@@ -301,8 +301,17 @@ Juliaの使用法を学んだりJuliaを試すには、Juliaの実行ファイ�
 
     foo
     bar
-    
+
+.. 
 Or you could put that code into a script and run it::
+
+    $ echo 'println(PROGRAM_FILE); for x in ARGS; println(x); end' > script.jl
+    $ julia script.jl foo bar
+    script.jl
+    foo
+    bar
+    
+もしくは以下のようにコードをスクリプトに組み込んで実行することもできます。::
 
     $ echo 'println(PROGRAM_FILE); for x in ARGS; println(x); end' > script.jl
     $ julia script.jl foo bar
