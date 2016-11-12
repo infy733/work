@@ -272,22 +272,29 @@ Juliaの使用法を学んだりJuliaを試すには、Juliaの実行ファイ�
     $ julia script.jl arg1 arg2...
 
 ファイルに記載されたコードを非対話的に実行する場合は、以下のようにファイル名を ``julia`` コマンドの
-第一引数として与えることができます。
+第一引数として与えることができます。::
 
     $ julia script.jl arg1 arg2...
 
-As the example implies, the following command-line arguments to ``julia``
-are taken as command-line arguments to the program ``script.jl``, passed
-in the global constant ``ARGS``. The name of the script itself is passed
-in as the global ``PROGRAM_FILE``. Note that ``ARGS`` is also set when script
-code is given using the ``-e`` option on the command line (see the ``julia``
-help output below) but ``PROGRAM_FILE`` will be empty. For example, to just
-print the arguments given to a script, you could do this::
+.. 
+  As the example implies, the following command-line arguments to ``julia``
+  are taken as command-line arguments to the program ``script.jl``, passed
+  in the global constant ``ARGS``. The name of the script itself is passed
+  in as the global ``PROGRAM_FILE``. Note that ``ARGS`` is also set when script
+  code is given using the ``-e`` option on the command line (see the ``julia``
+  help output below) but ``PROGRAM_FILE`` will be empty. For example, to just
+  print the arguments given to a script, you could do this::
 
     $ julia -e 'println(PROGRAM_FILE); for x in ARGS; println(x); end' foo bar
 
     foo
     bar
+
+記載例のように、 ``julia`` の後に続くコマンドラインの引数は、 ``script.jl`` 内のプログラムの引数として解釈され、
+グローバル定数 ``ARGS`` に渡されます。スクリプト自体の名前は、 ``PROGRAM_FILE`` に渡されます。
+``ARGS`` も ``-e`` オプションを使用したコマンドラインにてセットすることができますが、
+ ``PROGRAM_FILE`` は空白となりますので注意してください（以下 ``julia`` のヘルプを参照）。
+ 例として、スクリプトの引数を出力したい場合、以下のコマンドで実行することができます。::
 
 Or you could put that code into a script and run it::
 
