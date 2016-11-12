@@ -194,14 +194,35 @@
   `http://julialang.org/downloads/ <http://julialang.org/downloads/>`_.
 
 Juliaのインストール作業は、インストール済みのバイナリを使用する、
-ソースからコンパイルする、のどちらの手順を実施しても複雑ではありません。
+またはソースからコンパイルする、のどちらの手順を実施しても複雑ではありません。
 以下リンク先の手順に従ってJuliaをダウンロードしてインストールしてください。
 `http://julialang.org/downloads/ <http://julialang.org/downloads/>`_.
 
-The easiest way to learn and experiment with Julia is by starting an
-interactive session (also known as a read-eval-print loop or "repl")
-by double-clicking the Julia executable or running ``julia`` from the
-command line::
+.. 
+  The easiest way to learn and experiment with Julia is by starting an
+  interactive session (also known as a read-eval-print loop or "repl")
+  by double-clicking the Julia executable or running ``julia`` from the
+  command line::
+
+    $ julia
+                   _
+       _       _ _(_)_     |  A fresh approach to technical computing
+      (_)     | (_) (_)    |  Documentation: http://docs.julialang.org
+       _ _   _| |_  __ _   |  Type "?help" for help.
+      | | | | | | |/ _` |  |
+      | | |_| | | | (_| |  |  Version 0.5.0-dev+2440 (2016-02-01 02:22 UTC)
+     _/ |\__'_|_|_|\__'_|  |  Commit 2bb94d6 (11 days old master)
+    |__/                   |  x86_64-apple-darwin13.1.0
+
+    julia> 1 + 2
+    3
+
+    julia> ans
+    3
+
+Juliaの使用法を学んだりJuliaを試すには、Juliaの実行ファイルをダブルクリックするか、
+以下のようにコマンドラインから``julia``を起動して対話型セッション（read-eval-print-loopまたは「repl」）を
+開始することが一番の近道です。
 
     $ julia
                    _
