@@ -4,9 +4,9 @@
  Getting Started
 *****************
  
-.. Julia installation is straightforward, whether using precompiled
-.. binaries or compiling from source. Download and install Julia by
-.. following the instructions at
+Julia installation is straightforward, whether using precompiled
+binaries or compiling from source. Download and install Julia by
+following the instructions at
 `http://julialang.org/downloads/ <http://julialang.org/downloads/>`_.
 
 The easiest way to learn and experiment with Julia is by starting an
