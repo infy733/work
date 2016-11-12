@@ -388,8 +388,11 @@ Juliaが実行されるたびに実行したいコードがある場合は、 ``
 
     \end{CJK*}
 
-There are various ways to run Julia code and provide options, similar to
-those available for the ``perl`` and ``ruby`` programs:
+.. 
+  There are various ways to run Julia code and provide options, similar to
+  those available for the ``perl`` and ``ruby`` programs:
+  
+``perl`` や ``ruby`` と同様に、Juliaコードの実行やオプションを与えるための様々な方法があります。:
 
 .. code-block:: none
 
