@@ -328,21 +328,49 @@ Juliaの使用法を学んだりJuliaを試すには、Juliaの実行ファイ�
 
     $ julia --color=yes -O -- foo.jl arg1 arg2..
 
-Julia can be started in parallel mode with either the ``-p`` or the
-``--machinefile`` options. ``-p n`` will launch an additional ``n`` worker
-processes, while ``--machinefile file`` will launch a worker for each line in
-file ``file``. The machines defined in ``file`` must be accessible via a
-passwordless ``ssh`` login, with Julia installed at the same location as the
-current host. Each machine definition takes the form
-``[count*][user@]host[:port] [bind_addr[:port]]`` . ``user`` defaults to current user,
-``port`` to the standard ssh port. ``count`` is the number of workers to spawn
-on the node, and defaults to 1. The optional ``bind-to bind_addr[:port]``
-specifies the ip-address and port that other workers should use to
-connect to this worker.
+.. 
+  Julia can be started in parallel mode with either the ``-p`` or the
+  ``--machinefile`` options. ``-p n`` will launch an additional ``n`` worker
+  processes, while ``--machinefile file`` will launch a worker for each line in
+  file ``file``. The machines defined in ``file`` must be accessible via a
+  passwordless ``ssh`` login, with Julia installed at the same location as the
+  current host. Each machine definition takes the form
+  ``[count*][user@]host[:port] [bind_addr[:port]]`` . ``user`` defaults to current user,
+  ``port`` to the standard ssh port. ``count`` is the number of workers to spawn
+  on the node, and defaults to 1. The optional ``bind-to bind_addr[:port]``
+  specifies the ip-address and port that other workers should use to
+  connect to this worker.
 
+Juliaは ``-p`` または ``--machinefile`` オプションにより並列モードとして起動することができます。 ``-p n`` は
+ ``n`` 個の追加のワーカープロセスを起動し、 ``--machinefile file`` は ``file`` に記載されたそれぞれ一行に1つのワーカーを
+起動します。 ``file`` に定義されたマシンはパスワード不要の ``ssh`` 接続が可能である必要があり、
+またJuliaがインストールされた使用しているホストと同じ場所である必要があります。
+それぞれのマシンの定義の方法は、 ``[count*][user@]host[:port] [bind_addr[:port]]`` となります。 ``user`` の
+デフォルトはカレントユーザ、 ``port`` は標準sshポートとなります。 ``count`` はノードに起動するワーカーの数であり、
+デフォルトは1です。オプショナルの ``bind-to bind_addr[:port]`` は他のワーカーが使用してるワーカーに接続する際に
+必要なIPアドレスとポートを指定します。
 
-If you have code that you want executed whenever Julia is run, you can
-put it in ``~/.juliarc.jl``:
+.. 
+  If you have code that you want executed whenever Julia is run, you can
+  put it in ``~/.juliarc.jl``:
+
+  .. raw:: latex
+
+      \begin{CJK*}{UTF8}{mj}
+
+  ::
+
+      $ echo 'println("Greetings! 你好! 안녕하세요?")' > ~/.juliarc.jl
+      $ julia
+      Greetings! 你好! 안녕하세요?
+
+      ...
+
+  .. raw:: latex
+
+      \end{CJK*}
+    
+Juliaが実行されるたびに実行したいコードがある場合は、 ``~/.juliarc.jl`` にそのコードを記載することが可能です。::
 
 .. raw:: latex
 
