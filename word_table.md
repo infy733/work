@@ -2,13 +2,13 @@
 
 | English                               | 日本語
 | :-----------------------------------  | :-------------
-+| repository                          | リポジトリ
-+| document, documentation               | ドキュメント
-+| first-class                           | 第一級
+<!--| repository                          | リポジトリ
+| document, documentation               | ドキュメント
+| first-class                           | 第一級
 | technical computing                   | 技術計算
 | scalar                                | スカラー
 | reference                             | 参照
-| user                                  | ユーザー
+| user                                  | ユーザー -->
 | interactive session                   | 対話型セッション
 | expression                            | 式
 | is bound to                           | 紐付けされる
