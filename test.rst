@@ -1,7 +1,7 @@
 .. _man-getting-started:
 
 *****************
-// Getting Started
+.. Getting Started
 *****************
 
 Julia installation is straightforward, whether using precompiled
