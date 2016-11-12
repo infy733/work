@@ -2,7 +2,7 @@
 
 | English                               | 日本語
 | :-----------------------------------  | :-------------
-<!--| repository                          | リポジトリ
+[| repository                          | リポジトリ]
 | document, documentation               | ドキュメント
 | first-class                           | 第一級
 | technical computing                   | 技術計算
