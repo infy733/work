@@ -1,9 +1,9 @@
 .. _man-getting-started:
 
 *****************
-.. Getting Started
+ Getting Started
 *****************
-
+.. 
 Julia installation is straightforward, whether using precompiled
 binaries or compiling from source. Download and install Julia by
 following the instructions at
@@ -172,4 +172,5 @@ help new users get started with Julia:
 - `Videos from the Julia tutorial at MIT <http://julialang.org/blog/2013/03/julia-tutorial-MIT>`_
 - `Forio Julia Tutorials <http://forio.com/labs/julia-studio/tutorials/>`_
 - `YouTube videos from the JuliaCons <https://www.youtube.com/user/JuliaLanguage/playlists>`_
+
 
