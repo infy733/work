@@ -341,8 +341,8 @@ Juliaの使用法を学んだりJuliaを試すには、Juliaの実行ファイ�
   specifies the ip-address and port that other workers should use to
   connect to this worker.
 
-Juliaは ``-p`` または ``--machinefile`` オプションにより並列モードとして起動することができます。 ``-p n`` は
- ``n`` 個の追加のワーカープロセスを起動し、 ``--machinefile file`` は ``file`` に記載されたそれぞれ一行に1つのワーカーを
+Juliaは ``-p`` または ``--machinefile`` オプションにより並列モードとして起動することができます。 ``-p n`` は ``n`` 個の
+追加のワーカープロセスを起動し、 ``--machinefile file`` は ``file`` に記載されたそれぞれ一行に1つのワーカーを
 起動します。 ``file`` に定義されたマシンはパスワード不要の ``ssh`` 接続が可能である必要があり、
 またJuliaがインストールされた使用しているホストと同じ場所である必要があります。
 それぞれのマシンの定義の方法は、 ``[count*][user@]host[:port] [bind_addr[:port]]`` となります。 ``user`` の
