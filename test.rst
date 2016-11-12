@@ -259,11 +259,20 @@ Juliaの使用法を学んだりJuliaを試すには、Juliaの実行ファイ�
 最後に判別された式の値が表示されているか否かに紐付きます。 ``ans`` 変数は、対話型セッションだけでなく、
 他の方法でJuliaが実行された場合にも紐付けがされます。
 
-To evaluate expressions written in a source file ``file.jl``, write
-``include("file.jl")``.
+.. 
+  To evaluate expressions written in a source file ``file.jl``, write
+  ``include("file.jl")``.
 
-To run code in a file non-interactively, you can give it as the first
-argument to the ``julia`` command::
+ソースファイル ``file.jl`` に記載された式を読み込ませるためには、 ``include("file.jl")`` と入力してください。
+
+.. 
+  To run code in a file non-interactively, you can give it as the first
+  argument to the ``julia`` command::
+
+    $ julia script.jl arg1 arg2...
+
+ファイルに記載されたコードを非対話的に実行する場合は、以下のようにファイル名を ``julia`` コマンドの
+第一引数として与えることができます。
 
     $ julia script.jl arg1 arg2...
 
