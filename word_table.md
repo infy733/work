@@ -38,7 +38,7 @@
 | loating point arithmetic              | 浮動小数点演算
 | GNU Multi-Precision Library           | GNU Multi-Precision Library
 | GNU MPFR Library                      | GNU MPFR Library
-| type promotion and conversion mechanism                  | 型変換機能
+| type promotion and conversion mechanism　| 型変換機能
 | significand                           | 仮数
 | Numeric Literal Coefficients          | 数値リテラル係数
 | promotion system                      | 推進体制？
