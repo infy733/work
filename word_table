@@ -39,7 +39,7 @@
 | GNU Multi-Precision Library           |
 | GNU MPFR Library                      |
 | type promotion and 
-| conversion mechanism                  |
+  conversion mechanism                  |
 | significand                           |
 | Numeric Literal Coefficients          |
 | promotion system                      |
