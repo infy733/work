@@ -476,12 +476,18 @@ Juliaが実行されるたびに実行したいコードがある場合は、 ``
      --track-allocation={none|user|all}, --track-allocation
                                Count bytes allocated by each source line
 
+.. 
+  Resources
+  ---------
 
-Resources
+リソース
 ---------
 
-In addition to this manual, there are various other resources that may
-help new users get started with Julia:
+.. 
+  In addition to this manual, there are various other resources that may
+  help new users get started with Julia:
+
+当マニュアルに加えて、Juliaを開始するにあたり参考となる様々な資料があります。
 
 - `Julia and IJulia cheatsheet <http://math.mit.edu/~stevenj/Julia-cheatsheet.pdf>`_
 - `Learn Julia in a few minutes <https://learnxinyminutes.com/docs/julia/>`_
