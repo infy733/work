@@ -303,7 +303,7 @@ Juliaの使用法を学んだりJuliaを試すには、Juliaの実行ファイ�
     bar
 
 .. 
-Or you could put that code into a script and run it::
+  Or you could put that code into a script and run it::
 
     $ echo 'println(PROGRAM_FILE); for x in ARGS; println(x); end' > script.jl
     $ julia script.jl foo bar
@@ -320,7 +320,7 @@ Or you could put that code into a script and run it::
     bar
 
 .. 
-The ``--`` delimiter can be used to separate command-line args to the scriptfile from args to Julia::
+  The ``--`` delimiter can be used to separate command-line args to the scriptfile from args to Julia::
 
     $ julia --color=yes -O -- foo.jl arg1 arg2..
     
