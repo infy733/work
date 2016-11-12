@@ -222,7 +222,7 @@ Juliaのインストール作業は、インストール済みのバイナリを
 
 Juliaの使用法を学んだりJuliaを試すには、Juliaの実行ファイルをダブルクリックするか、
 以下のようにコマンドラインから ``julia`` を起動して対話型セッション（read-eval-print-loopまたは「repl」）を
-開始することが一番の近道です::
+開始することが一番の近道です。::
 
     $ julia
                    _
@@ -239,18 +239,25 @@ Juliaの使用法を学んだりJuliaを試すには、Juliaの実行ファイ�
 
     julia> ans
     3
-    
-    
-To exit the interactive session, type ``^D`` — the control key
-together with the ``d`` key or type ``quit()``. When run in interactive
-mode, ``julia`` displays a banner and prompts the user for input. Once
-the user has entered a complete expression, such as ``1 + 2``, and
-hits enter, the interactive session evaluates the expression and shows
-its value. If an expression is entered into an interactive session
-with a trailing semicolon, its value is not shown. The variable
-``ans`` is bound to the value of the last evaluated expression whether
-it is shown or not. The ``ans`` variable is only bound in interactive
-sessions, not when Julia code is run in other ways.
+
+.. 
+  To exit the interactive session, type ``^D`` — the control key
+  together with the ``d`` key or type ``quit()``. When run in interactive
+  mode, ``julia`` displays a banner and prompts the user for input. Once
+  the user has entered a complete expression, such as ``1 + 2``, and
+  hits enter, the interactive session evaluates the expression and shows
+  its value. If an expression is entered into an interactive session
+  with a trailing semicolon, its value is not shown. The variable
+  ``ans`` is bound to the value of the last evaluated expression whether
+  it is shown or not. The ``ans`` variable is only bound in interactive
+  sessions, not when Julia code is run in other ways.
+  
+対話型セッションは、 ``^D`` （コントロールキーと「D」を同時押し）と入力するか、 ``quit()``と入力することで
+終了することができます。``julia`` を対話モードで実行した場合、バナーとユーザに入力を求めるプロンプトが表示されます。
+ユーザが ``1 + 2``などの完全な式を入力しエンターキーを押すと、対話型セッションは入力された式を判別し、
+その結果の値を出力します。もし式の末尾にセミコロンを付けて入力した場合は、結果の値は表示されません。
+ ``ans`` 変数は、最後に判別された式の値が表示されているか否かに紐付きます。 ``ans`` 変数は、対話型セッションだけでなく、
+他の方法でJuliaが実行された場合にも紐付けがされます。
 
 To evaluate expressions written in a source file ``file.jl``, write
 ``include("file.jl")``.
