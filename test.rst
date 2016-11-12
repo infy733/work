@@ -3,8 +3,9 @@
 *****************
  Getting Started
 *****************
-.. 
-Julia installation is straightforward, whether using precompiled
+.. .. 
+ 
+<!--Julia installation is straightforward, whether using precompiled
 binaries or compiling from source. Download and install Julia by
 following the instructions at
 `http://julialang.org/downloads/ <http://julialang.org/downloads/>`_.
@@ -12,7 +13,8 @@ following the instructions at
 The easiest way to learn and experiment with Julia is by starting an
 interactive session (also known as a read-eval-print loop or "repl")
 by double-clicking the Julia executable or running ``julia`` from the
-command line::
+command line:: 
+-->
 
     $ julia
                    _
