@@ -1,8 +1,8 @@
 .. _man-getting-started:
 
-<!-- *****************
- Getting Started
-***************** -->
+*****************
+# Getting Started
+*****************
 
 Julia installation is straightforward, whether using precompiled
 binaries or compiling from source. Download and install Julia by
