@@ -319,7 +319,12 @@ Or you could put that code into a script and run it::
     foo
     bar
 
+.. 
 The ``--`` delimiter can be used to separate command-line args to the scriptfile from args to Julia::
+
+    $ julia --color=yes -O -- foo.jl arg1 arg2..
+    
+区切り文字 ``--`` は、コマンドライン内のスクリプトファイルに対する引数と、Juliaに対する引き数を区別させるために使用できます。::
 
     $ julia --color=yes -O -- foo.jl arg1 arg2..
 
