@@ -222,7 +222,7 @@ Juliaのインストール作業は、インストール済みのバイナリを
 
 Juliaの使用法を学んだりJuliaを試すには、Juliaの実行ファイルをダブルクリックするか、
 以下のようにコマンドラインから ``julia`` を起動して対話型セッション（read-eval-print-loopまたは「repl」）を
-開始することが一番の近道です。
+開始することが一番の近道です。::
 
     $ julia
                    _
@@ -239,7 +239,8 @@ Juliaの使用法を学んだりJuliaを試すには、Juliaの実行ファイ�
 
     julia> ans
     3
-
+    
+    
 To exit the interactive session, type ``^D`` — the control key
 together with the ``d`` key or type ``quit()``. When run in interactive
 mode, ``julia`` displays a banner and prompts the user for input. Once
