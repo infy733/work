@@ -169,42 +169,23 @@
 Juliaにおける変数は、値に関連（または紐づく）する名前になります。これは、
 計算によって得た値などを後に使用するために保存する際に便利です。以下は例です。:
 
-.. 
-  .. doctest::
+ .. doctest::
 
-      # Assign the value 10 to the variable x
-      julia> x = 10
-      10
+     # Assign the value 10 to the variable x
+     julia> x = 10
+     10
 
-      # Doing math with x's value
-      julia> x + 1
-      11
+     # Doing math with x's value
+     julia> x + 1
+     11
 
-      # Reassign x's value
-      julia> x = 1 + 1
-      2
+     # Reassign x's value
+     julia> x = 1 + 1
+     2
 
-      # You can assign values of other types, like strings of text
-      julia> x = "Hello World!"
-      "Hello World!"
-
-.. doctest::
-
-    # Assign the value 10 to the variable x
-    julia> x = 10
-    10
-
-    # Doing math with x's value
-    julia> x + 1
-    11
-
-    # Reassign x's value
-    julia> x = 1 + 1
-    2
-
-    # You can assign values of other types, like strings of text
-    julia> x = "Hello World!"
-    "Hello World!"
+     # You can assign values of other types, like strings of text
+     julia> x = "Hello World!"
+     "Hello World!"
 
 .. 
  Julia provides an extremely flexible system for naming variables.
