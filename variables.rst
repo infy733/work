@@ -167,7 +167,7 @@
  A variable, in Julia, is a name associated (or bound) to a value. It's useful when you want to store a value (that you obtained after some math, for example) for later use. For example:
 
 Juliaにおける変数は、値に関連（または紐づく）する名前になります。これは、
-計算によって得た値などを後に使用するために保存する際に便利です。以下は例です。:
+計算によって得た値などを後に使用するために保存する際に便利です。以下は例です。::
 
 .. 
   .. doctest::
@@ -212,7 +212,7 @@ Juliaにおける変数は、値に関連（または紐づく）する名前に
  the language will not treat variables differently based on their names).
  
 Juliaでは変数名を柔軟に設定できることができます。変数名は大文字と小文字が区別され、
-言語的な意味を持ちません。:
+言語的な意味を持ちません。::
 
 .. 
  .. raw:: latex
@@ -267,7 +267,7 @@ Juliaでは変数名を柔軟に設定できることができます。変数名
 .. 
   Unicode names (in UTF-8 encoding) are allowed:
 
-Unicode（UTF-8）の変数名を使用することができます。:
+Unicode（UTF-8）の変数名を使用することができます。::
 
 .. 
  .. raw:: latex
@@ -303,7 +303,7 @@ Unicode（UTF-8）の変数名を使用することができます。:
 Julia REPLおよび他のJuliaの編集環境では、バックスラッシュを伴うLaTex記号とタブを
 入力することでUnicode数学記号を入力することが可能です。例えば、変数名 ``δ`` は、
 ``\delta``-*tab*とすることで入力できます。また、 ``α̂₂`` は、 ``\alpha``-*tab*-``\hat``-*tab*-``\_2``-*tab*と
-することで入力できます。:
+することで入力できます。::
 
 .. raw:: latex
 
