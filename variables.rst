@@ -167,7 +167,7 @@
  A variable, in Julia, is a name associated (or bound) to a value. It's useful when you want to store a value (that you obtained after some math, for example) for later use. For example:
 
 Juliaにおける変数は、値に関連（または紐づく）する名前になります。これは、
-計算によって得た値などを後に使用するために保存する際に便利です。以下は例です。
+計算によって得た値などを後に使用するために保存する際に便利です。以下は例です。:
 
 .. doctest::
 
