@@ -170,23 +170,23 @@ Juliaにおける変数は、値に関連（または紐づく）する名前に
 計算によって得た値などを後に使用するために保存する際に便利です。以下は例です。
 
 .. 
-.. doctest::
+  .. doctest::
 
-    # Assign the value 10 to the variable x
-    julia> x = 10
-    10
+      # Assign the value 10 to the variable x
+      julia> x = 10
+      10
 
-    # Doing math with x's value
-    julia> x + 1
-    11
+      # Doing math with x's value
+      julia> x + 1
+      11
 
-    # Reassign x's value
-    julia> x = 1 + 1
-    2
+      # Reassign x's value
+      julia> x = 1 + 1
+      2
 
-    # You can assign values of other types, like strings of text
-    julia> x = "Hello World!"
-    "Hello World!"
+      # You can assign values of other types, like strings of text
+      julia> x = "Hello World!"
+      "Hello World!"
 
 .. doctest::
 
@@ -265,7 +265,7 @@ Juliaでは変数名を柔軟に設定できることができます。変数名
 
     \end{CJK*}
 .. 
-Unicode names (in UTF-8 encoding) are allowed:
+  Unicode names (in UTF-8 encoding) are allowed:
 
 Unicode（UTF-8）の変数名を使用することができます。
 
@@ -302,7 +302,7 @@ Unicode（UTF-8）の変数名を使用することができます。
 
 Julia REPLおよび他のJuliaの編集環境では、バックスラッシュを伴うLaTex記号とタブを
 入力することでUnicode数学記号を入力することが可能です。例えば、変数名 ``δ`` は、
- ``\delta``-*tab*とすることで入力できます。また、 ``α̂₂`` は、 ``\alpha``-*tab*-``\hat``-*tab*-``\_2``-*tab*と
+``\delta``-*tab*とすることで入力できます。また、 ``α̂₂`` は、 ``\alpha``-*tab*-``\hat``-*tab*-``\_2``-*tab*と
 することで入力できます。
 
 .. raw:: latex
