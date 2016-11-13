@@ -400,8 +400,21 @@ Sc/So（通貨とその他の記号）、その他の記号（Sm数学記号の�
 中置演算子として解析され、ユーザ定義のメソッド（ ``⊕`` をクロネッカー積として定義するために ``const ⊗ = kron`` を
 使用する等）として使用することが可能です。
 
-The only explicitly disallowed names for variables are the names of built-in
-statements:
+.. 
+  The only explicitly disallowed names for variables are the names of built-in
+  statements:
+
+  .. doctest::
+
+      julia> else = false
+      ERROR: syntax: unexpected "else"
+       ...
+
+      julia> try = "No"
+      ERROR: syntax: unexpected "="
+       ...
+
+ビルトインステートメントの名前のみを変数名として使用することはできません
 
 .. doctest::
 
@@ -413,21 +426,35 @@ statements:
     ERROR: syntax: unexpected "="
      ...
 
+.. 
+  Stylistic Conventions
+  =====================
 
-Stylistic Conventions
+文体表記
 =====================
 
-While Julia imposes few restrictions on valid names, it has become useful to
-adopt the following conventions:
+.. 
+  While Julia imposes few restrictions on valid names, it has become useful to
+  adopt the following conventions:
 
-- Names of variables are in lower case.
-- Word separation can be indicated by underscores (``'_'``), but use of
-  underscores is discouraged unless the name would be hard to read otherwise.
-- Names of ``Type``\ s and ``Module``\ s begin with a capital letter and word separation is
-  shown with upper camel case instead of underscores.
-- Names of ``function``\ s and ``macro``\s are in lower case, without
-  underscores.
-- Functions that write to their arguments have names that end in ``!``.
-  These are sometimes called "mutating" or "in-place" functions because
-  they are intended to produce changes in their arguments after the
-  function is called, not just return a value.
+Juliaは変数名にいくつかの制限を設けていますが、以下の表記法を使用するのに便利になっています。
+
+.. 
+  - Names of variables are in lower case.
+  - Word separation can be indicated by underscores (``'_'``), but use of
+    underscores is discouraged unless the name would be hard to read otherwise.
+  - Names of ``Type``\ s and ``Module``\ s begin with a capital letter and word separation is
+    shown with upper camel case instead of underscores.
+  - Names of ``function``\ s and ``macro``\s are in lower case, without
+    underscores.
+  - Functions that write to their arguments have names that end in ``!``.
+    These are sometimes called "mutating" or "in-place" functions because
+    they are intended to produce changes in their arguments after the
+    function is called, not just return a value.
+    
+- 変数名を小文字で表記する。
+- 単語の区切りはアンダースコア（ ``'_'`` ）で表すことができますが、変数名が読みにくい場合の除き使用は推奨されていません。
+- ``型``\ と ``モジュール名``\ は大文字で始まり、単語の区切りはアンダースコアの代わりにキャメルケースで表記されます。
+- ``関数``\や ``マクロ``\の名前はアンダースコアを含まない小文字で表記されます。
+- 引数に書き込む関数名は ``!`` で終わります。これらの関数は、関数が呼び出された際に戻り値を返すだけでなく
+引数に変更を加えるため、「変異」または「in-place」と呼ばれています。    
