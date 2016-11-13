@@ -164,10 +164,7 @@
 ***********
 
 
- A variable, in Julia, is a name associated (or bound) to a value. It's useful when you want to store a value (that you obtained after some math, for example) for later use. For example:
-
-Juliaにおける変数は、値に関連（または紐づく）する名前になります。これは、
-計算によって得た値などを後に使用するために保存する際に便利です。以下は例です。::
+A variable, in Julia, is a name associated (or bound) to a value. It's useful when you want to store a value (that you obtained after some math, for example) for later use. For example:
 
 .. doctest::
 
@@ -186,6 +183,10 @@ Juliaにおける変数は、値に関連（または紐づく）する名前に
     # You can assign values of other types, like strings of text
     julia> x = "Hello World!"
     "Hello World!"
+
+Julia provides an extremely flexible system for naming variables.
+Variable names are case-sensitive, and have no semantic meaning (that is,
+the language will not treat variables differently based on their names).
 
 .. 
  Julia provides an extremely flexible system for naming variables.
