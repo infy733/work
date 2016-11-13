@@ -262,7 +262,7 @@ Juliaでは変数名を柔軟に設定できることができます。変数名
 
     \end{CJK*}
 .. 
-Unicode names (in UTF-8 encoding) are allowed:
+  Unicode names (in UTF-8 encoding) are allowed:
 
   .. raw:: latex
 
