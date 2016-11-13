@@ -154,12 +154,38 @@
    they are intended to produce changes in their arguments after the
    function is called, not just return a value.
 
+.. 
+  ***********
+   Variables
+  ***********
 
 ***********
- Variables
+ 変数
 ***********
 
-A variable, in Julia, is a name associated (or bound) to a value. It's useful when you want to store a value (that you obtained after some math, for example) for later use. For example:
+.. 
+  A variable, in Julia, is a name associated (or bound) to a value. It's useful when you want to store a value (that you obtained after some math, for example) for later use. For example:
+
+  .. doctest::
+
+      # Assign the value 10 to the variable x
+      julia> x = 10
+      10
+
+      # Doing math with x's value
+      julia> x + 1
+      11
+
+      # Reassign x's value
+      julia> x = 1 + 1
+      2
+
+      # You can assign values of other types, like strings of text
+      julia> x = "Hello World!"
+      "Hello World!"
+
+Juliaにおける変数は、値に関連（または紐づく）する名前になります。これは、
+計算によって得た値などを後に使用するために保存する際に便利です。以下は例です。
 
 .. doctest::
 
@@ -178,10 +204,38 @@ A variable, in Julia, is a name associated (or bound) to a value. It's useful wh
     # You can assign values of other types, like strings of text
     julia> x = "Hello World!"
     "Hello World!"
+    
+.. 
+  Julia provides an extremely flexible system for naming variables.
+  Variable names are case-sensitive, and have no semantic meaning (that is,
+  the language will not treat variables differently based on their names).
 
-Julia provides an extremely flexible system for naming variables.
-Variable names are case-sensitive, and have no semantic meaning (that is,
-the language will not treat variables differently based on their names).
+  .. raw:: latex
+
+      \begin{CJK*}{UTF8}{gbsn}
+
+  .. doctest::
+
+      julia> x = 1.0
+      1.0
+
+      julia> y = -3
+      -3
+
+      julia> Z = "My string"
+      "My string"
+
+      julia> customary_phrase = "Hello world!"
+      "Hello world!"
+
+      julia> UniversalDeclarationOfHumanRightsStart = "人人生而自由，在尊严和权利上一律平等。"
+      "人人生而自由，在尊严和权利上一律平等。"
+
+  .. raw:: latex
+
+      \end{CJK*}
+
+Juliaでは変数名を柔軟に設定できることができます。変数名は大文字と小文字が区別され、言語的な意味を持ちません。
 
 .. raw:: latex
 
@@ -207,8 +261,22 @@ the language will not treat variables differently based on their names).
 .. raw:: latex
 
     \end{CJK*}
-
+.. 
 Unicode names (in UTF-8 encoding) are allowed:
+
+  .. raw:: latex
+
+      \begin{CJK*}{UTF8}{mj}
+
+  .. doctest::
+
+      julia> δ = 0.00001
+      1.0e-5
+
+      julia> 안녕하세요 = "Hello"
+      "Hello"
+
+Unicode（UTF-8）の変数名を使用することができます。
 
 .. raw:: latex
 
@@ -221,12 +289,21 @@ Unicode names (in UTF-8 encoding) are allowed:
 
     julia> 안녕하세요 = "Hello"
     "Hello"
+.. 
+  In the Julia REPL and several other Julia editing environments, you
+  can type many Unicode math symbols by typing the backslashed LaTeX symbol
+  name followed by tab.  For example, the variable name ``δ`` can be
+  entered by typing ``\delta``-*tab*, or even ``α̂₂`` by
+  ``\alpha``-*tab*-``\hat``-*tab*-``\_2``-*tab*.
 
-In the Julia REPL and several other Julia editing environments, you
-can type many Unicode math symbols by typing the backslashed LaTeX symbol
-name followed by tab.  For example, the variable name ``δ`` can be
-entered by typing ``\delta``-*tab*, or even ``α̂₂`` by
-``\alpha``-*tab*-``\hat``-*tab*-``\_2``-*tab*.
+  .. raw:: latex
+
+      \end{CJK*}
+
+Julia REPLおよび他のJuliaの編集環境では、バックスラッシュを伴うLaTex記号と
+タブを入力することでUnicode数学記号を入力することが可能です。例えば、変数名 ``δ`` は、
+``\delta``-*tab*とすることで入力できます。また、 ``α̂₂`` は、
+``\alpha``-*tab*-``\hat``-*tab*-``\_2``-*tab*とすることで入力できます。
 
 .. raw:: latex
 
