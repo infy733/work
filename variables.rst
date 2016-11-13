@@ -385,13 +385,20 @@ Sc/So（通貨とその他の記号）、その他の記号（Sm数学記号の�
 
 .. _Unicode文字カテゴリ: http://www.fileformat.info/info/unicode/category/index.htm
 
-Operators like ``+`` are also valid identifiers, but are parsed specially. In
-some contexts, operators can be used just like variables; for example
-``(+)`` refers to the addition function, and ``(+) = f`` will reassign
-it.  Most of the Unicode infix operators (in category Sm),
-such as ``⊕``, are parsed as infix operators and are available for
-user-defined methods (e.g. you can use ``const ⊗ = kron`` to define
-``⊗`` as an infix Kronecker product).
+.. 
+  Operators like ``+`` are also valid identifiers, but are parsed specially. In
+  some contexts, operators can be used just like variables; for example
+  ``(+)`` refers to the addition function, and ``(+) = f`` will reassign
+  it.  Most of the Unicode infix operators (in category Sm),
+  such as ``⊕``, are parsed as infix operators and are available for
+  user-defined methods (e.g. you can use ``const ⊗ = kron`` to define
+  ``⊗`` as an infix Kronecker product).
+
+``+``のような演算子も有効な識別子ですが、異なった解析がされます。ある文脈では、
+演算子は変数のように使用することができます。例えば、``(+)``は足し算を意味し、
+``(+) = f``は再割り当てを行います。``⊕``などのUnicode中置演算子（Smカテゴリ）のほとんどは、
+中置演算子として解析され、ユーザ定義のメソッド（``⊕``をクロネッカー積として定義するために
+``const ⊗ = kron``」を使用する等）として使用することが可能です。
 
 The only explicitly disallowed names for variables are the names of built-in
 statements:
