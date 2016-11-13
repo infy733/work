@@ -377,7 +377,7 @@ Juliaでは、必要であればビルトインの定数や関数を再定義す
   .. _Unicode character categories: http://www.fileformat.info/info/unicode/category/index.htm
 
 変数名は、文字（AからZまたはaからz）、アンダースコア、もしくは00A0よりも大きなUnicodeの
-サブセットの符号点である必要があります。特に、`Unicode character categories`のLu/Ll/Lt/Lm/Lo/Nl （文字）、
+サブセットの符号点である必要があります。特に、`Unicode character categories`_ のLu/Ll/Lt/Lm/Lo/Nl （文字）、
 Sc/So（通貨とその他の記号）、その他の記号（Sm数学記号のサブセットなど）を使用することができます。
 ！や数字（0から9とNd･Noカテゴリ内のその他の記号）、その他のUnicode符号点
 （発音区別符号およびその他の修飾文字（Mn/Mc/Me/Skカテゴリ）、句読点コネクタ（Pcカテゴリ）、
