@@ -309,7 +309,29 @@ Julia REPLおよび他のJuliaの編集環境では、バックスラッシュ�
 
     \end{CJK*}
 
-Julia will even let you redefine built-in constants and functions if needed:
+.. 
+  Julia will even let you redefine built-in constants and functions if needed:
+
+  .. doctest::
+
+      julia> pi
+      π = 3.1415926535897...
+
+      julia> pi = 3
+      WARNING: imported binding for pi overwritten in module Main
+      3
+
+      julia> pi
+      3
+
+      julia> sqrt(100)
+      10.0
+
+      julia> sqrt = 4
+      WARNING: imported binding for sqrt overwritten in module Main
+      4
+
+Juliaでは、必要であればビルトインの定数や関数を再定義することができます。
 
 .. doctest::
 
@@ -330,7 +352,10 @@ Julia will even let you redefine built-in constants and functions if needed:
     WARNING: imported binding for sqrt overwritten in module Main
     4
 
-However, this is obviously not recommended to avoid potential confusion.
+.. 
+  However, this is obviously not recommended to avoid potential confusion.
+
+しかし、これは混乱を避ける目的で、推奨されていません。
 
 Allowed Variable Names
 ======================
