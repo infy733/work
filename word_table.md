@@ -44,7 +44,7 @@
 | promotion system                      | 推進体制？
 | operand                               | 被演算子
 | binary operator                       | 二項演算子
-| primitive numeric type                | 数値プリミティブ型
+| primitive numeric type / numeric primitive type                 | 数値プリミティブ型
 | 
 | 
 | 
