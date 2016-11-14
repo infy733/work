@@ -45,7 +45,7 @@
 | operand                               | 被演算子
 | binary operator                       | 二項演算子
 | primitive numeric type / numeric primitive type                 | 数値プリミティブ型
-| 
+| Arbitrary Precision Arithmetic        | 任意精度計算
 | 
 | 
 | 
