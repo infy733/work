@@ -915,8 +915,20 @@ Juliaは、幅広いプリミティブ数値型を提供し、標準的な数学
     julia> 1234
     1234
 
-The default type for an integer literal depends on whether the target
-system has a 32-bit architecture or a 64-bit architecture::
+.. 
+  The default type for an integer literal depends on whether the target
+  system has a 32-bit architecture or a 64-bit architecture::
+
+      # 32-bit system:
+      julia> typeof(1)
+      Int32
+
+      # 64-bit system:
+      julia> typeof(1)
+      Int64
+
+整数リテラルのデフォルトの型は、ターゲットシステムのアーキテクチャが32ビットであるか
+64ビットであるかによって異なります。::
 
     # 32-bit system:
     julia> typeof(1)
@@ -926,8 +938,19 @@ system has a 32-bit architecture or a 64-bit architecture::
     julia> typeof(1)
     Int64
 
-The Julia internal variable :const:`Sys.WORD_SIZE` indicates whether the target system
-is 32-bit or 64-bit.::
+.. 
+  The Julia internal variable :const:`Sys.WORD_SIZE` indicates whether the target system
+  is 32-bit or 64-bit.::
+
+      # 32-bit system:
+      julia> Sys.WORD_SIZE
+      32
+
+      # 64-bit system:
+      julia> Sys.WORD_SIZE
+      64
+
+Juliaの内部変数 :const:`Sys.WORD_SIZE` はターゲットシステムが32ビットまたは64ビットのどちらかであることを示します。::
 
     # 32-bit system:
     julia> Sys.WORD_SIZE
@@ -937,8 +960,25 @@ is 32-bit or 64-bit.::
     julia> Sys.WORD_SIZE
     64
 
-Julia also defines the types :class:`Int` and :class:`UInt`, which are aliases for the
-system's signed and unsigned native integer types respectively.::
+.. 
+  Julia also defines the types :class:`Int` and :class:`UInt`, which are aliases for the
+  system's signed and unsigned native integer types respectively.::
+
+      # 32-bit system:
+      julia> Int
+      Int32
+      julia> UInt
+      UInt32
+
+
+      # 64-bit system:
+      julia> Int
+      Int64
+      julia> UInt
+      UInt64
+
+Juliaは、システムの符号つきまたは符号なしの固有の整数型のエイリアスである :class:`Int` 
+および :class:`UInt` 型を定義します。::
 
     # 32-bit system:
     julia> Int
@@ -952,7 +992,6 @@ system's signed and unsigned native integer types respectively.::
     Int64
     julia> UInt
     UInt64
-
 Larger integer literals that cannot be represented using only 32 bits
 but can be represented in 64 bits always create 64-bit integers,
 regardless of the system type::
