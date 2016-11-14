@@ -1176,8 +1176,8 @@ Binary and octal literals are also supported:
 などの機能が含まれていますが、プログラミング経験者にとっては難しいものではないはずです。）
 
 .. 
-Overflow behavior
-~~~~~~~~~~~~~~~~~
+  Overflow behavior
+  ~~~~~~~~~~~~~~~~~
 
 オーバーフロー処理
 ~~~~~~~~~~~~~~~~~
@@ -1445,7 +1445,7 @@ Values can be converted to ``Float32`` easily:
 
   .. _man-special-floats:
 
-浮動小数点数には`2つの０ <https://en.wikipedia.org/wiki/Signed_zero>`_ （正の0と負の0）があります。
+浮動小数点数には`2つの０ <https://en.wikipedia.org/wiki/Signed_zero>`_（正の0と負の0）があります。
 この2つの0は同じ値ですが、 ``bits`` 関数を使用した際に見られるように、それぞれ異なるバイナリ表現を持ちます。::
 
 .. doctest::
