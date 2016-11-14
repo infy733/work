@@ -1328,7 +1328,7 @@ Juliaでは、指定された型の表現可能な最大値を超えた場合、
     0.00025f0
 
 .. 
-Values can be converted to ``Float32`` easily:
+  Values can be converted to ``Float32`` easily:
 
   .. doctest::
 
@@ -1445,7 +1445,7 @@ Values can be converted to ``Float32`` easily:
 
   .. _man-special-floats:
 
-浮動小数点数には`2つの０ <https://en.wikipedia.org/wiki/Signed_zero>`_（正の0と負の0）があります。
+浮動小数点数には`2つの０<https://en.wikipedia.org/wiki/Signed_zero>`_（正の0と負の0）があります。
 この2つの0は同じ値ですが、 ``bits`` 関数を使用した際に見られるように、それぞれ異なるバイナリ表現を持ちます。::
 
 .. doctest::
