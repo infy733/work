@@ -1878,9 +1878,9 @@ Juliaは、次の最大または最小の浮動小数点数を引数に戻り値
 - 浮動小数点数に関する高度かつ詳細な議論および演算時の数値の精度の問題については、
   David Goldbergの論文 `What Every Computer Scientist Should Know About Floating-Point Arithmetic
   <http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.22.6768&rep=rep1&type=pdf>`_ を参照してください。
-- より広範囲な歴史や合理性、浮動小数点数の問題に関する文献、およびその他の数値計算に関する議論については、
-  「浮動小数点の父」として知られる `William Kahan <https://en.wikipedia.org/wiki/William_Kahan>`_ の
-   `論文 <https://people.eecs.berkeley.edu/~wkahan/>`_ を参照してください。特に `An Interview with the Old
+- より広範囲な歴史や合理性、浮動小数点数の問題に関する文献、およびその他の数値計算に関する議論については、「浮動小数点の父」
+  として知られる `William Kahan <https://en.wikipedia.org/wiki/William_Kahan>`_ の 
+  `論文 <https://people.eecs.berkeley.edu/~wkahan/>`_ を参照してください。特に `An Interview with the Old
   Man of Floating-Point <https://people.eecs.berkeley.edu/~wkahan/ieee754status/754story.html>`_ 
   は特に興味深いものとなっています。
 
