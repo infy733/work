@@ -2254,10 +2254,31 @@ Juliaは、特定の方や特定の変数の型に対応してリテラル0お�
 :func:`one(x) <one>`    ``x`` のリテラル1型または変数 ``x`` の型
 ====================== =====================================================
 
-These functions are useful in :ref:`man-numeric-comparisons` to avoid overhead
-from unnecessary :ref:`type conversion <man-conversion-and-promotion>`.
+.. 
+  These functions are useful in :ref:`man-numeric-comparisons` to avoid overhead
+  from unnecessary :ref:`type conversion <man-conversion-and-promotion>`.
 
-Examples:
+これらの関数は、 :ref:`man-numeric-comparisons` 時の不要な :ref:`type conversion <man-conversion-and-promotion>` の
+オーバーヘッドを回避する際に有効です。
+
+.. 
+  Examples:
+
+  .. doctest::
+
+      julia> zero(Float32)
+      0.0f0
+
+      julia> zero(1.0)
+      0.0
+
+      julia> one(Int32)
+      1
+
+      julia> one(BigFloat)
+      1.000000000000000000000000000000000000000000000000000000000000000000000000000000
+
+例:
 
 .. doctest::
 
