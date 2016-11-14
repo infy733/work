@@ -992,17 +992,57 @@ Juliaは、システムの符号つきまたは符号なしの固有の整数型
     Int64
     julia> UInt
     UInt64
-Larger integer literals that cannot be represented using only 32 bits
-but can be represented in 64 bits always create 64-bit integers,
-regardless of the system type::
 
-    # 32-bit or 64-bit system:
+.. 
+  Larger integer literals that cannot be represented using only 32 bits
+  but can be represented in 64 bits always create 64-bit integers,
+  regardless of the system type::
+
+      # 32-bit or 64-bit system:
+      julia> typeof(3000000000)
+      Int64
+
+32ビットを使用して表現できないが、64ビットでは表現できるような大きな整数リテラルの場合、
+システムタイプに関係なく常に64ビット整数を作成します。::
+
+    # 32-bit or 64-bit system:
     julia> typeof(3000000000)
     Int64
 
-Unsigned integers are input and output using the ``0x`` prefix and hexadecimal
-(base 16) digits ``0-9a-f`` (the capitalized digits ``A-F`` also work for input).
-The size of the unsigned value is determined by the number of hex digits used:
+.. 
+  Unsigned integers are input and output using the ``0x`` prefix and hexadecimal
+  (base 16) digits ``0-9a-f`` (the capitalized digits ``A-F`` also work for input).
+  The size of the unsigned value is determined by the number of hex digits used:
+
+  .. doctest::
+
+      julia> 0x1
+      0x01
+
+      julia> typeof(ans)
+      UInt8
+
+      julia> 0x123
+      0x0123
+
+      julia> typeof(ans)
+      UInt16
+
+      julia> 0x1234567
+      0x01234567
+
+      julia> typeof(ans)
+      UInt32
+
+      julia> 0x123456789abcdef
+      0x0123456789abcdef
+
+      julia> typeof(ans)
+      UInt64
+
+符号なし整数は、 ``0x`` プレフィックスおよび16進数の ``0-9a-f`` （大文字の ``A-F`` は入力時のみ使用可能）を
+使用して入力および出力されます。符号なしの値の大きさは、使用されている16進数の桁数により決定されます。
+
 
 .. doctest::
 
@@ -1029,7 +1069,6 @@ The size of the unsigned value is determined by the number of hex digits used:
 
     julia> typeof(ans)
     UInt64
-
 This behavior is based on the observation that when one uses unsigned
 hex literals for integer values, one typically is using them to
 represent a fixed numeric byte sequence, rather than just an integer
