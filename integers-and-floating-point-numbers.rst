@@ -887,12 +887,26 @@ Juliaは、幅広いプリミティブ数値型を提供し、標準的な数学
 加えて、:ref:`man-complex-and-rational-numbers` へのサポートは、これらの数値プリミティブ型を踏まえて構築されています。
 全ての数値型は、明示的に割り当てることなく自然に相互運用します。 :ref:`type promotion system <man-conversion-and-promotion>`
 
+.. 
+  Integers
+  --------
 
-Integers
+整数
 --------
 
-Literal integers are represented in the standard manner:
+.. 
+  Literal integers are represented in the standard manner:
 
+  .. doctest::
+
+      julia> 1
+      1
+
+      julia> 1234
+      1234
+
+整数リテラルは標準的な方法で表現されます。:
+    
 .. doctest::
 
     julia> 1
