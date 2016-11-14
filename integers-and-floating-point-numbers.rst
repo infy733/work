@@ -821,7 +821,7 @@ Juliaは、幅広いプリミティブ数値型を提供し、標準的な数学
 .. 
   The following are Julia's primitive numeric types:
 
-
+以下はJuliaにおける数値プリミティブ型です。
 
 -  **Integer types:**
 
