@@ -1218,7 +1218,7 @@ Juliaでは、指定された型の表現可能な最大値を超えた場合、
   for wraparound produced by overflow is essential; otherwise, the ``BigInt`` type
   in :ref:`man-arbitrary-precision-arithmetic` is recommended instead.
 
-このように、Juliaにおける整数の演算は、`合同算術<https://en.wikipedia.org/wiki/Modular_arithmetic>`_の
+このように、Juliaにおける整数の演算は、`合同算術<https://en.wikipedia.org/wiki/Modular_arithmetic>`_ の
 形をとります。これは現代のコンピュータで実行される基本演算の特性を反映しています。
 オーバーフローを許容するアプリケーションでは、オーバーフローにより発生したワードラップの明示的なチェックは不可欠です。
 チェックが難しい場合は、 :ref:`man-arbitrary-precision-arithmetic` の ``BigInt`` 型を使用することをお勧めします。
@@ -1404,20 +1404,49 @@ Values can be converted to ``Float32`` easily:
     julia> 2*Float16(4.)
     Float16(8.0)    
 
-The underscore ``_`` can be used as digit separator:
+.. 
+  The underscore ``_`` can be used as digit separator:
+
+  .. doctest::
+
+      julia> 10_000, 0.000_000_005, 0xdead_beef, 0b1011_0010
+      (10000,5.0e-9,0xdeadbeef,0xb2)
+
+アンダースコア（ ``_`` ）は桁区切り文字として使用することができます。
 
 .. doctest::
 
     julia> 10_000, 0.000_000_005, 0xdead_beef, 0b1011_0010
-    (10000,5.0e-9,0xdeadbeef,0xb2)
+    (10000,5.0e-9,0xdeadbeef,0xb2)    
 
-Floating-point zero
+.. 
+  Floating-point zero
+  ~~~~~~~~~~~~~~~~~~~
+
+浮動小数点における0
 ~~~~~~~~~~~~~~~~~~~
 
-Floating-point numbers have `two zeros
-<https://en.wikipedia.org/wiki/Signed_zero>`_, positive zero and negative zero.
-They are equal to each other but have different binary representations, as can
-be seen using the ``bits`` function: :
+.. 
+  Floating-point numbers have `two zeros
+  <https://en.wikipedia.org/wiki/Signed_zero>`_, positive zero and negative zero.
+  They are equal to each other but have different binary representations, as can
+  be seen using the ``bits`` function: :
+
+  .. doctest::
+
+      julia> 0.0 == -0.0
+      true
+
+      julia> bits(0.0)
+      "0000000000000000000000000000000000000000000000000000000000000000"
+
+      julia> bits(-0.0)
+      "1000000000000000000000000000000000000000000000000000000000000000"
+
+  .. _man-special-floats:
+
+浮動小数点数には`2つの０ <https://en.wikipedia.org/wiki/Signed_zero>`_ （正の0と負の0）があります。
+この2つの0は同じ値ですが、 ``bits`` 関数を使用した際に見られるように、それぞれ異なるバイナリ表現を持ちます。::
 
 .. doctest::
 
@@ -1432,14 +1461,31 @@ be seen using the ``bits`` function: :
 
 .. _man-special-floats:
 
-Special floating-point values
+.. 
+  Special floating-point values
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+特殊な浮動小数点値
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-There are three specified standard floating-point values that do not
-correspond to any point on the real number line:
+.. 
+  There are three specified standard floating-point values that do not
+  correspond to any point on the real number line:
+  
+  =========== =========== ===========  ================= =================================================================
+  Special value                        Name              Description
+  -----------------------------------  ----------------- -----------------------------------------------------------------
+  ``Float16`` ``Float32`` ``Float64``
+  =========== =========== ===========  ================= =================================================================
+  ``Inf16``   ``Inf32``    ``Inf``     positive infinity a value greater than all finite floating-point values
+  ``-Inf16``  ``-Inf32``   ``-Inf``    negative infinity a value less than all finite floating-point values
+  ``NaN16``   ``NaN32``    ``NaN``     not a number      a value not ``==`` to any floating-point value (including itself)
+  =========== =========== ===========  ================= =================================================================
+
+実数直線上に対応しない3つの浮動小数点値が存在します。
 
 =========== =========== ===========  ================= =================================================================
-Special value                        Name              Description
+特殊な値                              名称               概要
 -----------------------------------  ----------------- -----------------------------------------------------------------
 ``Float16`` ``Float32`` ``Float64``
 =========== =========== ===========  ================= =================================================================
