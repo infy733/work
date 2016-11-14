@@ -1043,7 +1043,6 @@ Juliaは、システムの符号つきまたは符号なしの固有の整数型
 符号なし整数は、 ``0x`` プレフィックスおよび16進数の ``0-9a-f`` （大文字の ``A-F`` は入力時のみ使用可能）を
 使用して入力および出力されます。符号なしの値の大きさは、使用されている16進数の桁数により決定されます。
 
-
 .. doctest::
 
     julia> 0x1
@@ -1069,16 +1068,42 @@ Juliaは、システムの符号つきまたは符号なしの固有の整数型
 
     julia> typeof(ans)
     UInt64
-This behavior is based on the observation that when one uses unsigned
-hex literals for integer values, one typically is using them to
-represent a fixed numeric byte sequence, rather than just an integer
-value.
 
-Recall that the variable :data:`ans` is set to the value of the last expression
-evaluated in an interactive session. This does not occur when Julia code is
-run in other ways.
+.. 
+  This behavior is based on the observation that when one uses unsigned
+  hex literals for integer values, one typically is using them to
+  represent a fixed numeric byte sequence, rather than just an integer
+  value.
 
+この動作は、整数値に符号なし16進リテラルを使用する際、ただの整数ではなく、
+通常固定された数値のバイト列を表すという傾向に基づいています。
+
+.. 
+  Recall that the variable :data:`ans` is set to the value of the last expression
+  evaluated in an interactive session. This does not occur when Julia code is
+  run in other ways.
+
+前述の通り、変数 :data:`ans` は対話セッションで最後に出力された式の値がセットされます。
+この処理は、Juliaコードがその他の方法で実行された場合には実施されません。
+
+.. 
 Binary and octal literals are also supported:
+
+  .. doctest::
+
+      julia> 0b10
+      0x02
+
+      julia> typeof(ans)
+      UInt8
+
+      julia> 0o10
+      0x08
+
+      julia> typeof(ans)
+      UInt8
+
+2進および8進リテラルについてもサポートされています。::
 
 .. doctest::
 
@@ -1092,10 +1117,32 @@ Binary and octal literals are also supported:
     0x08
 
     julia> typeof(ans)
-    UInt8
+    UInt8    
 
-The minimum and maximum representable values of primitive numeric types
-such as integers are given by the :func:`typemin` and :func:`typemax` functions:
+.. 
+  The minimum and maximum representable values of primitive numeric types
+  such as integers are given by the :func:`typemin` and :func:`typemax` functions:
+
+  .. doctest::
+
+      julia> (typemin(Int32), typemax(Int32))
+      (-2147483648,2147483647)
+
+      julia> for T in [Int8,Int16,Int32,Int64,Int128,UInt8,UInt16,UInt32,UInt64,UInt128]
+               println("$(lpad(T,7)): [$(typemin(T)),$(typemax(T))]")
+             end
+         Int8: [-128,127]
+        Int16: [-32768,32767]
+        Int32: [-2147483648,2147483647]
+        Int64: [-9223372036854775808,9223372036854775807]
+       Int128: [-170141183460469231731687303715884105728,170141183460469231731687303715884105727]
+        UInt8: [0,255]
+       UInt16: [0,65535]
+       UInt32: [0,4294967295]
+       UInt64: [0,18446744073709551615]
+      UInt128: [0,340282366920938463463374607431768211455]
+
+整数のような数値プリミティブ型の最小値と最大値は、 :func:`typemin` および :func:`typemax` 関数により取得が可能です。::
 
 .. doctest::
 
@@ -1114,14 +1161,19 @@ such as integers are given by the :func:`typemin` and :func:`typemax` functions:
      UInt16: [0,65535]
      UInt32: [0,4294967295]
      UInt64: [0,18446744073709551615]
-    UInt128: [0,340282366920938463463374607431768211455]
+    UInt128: [0,340282366920938463463374607431768211455]    
 
-The values returned by :func:`typemin` and :func:`typemax` are always of the
-given argument type. (The above expression uses several features we have
-yet to introduce, including :ref:`for loops <man-loops>`,
-:ref:`man-strings`, and :ref:`man-string-interpolation`,
-but should be easy enough to understand for users with some existing
-programming experience.)
+.. 
+  The values returned by :func:`typemin` and :func:`typemax` are always of the
+  given argument type. (The above expression uses several features we have
+  yet to introduce, including :ref:`for loops <man-loops>`,
+  :ref:`man-strings`, and :ref:`man-string-interpolation`,
+  but should be easy enough to understand for users with some existing
+  programming experience.)
+  
+:func:`typemin` および :func:`typemax` の戻り値は常に指定された引数の型となります。
+（上記の式は、まだ紹介されていない :ref:`for loops <man-loops>`、:ref:`man-strings`、:ref:`man-string-interpolation`
+などの機能が含まれていますが、プログラミング経験者にとっては難しいものではないはずです。）
 
 
 Overflow behavior
