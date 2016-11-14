@@ -1494,11 +1494,54 @@ Juliaでは、指定された型の表現可能な最大値を超えた場合、
 ``NaN16``   ``NaN32``    ``NaN``     非数値            浮動小数点値以外の値
 =========== =========== ===========  ================= =================================================================
 
-For further discussion of how these non-finite floating-point values are
-ordered with respect to each other and other floats, see
-:ref:`man-numeric-comparisons`. By the
-`IEEE 754 standard <https://en.wikipedia.org/wiki/IEEE_754-2008>`_, these
-floating-point values are the results of certain arithmetic operations:
+.. 
+  For further discussion of how these non-finite floating-point values are
+  ordered with respect to each other and other floats, see
+  :ref:`man-numeric-comparisons`. By the
+  `IEEE 754 standard <https://en.wikipedia.org/wiki/IEEE_754-2008>`_, these
+  floating-point values are the results of certain arithmetic operations:
+
+  .. doctest::
+
+      julia> 1/Inf
+      0.0
+
+      julia> 1/0
+      Inf
+
+      julia> -5/0
+      -Inf
+
+      julia> 0.000001/0
+      Inf
+
+      julia> 0/0
+      NaN
+
+      julia> 500 + Inf
+      Inf
+
+      julia> 500 - Inf
+      -Inf
+
+      julia> Inf + Inf
+      Inf
+
+      julia> Inf - Inf
+      NaN
+
+      julia> Inf * Inf
+      Inf
+
+      julia> Inf / Inf
+      NaN
+
+      julia> 0 * Inf
+      NaN
+
+どのように非有限浮動小数点値がお互いに、およびその他の浮動値に対して順序付けられているかについては、
+:ref:`man-numeric-comparisons` を参照してください。`IEEE 754 規格 <https://en.wikipedia.org/wiki/IEEE_754-2008>`_
+では、これらの浮動小数点値は特定の演算処理の結果として取得されます。
 
 .. doctest::
 
@@ -1536,7 +1579,7 @@ floating-point values are the results of certain arithmetic operations:
     NaN
 
     julia> 0 * Inf
-    NaN
+    NaN    
 
 The :func:`typemin` and :func:`typemax` functions also apply to floating-point
 types:
