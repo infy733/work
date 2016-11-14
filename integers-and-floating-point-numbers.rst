@@ -1445,8 +1445,7 @@ Juliaでは、指定された型の表現可能な最大値を超えた場合、
 
   .. _man-special-floats:
 
-浮動小数点数には`2つの０
-<https://en.wikipedia.org/wiki/Signed_zero>`_　（正の0と負の0）があります。
+浮動小数点数には`2つの０<https://en.wikipedia.org/wiki/Signed_zero>`_　（正の0と負の0）があります。
 この2つの0は同じ値ですが、 ``bits`` 関数を使用した際に見られるように、それぞれ異なるバイナリ表現を持ちます。::
 
 .. doctest::
@@ -1490,9 +1489,9 @@ Juliaでは、指定された型の表現可能な最大値を超えた場合、
 -----------------------------------  ----------------- -----------------------------------------------------------------
 ``Float16`` ``Float32`` ``Float64``
 =========== =========== ===========  ================= =================================================================
-``Inf16``   ``Inf32``    ``Inf``     positive infinity a value greater than all finite floating-point values
-``-Inf16``  ``-Inf32``   ``-Inf``    negative infinity a value less than all finite floating-point values
-``NaN16``   ``NaN32``    ``NaN``     not a number      a value not ``==`` to any floating-point value (including itself)
+``Inf16``   ``Inf32``    ``Inf``     正の無限大         全ての有限の浮動小数点値よりも大きい値
+``-Inf16``  ``-Inf32``   ``-Inf``    負の無限大         全ての有限の浮動小数点数値よりも小さい値
+``NaN16``   ``NaN32``    ``NaN``     非数値            浮動小数点値以外の値
 =========== =========== ===========  ================= =================================================================
 
 For further discussion of how these non-finite floating-point values are
