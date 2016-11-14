@@ -1818,9 +1818,9 @@ Juliaは、次の最大または最小の浮動小数点数を引数に戻り値
          default :const:`RoundNearest` mode is set, and can give erroneous
          results when operating under other rounding modes.
          
-.. warning::端数処理は通常基本的な算術関数（:func:`+`、 :func:`-`、 :func:`*`、 :func:`/`、 :func:`sqrt`）および
-        型変換処理においてのみ正常に機能します。その他の多くの関数は、デフォルトの :const:`RoundNearest` モードが
-        設定されている前提で機能し、その他の端数処理モードでの演算処理では誤った結果を出力する場合があります。       
+.. warning:: 端数処理は通常基本的な算術関数（:func:`+`、 :func:`-`、 :func:`*`、 :func:`/`、 :func:`sqrt`）および
+       型変換処理においてのみ正常に機能します。その他の多くの関数は、デフォルトの :const:`RoundNearest` モードが
+       設定されている前提で機能し、その他の端数処理モードでの演算処理では誤った結果を出力する場合があります。       
 
 Background and References
 ~~~~~~~~~~~~~~~~~~~~~~~~~
