@@ -773,22 +773,33 @@
       julia> one(BigFloat)
       1.000000000000000000000000000000000000000000000000000000000000000000000000000000
     
-..
- .. _man-integers-and-floating-point-numbers:
 
- .. currentmodule:: Base
+.. _man-integers-and-floating-point-numbers:
+
+.. currentmodule:: Base
+
+.. 
+  *************************************
+   Integers and Floating-Point Numbers
+  *************************************
 
 *************************************
- Integers and Floating-Point Numbers
+ 整数と浮動小数点数
 *************************************
 
-Integers and floating-point values are the basic building blocks of
-arithmetic and computation. Built-in representations of such values are
-called numeric primitives, while representations of integers and
-floating-point numbers as immediate values in code are known as numeric
-literals. For example, ``1`` is an integer literal, while ``1.0`` is a
-floating-point literal; their binary in-memory representations as
-objects are numeric primitives.
+.. 
+  Integers and floating-point values are the basic building blocks of
+  arithmetic and computation. Built-in representations of such values are
+  called numeric primitives, while representations of integers and
+  floating-point numbers as immediate values in code are known as numeric
+  literals. For example, ``1`` is an integer literal, while ``1.0`` is a
+  floating-point literal; their binary in-memory representations as
+  objects are numeric primitives.
+  
+整数と浮動小数点値は、演算処理の基本的要素です。コード内の即値としての整数と浮動小数点値の表現は
+数値リテラルとして知られている一方で、ビルトインのこれらの値の表現は数値プリミティブと呼ばれています。
+例えば、 ``1`` は整数リテラルですが、 ``1.0`` は浮動小数点リテラルです。これらのオブジェクトとしての
+インメモリ表現が数値プリミティブです。
 
 Julia provides a broad range of primitive numeric types, and a full complement
 of arithmetic and bitwise operators as well as standard mathematical functions
