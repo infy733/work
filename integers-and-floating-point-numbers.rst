@@ -773,10 +773,10 @@
       julia> one(BigFloat)
       1.000000000000000000000000000000000000000000000000000000000000000000000000000000
     
-    
-.. _man-integers-and-floating-point-numbers:
+..
+ .. _man-integers-and-floating-point-numbers:
 
-.. currentmodule:: Base
+ .. currentmodule:: Base
 
 *************************************
  Integers and Floating-Point Numbers
