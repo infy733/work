@@ -818,7 +818,10 @@ Juliaは、幅広いプリミティブ数値型を提供し、標準的な数学
 使用しているハードウェアでは効果的に表現できない数値の演算処理を行うことができる :ref:`man-arbitrary-precision-arithmetic` の
 ソフトウェアサポートを提供します。
 
-The following are Julia's primitive numeric types:
+.. 
+  The following are Julia's primitive numeric types:
+
+
 
 -  **Integer types:**
 
