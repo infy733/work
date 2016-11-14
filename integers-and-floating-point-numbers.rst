@@ -798,18 +798,25 @@
   
 整数と浮動小数点値は、演算処理の基本的要素です。コード内の即値としての整数と浮動小数点値の表現は
 数値リテラルとして知られている一方で、ビルトインのこれらの値の表現は数値プリミティブと呼ばれています。
-例えば、  ``1`` は整数リテラルですが、 ``1.0`` は浮動小数点リテラルです。これらのオブジェクトとしての
+例えば、 ``1`` は整数リテラルですが、``1.0`` は浮動小数点リテラルです。これらのオブジェクトとしての
 インメモリ表現が数値プリミティブです。
 
-Julia provides a broad range of primitive numeric types, and a full complement
-of arithmetic and bitwise operators as well as standard mathematical functions
-are defined over them. These map directly onto numeric types and operations
-that are natively supported on modern computers, thus allowing Julia to take
-full advantage of computational resources. Additionally, Julia provides
-software support for :ref:`man-arbitrary-precision-arithmetic`, which can
-handle operations on numeric values that cannot be represented effectively in
-native hardware representations, but at the cost of relatively slower
-performance.
+.. 
+  Julia provides a broad range of primitive numeric types, and a full complement
+  of arithmetic and bitwise operators as well as standard mathematical functions
+  are defined over them. These map directly onto numeric types and operations
+  that are natively supported on modern computers, thus allowing Julia to take
+  full advantage of computational resources. Additionally, Julia provides
+  software support for :ref:`man-arbitrary-precision-arithmetic`, which can
+  handle operations on numeric values that cannot be represented effectively in
+  native hardware representations, but at the cost of relatively slower
+  performance.
+
+Juliaは、幅広いプリミティブ数値型を提供し、標準的な数学関数はもちろん算術演算やビット演算子の
+補完が定義されています。これらは、現代のコンピュータでサポートされている数値型や演算処理と関連づけます。
+これにより、Juliaは演算処理のリソースを最大限活用することができます。さらに、Juliaは、
+使用しているハードウェアでは効果的に表現できない数値の演算処理を行うことができる
+:ref:`man-arbitrary-precision-arithmetic`のソフトウェアサポートを提供します。
 
 The following are Julia's primitive numeric types:
 
