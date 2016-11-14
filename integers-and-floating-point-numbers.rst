@@ -1223,7 +1223,7 @@ Juliaでは、指定された型の表現可能な最大値を超えた場合、
 オーバーフローを許容するアプリケーションでは、オーバーフローにより発生したワードラップの明示的なチェックは不可欠です。
 チェックが難しい場合は、 :ref:`man-arbitrary-precision-arithmetic` の ``BigInt`` 型を使用することをお勧めします。
 
-..
+.. 
   Division errors
   ~~~~~~~~~~~~~~~
 
@@ -1237,14 +1237,44 @@ Juliaでは、指定された型の表現可能な最大値を超えた場合、
   (``rem`` and ``mod``) throw a :exc:`DivideError` when their second argument is
   zero.
 
-整数の除算（``div`` 関数）には、0で割る、最小の負の数（:func:`typemin`）を−1で割るの2つの
-例外的ケースがあります。どちらの結果も:exc:`DivideError` となります。余りおよび絶対値の
-関数（``rem`` および ``mod`` ）についても、その第二引数が0の際に:exc:`DivideError` となります。
+整数の除算（``div`` 関数）には、0で割る、最小の負の数（ :func:`typemin` ）を−1で割るの2つの
+例外的ケースがあります。どちらの結果も :exc:`DivideError` となります。余りおよび絶対値の
+関数（``rem`` および ``mod`` ）についても、その第二引数が0の際に :exc:`DivideError` となります。
 
-Floating-Point Numbers
+.. 
+  Floating-Point Numbers
+  ----------------------
+
+浮動小数点数
 ----------------------
 
-Literal floating-point numbers are represented in the standard formats:
+.. 
+  Literal floating-point numbers are represented in the standard formats:
+
+  .. doctest::
+
+      julia> 1.0
+      1.0
+
+      julia> 1.
+      1.0
+
+      julia> 0.5
+      0.5
+
+      julia> .5
+      0.5
+
+      julia> -1.23
+      -1.23
+
+      julia> 1e10
+      1.0e10
+
+      julia> 2.5e-4
+      0.00025
+
+浮動小数点数リテラルは標準的な形式で表されます。:
 
 .. doctest::
 
@@ -1267,10 +1297,24 @@ Literal floating-point numbers are represented in the standard formats:
     1.0e10
 
     julia> 2.5e-4
-    0.00025
+    0.00025    
 
-The above results are all ``Float64`` values. Literal ``Float32`` values can
-be entered by writing an ``f`` in place of ``e``:
+.. 
+  The above results are all ``Float64`` values. Literal ``Float32`` values can
+  be entered by writing an ``f`` in place of ``e``:
+
+  .. doctest::
+
+      julia> 0.5f0
+      0.5f0
+
+      julia> typeof(ans)
+      Float32
+
+      julia> 2.5f-4
+      0.00025f0
+
+上記の結果は、全て ``Float64`` 値です。リテラル ``Float32`` 値は、 ``f`` の代わりに ``e`` を使用することで入力が可能です。:
 
 .. doctest::
 
@@ -1283,7 +1327,18 @@ be entered by writing an ``f`` in place of ``e``:
     julia> 2.5f-4
     0.00025f0
 
+.. 
 Values can be converted to ``Float32`` easily:
+
+  .. doctest::
+
+      julia> Float32(-1.5)
+      -1.5f0
+
+      julia> typeof(ans)
+      Float32
+
+値は簡単に ``Float32`` に変換することが可能です。:
 
 .. doctest::
 
@@ -1293,7 +1348,24 @@ Values can be converted to ``Float32`` easily:
     julia> typeof(ans)
     Float32
 
-Hexadecimal floating-point literals are also valid, but only as ``Float64`` values:
+.. 
+  Hexadecimal floating-point literals are also valid, but only as ``Float64`` values:
+
+  .. doctest::
+
+      julia> 0x1p0
+      1.0
+
+      julia> 0x1.8p3
+      12.0
+
+      julia> 0x.4p-1
+      0.125
+
+      julia> typeof(ans)
+      Float64
+
+16進数の浮動小数点リテラルも有効ですが、 ``Float64`` 値としてのみ使用が可能です。:
 
 .. doctest::
 
@@ -1307,10 +1379,22 @@ Hexadecimal floating-point literals are also valid, but only as ``Float64`` valu
     0.125
 
     julia> typeof(ans)
-    Float64
+    Float64    
 
-Half-precision floating-point numbers are also supported (``Float16``), but
-only as a storage format. In calculations they'll be converted to ``Float32``:
+.. 
+  Half-precision floating-point numbers are also supported (``Float16``), but
+  only as a storage format. In calculations they'll be converted to ``Float32``:
+
+  .. doctest::
+
+      julia> sizeof(Float16(4.))
+      2
+
+      julia> 2*Float16(4.)
+      Float16(8.0)
+
+半制度浮動小数点数もサポートされていますが（ ``Float16`` ）、保存形式のみとして使用が可能です。
+計算時には、それらは ``Float32`` に変換されます。:
 
 .. doctest::
 
@@ -1318,7 +1402,7 @@ only as a storage format. In calculations they'll be converted to ``Float32``:
     2
 
     julia> 2*Float16(4.)
-    Float16(8.0)
+    Float16(8.0)    
 
 The underscore ``_`` can be used as digit separator:
 
