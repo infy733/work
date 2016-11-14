@@ -1445,7 +1445,7 @@ Juliaでは、指定された型の表現可能な最大値を超えた場合、
 
   .. _man-special-floats:
 
-浮動小数点数には`2つの０<https://en.wikipedia.org/wiki/Signed_zero>`_　（正の0と負の0）があります。
+浮動小数点数には `2つの０<https://en.wikipedia.org/wiki/Signed_zero>`_　（正の0と負の0）があります。
 この2つの0は同じ値ですが、 ``bits`` 関数を使用した際に見られるように、それぞれ異なるバイナリ表現を持ちます。::
 
 .. doctest::
@@ -1540,7 +1540,7 @@ Juliaでは、指定された型の表現可能な最大値を超えた場合、
       NaN
 
 どのように非有限浮動小数点値がお互いに、およびその他の浮動値に対して順序付けられているかについては、
-:ref:`man-numeric-comparisons` を参照してください。`IEEE 754規格 <https://en.wikipedia.org/wiki/IEEE_754-2008>`_
+:ref:`man-numeric-comparisons` を参照してください。 `IEEE 754規格 <https://en.wikipedia.org/wiki/IEEE_754-2008>`_
 では、これらの浮動小数点値は特定の演算処理の結果として取得されます。:
 
 .. doctest::
@@ -1884,20 +1884,51 @@ Juliaは、次の最大または最小の浮動小数点数を引数に戻り値
   Man of Floating-Point <https://people.eecs.berkeley.edu/~wkahan/ieee754status/754story.html>`_ 
   は特に興味深いものとなっています。
 
-Arbitrary Precision Arithmetic
+.. 
+  Arbitrary Precision Arithmetic
+  ------------------------------
+
+任意精度計算
 ------------------------------
 
-To allow computations with arbitrary-precision integers and floating point numbers,
-Julia wraps the `GNU Multiple Precision Arithmetic Library (GMP) <https://gmplib.org>`_ and the `GNU MPFR Library <http://www.mpfr.org>`_, respectively.
-The :class:`BigInt` and :class:`BigFloat` types are available in Julia for arbitrary precision
-integer and floating point numbers respectively.
+.. 
+  To allow computations with arbitrary-precision integers and floating point numbers,
+  Julia wraps the `GNU Multiple Precision Arithmetic Library (GMP) <https://gmplib.org>`_ and the `GNU MPFR Library <http://www.mpfr.org>`_, respectively.
+  The :class:`BigInt` and :class:`BigFloat` types are available in Julia for arbitrary precision
+  integer and floating point numbers respectively.
 
-Constructors exist to create these types from primitive numerical types, and
-:func:`parse` can be use to construct them from :class:`AbstractString`\ s.  Once
-created, they participate in arithmetic with all other numeric types thanks to
-Julia's
-:ref:`type promotion and conversion mechanism <man-conversion-and-promotion>`:
+任意精度の整数と浮動小数点数の計算を可能にするため、Juliaは `GNU Multiple Precision Arithmetic Library (GMP) <https://gmplib.org>`_ 
+および `GNU MPFR Library <http://www.mpfr.org>`_ に対応しています。Juliaでは任意精度整数と浮動小数点数のための :class:`BigInt` 
+および :class:`BigFloat` 型を利用いただけます。
 
+.. 
+  Constructors exist to create these types from primitive numerical types, and
+  :func:`parse` can be use to construct them from :class:`AbstractString`\ s.  Once
+  created, they participate in arithmetic with all other numeric types thanks to
+  Julia's
+  :ref:`type promotion and conversion mechanism <man-conversion-and-promotion>`:
+
+  .. doctest::
+
+      julia> BigInt(typemax(Int64)) + 1
+      9223372036854775808
+
+      julia> parse(BigInt, "123456789012345678901234567890") + 1
+      123456789012345678901234567891
+
+      julia> parse(BigFloat, "1.23456789012345678901")
+      1.234567890123456789010000000000000000000000000000000000000000000000000000000004
+
+      julia> BigFloat(2.0^66) / 3
+      2.459565876494606882133333333333333333333333333333333333333333333333333333333344e+19
+
+      julia> factorial(BigInt(40))
+      815915283247897734345611269596115894272000000000
+
+コンストラクタは数値プリミティブ型からこれらの型を生成し、 :func:`parse` は :class:`AbstractString`\ から
+これらの型を生成する際に使用できます。Juliaの :ref:`型変換機能 <man-conversion-and-promotion>`: により、
+一度生成すると、全ての数値型で演算に対応します。
+    
 .. doctest::
 
     julia> BigInt(typemax(Int64)) + 1
@@ -1913,10 +1944,34 @@ Julia's
     2.459565876494606882133333333333333333333333333333333333333333333333333333333344e+19
 
     julia> factorial(BigInt(40))
-    815915283247897734345611269596115894272000000000
+    815915283247897734345611269596115894272000000000    
 
-However, type promotion between the primitive types above and
-:class:`BigInt`/:class:`BigFloat` is not automatic and must be explicitly stated.
+.. 
+  However, type promotion between the primitive types above and
+  :class:`BigInt`/:class:`BigFloat` is not automatic and must be explicitly stated.
+
+  .. doctest::
+
+      julia> x = typemin(Int64)
+      -9223372036854775808
+
+      julia> x = x - 1
+      9223372036854775807
+
+      julia> typeof(x)
+      Int64
+
+      julia> y = BigInt(typemin(Int64))
+      -9223372036854775808
+
+      julia> y = y - 1
+      -9223372036854775809
+
+      julia> typeof(y)
+      BigInt
+
+しかし、上記のプリミティブ型と :class:`BigInt` または :class:`BigFloat` 間の型変換は、自動では行われず、
+明示的に指定する必要があります。
 
 .. doctest::
 
@@ -1938,13 +1993,38 @@ However, type promotion between the primitive types above and
     julia> typeof(y)
     BigInt
 
-The default precision (in number of bits of the significand) and
-rounding mode of :class:`BigFloat` operations can be changed globally
-by calling :func:`setprecision` and
-:func:`setrounding`, and all further calculations will take
-these changes in account.  Alternatively, the precision or the
-rounding can be changed only within the execution of a particular
-block of code by using the same functions with a ``do`` block:
+.. 
+  The default precision (in number of bits of the significand) and
+  rounding mode of :class:`BigFloat` operations can be changed globally
+  by calling :func:`setprecision` and
+  :func:`setrounding`, and all further calculations will take
+  these changes in account.  Alternatively, the precision or the
+  rounding can be changed only within the execution of a particular
+  block of code by using the same functions with a ``do`` block:
+
+  .. doctest::
+
+      julia> setrounding(BigFloat, RoundUp) do
+             BigFloat(1) + parse(BigFloat, "0.1")
+             end
+      1.100000000000000000000000000000000000000000000000000000000000000000000000000003
+
+      julia> setrounding(BigFloat, RoundDown) do
+             BigFloat(1) + parse(BigFloat, "0.1")
+             end
+      1.099999999999999999999999999999999999999999999999999999999999999999999999999986
+
+      julia> setprecision(40) do
+             BigFloat(1) + parse(BigFloat, "0.1")
+             end
+      1.1000000000004
+
+
+  .. _man-numeric-literal-coefficients:
+
+デフォルトの精度（仮数のビット数で設定）および :class:`BigFloat` 関数の端数処理は、 :func:`setprecision` 
+および :func:`setrounding` を使用することで設定変更が可能です。設定変更後の演算は全てこの変更が反映されます。
+また、コード内の特定のブロックのみの精度や端数処理の変更をしたい場合は、 ``do`` ブロックを併用することで設定が可能です。:
 
 .. doctest::
 
@@ -1966,12 +2046,31 @@ block of code by using the same functions with a ``do`` block:
 
 .. _man-numeric-literal-coefficients:
 
-Numeric Literal Coefficients
+.. 
+  Numeric Literal Coefficients
+  ----------------------------
+
+数値リテラル係数
 ----------------------------
 
-To make common numeric formulas and expressions clearer, Julia allows
-variables to be immediately preceded by a numeric literal, implying
-multiplication. This makes writing polynomial expressions much cleaner:
+.. 
+  To make common numeric formulas and expressions clearer, Julia allows
+  variables to be immediately preceded by a numeric literal, implying
+  multiplication. This makes writing polynomial expressions much cleaner:
+
+  .. doctest::
+
+      julia> x = 3
+      3
+
+      julia> 2x^2 - 3x + 1
+      10
+
+      julia> 1.5x^2 - .5x + 1
+      13.0
+
+一般的な数値式や表現をより明確にするため、Juliaでは乗算の数値リテラルが変数を
+先行することができます。これにより多項式をより明確に記載することができます。:
 
 .. doctest::
 
@@ -1984,36 +2083,76 @@ multiplication. This makes writing polynomial expressions much cleaner:
     julia> 1.5x^2 - .5x + 1
     13.0
 
-It also makes writing exponential functions more elegant:
+.. 
+  It also makes writing exponential functions more elegant:
+
+  .. doctest::
+
+      julia> 2^2x
+      64
+また、指数関数を簡潔に記載することが可能です。:
 
 .. doctest::
 
     julia> 2^2x
-    64
+    64    
 
-The precedence of numeric literal coefficients is the same as that of unary
-operators such as negation. So ``2^3x`` is parsed as ``2^(3x)``, and
-``2x^3`` is parsed as ``2*(x^3)``.
+.. 
+  The precedence of numeric literal coefficients is the same as that of unary
+  operators such as negation. So ``2^3x`` is parsed as ``2^(3x)``, and
+  ``2x^3`` is parsed as ``2*(x^3)``.
 
-Numeric literals also work as coefficients to parenthesized
-expressions:
+数値リテラル係数の優先順位は、否定のような単項演算子と同様です。 ``2^3x`` は ``2^(3x)`` として
+解析され、 ``2x^3`` は ``2*(x^3)`` として解析されます。:
+
+.. 
+  Numeric literals also work as coefficients to parenthesized
+  expressions:
+
+  .. doctest::
+
+      julia> 2(x-1)^2 - 3(x-1) + 1
+      3
+
+数値リテラルは括弧内の式の係数としての役割も持ちます。:
 
 .. doctest::
 
     julia> 2(x-1)^2 - 3(x-1) + 1
     3
 
-Additionally, parenthesized expressions can be used as coefficients to
-variables, implying multiplication of the expression by the variable:
+.. 
+  Additionally, parenthesized expressions can be used as coefficients to
+  variables, implying multiplication of the expression by the variable:
+
+  .. doctest::
+
+      julia> (x-1)x
+      6
+
+さらに、括弧内の式は、変数の式の乗数を示す変数の係数としても使用できます。:
 
 .. doctest::
 
     julia> (x-1)x
     6
 
-Neither juxtaposition of two parenthesized expressions, nor placing a
-variable before a parenthesized expression, however, can be used to
-imply multiplication:
+.. 
+  Neither juxtaposition of two parenthesized expressions, nor placing a
+  variable before a parenthesized expression, however, can be used to
+  imply multiplication:
+
+  .. doctest::
+
+      julia> (x-1)(x+1)
+      ERROR: MethodError: objects of type Int64 are not callable
+      ...
+
+      julia> x(x+1)
+      ERROR: MethodError: objects of type Int64 are not callable
+      ...
+
+2つの括弧内の式の並記や括弧を伴う式の前に変数の置くことは、乗算を意味するためには使用することができません。
 
 .. doctest::
 
@@ -2023,19 +2162,28 @@ imply multiplication:
 
     julia> x(x+1)
     ERROR: MethodError: objects of type Int64 are not callable
-    ...
+    ...    
 
-Both expressions are interpreted as function application: any
-expression that is not a numeric literal, when immediately followed by a
-parenthetical, is interpreted as a function applied to the values in
-parentheses (see :ref:`man-functions` for more about functions).
-Thus, in both of these cases, an error occurs since the left-hand value
-is not a function.
+.. 
+  Both expressions are interpreted as function application: any
+  expression that is not a numeric literal, when immediately followed by a
+  parenthetical, is interpreted as a function applied to the values in
+  parentheses (see :ref:`man-functions` for more about functions).
+  Thus, in both of these cases, an error occurs since the left-hand value
+  is not a function.
 
-The above syntactic enhancements significantly reduce the visual noise
-incurred when writing common mathematical formulae. Note that no
-whitespace may come between a numeric literal coefficient and the
-identifier or parenthesized expression which it multiplies.
+上記2つの式は関数として解釈されています。括弧を伴う式が直後に続く数値リテラルではない式は、
+括弧内の値に適用される関数として解釈されます（詳細は :ref:`man-functions` を参照ください）。
+上記の例では、左辺の値が関数ではないため、エラーが発生します。
+
+.. 
+  The above syntactic enhancements significantly reduce the visual noise
+  incurred when writing common mathematical formulae. Note that no
+  whitespace may come between a numeric literal coefficient and the
+  identifier or parenthesized expression which it multiplies.
+
+上記の構文の拡張機能は、同様な数式を記載する際の視覚的なノイズを低減します。
+数値リテラル係数と乗算識別子や括弧で囲まれた式の間には、空白を入れることができませんので、注意してください。
 
 Syntax Conflicts
 ~~~~~~~~~~~~~~~~
