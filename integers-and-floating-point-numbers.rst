@@ -905,7 +905,7 @@ Juliaは、幅広いプリミティブ数値型を提供し、標準的な数学
       julia> 1234
       1234
 
-整数リテラルは標準的な方法で表現されます。::
+整数リテラルは標準的な方法で表現されます。:
     
 .. doctest::
 
@@ -1041,7 +1041,7 @@ Juliaは、システムの符号つきまたは符号なしの固有の整数型
       UInt64
 
 符号なし整数は、 ``0x`` プレフィックスおよび16進数の ``0-9a-f`` （大文字の ``A-F`` は入力時のみ使用可能）を
-使用して入力および出力されます。符号なしの値の大きさは、使用されている16進数の桁数により決定されます。
+使用して入力および出力されます。符号なしの値の大きさは、使用されている16進数の桁数により決定されます。:
 
 .. doctest::
 
@@ -1103,7 +1103,7 @@ Binary and octal literals are also supported:
       julia> typeof(ans)
       UInt8
 
-2進および8進リテラルについてもサポートされています。::
+2進および8進リテラルについてもサポートされています。:
 
 .. doctest::
 
@@ -1142,7 +1142,7 @@ Binary and octal literals are also supported:
        UInt64: [0,18446744073709551615]
       UInt128: [0,340282366920938463463374607431768211455]
 
-整数のような数値プリミティブ型の最小値と最大値は、 :func:`typemin` および :func:`typemax` 関数により取得が可能です。::
+整数のような数値プリミティブ型の最小値と最大値は、 :func:`typemin` および :func:`typemax` 関数により取得が可能です。:
 
 .. doctest::
 
@@ -1175,12 +1175,29 @@ Binary and octal literals are also supported:
 （上記の式は、まだ紹介されていない :ref:`for loops <man-loops>`、:ref:`man-strings`、:ref:`man-string-interpolation`
 などの機能が含まれていますが、プログラミング経験者にとっては難しいものではないはずです。）
 
-
+.. 
 Overflow behavior
 ~~~~~~~~~~~~~~~~~
 
-In Julia, exceeding the maximum representable value of a given type results in
-a wraparound behavior:
+オーバーフロー処理
+~~~~~~~~~~~~~~~~~
+
+.. 
+  In Julia, exceeding the maximum representable value of a given type results in
+  a wraparound behavior:
+
+  .. doctest::
+
+      julia> x = typemax(Int64)
+      9223372036854775807
+
+      julia> x + 1
+      -9223372036854775808
+
+      julia> x + 1 == typemin(Int64)
+      true
+
+Juliaでは、指定された型の表現可能な最大値を超えた場合、ワードラップが発生します。:
 
 .. doctest::
 
@@ -1193,21 +1210,36 @@ a wraparound behavior:
     julia> x + 1 == typemin(Int64)
     true
 
-Thus, arithmetic with Julia integers is actually a form of `modular arithmetic
-<https://en.wikipedia.org/wiki/Modular_arithmetic>`_. This reflects the
-characteristics of the underlying arithmetic of integers as implemented on
-modern computers. In applications where overflow is possible, explicit checking
-for wraparound produced by overflow is essential; otherwise, the ``BigInt`` type
-in :ref:`man-arbitrary-precision-arithmetic` is recommended instead.
+.. 
+  Thus, arithmetic with Julia integers is actually a form of `modular arithmetic
+  <https://en.wikipedia.org/wiki/Modular_arithmetic>`_. This reflects the
+  characteristics of the underlying arithmetic of integers as implemented on
+  modern computers. In applications where overflow is possible, explicit checking
+  for wraparound produced by overflow is essential; otherwise, the ``BigInt`` type
+  in :ref:`man-arbitrary-precision-arithmetic` is recommended instead.
 
-Division errors
+このように、Juliaにおける整数の演算は、`合同算術<https://en.wikipedia.org/wiki/Modular_arithmetic>`_の
+形をとります。これは現代のコンピュータで実行される基本演算の特性を反映しています。
+オーバーフローを許容するアプリケーションでは、オーバーフローにより発生したワードラップの明示的なチェックは不可欠です。
+チェックが難しい場合は、 :ref:`man-arbitrary-precision-arithmetic` の ``BigInt`` 型を使用することをお勧めします。
+
+..
+  Division errors
+  ~~~~~~~~~~~~~~~
+
+除算処理エラー
 ~~~~~~~~~~~~~~~
 
-Integer division (the ``div`` function) has two exceptional cases: dividing by
-zero, and dividing the lowest negative number (:func:`typemin`) by -1. Both of
-these cases throw a :exc:`DivideError`. The remainder and modulus functions
-(``rem`` and ``mod``) throw a :exc:`DivideError` when their second argument is
-zero.
+.. 
+  Integer division (the ``div`` function) has two exceptional cases: dividing by
+  zero, and dividing the lowest negative number (:func:`typemin`) by -1. Both of
+  these cases throw a :exc:`DivideError`. The remainder and modulus functions
+  (``rem`` and ``mod``) throw a :exc:`DivideError` when their second argument is
+  zero.
+
+整数の除算（``div`` 関数）には、0で割る、最小の負の数（:func:`typemin`）を−1で割るの2つの
+例外的ケースがあります。どちらの結果も:exc:`DivideError` となります。余りおよび絶対値の
+関数（``rem`` および ``mod`` ）についても、その第二引数が0の際に:exc:`DivideError` となります。
 
 Floating-Point Numbers
 ----------------------
