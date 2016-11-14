@@ -815,8 +815,8 @@
 Juliaは、幅広いプリミティブ数値型を提供し、標準的な数学関数はもちろん算術演算やビット演算子の
 補完が定義されています。これらは、現代のコンピュータでサポートされている数値型や演算処理と関連づけます。
 これにより、Juliaは演算処理のリソースを最大限活用することができます。さらに、Juliaは、
-使用しているハードウェアでは効果的に表現できない数値の演算処理を行うことができる
- :ref:`man-arbitrary-precision-arithmetic`のソフトウェアサポートを提供します。
+使用しているハードウェアでは効果的に表現できない数値の演算処理を行うことができる :ref:`man-arbitrary-precision-arithmetic` の
+ソフトウェアサポートを提供します。
 
 The following are Julia's primitive numeric types:
 
