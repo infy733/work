@@ -878,10 +878,15 @@ Juliaは、幅広いプリミティブ数値型を提供し、標準的な数学
 .. _single: https://en.wikipedia.org/wiki/Single_precision_floating-point_format
 .. _double: https://en.wikipedia.org/wiki/Double_precision_floating-point_format
 
-Additionally, full support for :ref:`man-complex-and-rational-numbers` is built
-on top of these primitive numeric types. All numeric types interoperate
-naturally without explicit casting, thanks to a flexible, user-extensible
-:ref:`type promotion system <man-conversion-and-promotion>`.
+.. 
+  Additionally, full support for :ref:`man-complex-and-rational-numbers` is built
+  on top of these primitive numeric types. All numeric types interoperate
+  naturally without explicit casting, thanks to a flexible, user-extensible
+  :ref:`type promotion system <man-conversion-and-promotion>`.
+
+加えて、:ref:`man-complex-and-rational-numbers` へのサポートは、これらの数値プリミティブ型を踏まえて構築されています。
+全ての数値型は、明示的に割り当てることなく自然に相互運用します。 :ref:`type promotion system <man-conversion-and-promotion>`
+
 
 Integers
 --------
