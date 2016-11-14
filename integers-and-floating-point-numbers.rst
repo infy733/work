@@ -1822,41 +1822,67 @@ Juliaは、次の最大または最小の浮動小数点数を引数に戻り値
        型変換処理においてのみ正常に機能します。その他の多くの関数は、デフォルトの :const:`RoundNearest` モードが
        設定されている前提で機能し、その他の端数処理モードでの演算処理では誤った結果を出力する場合があります。       
 
-Background and References
+.. 
+  Background and References
+  ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+背景と参考
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Floating-point arithmetic entails many subtleties which can be surprising to
-users who are unfamiliar with the low-level implementation details. However,
-these subtleties are described in detail in most books on scientific
-computation, and also in the following references:
+.. 
+  Floating-point arithmetic entails many subtleties which can be surprising to
+  users who are unfamiliar with the low-level implementation details. However,
+  these subtleties are described in detail in most books on scientific
+  computation, and also in the following references:
 
-- The definitive guide to floating point arithmetic is the `IEEE 754-2008
-  Standard <http://standards.ieee.org/findstds/standard/754-2008.html>`_;
-  however, it is not available for free online.
-- For a brief but lucid presentation of how floating-point numbers are
-  represented, see John D. Cook's `article
-  <http://www.johndcook.com/blog/2009/04/06/anatomy-of-a-floating-point-number/>`_
-  on the subject as well as his `introduction
-  <http://www.johndcook.com/blog/2009/04/06/numbers-are-a-leaky-abstraction/>`_
-  to some of the issues arising from how this representation differs in
-  behavior from the idealized abstraction of real numbers.
-- Also recommended is Bruce Dawson's `series of blog posts on floating-point
-  numbers <https://randomascii.wordpress.com/2012/05/20/thats-not-normalthe-performance-of-odd-floats/>`_.
-- For an excellent, in-depth discussion of floating-point numbers and issues of
-  numerical accuracy encountered when computing with them, see David Goldberg's
-  paper `What Every Computer Scientist Should Know About Floating-Point
-  Arithmetic
-  <http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.22.6768&rep=rep1&type=pdf>`_.
-- For even more extensive documentation of the history of, rationale for,
-  and issues with floating-point numbers, as well as discussion of many other
-  topics in numerical computing, see the `collected writings
-  <https://people.eecs.berkeley.edu/~wkahan/>`_ of `William Kahan
-  <https://en.wikipedia.org/wiki/William_Kahan>`_, commonly known as the "Father
-  of Floating-Point". Of particular interest may be `An Interview with the Old
-  Man of Floating-Point
-  <https://people.eecs.berkeley.edu/~wkahan/ieee754status/754story.html>`_.
+浮動小数点数演算は、あまり経験のないユーザには難しいかもしれませんが、多くの応用的な知識が必要です。
+しかし、応用的な知識は科学技術計算に関する書籍や以下参考に詳細が記載されています。
 
-.. _man-arbitrary-precision-arithmetic:
+.. 
+  - The definitive guide to floating point arithmetic is the `IEEE 754-2008
+    Standard <http://standards.ieee.org/findstds/standard/754-2008.html>`_;
+    however, it is not available for free online.
+  - For a brief but lucid presentation of how floating-point numbers are
+    represented, see John D. Cook's `article
+    <http://www.johndcook.com/blog/2009/04/06/anatomy-of-a-floating-point-number/>`_
+    on the subject as well as his `introduction
+    <http://www.johndcook.com/blog/2009/04/06/numbers-are-a-leaky-abstraction/>`_
+    to some of the issues arising from how this representation differs in
+    behavior from the idealized abstraction of real numbers.
+  - Also recommended is Bruce Dawson's `series of blog posts on floating-point
+    numbers <https://randomascii.wordpress.com/2012/05/20/thats-not-normalthe-performance-of-odd-floats/>`_.
+  - For an excellent, in-depth discussion of floating-point numbers and issues of
+    numerical accuracy encountered when computing with them, see David Goldberg's
+    paper `What Every Computer Scientist Should Know About Floating-Point
+    Arithmetic
+    <http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.22.6768&rep=rep1&type=pdf>`_.
+  - For even more extensive documentation of the history of, rationale for,
+    and issues with floating-point numbers, as well as discussion of many other
+    topics in numerical computing, see the `collected writings
+    <https://people.eecs.berkeley.edu/~wkahan/>`_ of `William Kahan
+    <https://en.wikipedia.org/wiki/William_Kahan>`_, commonly known as the "Father
+    of Floating-Point". Of particular interest may be `An Interview with the Old
+    Man of Floating-Point
+    <https://people.eecs.berkeley.edu/~wkahan/ieee754status/754story.html>`_.
+
+  .. _man-arbitrary-precision-arithmetic:
+  
+- 浮動小数点演算の最も有効なガイドは`IEEE 754-2008規格 <http://standards.ieee.org/findstds/standard/754-2008.html>`_ 
+  です。しかし、オンライン上で無償で利用することはできません。
+- 浮動小数点数の表現に関するの簡潔かつ明快な説明は、John D. Cookの`記事
+  <http://www.johndcook.com/blog/2009/04/06/anatomy-of-a-floating-point-number/>`_ および実数の理想化された
+  抽象化によりどのように表現が異なるかに関するいくつかの問題についての彼の`紹介
+  <http://www.johndcook.com/blog/2009/04/06/numbers-are-a-leaky-abstraction/>`_ を参照してください。
+- Bruce Dawsonによる浮動小数点数に関する`一連のブログ記事
+  <https://randomascii.wordpress.com/2012/05/20/thats-not-normalthe-performance-of-odd-floats/>`_ もお勧めします。
+- 浮動小数点数に関する高度かつ詳細な議論および演算時の数値の精度の問題については、
+  David Goldbergの論文`What Every Computer Scientist Should Know About Floating-Point Arithmetic
+  <http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.22.6768&rep=rep1&type=pdf>`_ を参照してください。
+- より広範囲な歴史や合理性、浮動小数点数の問題に関する文献、およびその他の数値計算に関する議論については、
+ 「浮動小数点の父」として知られる`William Kahan <https://en.wikipedia.org/wiki/William_Kahan>`_ の
+  `論文 <https://people.eecs.berkeley.edu/~wkahan/>`_ を参照してください。特に`An Interview with the Old
+  Man of Floating-Point <https://people.eecs.berkeley.edu/~wkahan/ieee754status/754story.html>`_ 
+  は特に興味深いものとなっています。
 
 Arbitrary Precision Arithmetic
 ------------------------------
