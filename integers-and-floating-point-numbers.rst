@@ -1625,8 +1625,22 @@ Juliaでは、指定された型の表現可能な最大値を超えた場合、
 ほとんどの実数は、浮動小数点数で正確に表現することができないため、`計算機イプシロン <https://en.wikipedia.org/wiki/Machine_epsilon>`_
 として知られる隣接する２つの浮動小数点数の距離を理解することは、多くの用途のために重要となります。
 
-Julia provides :func:`eps`, which gives the distance between ``1.0``
-and the next larger representable floating-point value:
+.. 
+  Julia provides :func:`eps`, which gives the distance between ``1.0``
+  and the next larger representable floating-point value:
+
+  .. doctest::
+
+      julia> eps(Float32)
+      1.1920929f-7
+
+      julia> eps(Float64)
+      2.220446049250313e-16
+
+      julia> eps() # same as eps(Float64)
+      2.220446049250313e-16
+
+Juliaは、 ``1.0`` と次に大きい浮動小数点値の間の距離を取得する :func:`eps` 関数を提供しています。:
 
 .. doctest::
 
@@ -1637,15 +1651,35 @@ and the next larger representable floating-point value:
     2.220446049250313e-16
 
     julia> eps() # same as eps(Float64)
-    2.220446049250313e-16
+    2.220446049250313e-16    
 
-These values are ``2.0^-23`` and ``2.0^-52`` as ``Float32`` and ``Float64``
-values, respectively. The :func:`eps` function can also take a
-floating-point value as an argument, and gives the absolute difference
-between that value and the next representable floating point value. That
-is, ``eps(x)`` yields a value of the same type as ``x`` such that
-``x + eps(x)`` is the next representable floating-point value larger
-than ``x``:
+.. 
+  These values are ``2.0^-23`` and ``2.0^-52`` as ``Float32`` and ``Float64``
+  values, respectively. The :func:`eps` function can also take a
+  floating-point value as an argument, and gives the absolute difference
+  between that value and the next representable floating point value. That
+  is, ``eps(x)`` yields a value of the same type as ``x`` such that
+  ``x + eps(x)`` is the next representable floating-point value larger
+  than ``x``:
+
+  .. doctest::
+
+      julia> eps(1.0)
+      2.220446049250313e-16
+
+      julia> eps(1000.)
+      1.1368683772161603e-13
+
+      julia> eps(1e-27)
+      1.793662034335766e-43
+
+      julia> eps(0.0)
+      5.0e-324
+
+これらはそれぞれ ``Float32`` および ``Float64`` 値として ``2.0^-23`` および ``2.0^-52`` と
+なります。 :func:`eps` 関数は、浮動小数点値を引数として使用したり、ある値と次の浮動小数点値との絶対差を
+得ることができます。つまり、 ``eps(x)`` は ``x`` と同様の型の値を生成し、``x + eps(x)`` は ``x`` よりも
+大きい次の浮動小数点値を生成します。:
 
 .. doctest::
 
@@ -1659,18 +1693,48 @@ than ``x``:
     1.793662034335766e-43
 
     julia> eps(0.0)
-    5.0e-324
+    5.0e-324    
 
-The distance between two adjacent representable floating-point numbers is not
-constant, but is smaller for smaller values and larger for larger values. In
-other words, the representable floating-point numbers are densest in the real
-number line near zero, and grow sparser exponentially as one moves farther away
-from zero. By definition, ``eps(1.0)`` is the same as ``eps(Float64)`` since
-``1.0`` is a 64-bit floating-point value.
+.. 
+  The distance between two adjacent representable floating-point numbers is not
+  constant, but is smaller for smaller values and larger for larger values. In
+  other words, the representable floating-point numbers are densest in the real
+  number line near zero, and grow sparser exponentially as one moves farther away
+  from zero. By definition, ``eps(1.0)`` is the same as ``eps(Float64)`` since
+  ``1.0`` is a 64-bit floating-point value.
 
-Julia also provides the :func:`nextfloat` and :func:`prevfloat` functions which return
-the next largest or smallest representable floating-point number to the
-argument respectively: :
+隣接する2つの浮動小数点数の距離は一定ではありませんが、小さい値ではその距離はより小さく、
+大きい値ではより大きくなります。言い換えれば、浮動小数点数は実数線上で0に近い場合に最も高密度になり、
+0から離れるにつれてまばらになっていきます。定義上、 ``1.0`` は64ビットの浮動小数点値であるため、
+ ``eps(1.0)`` は``eps(Float64)`` と同一です。
+
+.. 
+  Julia also provides the :func:`nextfloat` and :func:`prevfloat` functions which return
+  the next largest or smallest representable floating-point number to the
+  argument respectively: :
+
+  .. doctest::
+
+      julia> x = 1.25f0
+      1.25f0
+
+      julia> nextfloat(x)
+      1.2500001f0
+
+      julia> prevfloat(x)
+      1.2499999f0
+
+      julia> bits(prevfloat(x))
+      "00111111100111111111111111111111"
+
+      julia> bits(x)
+      "00111111101000000000000000000000"
+
+      julia> bits(nextfloat(x))
+      "00111111101000000000000000000001"
+
+Juliaは、次の最大または最小の浮動小数点数を引数に戻り値として与える :func:`nextfloat` 
+および :func:`prevfloat` 関数を提供しています。:
 
 .. doctest::
 
@@ -1692,16 +1756,40 @@ argument respectively: :
     julia> bits(nextfloat(x))
     "00111111101000000000000000000001"
 
-This example highlights the general principle that the adjacent representable
-floating-point numbers also have adjacent binary integer representations.
+.. 
+  This example highlights the general principle that the adjacent representable
+  floating-point numbers also have adjacent binary integer representations.
 
-Rounding modes
+この例では、隣接する浮動小数点数は隣接する二進整数を持つという一般的な原則を表しています。
+
+.. 
+  Rounding modes
+  ~~~~~~~~~~~~~~
+
+端数処理モード
 ~~~~~~~~~~~~~~
 
-If a number doesn't have an exact floating-point representation, it must be
-rounded to an appropriate representable value, however, if wanted, the manner
-in which this rounding is done can be changed according to the rounding modes
-presented in the `IEEE 754 standard <https://en.wikipedia.org/wiki/IEEE_754-2008>`_.
+.. 
+  If a number doesn't have an exact floating-point representation, it must be
+  rounded to an appropriate representable value, however, if wanted, the manner
+  in which this rounding is done can be changed according to the rounding modes
+  presented in the `IEEE 754 standard <https://en.wikipedia.org/wiki/IEEE_754-2008>`_.
+
+  .. doctest::
+
+      julia> x = 1.1; y = 0.1;
+
+      julia> x + y
+      1.2000000000000002
+
+      julia> setrounding(Float64,RoundDown) do
+                 x + y
+             end
+      1.2
+
+値が割り切れる浮動小数点数ではない場合、適切な表現可能な値に繰り上げる必要があります。
+しかし、必要な場合は、どのように繰り上げするかは `IEEE 754規格 <https://en.wikipedia.org/wiki/IEEE_754-2008>`_ の
+端数処理モードに準拠して変更が可能です。
 
 .. doctest::
 
@@ -1713,7 +1801,7 @@ presented in the `IEEE 754 standard <https://en.wikipedia.org/wiki/IEEE_754-2008
     julia> setrounding(Float64,RoundDown) do
                x + y
            end
-    1.2
+    1.2   
 
 The default mode used is always :const:`RoundNearest`, which rounds to the nearest
 representable value, with ties rounded towards the nearest value with an even
