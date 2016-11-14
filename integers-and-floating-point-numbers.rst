@@ -1541,7 +1541,7 @@ Juliaでは、指定された型の表現可能な最大値を超えた場合、
 
 どのように非有限浮動小数点値がお互いに、およびその他の浮動値に対して順序付けられているかについては、
 :ref:`man-numeric-comparisons` を参照してください。`IEEE 754 規格 <https://en.wikipedia.org/wiki/IEEE_754-2008>`_
-では、これらの浮動小数点値は特定の演算処理の結果として取得されます。
+では、これらの浮動小数点値は特定の演算処理の結果として取得されます。:
 
 .. doctest::
 
@@ -1581,8 +1581,22 @@ Juliaでは、指定された型の表現可能な最大値を超えた場合、
     julia> 0 * Inf
     NaN    
 
-The :func:`typemin` and :func:`typemax` functions also apply to floating-point
-types:
+.. 
+  The :func:`typemin` and :func:`typemax` functions also apply to floating-point
+  types:
+
+  .. doctest::
+
+      julia> (typemin(Float16),typemax(Float16))
+      (-Inf16,Inf16)
+
+      julia> (typemin(Float32),typemax(Float32))
+      (-Inf32,Inf32)
+
+      julia> (typemin(Float64),typemax(Float64))
+      (-Inf,Inf)
+      
+:func:`typemin` および :func:`typemax` 関数は浮動小数点型に対しても使用が可能です。
 
 .. doctest::
 
@@ -1595,13 +1609,21 @@ types:
     julia> (typemin(Float64),typemax(Float64))
     (-Inf,Inf)
 
-Machine epsilon
+.. 
+  Machine epsilon
+  ~~~~~~~~~~~~~~~
+
+計算機イプシロン
 ~~~~~~~~~~~~~~~
 
-Most real numbers cannot be represented exactly with floating-point numbers,
-and so for many purposes it is important to know the distance between two
-adjacent representable floating-point numbers, which is often known as
-`machine epsilon <https://en.wikipedia.org/wiki/Machine_epsilon>`_.
+.. 
+  Most real numbers cannot be represented exactly with floating-point numbers,
+  and so for many purposes it is important to know the distance between two
+  adjacent representable floating-point numbers, which is often known as
+  `machine epsilon <https://en.wikipedia.org/wiki/Machine_epsilon>`_.
+  
+ほとんどの実数は、浮動小数点数で正確に表現することができないため、`計算機イプシロン <https://en.wikipedia.org/wiki/Machine_epsilon>`_
+として知られる隣接する２つの浮動小数点数の距離を理解することは、多くの用途のために重要となります。
 
 Julia provides :func:`eps`, which gives the distance between ``1.0``
 and the next larger representable floating-point value:
