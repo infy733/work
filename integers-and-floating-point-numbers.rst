@@ -1087,7 +1087,7 @@ Juliaは、システムの符号つきまたは符号なしの固有の整数型
 この処理は、Juliaコードがその他の方法で実行された場合には実施されません。
 
 .. 
-Binary and octal literals are also supported:
+  Binary and octal literals are also supported:
 
   .. doctest::
 
@@ -1218,7 +1218,7 @@ Juliaでは、指定された型の表現可能な最大値を超えた場合、
   for wraparound produced by overflow is essential; otherwise, the ``BigInt`` type
   in :ref:`man-arbitrary-precision-arithmetic` is recommended instead.
 
-このように、Juliaにおける整数の演算は、`合同算術<https://en.wikipedia.org/wiki/Modular_arithmetic>`_ の
+このように、Juliaにおける整数の演算は、 `合同算術 <https://en.wikipedia.org/wiki/Modular_arithmetic>`_ の
 形をとります。これは現代のコンピュータで実行される基本演算の特性を反映しています。
 オーバーフローを許容するアプリケーションでは、オーバーフローにより発生したワードラップの明示的なチェックは不可欠です。
 チェックが難しい場合は、 :ref:`man-arbitrary-precision-arithmetic` の ``BigInt`` 型を使用することをお勧めします。
@@ -1445,7 +1445,7 @@ Juliaでは、指定された型の表現可能な最大値を超えた場合、
 
   .. _man-special-floats:
 
-浮動小数点数には `two zeros<https://en.wikipedia.org/wiki/Signed_zero>`_（正の0と負の0）があります。
+浮動小数点数には `2つの0 <https://en.wikipedia.org/wiki/Signed_zero>`_ （正の0と負の0）があります。
 この2つの0は同じ値ですが、 ``bits`` 関数を使用した際に見られるように、それぞれ異なるバイナリ表現を持ちます。::
 
 .. doctest::
@@ -2185,39 +2185,73 @@ Juliaは、次の最大または最小の浮動小数点数を引数に戻り値
 上記の構文の拡張機能は、同様な数式を記載する際の視覚的なノイズを低減します。
 数値リテラル係数と乗算識別子や括弧で囲まれた式の間には、空白を入れることができませんので、注意してください。
 
-Syntax Conflicts
+.. 
+  Syntax Conflicts
+  ~~~~~~~~~~~~~~~~
+
+構文の競合
 ~~~~~~~~~~~~~~~~
 
-Juxtaposed literal coefficient syntax may conflict with two numeric literal
-syntaxes: hexadecimal integer literals and engineering notation for
-floating-point literals. Here are some situations where syntactic
-conflicts arise:
+.. 
+  Juxtaposed literal coefficient syntax may conflict with two numeric literal
+  syntaxes: hexadecimal integer literals and engineering notation for
+  floating-point literals. Here are some situations where syntactic
+  conflicts arise:
 
--  The hexadecimal integer literal expression ``0xff`` could be
-   interpreted as the numeric literal ``0`` multiplied by the variable
-   ``xff``.
--  The floating-point literal expression ``1e10`` could be interpreted
-   as the numeric literal ``1`` multiplied by the variable ``e10``, and
-   similarly with the equivalent ``E`` form.
+並列されたリテラル係数の構文は、16進整数リテラルと浮動小数点リテラルの指数表記の2つの
+数値リテラルと競合する場合があります。以下は構文の競合が発生する状況の例です。
 
-In both cases, we resolve the ambiguity in favor of interpretation as a
-numeric literals:
+.. 
+  -  The hexadecimal integer literal expression ``0xff`` could be
+     interpreted as the numeric literal ``0`` multiplied by the variable
+     ``xff``.
+  -  The floating-point literal expression ``1e10`` could be interpreted
+     as the numeric literal ``1`` multiplied by the variable ``e10``, and
+     similarly with the equivalent ``E`` form.
 
--  Expressions starting with ``0x`` are always hexadecimal literals.
--  Expressions starting with a numeric literal followed by ``e`` or
-   ``E`` are always floating-point literals.
+-  16進整数リテラルの表記 ``0xff`` は、数値リテラル ``0`` 掛ける変数 ``xff`` と解釈される可能性があります。
+-  浮動小数点リテラルの表記 ``1e10`` は、数値リテラル ``1`` 掛ける指数関数のような変数 ``e10`` と解釈される可能性があります。
 
-Literal zero and one
+.. 
+  In both cases, we resolve the ambiguity in favor of interpretation as a
+  numeric literals:
+
+上記両ケースでは、優先的に数値リテラルとして解釈されるようにすることで、あいまいさを回避しています。
+
+.. 
+  -  Expressions starting with ``0x`` are always hexadecimal literals.
+  -  Expressions starting with a numeric literal followed by ``e`` or
+     ``E`` are always floating-point literals.
+
+-   ``0x`` で始まる式は、常に16進リテラルとして解釈されます。
+-   ``e`` または ``E`` が続く数値リテラルで始まる式は、浮動小数点リテラルとして解釈されます。
+
+.. 
+  Literal zero and one
+  --------------------
+
+リテラル0および1
 --------------------
 
-Julia provides functions which return literal 0 and 1 corresponding to a
-specified type or the type of a given variable.
+.. 
+  Julia provides functions which return literal 0 and 1 corresponding to a
+  specified type or the type of a given variable.
+  
+Juliaは、特定の方や特定の変数の型に対応してリテラル0および1を返す関数を提供しています。  
+
+.. 
+  ====================== =====================================================
+  Function               Description
+  ====================== =====================================================
+  :func:`zero(x) <zero>` Literal zero of type ``x`` or type of variable ``x``
+  :func:`one(x) <one>`   Literal one of type ``x`` or type of variable ``x``
+  ====================== =====================================================
 
 ====================== =====================================================
-Function               Description
+関数                   概要
 ====================== =====================================================
-:func:`zero(x) <zero>` Literal zero of type ``x`` or type of variable ``x``
-:func:`one(x) <one>`   Literal one of type ``x`` or type of variable ``x``
+:func:`zero(x) <zero>`  ``x`` 型のリテラル0または変数 ``x`` の型
+:func:`one(x) <one>`    ``x`` のリテラル1型または変数 ``x`` の型
 ====================== =====================================================
 
 These functions are useful in :ref:`man-numeric-comparisons` to avoid overhead
