@@ -1540,7 +1540,7 @@ Juliaでは、指定された型の表現可能な最大値を超えた場合、
       NaN
 
 どのように非有限浮動小数点値がお互いに、およびその他の浮動値に対して順序付けられているかについては、
-:ref:`man-numeric-comparisons` を参照してください。`IEEE 754 規格 <https://en.wikipedia.org/wiki/IEEE_754-2008>`_
+:ref:`man-numeric-comparisons` を参照してください。`IEEE 754規格 <https://en.wikipedia.org/wiki/IEEE_754-2008>`_
 では、これらの浮動小数点値は特定の演算処理の結果として取得されます。:
 
 .. doctest::
@@ -1803,15 +1803,24 @@ Juliaは、次の最大または最小の浮動小数点数を引数に戻り値
            end
     1.2   
 
-The default mode used is always :const:`RoundNearest`, which rounds to the nearest
-representable value, with ties rounded towards the nearest value with an even
-least significant bit.
+.. 
+  The default mode used is always :const:`RoundNearest`, which rounds to the nearest
+  representable value, with ties rounded towards the nearest value with an even
+  least significant bit.
 
-.. warning:: Rounding is generally only correct for basic arithmetic functions
-	     (:func:`+`, :func:`-`, :func:`*`, :func:`/` and :func:`sqrt`) and
-	     type conversion operations. Many other functions assume the
-	     default :const:`RoundNearest` mode is set, and can give erroneous
-	     results when operating under other rounding modes.
+デフォルトでは、偶数の最下位ビットに最も近い値になるよう値を
+繰り上げる :const:`RoundNearest` が常に使用されます。
+
+.. 
+  .. warning:: Rounding is generally only correct for basic arithmetic functions
+         (:func:`+`, :func:`-`, :func:`*`, :func:`/` and :func:`sqrt`) and
+         type conversion operations. Many other functions assume the
+         default :const:`RoundNearest` mode is set, and can give erroneous
+         results when operating under other rounding modes.
+         
+.. warning::端数処理は通常基本的な算術関数（:func:`+`、 :func:`-`、 :func:`*`、 :func:`/`、 :func:`sqrt`）および
+        型変換処理においてのみ正常に機能します。その他の多くの関数は、デフォルトの :const:`RoundNearest` モードが
+        設定されている前提で機能し、その他の端数処理モードでの演算処理では誤った結果を出力する場合があります。       
 
 Background and References
 ~~~~~~~~~~~~~~~~~~~~~~~~~
