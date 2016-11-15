@@ -294,7 +294,6 @@ Juliaの使用法を学んだりJuliaを試すには、Juliaの実行ファイ�
 グローバル定数 ``ARGS`` に渡されます。スクリプト自体の名前は、 ``PROGRAM_FILE`` に渡されます。 ``ARGS`` 
 も ``-e`` オプションを使用したコマンドラインにてセットすることができますが、 ``PROGRAM_FILE`` は
 空白となりますので注意してください（以下 ``julia`` のヘルプを参照）。
-グローバル定数 ``ARGS`` に渡されます。スクリプト自体の名前は、 ``PROGRAM_FILE`` に渡されます。
 例として、スクリプトの引数を出力したい場合、以下のコマンドで実行することができます。::
 
     $ julia -e 'println(PROGRAM_FILE); for x in ARGS; println(x); end' foo bar
