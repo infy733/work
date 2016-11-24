@@ -1553,7 +1553,7 @@ erfc <http://www.johndcook.com/blog/2010/06/07/math-library-functions-that-seem-
 =================================================== ==============================================================================
 関数                                                概要
 =================================================== ==============================================================================
-:func:`erf(x) <erf>`                                ``x`` における`誤差関数 <https://en.wikipedia.org/wiki/Error_function>`_ 
+:func:`erf(x) <erf>`                                ``x`` における `誤差関数 <https://en.wikipedia.org/wiki/Error_function>`_ 
 :func:`erfc(x) <erfc>`                              大きな値 ``x`` における ``1-erf(x)``のより正確な処理が可能な相補誤差関数 
 :func:`erfinv(x) <erfinv>`                          :func:`erf` に対する逆関数
 :func:`erfcinv(x) <erfinvc>`                        :func:`erfc` に対する逆関数
