@@ -1339,22 +1339,39 @@ varargs関数を定義することができます。
 例にある通り、継承された中に間違った数の要素がある場合、あまりにも多くの引数が明示的に与えられた場合と同様に、
 関数呼び出しは失敗します。
 
-Optional Arguments
+.. 
+ Optional Arguments
+ ------------------
+
+オプションの引数
 ------------------
 
-In many cases, function arguments have sensible default values and therefore
-might not need to be passed explicitly in every call. For example, the
-library function :func:`parse(type,num,base) <parse>` interprets a string as a number
-in some base. The ``base`` argument defaults to ``10``. This behavior can be
-expressed concisely as::
+.. 
+ In many cases, function arguments have sensible default values and therefore
+ might not need to be passed explicitly in every call. For example, the
+ library function :func:`parse(type,num,base) <parse>` interprets a string as a number
+ in some base. The ``base`` argument defaults to ``10``. This behavior can be
+ expressed concisely as::
 
     function parse(type, num, base=10)
         ###
     end
 
-With this definition, the function can be called with either two or three
-arguments, and ``10`` is automatically passed when a third argument is not
-specified:
+多くの場合、関数の引数は明確なデフォルト値を持つため、引数は全ての呼び出しの際に明示的に与える必要はありません。
+例えば、ライブラリ関数 :func:`parse(type,num,base) <parse>` は、文字列を何らかの数値として解釈します。
+``base`` 引数のデフォルトは ``10`` です。この動作は、以下のように簡潔に表現できます。::
+
+    function parse(type, num, base=10)
+        ###
+    end
+
+.. 
+ With this definition, the function can be called with either two or three
+ arguments, and ``10`` is automatically passed when a third argument is not
+ specified:
+
+この定義では、関数は2つまたは3つの引数を使って呼び出すことができ、
+3つ目の引数が指定されていない場合は自動的に ``10`` が渡されます。
 
 .. doctest::
 
@@ -1367,76 +1384,141 @@ specified:
     julia> parse(Int,"12")
     12
 
-Optional arguments are actually just a convenient syntax for writing
-multiple method definitions with different numbers of arguments
-(see :ref:`man-note-on-optional-and-keyword-arguments`).
+.. 
+ Optional arguments are actually just a convenient syntax for writing
+ multiple method definitions with different numbers of arguments
+ (see :ref:`man-note-on-optional-and-keyword-arguments`).
 
+オプションの引数は、引数の数が異なる複数のメソッド定義を記述する際に便利な構文です。
+（ :ref:`man-オプションとキーワードの引数に関する注意` を参照してください。）
 
-Keyword Arguments
+.. 
+ Keyword Arguments
+ -----------------
+
+キーワード引数
 -----------------
 
-Some functions need a large number of arguments, or have a large number of
-behaviors. Remembering how to call such functions can be difficult. Keyword
-arguments can make these complex interfaces easier to use and extend by
-allowing arguments to be identified by name instead of only by position.
+.. 
+ Some functions need a large number of arguments, or have a large number of
+ behaviors. Remembering how to call such functions can be difficult. Keyword
+ arguments can make these complex interfaces easier to use and extend by
+ allowing arguments to be identified by name instead of only by position.
 
-For example, consider a function ``plot`` that
-plots a line. This function might have many options, for controlling line
-style, width, color, and so on. If it accepts keyword arguments, a possible
-call might look like ``plot(x, y, width=2)``, where we have chosen to
-specify only line width. Notice that this serves two purposes. The call is
-easier to read, since we can label an argument with its meaning. It also
-becomes possible to pass any subset of a large number of arguments, in
-any order.
+いくつかの関数は、多数の引数を必要とするか、または多数の挙動を持ちます。
+関数の呼び出し方法を覚えておくのは難しいことです。キーワード引数を使用することで、
+引数を位置だけでなく名前で識別できるため、これらの複雑なインタフェースを使いやすく拡張することができます。
 
-Functions with keyword arguments are defined using a semicolon in the
-signature::
+.. 
+ For example, consider a function ``plot`` that
+ plots a line. This function might have many options, for controlling line
+ style, width, color, and so on. If it accepts keyword arguments, a possible
+ call might look like ``plot(x, y, width=2)``, where we have chosen to
+ specify only line width. Notice that this serves two purposes. The call is
+ easier to read, since we can label an argument with its meaning. It also
+ becomes possible to pass any subset of a large number of arguments, in
+ any order.
+
+例えば、線を引く ``plot`` 関数を考えてみましょう。この関数には、線のスタイル、幅、
+色などを設定するための多くのオプションがあります。キーワード引数が使える場合、
+線の幅のみを指定した関数の呼び出しは ``plot(x, y, width=2)`` のようになるかもしれません。
+これは2つの目的に役立ちます。引数の意味に関連するラベルを付けることができるので、
+関数の呼び出し式は読みやすくなります。また、多数の引数のサブセットを任意の順序で渡すことも可能になります。
+
+.. 
+ Functions with keyword arguments are defined using a semicolon in the
+ signature::
+
+     function plot(x, y; style="solid", width=1, color="black")
+         ###
+     end
+
+キーワード引数を持つ関数は、セミコロンを使用して定義されます。::
 
     function plot(x, y; style="solid", width=1, color="black")
         ###
     end
+    
+.. 
+ When the function is called, the semicolon is optional: one can
+ either call ``plot(x, y, width=2)`` or ``plot(x, y; width=2)``, but
+ the former style is more common.  An explicit semicolon is required only
+ for passing varargs or computed keywords as described below.
 
-When the function is called, the semicolon is optional: one can
-either call ``plot(x, y, width=2)`` or ``plot(x, y; width=2)``, but
-the former style is more common.  An explicit semicolon is required only
-for passing varargs or computed keywords as described below.
+関数が呼び出されるとき、セミコロンはオプションです。 ``plot(x, y, width=2)`` または ``plot(x, y; width=2)`` で
+呼び出すことができますが、前者の形式がより一般的です。明示的なセミコロンは、以下で説明するように、
+可変引数または計算キーワードを渡すためにのみ必要です。
 
-Keyword argument default values are evaluated only when necessary
-(when a corresponding keyword argument is not passed), and in
-left-to-right order. Therefore default expressions may refer to
-prior keyword arguments.
+.. 
+ Keyword argument default values are evaluated only when necessary
+ (when a corresponding keyword argument is not passed), and in
+ left-to-right order. Therefore default expressions may refer to
+ prior keyword arguments.
 
+キーワード引数のデフォルト値は、必要なときのみ（対応するキーワード引数が渡されない場合）および
+左から右の順序でのみ処理されます。したがって、デフォルトの式はキーワードの前の引数を参照することがあります。
+
+.. 
 The types of keyword arguments can be made explicit as follows::
 
     function f(;x::Int64=1)
         ###
     end
 
-Extra keyword arguments can be collected using ``...``, as in varargs
-functions::
+キーワード引数の型は、以下のように明示的に指定できます。::
+
+    function f(;x::Int64=1)
+        ###
+    end
+
+.. 
+ Extra keyword arguments can be collected using ``...``, as in varargs
+ functions::
 
     function f(x; y=0, kwargs...)
         ###
     end
 
-Inside ``f``, ``kwargs`` will be a collection of ``(key,value)`` tuples,
-where each ``key`` is a symbol. Such collections can be passed as keyword
-arguments using a semicolon in a call, e.g. ``f(x, z=1; kwargs...)``.
-Dictionaries can also be used for this purpose.
+可変引数関数のように、 ``...`` を使用して追加のキーワード引数を指定することができます。
 
-One can also pass ``(key,value)`` tuples, or any iterable
-expression (such as a ``=>`` pair) that can be assigned to such a
-tuple, explicitly after a semicolon.  For example, ``plot(x, y;
-(:width,2))`` and ``plot(x, y; :width => 2)`` are equivalent to
-``plot(x, y, width=2)``.  This is useful in situations where the
-keyword name is computed at runtime.
+    function f(x; y=0, kwargs...)
+        ###
+    end
 
-The nature of keyword arguments makes it possible to specify the same
-argument more than once. For example, in the call
-``plot(x, y; options..., width=2)`` it is possible that the ``options``
-structure also contains a value for ``width``. In such a case the
-rightmost occurrence takes precedence; in this example, ``width``
-is certain to have the value ``2``.
+.. 
+ Inside ``f``, ``kwargs`` will be a collection of ``(key,value)`` tuples,
+ where each ``key`` is a symbol. Such collections can be passed as keyword
+ arguments using a semicolon in a call, e.g. ``f(x, z=1; kwargs...)``.
+ Dictionaries can also be used for this purpose.
+
+``f`` の内部では、 ``kwargs`` は各 ``key`` がシンボルである ``(key,value)`` のチュープルのコレクションになります。
+そのようなコレクションは、呼び出しの際にセミコロンを使用してキーワード引数として渡すことができます。
+（例 ``f(x, z=1; kwargs...)`` ）辞書もこの目的のために使用することができます。
+
+.. 
+ One can also pass ``(key,value)`` tuples, or any iterable
+ expression (such as a ``=>`` pair) that can be assigned to such a
+ tuple, explicitly after a semicolon.  For example, ``plot(x, y;
+ (:width,2))`` and ``plot(x, y; :width => 2)`` are equivalent to
+ ``plot(x, y, width=2)``.  This is useful in situations where the
+ keyword name is computed at runtime.
+
+セミコロンの後にこのようなチュープルに割り当てられる ``(key,value)`` チュープル、
+または繰り返し処理可能な式（ ``=>`` ペアなど）を渡すこともできます。例えば、
+``plot(x, y; (:width,2))`` および ``plot(x, y; :width => 2)`` は ``plot(x, y, width=2)`` と同義です。
+これは、実行時にキーワード名が計算される場合に便利です。
+
+.. 
+ The nature of keyword arguments makes it possible to specify the same
+ argument more than once. For example, in the call
+ ``plot(x, y; options..., width=2)`` it is possible that the ``options``
+ structure also contains a value for ``width``. In such a case the
+ rightmost occurrence takes precedence; in this example, ``width``
+ is certain to have the value ``2``.
+
+キーワード引数の性質により、同じ引数を複数回指定することができます。例えば ``plot(x, y; options..., width=2)`` の呼び出しで
+``options`` 構造体に ``width`` の値を与えることができます。このような場合、最も右端の値が優先されます。
+この例では、 ``width`` の値は  ``2`` となります。
 
 .. _man-evaluation-scope-default-values:
 
