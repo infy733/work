@@ -1071,14 +1071,23 @@ Juliaには、文字列に関する注目すべき高度な機能があります
 
 .. _man-characters:
 
-Characters
+.. 
+ Characters
+ ----------
+
+文字
 ----------
 
-A :obj:`Char` value represents a single character: it is just a 32-bit
-bitstype with a special literal representation and appropriate arithmetic
-behaviors, whose numeric value is interpreted as a `Unicode code
-point <https://en.wikipedia.org/wiki/Code_point>`_. Here is how :obj:`Char`
-values are input and shown:
+.. 
+ A :obj:`Char` value represents a single character: it is just a 32-bit
+ bitstype with a special literal representation and appropriate arithmetic
+ behaviors, whose numeric value is interpreted as a `Unicode code
+ point <https://en.wikipedia.org/wiki/Code_point>`_. Here is how :obj:`Char`
+ values are input and shown:
+
+:obj:`Char` 値は1つの文字を表します。これは特殊なリテラル表現と適切な算術演算を持つ32ビットのビットタイプであり、
+数値は `Unicodeコードポイント <https://en.wikipedia.org/wiki/Code_point>`_ として解釈されます。
+:obj:`Char` 値の入力と表示方法は以下の通りです。
 
 .. doctest::
 
@@ -1088,8 +1097,11 @@ values are input and shown:
     julia> typeof(ans)
     Char
 
-You can convert a :obj:`Char` to its integer value, i.e. code point,
-easily:
+.. 
+ You can convert a :obj:`Char` to its integer value, i.e. code point,
+ easily:
+
+:obj:`Char` を整数値（コードポイント）に簡単に変換することができます。
 
 .. doctest::
 
@@ -1099,18 +1111,27 @@ easily:
     julia> typeof(ans)
     Int64
 
-On 32-bit architectures, :func:`typeof(ans) <typeof>` will be ``Int32``. You can
-convert an integer value back to a :obj:`Char` just as easily:
+.. 
+ On 32-bit architectures, :func:`typeof(ans) <typeof>` will be ``Int32``. You can
+ convert an integer value back to a :obj:`Char` just as easily:
+
+32ビットのアーキテクチャ上では、「 :func:`typeof(ans) <typeof>` は ``Int32`` になります。
+整数値を簡単に :obj:`Char` に戻すことができます。
 
 .. doctest::
 
     julia> Char(120)
     'x'
 
-Not all integer values are valid Unicode code points, but for
-performance, the :func:`Char` conversion does not check that every character
-value is valid. If you want to check that each converted value is a
-valid code point, use the :func:`isvalid` function:
+.. 
+ Not all integer values are valid Unicode code points, but for
+ performance, the :func:`Char` conversion does not check that every character
+ value is valid. If you want to check that each converted value is a
+ valid code point, use the :func:`isvalid` function:
+
+全ての整数値が有効なUnicodeコードポイントではありませんが、パフォーマンスのために、
+ :func:`Char` 変換の際に全ての文字値が有効であるかチェックしません。全ての変換された値が有効なコードポイントであるか
+確認したい場合は、 :func:`isvalid` 関数を使用してください。
 
 .. doctest::
 
@@ -1120,15 +1141,24 @@ valid code point, use the :func:`isvalid` function:
     julia> isvalid(Char, 0x110000)
     false
 
-As of this writing, the valid Unicode code points are ``U+00`` through
-``U+d7ff`` and ``U+e000`` through ``U+10ffff``. These have not all been
-assigned intelligible meanings yet, nor are they necessarily
-interpretable by applications, but all of these values are considered to
-be valid Unicode characters.
+.. 
+ As of this writing, the valid Unicode code points are ``U+00`` through
+ ``U+d7ff`` and ``U+e000`` through ``U+10ffff``. These have not all been
+ assigned intelligible meanings yet, nor are they necessarily
+ interpretable by applications, but all of these values are considered to
+ be valid Unicode characters.
 
-You can input any Unicode character in single quotes using ``\u``
-followed by up to four hexadecimal digits or ``\U`` followed by up to
-eight hexadecimal digits (the longest valid value only requires six):
+現時点では、有効なコードポイントは ``U+00`` から ``U+d7ff`` までと、 ``U+e000`` から ``U+10ffff`` までとなります。
+これらは全て理解可能な意味が割り当てられているわけではなく、また必ずしもアプリケーションによって
+解釈可能ではありませんが、これらの値は全て有効なUnicode文字としてみなされます。
+
+.. 
+ You can input any Unicode character in single quotes using ``\u``
+ followed by up to four hexadecimal digits or ``\U`` followed by up to
+ eight hexadecimal digits (the longest valid value only requires six):
+
+``\u`` に続けて最大4桁の16進数を入力するか、 ``\U`` に続けて最大8桁の16進数（6桁から有効）を
+入力することで、Unicode文字をシングルクオーテーションとして入力することができます。
 
 .. doctest::
 
@@ -1144,12 +1174,18 @@ eight hexadecimal digits (the longest valid value only requires six):
     julia> '\U10ffff'
     '\U10ffff'
 
-Julia uses your system's locale and language settings to determine which
-characters can be printed as-is and which must be output using the
-generic, escaped ``\u`` or ``\U`` input forms. In addition to these
-Unicode escape forms, all of `C's traditional escaped input
-forms <https://en.wikipedia.org/wiki/C_syntax#Backslash_escapes>`_ can
-also be used:
+.. 
+ Julia uses your system's locale and language settings to determine which
+ characters can be printed as-is and which must be output using the
+ generic, escaped ``\u`` or ``\U`` input forms. In addition to these
+ Unicode escape forms, all of `C's traditional escaped input
+ forms <https://en.wikipedia.org/wiki/C_syntax#Backslash_escapes>`_ can
+ also be used:
+
+Juliaは、システムのローカルと言語設定を使用して、どの文字が現状のまま出力できるか、
+およびどの文字が ``\u`` または ``\U`` を使用してエスケープされた状態で出力すべきか判断します。
+これらのUnicodeエスケープ形式に加えて、 `C言語のエスケープ形式 <https://en.wikipedia.org/wiki/C_syntax#Backslash_escapes>`_ の
+入力も可能です。
 
 .. doctest::
 
