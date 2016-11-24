@@ -1360,8 +1360,8 @@ Juliaは、不正確な変換の処理が異なる3つの形式の数値変換�
 :func:`mod(x,y) <mod>`       剰余演算； ``x == fld(x,y)*y + mod(x,y)`` を満たす；記号は ``y`` と一致
 :func:`mod1(x,y) <mod1>`     オフセットが1の ``mod()`` ； ``mod(r, y) == mod(x, y)`` の場合、  ``y>0`` に ``r∈(0,y]`` を、　 ``y<0`` に ``r∈[y,0)`` を返す 
 :func:`mod2pi(x) <mod2pi>`   2piを法とする； ``0 <= mod2pi(x)  < 2pi``
-:func:`divrem(x,y) <divrem>`  ``(div(x,y),rem(x,y))``　を返す
-:func:`fldmod(x,y) <fldmod>`  ``(fld(x,y),mod(x,y))``　を返す
+:func:`divrem(x,y) <divrem>` ``(div(x,y),rem(x,y))`` を返す
+:func:`fldmod(x,y) <fldmod>` ``(fld(x,y),mod(x,y))`` を返す
 :func:`gcd(x,y...) <gcd>`    ``x`` 、 ``y`` 、...の最大の正の因数
 :func:`lcm(x,y...) <lcm>`    ``x`` 、 ``y`` 、...の最小の正の公倍数
 ============================ =======================================================================
