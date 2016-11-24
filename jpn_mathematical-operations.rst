@@ -1060,24 +1060,39 @@ Juliaでは、このような処理を正確に実施できるよう、細心の
     julia> 1 < 2 <= 2 < 3 == 3 > 2 >= 1 == 1 < 3 != 5
     true
 
-Chaining comparisons is often quite convenient in numerical code.
-Chained comparisons use the :obj:`&&` operator for scalar comparisons,
-and the :obj:`&` operator for elementwise comparisons, which allows them to
-work on arrays. For example, ``0 .< A .< 1`` gives a boolean array whose
-entries are true where the corresponding elements of ``A`` are between 0
-and 1.
+.. 
+ Chaining comparisons is often quite convenient in numerical code.
+ Chained comparisons use the :obj:`&&` operator for scalar comparisons,
+ and the :obj:`&` operator for elementwise comparisons, which allows them to
+ work on arrays. For example, ``0 .< A .< 1`` gives a boolean array whose
+ entries are true where the corresponding elements of ``A`` are between 0
+ and 1.
 
-The operator :obj:`.\< <Base..\<>` is intended for array objects; the operation
-``A .< B`` is valid only if ``A`` and ``B`` have the same dimensions.  The
-operator returns an array with boolean entries and with the same dimensions
-as ``A`` and ``B``.  Such operators are called *elementwise*; Julia offers a
-suite of elementwise operators: :obj:`.* <Base..*>`, :obj:`.+ <Base..+>`, etc.  Some of the elementwise
-operators can take a scalar operand such as the example ``0 .< A .< 1`` in
-the preceding paragraph.
-This notation means that the scalar operand should be replicated for each entry of
-the array.
+連続した比較は、数値コードで便利です。連続した比較は、スカラー比較に :obj:`&&` 演算子を使用し、
+要素単位（elementwiseの比較では配列処理を行う :obj:`&` 演算子を使用します。例えば、 ``0 .< A .< 1`` は、 ``A`` に
+対応する要素が0と1の間に存在し、エントリが真であるブール値配列を返します。
 
-Note the evaluation behavior of chained comparisons:
+.. 
+ The operator :obj:`.\< <Base..\<>` is intended for array objects; the operation
+ ``A .< B`` is valid only if ``A`` and ``B`` have the same dimensions.  The
+ operator returns an array with boolean entries and with the same dimensions
+ as ``A`` and ``B``.  Such operators are called *elementwise*; Julia offers a
+ suite of elementwise operators: :obj:`.* <Base..*>`, :obj:`.+ <Base..+>`, etc.  Some of the elementwise
+ operators can take a scalar operand such as the example ``0 .< A .< 1`` in
+ the preceding paragraph.
+ This notation means that the scalar operand should be replicated for each entry of
+ the array.
+
+:obj:`.\< <Base..\<>` 演算子は配列オブジェクトを対象としています。演算 ``A .< B`` は ``A`` と ``B`` が同じ次元の場合のみ有効です。
+演算子は、ブール値のエントリを持ち、かつ ``A`` と ``B`` と同じ次元の配列を返します。このような演算子は要素単位（elementwise）と呼ばれ、
+Juliaは :obj:`.* <Base..*>` 、 :obj:`.+ <Base..+>` といった要素単位演算子の一式を提供します。いくつかの要素単位演算子は、
+前述の ``0 .< A .< 1`` のようなスカラー被演算子を使用することができます。これは、配列の各エントリに対して
+スカラー被演算子を複製する必要があることを意味します。
+
+.. 
+ Note the evaluation behavior of chained comparisons:
+
+連続した比較の値の処理に注意してください。
 
 .. doctest::
 
