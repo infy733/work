@@ -674,14 +674,21 @@ Juliaは、基本的な数値プリミティブ型の全ての算術演算子と
 ==========  ============== ============================================
 式          名称            概要
 ==========  ============== ============================================
-``!x``      否定形          ``true`` を ``false`` に、または ``false`` を ``true`` にえs変更する
+``!x``      否定形          ``true`` を ``false`` に、または ``false`` を ``true`` に変更する
 ==========  ============== ============================================
 
-Julia's promotion system makes arithmetic operations on mixtures of argument
-types "just work" naturally and automatically. See :ref:`man-conversion-and-promotion`
-for details of the promotion system.
+.. 
+ Julia's promotion system makes arithmetic operations on mixtures of argument
+ types "just work" naturally and automatically. See :ref:`man-conversion-and-promotion`
+ for details of the promotion system.
 
-Here are some simple examples using arithmetic operators:
+Juliaの推進体制は、複数の引数の型を含む算術演算が自然にかつ自動的に
+動作するようにしています。推進体制の詳細については :ref:`man-変換とプロモーション`を参照ください。
+
+.. 
+ Here are some simple examples using arithmetic operators:
+
+以下は算術演算の例です。
 
 .. doctest::
 
@@ -694,9 +701,13 @@ Here are some simple examples using arithmetic operators:
     julia> 3*2/12
     0.5
 
-(By convention, we tend to space operators more tightly if they get applied before
-other nearby operators. For instance, we would generally write ``-x + 2`` to reflect
-that first ``x`` gets negated, and then ``2`` is added to that result.)
+.. 
+ (By convention, we tend to space operators more tightly if they get applied before
+ other nearby operators. For instance, we would generally write ``-x + 2`` to reflect
+ that first ``x`` gets negated, and then ``2`` is added to that result.)
+
+（慣例的に、他の演算子が適用される場合は、スペースを開けずに記載する傾向があります。
+例えば、通常 ``-x + 2`` と記載しますが、これは最初に ``x`` を負の数にし、その後 ``2`` をその結果に足します。）
 
 Bitwise Operators
 -----------------
