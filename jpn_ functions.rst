@@ -1022,15 +1022,21 @@ Juliaでは、ほとんどの演算子は特別な構文をサポートする関
  Anonymous Functions
  -------------------
 
-Anonymous Functions
+無名関数
 -------------------
 
-Functions in Julia are `first-class objects
-<https://en.wikipedia.org/wiki/First-class_citizen>`_: they can be assigned to
-variables, and called using the standard function call syntax from the
-variable they have been assigned to. They can be used as arguments, and
-they can be returned as values. They can also be created anonymously,
-without being given a name, using either of these syntaxes:
+.. 
+ Functions in Julia are `first-class objects
+ <https://en.wikipedia.org/wiki/First-class_citizen>`_: they can be assigned to
+ variables, and called using the standard function call syntax from the
+ variable they have been assigned to. They can be used as arguments, and
+ they can be returned as values. They can also be created anonymously,
+ without being given a name, using either of these syntaxes:
+
+Juliaの関数は `第1級オブジェクト <https://en.wikipedia.org/wiki/First-class_citizen>`_ です。
+関数は変数に代入することができ、代入された変数から標準の関数呼び出し構文を使用して呼び出すことができます。
+関数は引数として使用でき、値として返すことができます。以下の構文のいずれかを使用して、
+名前を付けずに匿名で関数を作成することもできます。
 
 .. doctest::
 
@@ -1042,15 +1048,23 @@ without being given a name, using either of these syntaxes:
            end
     (::#3) (generic function with 1 method)
 
-This creates a function taking one argument *x* and returning the
-value of the polynomial *x*\ ^2 + 2\ *x* - 1 at that value.
-Notice that the result is a generic function, but with a
-compiler-generated name based on consecutive numbering.
+.. 
+ This creates a function taking one argument *x* and returning the
+ value of the polynomial *x*\ ^2 + 2\ *x* - 1 at that value.
+ Notice that the result is a generic function, but with a
+ compiler-generated name based on consecutive numbering.
 
-The primary use for anonymous functions is passing them to functions which take
-other functions as arguments. A classic example is :func:`map`,
-which applies a function to each value of an array and returns a new
-array containing the resulting values:
+これは、引数 *x* をとり、その値で多項式 *x*\ ^2 + 2\ *x* - 1 の結果を返す関数を作成します。
+この結果は汎用関数ですが、連続した番号付けに基づくコンパイラ生成の名前が付いています。
+
+.. 
+ The primary use for anonymous functions is passing them to functions which take
+ other functions as arguments. A classic example is :func:`map`,
+ which applies a function to each value of an array and returns a new
+ array containing the resulting values:
+
+無名関数の主な用途は、他の関数を引数とする関数に渡すことです。典型的な例は :func:`map` で、
+配列の各値に関数を適用し、結果の値を持つ新しい配列を返します。
 
 .. doctest::
 
@@ -1060,11 +1074,16 @@ array containing the resulting values:
      4.0
      2.0
 
-This is fine if a named function effecting the transform one wants
-already exists to pass as the first argument to :func:`map`. Often, however,
-a ready-to-use, named function does not exist. In these situations, the
-anonymous function construct allows easy creation of a single-use
-function object without needing a name:
+.. 
+ This is fine if a named function effecting the transform one wants
+ already exists to pass as the first argument to :func:`map`. Often, however,
+ a ready-to-use, named function does not exist. In these situations, the
+ anonymous function construct allows easy creation of a single-use
+ function object without needing a name:
+
+これは、変換を有効にする名前付き関数がすでにある関数に :func:`map` への最初の引数として渡す場合には問題ありません。
+しかし、すぐに使える名前付き関数は多くの場合存在しません。このような場合、無名関数を使用すると、
+名前を付けることなく使いやすい関数オブジェクトを簡単に生成できます。
 
 .. doctest::
 
@@ -1074,21 +1093,36 @@ function object without needing a name:
      14
      -2
 
-An anonymous function accepting multiple arguments can be written using
-the syntax ``(x,y,z)->2x+y-z``. A zero-argument anonymous function is
-written as ``()->3``. The idea of a function with no arguments may seem
-strange, but is useful for "delaying" a computation. In this usage, a
-block of code is wrapped in a zero-argument function, which is later
-invoked by calling it as ``f()``.
+.. 
+ An anonymous function accepting multiple arguments can be written using
+ the syntax ``(x,y,z)->2x+y-z``. A zero-argument anonymous function is
+ written as ``()->3``. The idea of a function with no arguments may seem
+ strange, but is useful for "delaying" a computation. In this usage, a
+ block of code is wrapped in a zero-argument function, which is later
+ invoked by calling it as ``f()``.
 
-Multiple Return Values
+複数の引数を取る無名関数は、構文 ``(x,y,z)->2x+y-z`` を使用して記述できます。引数のない無名関数は、
+``()->3`` と書くことができます。引数を持たない関数の考え方は不思議に思えるかもしれませんが、
+計算を「遅らせる」際に便利です。この使用法では、コードのブロックは引数が
+無い関数にラップされ、後で ``f()`` として呼び出されます。
+
+.. 
+ Multiple Return Values
+ ----------------------
+
+複数の戻り値
 ----------------------
 
-In Julia, one returns a tuple of values to simulate returning multiple
-values. However, tuples can be created and destructured without needing
-parentheses, thereby providing an illusion that multiple values are
-being returned, rather than a single tuple value. For example, the
-following function returns a pair of values:
+.. 
+ In Julia, one returns a tuple of values to simulate returning multiple
+ values. However, tuples can be created and destructured without needing
+ parentheses, thereby providing an illusion that multiple values are
+ being returned, rather than a single tuple value. For example, the
+ following function returns a pair of values:
+
+Juliaでは、複数の値を返すシミュレーションするために値のチュープルを返します。しかし、チュープルは、
+括弧無しで作成および破棄することができ、それにより1つのチュープル値ではなく、複数の値が返されるという錯覚が発生します。
+例えば、次の関数は1組の値を返します。
 
 .. doctest::
 
@@ -1096,17 +1130,24 @@ following function returns a pair of values:
              a+b, a*b
            end;
 
-If you call it in an interactive session without assigning the return
-value anywhere, you will see the tuple returned:
+.. 
+ If you call it in an interactive session without assigning the return
+ value anywhere, you will see the tuple returned:
+
+戻り値をどこにも指定せずに対話セッションで関数を呼び出すと、返されたチュープルが表示されます。
 
 .. doctest::
 
     julia> foo(2,3)
     (5,6)
 
-A typical usage of such a pair of return values, however, extracts each
-value into a variable. Julia supports simple tuple "destructuring" that
-facilitates this:
+.. 
+ A typical usage of such a pair of return values, however, extracts each
+ value into a variable. Julia supports simple tuple "destructuring" that
+ facilitates this:
+
+しかし、このような1組の戻り値の典型的な使用法は、それぞれの値を変数に抽出します。Juliaは、
+これを容易にするチュープル「構造解除」をサポートしています。
 
 .. doctest::
 
@@ -1118,34 +1159,57 @@ facilitates this:
     julia> y
     6
 
-You can also return multiple values via an explicit usage of the
-``return`` keyword::
+.. 
+ You can also return multiple values via an explicit usage of the
+ ``return`` keyword::
 
     function foo(a,b)
       return a+b, a*b
     end
 
-This has the exact same effect as the previous definition of ``foo``.
+また、 ``return`` キーワードを明示的に使用して複数の値を返すこともできます。
+
+    function foo(a,b)
+      return a+b, a*b
+    end
+
+.. 
+ This has the exact same effect as the previous definition of ``foo``.
+
+これは前述の ``foo`` の定義とまったく同じ効果があります。
 
 .. _man-varargs-functions:
 
-Varargs Functions
+.. 
+ Varargs Functions
+ -----------------
+
+可変引数関数
 -----------------
 
-It is often convenient to be able to write functions taking an arbitrary
-number of arguments. Such functions are traditionally known as "varargs"
-functions, which is short for "variable number of arguments". You can
-define a varargs function by following the last argument with an
-ellipsis:
+.. 
+ It is often convenient to be able to write functions taking an arbitrary
+ number of arguments. Such functions are traditionally known as "varargs"
+ functions, which is short for "variable number of arguments". You can
+ define a varargs function by following the last argument with an
+ ellipsis:
+
+任意の数の引数を取って関数を書くことができるとは便利です。そのような関数は「variable number of arguments」の
+略語である 「varargs（可変引数）」関数として知られています。最後の引数の後に省略記号をつけることで、
+varargs関数を定義することができます。
 
 .. doctest::
 
     julia> bar(a,b,x...) = (a,b,x)
     bar (generic function with 1 method)
 
-The variables ``a`` and ``b`` are bound to the first two argument values
-as usual, and the variable ``x`` is bound to an iterable collection of
-the zero or more values passed to ``bar`` after its first two arguments:
+.. 
+ The variables ``a`` and ``b`` are bound to the first two argument values
+ as usual, and the variable ``x`` is bound to an iterable collection of
+ the zero or more values passed to ``bar`` after its first two arguments:
+
+変数 ``a`` および ``b`` は、通常のように最初の2つの引数値に紐付き、変数 ``x`` は、
+最初の2つの引数の後に ``bar`` に渡される繰り返し処理可能な0またはそれ以上の値に紐付きます。
 
 .. doctest::
 
@@ -1161,14 +1225,25 @@ the zero or more values passed to ``bar`` after its first two arguments:
     julia> bar(1,2,3,4,5,6)
     (1,2,(3,4,5,6))
 
-In all these cases, ``x`` is bound to a tuple of the trailing values
-passed to ``bar``.
+.. 
+ In all these cases, ``x`` is bound to a tuple of the trailing values
+ passed to ``bar``.
 
-It is possible to constrain the number of values passed as a variable argument; this will be discussed later in :ref:`man-vararg-fixedlen`.
+これらのケースの場合、 ``x`` は ``bar`` に渡された末尾の値のチュープルに紐付きます。
 
-On the flip side, it is often handy to "splice" the values contained in
-an iterable collection into a function call as individual arguments. To
-do this, one also uses ``...`` but in the function call instead:
+.. 
+ It is possible to constrain the number of values passed as a variable argument; this will be discussed later in :ref:`man-vararg-fixedlen`.
+
+渡される値の数を可変引数として制限することは可能です。これに関する詳細は後の :ref:`man-パラメトリック制約付き可変引数メソッド` で
+説明されます。
+
+.. 
+ On the flip side, it is often handy to "splice" the values contained in
+ an iterable collection into a function call as individual arguments. To
+ do this, one also uses ``...`` but in the function call instead:
+
+繰り返し処理コレクションに含まれる値を個々の引数として関数呼び出しに「継承」することはしばしば便利です。
+これを行うには、関数呼び出しで ``...`` を使用します。
 
 .. doctest::
 
@@ -1178,9 +1253,13 @@ do this, one also uses ``...`` but in the function call instead:
     julia> bar(1,2,x...)
     (1,2,(3,4))
 
-In this case a tuple of values is spliced into a varargs call precisely
-where the variable number of arguments go. This need not be the case,
-however:
+.. 
+ In this case a tuple of values is spliced into a varargs call precisely
+ where the variable number of arguments go. This need not be the case,
+ however:
+
+この場合、値のチュープルは、可変引数がどこに渡されるか可変引数の呼び出しに継承されます。
+しかし、そうである必要はありません。
 
 .. doctest::
 
@@ -1196,8 +1275,11 @@ however:
     julia> bar(x...)
     (1,2,(3,4))
 
-Furthermore, the iterable object spliced into a function call need not
-be a tuple:
+.. 
+ Furthermore, the iterable object spliced into a function call need not
+ be a tuple:
+
+さらに、関数呼び出しに継承された繰り返し処理可能オブジェクトはチュープルである必要はありません。
 
 .. doctest::
 
@@ -1219,8 +1301,11 @@ be a tuple:
     julia> bar(x...)
     (1,2,(3,4))
 
-Also, the function that arguments are spliced into need not be a varargs
-function (although it often is):
+.. 
+ Also, the function that arguments are spliced into need not be a varargs
+ function (although it often is):
+
+また、引数が継承された関数は、可変引数関数である必要はありません。
 
 .. doctest::
 
@@ -1246,9 +1331,13 @@ function (although it often is):
       baz(::Any, ::Any) at none:1
     ...
 
-As you can see, if the wrong number of elements are in the spliced
-container, then the function call will fail, just as it would if too
-many arguments were given explicitly.
+.. 
+ As you can see, if the wrong number of elements are in the spliced
+ container, then the function call will fail, just as it would if too
+ many arguments were given explicitly.
+
+例にある通り、継承された中に間違った数の要素がある場合、あまりにも多くの引数が明示的に与えられた場合と同様に、
+関数呼び出しは失敗します。
 
 Optional Arguments
 ------------------
