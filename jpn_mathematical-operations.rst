@@ -1568,28 +1568,28 @@ erfc <http://www.johndcook.com/blog/2010/06/07/math-library-functions-that-seem-
 :func:`lbeta(x,y) <lbeta>`                          大きな値  ``x`` または ``y`` における正確な ``log(beta(x,y))``
 :func:`eta(x) <eta>`                                ``x`` における `ディレクレイータ関数 <https://en.wikipedia.org/wiki/Dirichlet_eta_function>`_
 :func:`zeta(x) <zeta>`                              ``x`` における `リーマンゼータ関数 <https://en.wikipedia.org/wiki/Riemann_zeta_function>`_
-|airylist|                                          `Airy Ai function <https://en.wikipedia.org/wiki/Airy_function>`_ at ``z``
-|airyprimelist|                                     derivative of the Airy Ai function at ``z``
-:func:`airybi(z) <airybi>`, ``airy(2,z)``           `Airy Bi function <https://en.wikipedia.org/wiki/Airy_function>`_ at ``z``
-:func:`airybiprime(z) <airybiprime>`, ``airy(3,z)`` derivative of the Airy Bi function at ``z``
-:func:`airyx(z) <airyx>`, ``airyx(k,z)``            scaled Airy AI function and ``k`` th derivatives at ``z``
-:func:`besselj(nu,z) <besselj>`                     `Bessel function <https://en.wikipedia.org/wiki/Bessel_function>`_ of the first kind of order ``nu`` at ``z``
+|airylist|                                          ``z`` における `エアリー関数（Ai） <https://en.wikipedia.org/wiki/Airy_function>`_
+|airyprimelist|                                     ``z`` におけるエアリー関数（Ai）の微分 
+:func:`airybi(z) <airybi>`, ``airy(2,z)``           ``z`` における `エアリー関数（Bi） <https://en.wikipedia.org/wiki/Airy_function>`_
+:func:`airybiprime(z) <airybiprime>`, ``airy(3,z)`` ``z`` におけるエアリー関数（Bi）の微分 
+:func:`airyx(z) <airyx>`, ``airyx(k,z)``            ``z`` におけるスケーリングされたエアリー関数（Ai）および ``k`` 次微分
+:func:`besselj(nu,z) <besselj>`                     ``z`` における第1種の次数 ``nu`` の  `ベッセル関数 <https://en.wikipedia.org/wiki/Bessel_function>`_
 :func:`besselj0(z) <besselj0>`                      ``besselj(0,z)``
 :func:`besselj1(z) <besselj1>`                      ``besselj(1,z)``
-:func:`besseljx(nu,z) <besseljx>`                   scaled Bessel function of the first kind of order ``nu`` at ``z``
-:func:`bessely(nu,z) <bessely>`                     `Bessel function <https://en.wikipedia.org/wiki/Bessel_function>`_ of the second kind of order ``nu`` at ``z``
+:func:`besseljx(nu,z) <besseljx>`                   スケーリングされた ``z`` における第1種の次数  ``nu`` のベッセル関数
+:func:`bessely(nu,z) <bessely>`                     ``z`` における第2種の次数 ``nu`` の `ベッセル関数 <https://en.wikipedia.org/wiki/Bessel_function>`_
 :func:`bessely0(z) <bessely0>`                      ``bessely(0,z)``
 :func:`bessely1(z) <bessely0>`                      ``bessely(1,z)``
-:func:`besselyx(nu,z) <besselyx>`                   scaled Bessel function of the second kind of order ``nu`` at ``z``
-:func:`besselh(nu,k,z) <besselh>`                   `Bessel function <https://en.wikipedia.org/wiki/Bessel_function>`_ of the third kind (a.k.a. Hankel function) of order ``nu`` at ``z``; ``k`` must be either ``1`` or ``2``
+:func:`besselyx(nu,z) <besselyx>`                   スケーリングされた ``z`` における第2種の次数 ``nu`` のベッセル関数
+:func:`besselh(nu,k,z) <besselh>`                   ``z`` における第３種の次数 ``nu`` の `ベッセル関数（ハンケル関数） <https://en.wikipedia.org/wiki/Bessel_function>`_ ； ``k`` は ``1`` または ``2`` のいずれかでなければならない
 :func:`hankelh1(nu,z) <hankelh1>`                   ``besselh(nu, 1, z)``
-:func:`hankelh1x(nu,z) <hankelh1x>`                 scaled ``besselh(nu, 1, z)``
+:func:`hankelh1x(nu,z) <hankelh1x>`                 スケーリングされた ``besselh(nu, 1, z)``
 :func:`hankelh2(nu,z) <hankelh2>`                   ``besselh(nu, 2, z)``
-:func:`hankelh2x(nu,z) <hankelh2x>`                 scaled ``besselh(nu, 2, z)``
-:func:`besseli(nu,z) <besseli>`                     modified `Bessel function <https://en.wikipedia.org/wiki/Bessel_function>`_ of the first kind of order ``nu`` at ``z``
-:func:`besselix(nu,z) <besselix>`                   scaled modified Bessel function of the first kind of order ``nu`` at ``z``
-:func:`besselk(nu,z) <besselk>`                     modified `Bessel function <https://en.wikipedia.org/wiki/Bessel_function>`_ of the second kind of order ``nu`` at ``z``
-:func:`besselkx(nu,z) <besselkx>`                   scaled modified Bessel function of the second kind of order ``nu`` at ``z``
+:func:`hankelh2x(nu,z) <hankelh2x>`                 スケーリングされた ``besselh(nu, 2, z)``
+:func:`besseli(nu,z) <besseli>`                     ``z`` における第1種の次数 ``nu`` の修正された `ベッセル関数 <https://en.wikipedia.org/wiki/Bessel_function>`_
+:func:`besselix(nu,z) <besselix>`                   スケーリングされた ``z`` における第1種の次数 ``nu`` の修正されたベッセル関数
+:func:`besselk(nu,z) <besselk>`                     ``z`` における第2種の次数 ``nu`` の修正された `ベッセル関数 <https://en.wikipedia.org/wiki/Bessel_function>`_
+:func:`besselkx(nu,z) <besselkx>`                   スケーリングされた ``z`` における第2種の次数 ``nu`` の修正されたベッセル関数
 =================================================== ==============================================================================
 
 .. |airylist| replace:: :func:`airy(z) <airy>`, :func:`airyai(z) <airyai>`, ``airy(0,z)``
