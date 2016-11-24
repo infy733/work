@@ -1818,41 +1818,61 @@ Juliaでは、Perlのように ``$`` を使用して文字列リテラルに補�
 .. _man-non-standard-string-literals:
 
 .. 
-Non-Standard String Literals
+ Non-Standard String Literals
+ ----------------------------
+
+非標準文字列リテラル
 ----------------------------
 
-Non-Standard String Literals
-----------------------------
+.. 
+ There are situations when you want to construct a string or use string
+ semantics, but the behavior of the standard string construct is not
+ quite what is needed. For these kinds of situations, Julia provides
+ :ref:`non-standard string literals <man-non-standard-string-literals2>`.
+ A non-standard string literal looks like
+ a regular double-quoted string literal, but is immediately prefixed by
+ an identifier, and doesn't behave quite like a normal string literal. The
+ convention is that non-standard literals with uppercase prefixes produce
+ actual string objects, while those with lowercase prefixes produce
+ non-string objects like byte arrays or compiled regular expressions. Regular
+ expressions, byte array literals and version number literals, as described
+ below, are some examples of non-standard string literals. Other examples are
+ given in the :ref:`metaprogramming <man-non-standard-string-literals2>`
+ section.
 
-There are situations when you want to construct a string or use string
-semantics, but the behavior of the standard string construct is not
-quite what is needed. For these kinds of situations, Julia provides
-:ref:`non-standard string literals <man-non-standard-string-literals2>`.
-A non-standard string literal looks like
-a regular double-quoted string literal, but is immediately prefixed by
-an identifier, and doesn't behave quite like a normal string literal. The
-convention is that non-standard literals with uppercase prefixes produce
-actual string objects, while those with lowercase prefixes produce
-non-string objects like byte arrays or compiled regular expressions. Regular
-expressions, byte array literals and version number literals, as described
-below, are some examples of non-standard string literals. Other examples are
-given in the :ref:`metaprogramming <man-non-standard-string-literals2>`
-section.
+文字列を作成したり文字列を使用したいが、標準的な文字列構成の挙動が必要ではない場合があるかもしれません。
+このような場合のために、Juliaは:ref:`非標準文字列リテラル <man-non-standard-string-literals2>`を提供しています。
+非標準文字列リテラルは通常のダブルクオート文字列リテラルと同じように見えますが、すぐに識別子が前につけられ、
+通常の文字列リテラルとは異なった挙動をします。大文字の接頭辞を非標準リテラルは実際の文字列オブジェクトを生成し、
+一方で小文字の接頭辞を持つものはバイト配列やコンパイルされた正規表現のような非文字列オブジェクトを生成します。
+以下に説明されている正規表現（バイト配列リテラルおよびバージョン番号リテラル）は、非標準文字列リテラルの例です。
+他の例は、 :ref:`メタプログラミングセクション <man-non-standard-string-literals2>`に記載されています。
 
 
-Regular Expressions
+.. 
+ Regular Expressions
+ -------------------
+
+正規表現
 -------------------
 
-Julia has Perl-compatible regular expressions (regexes), as provided by
-the `PCRE <http://www.pcre.org/>`_ library. Regular expressions are
-related to strings in two ways: the obvious connection is that regular
-expressions are used to find regular patterns in strings; the other
-connection is that regular expressions are themselves input as strings,
-which are parsed into a state machine that can be used to efficiently
-search for patterns in strings. In Julia, regular expressions are input
-using non-standard string literals prefixed with various identifiers
-beginning with ``r``. The most basic regular expression literal without
-any options turned on just uses ``r"..."``:
+.. 
+ Julia has Perl-compatible regular expressions (regexes), as provided by
+ the `PCRE <http://www.pcre.org/>`_ library. Regular expressions are
+ related to strings in two ways: the obvious connection is that regular
+ expressions are used to find regular patterns in strings; the other
+ connection is that regular expressions are themselves input as strings,
+ which are parsed into a state machine that can be used to efficiently
+ search for patterns in strings. In Julia, regular expressions are input
+ using non-standard string literals prefixed with various identifiers
+ beginning with ``r``. The most basic regular expression literal without
+ any options turned on just uses ``r"..."``:
+
+JuliaはPerlと互換性がある `PCRE <http://www.pcre.org/>`_ ライブラリが提供する正規表現があります。正規表現は2つの点で文字列と関連しています。
+1つは、正規表現は文字列内の規則的なパターンを見つけるために使用されるという明確な関連性があります。
+もう1つは、正規表現自体が文字列として入力され、文字列のパターンを効率的に検索するために使用できるステートマシンに解析されます。
+Juliaでは、正規表現は ``r`` で始まる様々な識別子の接頭辞が付いた非標準文字列リテラルを使用して入力されます。
+オプションがない最も基本的な正規表現リテラルは、 ``r"..."`` を使用します。
 
 .. doctest::
 
@@ -1862,7 +1882,10 @@ any options turned on just uses ``r"..."``:
     julia> typeof(ans)
     Regex
 
-To check if a regex matches a string, use :func:`ismatch`:
+.. 
+ To check if a regex matches a string, use :func:`ismatch`:
+
+正規表現が文字列に一致するか確認するためには、 :func:`ismatch`: を使用します。
 
 .. doctest::
 
@@ -1871,12 +1894,16 @@ To check if a regex matches a string, use :func:`ismatch`:
 
     julia> ismatch(r"^\s*(?:#|$)", "# a comment")
     true
+.. 
+ As one can see here, :func:`ismatch` simply returns true or false,
+ indicating whether the given regex matches the string or not. Commonly,
+ however, one wants to know not just whether a string matched, but also
+ *how* it matched. To capture this information about a match, use the
+ :func:`match` function instead:
 
-As one can see here, :func:`ismatch` simply returns true or false,
-indicating whether the given regex matches the string or not. Commonly,
-however, one wants to know not just whether a string matched, but also
-*how* it matched. To capture this information about a match, use the
-:func:`match` function instead:
+見てわかる通り、 :func:`ismatch` は単純に正規表現が文字列と一致するかどうかを示しすtrueまたはfalseを返します。
+しかし一般的には、文字列が一致するかどうかだけでなく、どのように一致するかを知りたいと考えるかもしれません。
+一致に関するこの情報を得るために、代わりに :func:`match` 関数を使用してください。
 
 .. doctest::
 
@@ -1885,10 +1912,11 @@ however, one wants to know not just whether a string matched, but also
     julia> match(r"^\s*(?:#|$)", "# a comment")
     RegexMatch("#")
 
-If the regular expression does not match the given string, :func:`match`
-returns ``nothing`` — a special value that does not print anything at
-the interactive prompt. Other than not printing, it is a completely
-normal value and you can test for it programmatically::
+.. 
+ If the regular expression does not match the given string, :func:`match`
+ returns ``nothing`` — a special value that does not print anything at
+ the interactive prompt. Other than not printing, it is a completely
+ normal value and you can test for it programmatically::
 
     m = match(r"^\s*(?:#|$)", line)
     if m === nothing
@@ -1897,20 +1925,39 @@ normal value and you can test for it programmatically::
         println("blank or comment")
     end
 
-If a regular expression does match, the value returned by :func:`match` is a
-:obj:`RegexMatch` object. These objects record how the expression matches,
-including the substring that the pattern matches and any captured
-substrings, if there are any. This example only captures the portion of
-the substring that matches, but perhaps we want to capture any non-blank
-text after the comment character. We could do the following:
+正規表現が文字列と一致しない場合、 :func:`match` は ``nothing`` 返します。これは対話型プロンプトで何も出力しない特別な値です。
+これは出力しない場合を除き、正常な値であり、プログラムでテストすることができます。::
+
+    m = match(r"^\s*(?:#|$)", line)
+    if m === nothing
+        println("not a comment")
+    else
+        println("blank or comment")
+    end
+
+.. 
+ If a regular expression does match, the value returned by :func:`match` is a
+ :obj:`RegexMatch` object. These objects record how the expression matches,
+ including the substring that the pattern matches and any captured
+ substrings, if there are any. This example only captures the portion of
+ the substring that matches, but perhaps we want to capture any non-blank
+ text after the comment character. We could do the following:
+
+正規表現が一致する場合、 :func:`match` によって返される値は :obj:`RegexMatch` オブジェクトとなります。
+このオブジェクトは、パターンが一致する部分文字列およびもしあればキャプチャされた部分文字列を含む、
+その正規表現がどのように一致するかを記録します。この例では、部分文字列の一部だけを取得していますが、
+コメント文字後の空白以外のテキストを取得したい場合があるかもしれません。その場合は以下でできます。
 
 .. doctest::
 
     julia> m = match(r"^\s*(?:#\s*(.*?)\s*$|$)", "# a comment ")
     RegexMatch("# a comment ", 1="a comment")
 
-When calling :func:`match`, you have the option to specify an index at
-which to start the search. For example:
+.. 
+ When calling :func:`match`, you have the option to specify an index at
+ which to start the search. For example:
+
+:func:`match` を呼び出すとき、どのインデックスから検索を開始するかを指定するオプションがあります。例えば、
 
 .. doctest::
 
@@ -1923,17 +1970,31 @@ which to start the search. For example:
     julia> m = match(r"[0-9]","aaaa1aaaa2aaaa3",11)
     RegexMatch("3")
 
-You can extract the following info from a :obj:`RegexMatch` object:
+.. 
+ You can extract the following info from a :obj:`RegexMatch` object:
 
--  the entire substring matched: ``m.match``
--  the captured substrings as an array of strings: ``m.captures``
--  the offset at which the whole match begins: ``m.offset``
--  the offsets of the captured substrings as a vector: ``m.offsets``
+:obj:`RegexMatch` オブジェクトから次の情報を抽出することができます。
 
-For when a capture doesn't match, instead of a substring, ``m.captures``
-contains ``nothing`` in that position, and ``m.offsets`` has a zero
-offset (recall that indices in Julia are 1-based, so a zero offset into
-a string is invalid). Here is a pair of somewhat contrived examples:
+.. 
+ -  the entire substring matched: ``m.match``
+ -  the captured substrings as an array of strings: ``m.captures``
+ -  the offset at which the whole match begins: ``m.offset``
+ -  the offsets of the captured substrings as a vector: ``m.offsets``
+
+-  全ての一致した部分文字列： ``m.match``
+-  文字列の配列としてキャプチャされた部分文字列： ``m.captures``
+-  全体の一致が始まるオフセット： ``m.offset``
+-  ベクトルとしてキャプチャされた部分文字列のオフセット： ``m.offsets``
+
+.. 
+ For when a capture doesn't match, instead of a substring, ``m.captures``
+ contains ``nothing`` in that position, and ``m.offsets`` has a zero
+ offset (recall that indices in Julia are 1-based, so a zero offset into
+ a string is invalid). Here is a pair of somewhat contrived examples:
+
+キャプチャが一致しない場合、部分文字列の代わりに、 ``m.captures`` には ``nothing`` が格納され、
+``m.offsets`` にはゼロオフセットが格納されます。（Juliaは1ベースであり、文字列へのゼロオフセットは無効です。）
+以下は考慮の末出された例です。
 
 .. doctest::
 
@@ -1979,14 +2040,24 @@ a string is invalid). Here is a pair of somewhat contrived examples:
      0
      2
 
-It is convenient to have captures returned as an array so that one can
-use destructuring syntax to bind them to local variables::
+.. 
+ It is convenient to have captures returned as an array so that one can
+ use destructuring syntax to bind them to local variables::
 
     julia> first, second, third = m.captures; first
     "a"
 
-Captures can also be accessed by indexing the :obj:`RegexMatch` object
-with the number or name of the capture group:
+キャプチャが配列として返されることで、ローカル変数に紐づける再構成構文を使うことができます。::
+
+    julia> first, second, third = m.captures; first
+    "a"
+
+.. 
+ Captures can also be accessed by indexing the :obj:`RegexMatch` object
+ with the number or name of the capture group:
+
+キャプチャグループの番号または名前で :obj:`RegexMatch` オブジェクトをインデックスすることで、
+取得した値にアクセスすることもできます。
 
 .. doctest::
 
@@ -1997,30 +2068,40 @@ with the number or name of the capture group:
     julia> m[2]
     "45"
 
-Captures can be referenced in a substitution string when using :func:`replace`
-by using ``\n`` to refer to the nth capture group and prefixing the
-subsitution string with ``s``. Capture group 0 refers to the entire match object.
-Named capture groups can be referenced in the substitution with ``g<groupname>``.
-For example:
+.. 
+ Captures can be referenced in a substitution string when using :func:`replace`
+ by using ``\n`` to refer to the nth capture group and prefixing the
+ subsitution string with ``s``. Capture group 0 refers to the entire match object.
+ Named capture groups can be referenced in the substitution with ``g<groupname>``.
+ For example:
+
+``\n`` を使用してn番目のキャプチャグループを参照し、サブ文字列に ``s`` を接頭辞として使用することで
+:func:`replace` を使用した場合、置換文字列でキャプチャを参照できます。キャプチャ・グループ0はマッチ・オブジェクト全体を
+参照します。名前付きキャプチャグループは、 ``g<groupname>`` での置換で参照できます。例えば：
 
 .. doctest::
 
     julia> replace("first second", r"(\w+) (?<agroup>\w+)", s"\g<agroup> \1")
     "second first"
 
-Numbered capture groups can also be referenced as ``\g<n>`` for disambiguation,
-as in:
+.. 
+ Numbered capture groups can also be referenced as ``\g<n>`` for disambiguation,
+ as in:
+
+番号付きキャプチャグループは、次のように曖昧さ回避のために ``\g<n>`` として参照することもできます。
 
 .. doctest::
 
     julia> replace("a", r".", s"\g<0>1")
     "a1"
 
-You can modify the behavior of regular expressions by some combination
-of the flags ``i``, ``m``, ``s``, and ``x`` after the closing double
-quote mark. These flags have the same meaning as they do in Perl, as
-explained in this excerpt from the `perlre
-manpage <http://perldoc.perl.org/perlre.html#Modifiers>`_::
+.. 
+ You can modify the behavior of regular expressions by some combination
+ of the flags ``i``, ``m``, ``s``, and ``x`` after the closing double
+ quote mark. These flags have the same meaning as they do in Perl, as
+ explained in this excerpt from the `perlre
+ manpage <http://perldoc.perl.org/perlre.html#Modifiers>`_::
+
 
     i   Do case-insensitive pattern matching.
 
@@ -2050,7 +2131,43 @@ manpage <http://perldoc.perl.org/perlre.html#Modifiers>`_::
         treated as a metacharacter introducing a comment, just as in
         ordinary code.
 
-For example, the following regex has all three flags turned on:
+閉じるダブルクオーテーションの後に、フラグ  ``i`` 、 ``m`` 、 ``s``　、および ``x`` の組み合わせによって
+正規表現の挙動を変更することができます。これらのフラグは、 `Perlのマニュアルページ <http://perldoc.perl.org/perlre.html#Modifiers>`_から
+抜粋したように、Perlで使用されるのと同じ意味を持っています。::
+        
+        
+    i   Do case-insensitive pattern matching.
+
+        If locale matching rules are in effect, the case map is taken
+        from the current locale for code points less than 255, and
+        from Unicode rules for larger code points. However, matches
+        that would cross the Unicode rules/non-Unicode rules boundary
+        (ords 255/256) will not succeed.
+
+    m   Treat string as multiple lines.  That is, change "^" and "$"
+        from matching the start or end of the string to matching the
+        start or end of any line anywhere within the string.
+
+    s   Treat string as single line.  That is, change "." to match any
+        character whatsoever, even a newline, which normally it would
+        not match.
+
+        Used together, as r""ms, they let the "." match any character
+        whatsoever, while still allowing "^" and "$" to match,
+        respectively, just after and just before newlines within the
+        string.
+
+    x   Tells the regular expression parser to ignore most whitespace
+        that is neither backslashed nor within a character class. You
+        can use this to break up your regular expression into
+        (slightly) more readable parts. The '#' character is also
+        treated as a metacharacter introducing a comment, just as in
+        ordinary code.        
+
+.. 
+ For example, the following regex has all three flags turned on:
+
+例えば、次の正規表現には3つのフラグがすべて設定されています。
 
 .. doctest::
 
@@ -2060,9 +2177,13 @@ For example, the following regex has all three flags turned on:
     julia> match(r"a+.*b+.*?d$"ism, "Goodbye,\nOh, angry,\nBad world\n")
     RegexMatch("angry,\nBad world")
 
-Triple-quoted regex strings, of the form ``r"""..."""``, are also
-supported (and may be convenient for regular expressions containing
-quotation marks or newlines).
+.. 
+ Triple-quoted regex strings, of the form ``r"""..."""``, are also
+ supported (and may be convenient for regular expressions containing
+ quotation marks or newlines).
+
+``r"""..."""`` 形式の3つのダブルクオーテーション付き正規表現文字列もサポートされています。
+（また、クオーテーションや改行を含む正規表現にも便利です。）
 
 Byte Array Literals
 -------------------
