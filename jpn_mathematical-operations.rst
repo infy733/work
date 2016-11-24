@@ -1318,12 +1318,12 @@ Juliaは、不正確な変換の処理が異なる3つの形式の数値変換�
 =========================== =============================================== =============
 :func:`round(x) <round>`    ``x`` を最も近い整数になるよう丸めを行う              ``typeof(x)``
 :func:`round(T, x) <round>` ``x`` を最も近い整数になるよう丸めを行う              ``T``
-:func:`floor(x) <floor>`    ``x`` を ``-Inf`` に向かって「x」を丸めを行う        ``typeof(x)``
-:func:`floor(T, x) <floor>` round ``x`` towards ``-Inf``                    ``T``
-:func:`ceil(x) <ceil>`      round ``x`` towards ``+Inf``                    ``typeof(x)``
-:func:`ceil(T, x) <ceil>`   round ``x`` towards ``+Inf``                    ``T``
-:func:`trunc(x) <trunc>`    round ``x`` towards zero                        ``typeof(x)``
-:func:`trunc(T, x) <trunc>` round ``x`` towards zero                        ``T``
+:func:`floor(x) <floor>`    ``x`` を ``-Inf`` に向かって丸めを行う              ``typeof(x)``
+:func:`floor(T, x) <floor>` ``x`` を ``-Inf`` に向かって丸めを行う              ``T``
+:func:`ceil(x) <ceil>`      ``x`` を ``+Inf`` に向かって丸めを行う              ``typeof(x)``
+:func:`ceil(T, x) <ceil>`   ``x`` を ``+Inf`` に向かって丸めを行う              ``T``
+:func:`trunc(x) <trunc>`    ``x`` を0に向かって丸めを行う                       ``typeof(x)``
+:func:`trunc(T, x) <trunc>` ``x`` を0に向かって丸めを行う                       ``T``
 =========================== =============================================== =============
 
 Division functions
