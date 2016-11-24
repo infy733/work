@@ -808,16 +808,24 @@ Updating operators
       julia> x
       4
 
-The updating versions of all the binary arithmetic and bitwise operators
-are::
+.. 
+ The updating versions of all the binary arithmetic and bitwise operators
+ are::
 
     +=  -=  *=  /=  \=  ÷=  %=  ^=  &=  |=  $=  >>>=  >>=  <<=
 
+更新機能を持つ二項演算子とビット単位の演算子は以下の通りです。::
+
+    +=  -=  *=  /=  \=  ÷=  %=  ^=  &=  |=  $=  >>>=  >>=  <<=
+
+.. 
+ .. note::
+    An updating operator rebinds the variable on the left-hand side.
+    As a result, the type of the variable may change.
 
 .. note::
-   An updating operator rebinds the variable on the left-hand side.
-   As a result, the type of the variable may change.
-
+   更新機能の結果は、左辺にある変数の型に紐付きます。これにより、変数の型が変更されることがあります。
+   
    .. doctest::
 
       julia> x = 0x01; typeof(x)
