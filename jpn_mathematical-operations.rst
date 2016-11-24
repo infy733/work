@@ -915,9 +915,13 @@ Juliaの推進体制は、複数の引数の型を含む算術演算が自然に
     julia> 3 < -0.5
     false
 
-Integers are compared in the standard manner — by comparison of bits.
-Floating-point numbers are compared according to the `IEEE 754
-standard <https://en.wikipedia.org/wiki/IEEE_754-2008>`_:
+.. 
+ Integers are compared in the standard manner — by comparison of bits.
+ Floating-point numbers are compared according to the `IEEE 754
+ standard <https://en.wikipedia.org/wiki/IEEE_754-2008>`_:
+
+整数は標準的な方法（ビットの比較）により比較されます。
+浮動小数点数は `IEEE 754規格 <https://en.wikipedia.org/wiki/IEEE_754-2008>`_に準拠して比較されます。
 
 -  Finite numbers are ordered in the usual manner.
 -  Positive zero is equal but not greater than negative zero.
