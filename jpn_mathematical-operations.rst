@@ -750,7 +750,7 @@ Juliaの推進体制は、複数の引数の型を含む算術演算が自然に
 ===========  =========================================================================
 
 .. 
-Here are some examples with bitwise operators:
+ Here are some examples with bitwise operators:
 
 以下はビット単位演算子の例です。
 
@@ -775,8 +775,8 @@ Here are some examples with bitwise operators:
     0x84
 
 .. 
-Updating operators
-------------------
+ Updating operators
+ ------------------
 
 演算子の更新
 ------------------
@@ -840,8 +840,8 @@ Updating operators
 .. _man-numeric-comparisons:
 
 .. 
-Numeric Comparisons
--------------------
+ Numeric Comparisons
+ -------------------
 
 数値の比較
 -------------------
