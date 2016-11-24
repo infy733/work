@@ -749,7 +749,10 @@ Juliaの推進体制は、複数の引数の型を含む算術演算が自然に
 ``x << y``   論理/算術左桁送り
 ===========  =========================================================================
 
+.. 
 Here are some examples with bitwise operators:
+
+以下はビット単位演算子の例です。
 
 .. doctest::
 
@@ -771,13 +774,30 @@ Here are some examples with bitwise operators:
     julia> ~UInt8(123)
     0x84
 
+.. 
 Updating operators
 ------------------
-Every binary arithmetic and bitwise operator also has an updating
-version that assigns the result of the operation back into its left
-operand. The updating version of the binary operator is formed by placing a
-``=`` immediately after the operator. For example, writing ``x += 3`` is
-equivalent to writing ``x = x + 3``::
+
+演算子の更新
+------------------
+.. 
+ Every binary arithmetic and bitwise operator also has an updating
+ version that assigns the result of the operation back into its left
+ operand. The updating version of the binary operator is formed by placing a
+ ``=`` immediately after the operator. For example, writing ``x += 3`` is
+ equivalent to writing ``x = x + 3``::
+
+      julia> x = 1
+      1
+
+      julia> x += 3
+      4
+
+      julia> x
+      4
+全ての二項演算子とビット単位の演算子には、被演算子の処理の結果を代入できる更新機能があります。
+二校演算子の更新機能は、演算子の後ろに ``=`` を記載することで実行できます。
+例えば、 ``x += 3`` と記載することで``x = x + 3`` と同じ結果となります。:
 
       julia> x = 1
       1
