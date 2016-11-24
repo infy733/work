@@ -627,7 +627,7 @@ Juliaは、基本的な数値プリミティブ型の全ての算術演算子と
  <https://en.wikipedia.org/wiki/Arithmetic#Arithmetic_operations>`_
  are supported on all primitive numeric types:
 
-以下の `算術演算子<https://en.wikipedia.org/wiki/Arithmetic#Arithmetic_operations>`_ は
+以下の `算術演算子 <https://en.wikipedia.org/wiki/Arithmetic#Arithmetic_operations>`_ は
 全ての数値プリミティブ型でサポートされています。
 
 ==========  ============== ======================================
