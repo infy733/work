@@ -1170,43 +1170,76 @@ Juliaは、優先順位の高いものから低いものまで、以下の処理
 
 .. _man-elementary-functions:
 
-Elementary Functions
+.. 
+ Elementary Functions
+ ~~~~~~~~~~~~~~~~~~~~
+
+基本的な関数
 ~~~~~~~~~~~~~~~~~~~~
 
-Julia provides a comprehensive collection of mathematical functions and
-operators. These mathematical operations are defined over as broad a
-class of numerical values as permit sensible definitions, including
-integers, floating-point numbers, rationals, and complexes, wherever
-such definitions make sense.
+.. 
+ Julia provides a comprehensive collection of mathematical functions and
+ operators. These mathematical operations are defined over as broad a
+ class of numerical values as permit sensible definitions, including
+ integers, floating-point numbers, rationals, and complexes, wherever
+ such definitions make sense.
 
-Moreover, these functions (like any Julia function) can be applied
-in "vectorized" fashion to arrays and other collections with the
-syntax ``f.(A)``, e.g. ``sin.(A)`` will compute the elementwise
-sine of each element of an array ``A``.  See :ref:`man-dot-vectorizing`.
+Juliaは、包括的な数学関数および演算子を提供します。これらの数学的演算子は、
+整数、浮動小数点数、有理数、およびそれらの複合などを許容可能な定義として、
+幅広い数値クラスとして定義されています。
+
+.. 
+ Moreover, these functions (like any Julia function) can be applied
+ in "vectorized" fashion to arrays and other collections with the
+ syntax ``f.(A)``, e.g. ``sin.(A)`` will compute the elementwise
+ sine of each element of an array ``A``.  See :ref:`man-dot-vectorizing`.
+
+さらに、これらの関数（ほかのJuliaの関数のような）は、配列や構文 ``f.(A)`` を伴うその他の
+要素に「ベクトル化」して適用することができます。 ``sin.(A)`` は、配列 ``A`` の各要素の要素単位の
+正弦を計算します。詳細は :ref:`man-ベクトル化関数のドット構文` を参照してください。
 
 .. _man-numerical-conversions:
 
-Numerical Conversions
+.. 
+ Numerical Conversions
+ ---------------------
+
+数値変換
 ---------------------
 
-Julia supports three forms of numerical conversion, which differ in their
-handling of inexact conversions.
+ Julia supports three forms of numerical conversion, which differ in their
+ handling of inexact conversions.
 
-- The notation ``T(x)`` or ``convert(T,x)`` converts ``x`` to a value of type ``T``.
+Juliaは、不正確な変換の処理が異なる3つの形式の数値変換をサポートしています。
 
-  -  If ``T`` is a floating-point type, the result is the nearest representable
-     value, which could be positive or negative infinity.
+.. 
+ - The notation ``T(x)`` or ``convert(T,x)`` converts ``x`` to a value of type ``T``.
 
-  -  If ``T`` is an integer type, an ``InexactError`` is raised if ``x``
-     is not representable by ``T``.
+   -  If ``T`` is a floating-point type, the result is the nearest representable
+      value, which could be positive or negative infinity.
+
+   -  If ``T`` is an integer type, an ``InexactError`` is raised if ``x``
+      is not representable by ``T``.
 
 
-- ``x % T`` converts an integer ``x`` to a value of integer type ``T``
-  congruent to ``x`` modulo ``2^n``, where ``n`` is the number of bits in ``T``.
-  In other words, the binary representation is truncated to fit.
+ - ``x % T`` converts an integer ``x`` to a value of integer type ``T``
+   congruent to ``x`` modulo ``2^n``, where ``n`` is the number of bits in ``T``.
+   In other words, the binary representation is truncated to fit.
 
-- The :ref:`man-rounding-functions` take a type ``T`` as an optional argument.
-  For example, ``round(Int,x)`` is a shorthand for ``Int(round(x))``.
+ - The :ref:`man-rounding-functions` take a type ``T`` as an optional argument.
+   For example, ``round(Int,x)`` is a shorthand for ``Int(round(x))``.
+
+- 表記法 ``T(x)`` または ``convert(T,x)`` は、 ``x`` を ``T`` 型の値に変換します。
+
+  -  ``T`` が浮動小数点型の場合、変換の結果は最も近い表現可能な、正または負の無限大にもなり得る値になります。
+
+  -  ``T`` が整数型の場合、 ``x`` が ``T`` で表現できない際は ``InexactError`` が発生します。
+
+
+- ``x % T`` は、整数 ``x`` を、 ``x`` を法とする ``2^n`` （ ``n`` は ``T`` のビット数）に一致する整数型 ``T`` の
+値に変換します。言い換えれば、バイナリ表現は値に収まるように切り捨てられます。
+
+- :ref:`man-端数処理関数` は、 ``T`` 型をオプション引数として解釈します。例えば、 ``round(Int,x)`` は ``Int(round(x))`` の短縮系です。
 
 The following examples show the different forms.
 
