@@ -1237,12 +1237,14 @@ Juliaは、不正確な変換の処理が異なる3つの形式の数値変換�
   -  ``T`` が整数型の場合、 ``x`` が ``T`` で表現できない際は ``InexactError`` が発生します。
 
 
-- ``x % T`` は、整数 ``x`` を、 ``x`` を法とする ``2^n`` （ ``n`` は ``T`` のビット数）に一致する整数型 ``T`` の
-   値に変換します。言い換えれば、バイナリ表現は値に収まるように切り捨てられます。
+- ``x % T`` は、整数 ``x`` を、 ``x`` を法とする ``2^n`` （ ``n`` は ``T`` のビット数）に一致する整数型 ``T`` の値に変換します。言い換えれば、バイナリ表現は値に収まるように切り捨てられます。
 
 - :ref:`man-端数処理関数` は、 ``T`` 型をオプション引数として解釈します。例えば、 ``round(Int,x)`` は ``Int(round(x))`` の短縮系です。
 
-The following examples show the different forms.
+.. 
+ The following examples show the different forms.
+ 
+以下の例は異なる形式を表しています。 
 
 .. doctest::
 
@@ -1282,20 +1284,41 @@ The following examples show the different forms.
      in round(::Type{Int8}, ::Float64) at ./float.jl:211
      ...
 
-See :ref:`man-conversion-and-promotion` for how to define your own
-conversions and promotions.
+.. 
+ See :ref:`man-conversion-and-promotion` for how to define your own
+ conversions and promotions.
+
+独自の変換とプロモーションの定義方法については、 :ref:`man-変換とプロモーション` を参照してください。
 
 .. _man-rounding-functions:
 
-Rounding functions
+.. 
+ Rounding functions
+ ~~~~~~~~~~~~~~~~~~
+
+端数処理関数
 ~~~~~~~~~~~~~~~~~~
 
+.. 
+ =========================== ================================== =============
+ Function                    Description                        Return type
+ =========================== ================================== =============
+ :func:`round(x) <round>`    round ``x`` to the nearest integer ``typeof(x)``
+ :func:`round(T, x) <round>` round ``x`` to the nearest integer ``T``
+ :func:`floor(x) <floor>`    round ``x`` towards ``-Inf``       ``typeof(x)``
+ :func:`floor(T, x) <floor>` round ``x`` towards ``-Inf``       ``T``
+ :func:`ceil(x) <ceil>`      round ``x`` towards ``+Inf``       ``typeof(x)``
+ :func:`ceil(T, x) <ceil>`   round ``x`` towards ``+Inf``       ``T``
+ :func:`trunc(x) <trunc>`    round ``x`` towards zero           ``typeof(x)``
+ :func:`trunc(T, x) <trunc>` round ``x`` towards zero           ``T``
+ =========================== ================================== =============
+
 =========================== ================================== =============
-Function                    Description                        Return type
+関数                        概要                                戻り値の型
 =========================== ================================== =============
-:func:`round(x) <round>`    round ``x`` to the nearest integer ``typeof(x)``
-:func:`round(T, x) <round>` round ``x`` to the nearest integer ``T``
-:func:`floor(x) <floor>`    round ``x`` towards ``-Inf``       ``typeof(x)``
+:func:`round(x) <round>`    ``x`` を最も近い整数になるよう丸めを行う ``typeof(x)``
+:func:`round(T, x) <round>` ``x`` を最も近い整数になるよう丸めを行う ``T``
+:func:`floor(x) <floor>`    ``x`` を ``-Inf`` に向かって「x」を丸めを行う      ``typeof(x)``
 :func:`floor(T, x) <floor>` round ``x`` towards ``-Inf``       ``T``
 :func:`ceil(x) <ceil>`      round ``x`` towards ``+Inf``       ``typeof(x)``
 :func:`ceil(T, x) <ceil>`   round ``x`` towards ``+Inf``       ``T``
