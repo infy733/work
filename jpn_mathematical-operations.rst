@@ -597,21 +597,38 @@
 
 .. currentmodule:: Base
 
+.. 
+ **************************************************
+  Mathematical Operations and Elementary Functions
+ **************************************************
+
 **************************************************
- Mathematical Operations and Elementary Functions
+ 算術処理と基本的な関数
 **************************************************
 
-Julia provides a complete collection of basic arithmetic and bitwise
-operators across all of its numeric primitive types, as well as
-providing portable, efficient implementations of a comprehensive
-collection of standard mathematical functions.
+.. 
+ Julia provides a complete collection of basic arithmetic and bitwise
+ operators across all of its numeric primitive types, as well as
+ providing portable, efficient implementations of a comprehensive
+ collection of standard mathematical functions.
 
-Arithmetic Operators
+Juliaは、基本的な数値プリミティブ型の全ての算術演算子とビット演算子だけでなく、
+可搬的かつ標準的な数学関数の効率的な実装を実現しています。
+
+.. 
+ Arithmetic Operators
+ --------------------
+
+算術演算子
 --------------------
 
-The following `arithmetic operators
-<https://en.wikipedia.org/wiki/Arithmetic#Arithmetic_operations>`_
-are supported on all primitive numeric types:
+.. 
+ The following `arithmetic operators
+ <https://en.wikipedia.org/wiki/Arithmetic#Arithmetic_operations>`_
+ are supported on all primitive numeric types:
+
+以下の `算術演算子<https://en.wikipedia.org/wiki/Arithmetic#Arithmetic_operations>`_ は
+全ての数値プリミティブ型でサポートされています。
 
 ==========  ============== ======================================
 Expression  Name           Description
