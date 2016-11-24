@@ -1210,8 +1210,11 @@ Juliaは、システムのローカルと言語設定を使用して、どの文
     julia> Int('\xff')
     255
 
-You can do comparisons and a limited amount of arithmetic with
-:obj:`Char` values:
+.. 
+ You can do comparisons and a limited amount of arithmetic with
+ :obj:`Char` values:
+
+:obj:`Char` 値を使用して比較と限られた範囲の算術演算を行うことができます。
 
 .. doctest::
 
@@ -1230,10 +1233,17 @@ You can do comparisons and a limited amount of arithmetic with
     julia> 'A' + 1
     'B'
 
-String Basics
+.. 
+ String Basics
+ -------------
+
+文字列の基礎
 -------------
 
-String literals are delimited by double quotes or triple double quotes:
+.. 
+ String literals are delimited by double quotes or triple double quotes:
+
+文字列リテラルはダブルクオーテーションまたは3つのダブルクオーテーションで区切られます。
 
 .. doctest::
 
@@ -1243,7 +1253,10 @@ String literals are delimited by double quotes or triple double quotes:
     julia> """Contains "quote" characters"""
     "Contains \"quote\" characters"
 
-If you want to extract a character from a string, you index into it:
+.. 
+ If you want to extract a character from a string, you index into it:
+ 
+文字列から文字を抽出する場合は、その文字列にインデックスを付ける必要があります。 
 
 .. doctest::
 
@@ -1256,15 +1269,23 @@ If you want to extract a character from a string, you index into it:
     julia> str[end]
     '\n'
 
-All indexing in Julia is 1-based: the first element of any
-integer-indexed object is found at index 1, and the last
-element is found at index ``n``, when the string has
-a length of ``n``.
+.. 
+ All indexing in Julia is 1-based: the first element of any
+ integer-indexed object is found at index 1, and the last
+ element is found at index ``n``, when the string has
+ a length of ``n``.
 
-In any indexing expression, the keyword ``end`` can be used as a
-shorthand for the last index (computed by :func:`endof(str) <endof>`).
-You can perform arithmetic and other operations with ``end``, just like
-a normal value:
+Juliaの全てのインデックスは1ベースです。整数インデックスオブジェクトの最初の要素は
+インデックス1となり、その文字列の長さが ``n`` の場合、その最後の要素は ``n`` となります。
+
+.. 
+ In any indexing expression, the keyword ``end`` can be used as a
+ shorthand for the last index (computed by :func:`endof(str) <endof>`).
+ You can perform arithmetic and other operations with ``end``, just like
+ a normal value:
+
+どのインデックス表現でも、キーワード ``end`` は :func:`endof(str) <endof>` で計算される最後のインデックスの
+省略形として使用できます。通常の値と同様に、算術演算やその他の処理を ``end`` を使用して行うことができます。
 
 .. doctest::
 
@@ -1274,7 +1295,16 @@ a normal value:
     julia> str[end÷2]
     ' '
 
-Using an index less than 1 or greater than ``end`` raises an error::
+.. 
+ Using an index less than 1 or greater than ``end`` raises an error::
+
+     julia> str[0]
+     ERROR: BoundsError: attempt to access 14-element Array{UInt8,1} at index [0]
+
+     julia> str[end+1]
+     ERROR: BoundsError: attempt to access 14-element Array{UInt8,1} at index [15]
+
+1以下または ``end`` 以上のインデックスを使用した場合、エラーが出力されます。::
 
     julia> str[0]
     ERROR: BoundsError: attempt to access 14-element Array{UInt8,1} at index [0]
@@ -1282,14 +1312,20 @@ Using an index less than 1 or greater than ``end`` raises an error::
     julia> str[end+1]
     ERROR: BoundsError: attempt to access 14-element Array{UInt8,1} at index [15]
 
-You can also extract a substring using range indexing:
+.. 
+ You can also extract a substring using range indexing:
+
+範囲のインデックスを使用することで、部分的な文字列を抽出することができます。
 
 .. doctest::
 
     julia> str[4:9]
     "lo, wo"
 
-Notice that the expressions ``str[k]`` and ``str[k:k]`` do not give the same result:
+.. 
+ Notice that the expressions ``str[k]`` and ``str[k:k]`` do not give the same result:
+
+``str[k]`` と ``str[k:k]`` は同じ結果とならないことに注意してください。
 
 .. doctest::
 
@@ -1299,9 +1335,13 @@ Notice that the expressions ``str[k]`` and ``str[k:k]`` do not give the same res
     julia> str[6:6]
     ","
 
-The former is a single character value of type :obj:`Char`, while the
-latter is a string value that happens to contain only a single
-character. In Julia these are very different things.
+.. 
+ The former is a single character value of type :obj:`Char`, while the
+ latter is a string value that happens to contain only a single
+ character. In Julia these are very different things.
+
+前者は :obj:`Char` 型の単一の文字値ですが、後者はこのケースでは1文字だけですが、
+文字列値です。Juliaではこれらは異なるものです。
 
 Unicode and UTF-8
 -----------------
