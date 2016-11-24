@@ -1499,10 +1499,17 @@ JuliaはデフォルトでUTF-8エンコーディングを使用し、パッケ�
 
 .. _man-string-interpolation:
 
-Interpolation
+.. 
+ Interpolation
+ -------------
+
+補間
 -------------
 
-One of the most common and useful string operations is concatenation:
+.. 
+ One of the most common and useful string operations is concatenation:
+
+最も一般的かつ便利な文字列操作の一つは連結です。
 
 .. doctest::
 
@@ -1515,32 +1522,48 @@ One of the most common and useful string operations is concatenation:
     julia> string(greet, ", ", whom, ".\n")
     "Hello, world.\n"
 
-Constructing strings like this can become a bit cumbersome, however. To
-reduce the need for these verbose calls to :func:`string`, Julia allows
-interpolation into string literals using ``$``, as in Perl:
+.. 
+ Constructing strings like this can become a bit cumbersome, however. To
+ reduce the need for these verbose calls to :func:`string`, Julia allows
+ interpolation into string literals using ``$``, as in Perl:
+
+しかしこのような文字列を作成するのは少し複雑です。 :func:`string` へのこれらの冗長的な呼び出しを減らすため、
+Juliaでは、Perlのように ``$`` を使用して文字列リテラルに補間を行うことができます。
 
 .. doctest::
 
     julia> "$greet, $whom.\n"
     "Hello, world.\n"
 
-This is more readable and convenient and equivalent to the above string
-concatenation — the system rewrites this apparent single string literal
-into a concatenation of string literals with variables.
+.. 
+ This is more readable and convenient and equivalent to the above string
+ concatenation — the system rewrites this apparent single string literal
+ into a concatenation of string literals with variables.
 
-The shortest complete expression after the ``$`` is taken as the
-expression whose value is to be interpolated into the string. Thus, you
-can interpolate any expression into a string using parentheses:
+これは読みやすく便利で、上記の文字列連結と同等です。システムは、単一文字列リテラルを変数と
+文字列リテラルの連結に書き換えます。
+
+.. 
+ The shortest complete expression after the ``$`` is taken as the
+ expression whose value is to be interpolated into the string. Thus, you
+ can interpolate any expression into a string using parentheses:
+
+``$`` の後の最短の完全な式は、値が文字列に補間される式として解釈されます。
+したがって、括弧を使用して任意の式を文字列に補間できます。
 
 .. doctest::
 
     julia> "1 + 2 = $(1 + 2)"
     "1 + 2 = 3"
 
-Both concatenation and string interpolation call
-:func:`string` to convert objects into string form. Most
-non-:obj:`AbstractString` objects are converted to strings closely
-corresponding to how they are entered as literal expressions:
+.. 
+ Both concatenation and string interpolation call
+ :func:`string` to convert objects into string form. Most
+ non-:obj:`AbstractString` objects are converted to strings closely
+ corresponding to how they are entered as literal expressions:
+
+補間と文字列補間の両方ともオブジェクトを文字列形式に変換するために :func:`string` を呼び出します。
+ほとんどの非 :obj:`AbstractString` オブジェクトは、どのようにリテラル表現として入力されるかに対応する文字列に変換されます。
 
 .. doctest::
 
@@ -1553,9 +1576,13 @@ corresponding to how they are entered as literal expressions:
     julia> "v: $v"
     "v: [1,2,3]"
 
-:func:`string` is the identity for :obj:`AbstractString` and :obj:`Char`
-values, so these are interpolated into strings as themselves, unquoted
-and unescaped:
+.. 
+ :func:`string` is the identity for :obj:`AbstractString` and :obj:`Char`
+ values, so these are interpolated into strings as themselves, unquoted
+ and unescaped:
+
+:func:`string` は :obj:`AbstractString` および :obj:`Char` 値と同一です。そのため、これらはクオーテーションが付かず、
+エスケープもされずにそのまま文字列に補間されます。
 
 .. doctest::
 
@@ -1565,34 +1592,52 @@ and unescaped:
     julia> "hi, $c"
     "hi, x"
 
-To include a literal ``$`` in a string literal, escape it with a
-backslash:
+.. 
+ To include a literal ``$`` in a string literal, escape it with a
+ backslash:
+
+文字列リテラルにリテラル ``$`` を含める場合は、バックスラッシュを使ってエスケープする必要があります。
 
 .. doctest::
 
     julia> print("I have \$100 in my account.\n")
     I have $100 in my account.
 
-Triple-Quoted String Literals
+.. 
+ Triple-Quoted String Literals
+ -----------------------------
+
+3つのダブルクオーテーション
 -----------------------------
 
-When strings are created using triple-quotes (``"""..."""``) they have some
-special behavior that can be useful for creating longer blocks of text. First,
-if the opening ``"""`` is followed by a newline, the newline is stripped from
-the resulting string.
+.. 
+ When strings are created using triple-quotes (``"""..."""``) they have some
+ special behavior that can be useful for creating longer blocks of text. First,
+ if the opening ``"""`` is followed by a newline, the newline is stripped from
+ the resulting string.
+
+文字列が3のダブルクオーテーション（ ``"""..."""`` ）を使用して作成される場合、
+長いテキストを作成するのに便利な特殊な動作をします。まず、始めの ``"""`` の後ろに改行が続いた場合、
+結果の文字列から改行は取り除かれます。
 
 ::
 
     """hello"""
 
-is equivalent to
+.. 
+ is equivalent to
+
+は以下と同等です。
 
 ::
 
     """
     hello"""
 
-but
+.. 
+ but
+
+しかし、
 
 ::
 
@@ -1600,10 +1645,15 @@ but
 
     hello"""
 
-will contain a literal newline at the beginning. Trailing whitespace is left
-unaltered. They can contain ``"`` symbols without escaping. Triple-quoted strings
-are also dedented to the level of the least-indented line. This is useful for
-defining strings within code that is indented. For example:
+.. 
+ will contain a literal newline at the beginning. Trailing whitespace is left
+ unaltered. They can contain ``"`` symbols without escaping. Triple-quoted strings
+ are also dedented to the level of the least-indented line. This is useful for
+ defining strings within code that is indented. For example:
+
+最初にリテラル改行を含みます。末尾の空白は変更されません。これらはエスケープなしで ``"`` 記号を含めることができます。
+3つのダブルクオーテーションで囲まれた文字列は、最もインデントされていない行合わせてインデントします。
+これはインデントされたコードないの文字列を定義するのに便利です。例えば、
 
 .. doctest::
 
@@ -1613,14 +1663,23 @@ defining strings within code that is indented. For example:
              """
     "  Hello,\n  world.\n"
 
-In this case the final (empty) line before the closing ``"""`` sets the
-indentation level.
+.. 
+ In this case the final (empty) line before the closing ``"""`` sets the
+ indentation level.
 
-Note that line breaks in literal strings, whether single- or triple-quoted,
-result in a newline (LF) character ``\n`` in the string, even if your
-editor uses a carriage return ``\r`` (CR) or CRLF combination to end lines.
-To include a CR in a string, use an explicit escape ``\r``; for example,
-you can enter the literal string ``"a CRLF line ending\r\n"``.
+この場合、閉じる ``"""`` の前の最後の（空の）行はインデントレベルを定義します。
+
+.. 
+ Note that line breaks in literal strings, whether single- or triple-quoted,
+ result in a newline (LF) character ``\n`` in the string, even if your
+ editor uses a carriage return ``\r`` (CR) or CRLF combination to end lines.
+ To include a CR in a string, use an explicit escape ``\r``; for example,
+ you can enter the literal string ``"a CRLF line ending\r\n"``.
+
+シングルクオートかトリプルクオートかどうかに関係なく、文字列リテラルの改行は、
+たとえあなたのエディタがキャッリジリターン ``\r`` （CR）またはCRLFの組み合わせを行末に使っているとしても、
+文字列内の改行（LF）文字 ``\n`` になります。文字列にCRを含めるためには、明示的に ``\r`` でエスケープを使用してください。
+例えば、文字列リテラルに ``"a CRLF line ending\r\n"`` を入力することができます。
 
 Common Operations
 -----------------
