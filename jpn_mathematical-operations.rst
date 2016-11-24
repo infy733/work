@@ -724,16 +724,29 @@ Juliaの推進体制は、複数の引数の型を含む算術演算が自然に
 以下の `ビット単位の演算子 <https://en.wikipedia.org/wiki/Bitwise_operation#Bitwise_operators>`_ は
 全ての数値プリミティブ型でサポートされています。
 
+.. 
+ ===========  =========================================================================
+ Expression   Name
+ ===========  =========================================================================
+ ``~x``       bitwise not
+ ``x & y``    bitwise and
+ ``x | y``    bitwise or
+ ``x $ y``    bitwise xor (exclusive or)
+ ``x >>> y``  `logical shift <https://en.wikipedia.org/wiki/Logical_shift>`_ right
+ ``x >> y``   `arithmetic shift <https://en.wikipedia.org/wiki/Arithmetic_shift>`_ right
+ ``x << y``   logical/arithmetic shift left
+ ===========  =========================================================================
+
 ===========  =========================================================================
-Expression   Name
+式           名称
 ===========  =========================================================================
-``~x``       bitwise not
-``x & y``    bitwise and
-``x | y``    bitwise or
-``x $ y``    bitwise xor (exclusive or)
-``x >>> y``  `logical shift <https://en.wikipedia.org/wiki/Logical_shift>`_ right
-``x >> y``   `arithmetic shift <https://en.wikipedia.org/wiki/Arithmetic_shift>`_ right
-``x << y``   logical/arithmetic shift left
+``~x``       ビット単位の否定
+``x & y``    ビット単位の論理積
+``x | y``    ビット単位の論理和
+``x $ y``    ビット単位の排他的論理和
+``x >>> y``  `論理右桁送り <https://en.wikipedia.org/wiki/Logical_shift>`_
+``x >> y``   `算術右桁送り <https://en.wikipedia.org/wiki/Arithmetic_shift>`_ 
+``x << y``   論理/算術左桁送り
 ===========  =========================================================================
 
 Here are some examples with bitwise operators:
