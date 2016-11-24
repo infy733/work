@@ -1479,7 +1479,7 @@ The types of keyword arguments can be made explicit as follows::
         ###
     end
 
-可変引数関数のように、 ``...`` を使用して追加のキーワード引数を指定することができます。
+可変引数関数のように、 ``...`` を使用して追加のキーワード引数を指定することができます。::
 
     function f(x; y=0, kwargs...)
         ###
@@ -1522,35 +1522,57 @@ The types of keyword arguments can be made explicit as follows::
 
 .. _man-evaluation-scope-default-values:
 
-Evaluation Scope of Default Values
+.. 
+ Evaluation Scope of Default Values
+ ----------------------------------
+
+デフォルト値の処理範囲
 ----------------------------------
 
-Optional and keyword arguments differ slightly in how their default
-values are evaluated. When optional argument default expressions are
-evaluated, only *previous* arguments are in scope. In contrast, *all*
-the arguments are in scope when keyword arguments default expressions
-are evaluated. For example, given this definition::
+.. 
+ Optional and keyword arguments differ slightly in how their default
+ values are evaluated. When optional argument default expressions are
+ evaluated, only *previous* arguments are in scope. In contrast, *all*
+ the arguments are in scope when keyword arguments default expressions
+ are evaluated. For example, given this definition::
 
     function f(x, a=b, b=1)
         ###
     end
 
-the ``b`` in ``a=b`` refers to a ``b`` in an outer scope, not the
-subsequent argument ``b``. However, if ``a`` and ``b`` were keyword
-arguments instead, then both would be created in the same scope and
-the ``b`` in ``a=b`` would refer to the subsequent argument ``b``
-(shadowing any ``b`` in an outer scope), which would result in an
-undefined variable error (since the default expressions are evaluated
-left-to-right, and ``b`` has not been assigned yet).
+オプションとキーワードの引数は、デフォルト値の処理方法が若干異なります。オプションの引数のデフォルト式が処理されるとき、
+前の引数だけが処理範囲内になります。対照的に、キーワード引数のデフォルト式が処理されるときは、
+すべての引数が処理範囲内になります。例えば、次の定義の場合、::
 
+    function f(x, a=b, b=1)
+        ###
+    end
 
-Do-Block Syntax for Function Arguments
+.. 
+ the ``b`` in ``a=b`` refers to a ``b`` in an outer scope, not the
+ subsequent argument ``b``. However, if ``a`` and ``b`` were keyword
+ arguments instead, then both would be created in the same scope and
+ the ``b`` in ``a=b`` would refer to the subsequent argument ``b``
+ (shadowing any ``b`` in an outer scope), which would result in an
+ undefined variable error (since the default expressions are evaluated
+ left-to-right, and ``b`` has not been assigned yet).
+
+``a=b`` の ``b`` は、後続の引数 ``b`` ではなく、この例の外側の ``b`` を参照します。しかし、 ``a`` と ``b`` がキーワード引数であれば、
+どちらも同じ処理範囲内に作成され、 ``a=b`` の ``b`` は後続の引数 ``b`` を参照し、変数未定義エラーとなります。
+（デフォルトの式は左から右に処理され、 ``b`` はまだ割り当てられていないため。）
+
+.. 
+ Do-Block Syntax for Function Arguments
+ --------------------------------------
+
+関数引数のためのDo-Block構文
 --------------------------------------
 
-Passing functions as arguments to other functions is a powerful technique,
-but the syntax for it is not always convenient. Such calls are especially
-awkward to write when the function argument requires multiple lines. As
-an example, consider calling :func:`map` on a function with several cases::
+.. 
+ Passing functions as arguments to other functions is a powerful technique,
+ but the syntax for it is not always convenient. Such calls are especially
+ awkward to write when the function argument requires multiple lines. As
+ an example, consider calling :func:`map` on a function with several cases::
 
     map(x->begin
                if x < 0 && iseven(x)
@@ -1563,7 +1585,23 @@ an example, consider calling :func:`map` on a function with several cases::
            end,
         [A, B, C])
 
-Julia provides a reserved word ``do`` for rewriting this code more clearly::
+他の関数への引数として関数を渡すことは強力な手法ですが、その構文は必ずしも便利ではありません。
+このような関数の呼び出しは、関数の引数に複数の行が必要な際に書くのが特に厄介になります。
+例として、 :func:`map` 関数を呼び出すケースを考えてみましょう。::
+
+    map(x->begin
+               if x < 0 && iseven(x)
+                   return 0
+               elseif x == 0
+                   return 1
+               else
+                   return x
+               end
+           end,
+        [A, B, C])
+
+.. 
+ Julia provides a reserved word ``do`` for rewriting this code more clearly::
 
     map([A, B, C]) do x
         if x < 0 && iseven(x)
@@ -1575,28 +1613,60 @@ Julia provides a reserved word ``do`` for rewriting this code more clearly::
         end
     end
 
-The ``do x`` syntax creates an anonymous function with argument ``x``
-and passes it as the first argument to :func:`map`. Similarly, ``do a,b``
-would create a two-argument anonymous function, and a plain ``do``
-would declare that what follows is an anonymous function of the form
-``() -> ...``.
+Juliaは、このコードをより明確に書き換えるために予約語 ``do`` を提供しています。::
 
-How these arguments are initialized depends on the "outer" function;
-here, :func:`map` will sequentially set ``x`` to ``A``, ``B``, ``C``,
-calling the anonymous function on each, just as would happen in the
-syntax ``map(func, [A, B, C])``.
+    map([A, B, C]) do x
+        if x < 0 && iseven(x)
+            return 0
+        elseif x == 0
+            return 1
+        else
+            return x
+        end
+    end
 
-This syntax makes it easier to use functions to effectively extend the
-language, since calls look like normal code blocks. There are many
-possible uses quite different from :func:`map`, such as managing system
-state. For example, there is a version of :func:`open` that runs code
-ensuring that the opened file is eventually closed::
+.. 
+ The ``do x`` syntax creates an anonymous function with argument ``x``
+ and passes it as the first argument to :func:`map`. Similarly, ``do a,b``
+ would create a two-argument anonymous function, and a plain ``do``
+ would declare that what follows is an anonymous function of the form
+ ``() -> ...``.
+
+``do x`` 構文は、引数 ``x`` を持つ無名関数を作成し、それを :func:`map` の最初の引数として渡します。
+同様に、 ``do a,b`` は2つの引数を持つ無名関数を作成し、ただの ``do`` は続く次の記述が ``() -> ...`` 形式の
+無名関数であるでと宣言します。
+
+.. 
+ How these arguments are initialized depends on the "outer" function;
+ here, :func:`map` will sequentially set ``x`` to ``A``, ``B``, ``C``,
+ calling the anonymous function on each, just as would happen in the
+ syntax ``map(func, [A, B, C])``.
+
+これらの引数がどのように初期化されるかは、「外側」の関数によって決まります。
+:func:`map` は、構文 ``map(func, [A, B, C])`` の場合と同様に、 ``x`` を ``A`` 、 ``B`` 、 ``C`` に順番に
+設定してそれぞれに無名関数を呼び出します。
+
+.. 
+ This syntax makes it easier to use functions to effectively extend the
+ language, since calls look like normal code blocks. There are many
+ possible uses quite different from :func:`map`, such as managing system
+ state. For example, there is a version of :func:`open` that runs code
+ ensuring that the opened file is eventually closed::
 
     open("outfile", "w") do io
         write(io, data)
     end
 
-This is accomplished by the following definition::
+この構文は、呼び出しが通常のコードブロックのように見えるため、関数を使用して効果的かつ容易に言語を拡張することができます。
+システム状態の管理など、 :func:`map` とはまったく異なるさまざまな用途があります。例えば、開かれたファイルが後に閉じられることを
+保証するコードを実行する :func:`open` があります。::
+
+    open("outfile", "w") do io
+        write(io, data)
+    end
+
+.. 
+ This is accomplished by the following definition::
 
     function open(f::Function, args...)
         io = open(args...)
@@ -1607,88 +1677,163 @@ This is accomplished by the following definition::
         end
     end
 
-Here, :func:`open` first opens the file for writing and then passes
-the resulting output stream to the anonymous function you defined
-in the ``do ... end`` block. After your function exits, :func:`open`
-will make sure that the stream is properly closed, regardless of
-whether your function exited normally or threw an exception.
-(The ``try/finally`` construct will be described in
-:ref:`man-control-flow`.)
+これは、次の定義によって実行できます。::
 
-With the ``do`` block syntax, it helps to check the documentation or
-implementation to know how the arguments of the user function are
-initialized.
+    function open(f::Function, args...)
+        io = open(args...)
+        try
+            f(io)
+        finally
+            close(io)
+        end
+    end
+
+.. 
+ Here, :func:`open` first opens the file for writing and then passes
+ the resulting output stream to the anonymous function you defined
+ in the ``do ... end`` block. After your function exits, :func:`open`
+ will make sure that the stream is properly closed, regardless of
+ whether your function exited normally or threw an exception.
+ (The ``try/finally`` construct will be described in
+ :ref:`man-control-flow`.)
+
+:func:`open` は最初にファイルを書き込み用に開き、一連の結果の出力を ``do ... end`` ブロックで定義した無名関数に渡します。
+関数の処理が終了した後、関数が正常に終了したか異常終了したかにかかわらず、 :func:`open` はデータ取得が正しく終了したことを確認します。
+（ ``try/finally`` 構造体については、 :ref:`man-コントロールフロー` に説明があります。）
+
+.. 
+ With the ``do`` block syntax, it helps to check the documentation or
+ implementation to know how the arguments of the user function are
+ initialized.
+
+``do`` ブロック構文では、ユーザ定義関数の引数がどのように初期化されるかを知るため、記述や実装をチェックします。
 
 .. _man-dot-vectorizing:
 
-Dot Syntax for Vectorizing Functions
+.. 
+ Dot Syntax for Vectorizing Functions
+ ------------------------------------
+
+ベクトル化関数のドット構文
 ------------------------------------
 
-In technical-computing languages, it is common to have "vectorized" versions of
-functions, which simply apply a given function ``f(x)`` to each element of an
-array ``A`` to yield a new array via ``f(A)``.   This kind of syntax is
-convenient for data processing, but in other languages vectorization is also
-often required for performance: if loops are slow, the "vectorized" version of a
-function can call fast library code written in a low-level language.   In Julia,
-vectorized functions are *not* required for performance, and indeed it is often
-beneficial to write your own loops (see :ref:`man-performance-tips`), but they
-can still be convenient.  Therefore, *any* Julia function ``f`` can be applied
-elementwise to any array (or other collection) with the syntax ``f.(A)``.
+.. 
+ In technical-computing languages, it is common to have "vectorized" versions of
+ functions, which simply apply a given function ``f(x)`` to each element of an
+ array ``A`` to yield a new array via ``f(A)``.   This kind of syntax is
+ convenient for data processing, but in other languages vectorization is also
+ often required for performance: if loops are slow, the "vectorized" version of a
+ function can call fast library code written in a low-level language.   In Julia,
+ vectorized functions are *not* required for performance, and indeed it is often
+ beneficial to write your own loops (see :ref:`man-performance-tips`), but they
+ can still be convenient.  Therefore, *any* Julia function ``f`` can be applied
+ elementwise to any array (or other collection) with the syntax ``f.(A)``.
 
-Of course, you can omit the dot if you write a specialized "vector" method
-of ``f``, e.g. via ``f(A::AbstractArray) = map(f, A)``, and this is just
-as efficient as ``f.(A)``.   But that approach requires you to decide in advance
-which functions you want to vectorize.
+プログラミング言語では、関数の「ベクトル化」バージョンを持つことが一般的です。
+これは、関数 ``f(x)`` を配列 ``A`` の各要素に適用して ``f(A)`` を介して新しい配列を生成します。
+この種の構文はデータ処理に便利ですが、他の言語では、ベクトル化はパフォーマンスのために必要です。
+ループが遅い場合、関数の「ベクトル化」バージョンでは、低いレベルの言語で書かれた速いライブラリコードを
+呼び出すことができます。Juliaでは、ベクトル化された関数はパフォーマンスのために必要ではなく、
+独自のループを書くことで有益になります。（「パフォーマンスに関するヒント」を参照）Julia関数 ``f`` は、
+``f.(A)``の構文を使用して配列（または他のコレクション）に要素ごとに適用することができます。
 
-More generally, ``f.(args...)`` is actually equivalent to
-``broadcast(f, args...)``, which allows you to operate on multiple
-arrays (even of different shapes), or a mix of arrays and scalars
-(see :ref:`man-broadcasting`).  For example, if you have ``f(x,y) = 3x + 4y``,
-then ``f.(pi,A)`` will return a new array consisting of ``f(pi,a)`` for each
-``a`` in ``A``, and ``f.(vector1,vector2)`` will return a new vector
-consisting of ``f(vector1[i],vector2[i])`` for each index ``i``
-(throwing an exception if the vectors have different length).
+.. 
+ Of course, you can omit the dot if you write a specialized "vector" method
+ of ``f``, e.g. via ``f(A::AbstractArray) = map(f, A)``, and this is just
+ as efficient as ``f.(A)``.   But that approach requires you to decide in advance
+ which functions you want to vectorize.
 
-Moreover, *nested* ``f.(args...)`` calls are *fused* into a single ``broadcast``
-loop.  For example, ``sin.(cos.(X))`` is equivalent to ``broadcast(x -> sin(cos(x)), X)``,
-similar to ``[sin(cos(x)) for x in X]``: there is only a single loop over ``X``,
-and a single array is allocated for the result.   [In contrast, ``sin(cos(X))``
-in a typical "vectorized" language would first allocate one temporary array for ``tmp=cos(X)``,
-and then compute ``sin(tmp)`` in a separate loop, allocating a second array.]
-This loop fusion is not a compiler optimization that may or may not occur, it
-is a *syntactic guarantee* whenever nested ``f.(args...)`` calls are encountered.  Technically,
-the fusion stops as soon as a "non-dot" function is encountered; for example,
-in ``sin.(sort(cos.(X)))`` the ``sin`` and ``cos`` loops cannot be merged
-because of the intervening ``sort`` function.
+``f`` の特殊な「ベクトル」メソッドを書くと、 ``f(A::AbstractArray) = map(f, A)`` のようにドットを省略することができ、
+これは ``f.(A)`` と同様に効率的です。しかし、この方法では、どの関数をベクトル化するかを事前に決めておく必要があります。
 
-Finally, the maximum efficiency is typically achieved when the output
-array of a vectorized operation is *pre-allocated*, so that repeated
-calls do not allocate new arrays over and over again for the results
-(:ref:`man-preallocation`:).   A convenient syntax for this is
-``X .= ...``, which is equivalent to ``broadcast!(identity, X, ...)``
-except that, as above, the ``broadcast!`` loop is fused with any nested
-"dot" calls.  For example, ``X .= sin.(Y)`` is equivalent to
-``broadcast!(sin, X, Y)``, overwriting ``X`` with ``sin.(Y)`` in-place.
-If the left-hand side is an array-indexing expression, e.g.
-``X[2:end] .= sin.(Y)``, then it translates to ``broadcast!`` on a ``view``,
-e.g. ``broadcast!(sin, view(X, 2:endof(X)), Y)``, so that the left-hand
-side is updated in-place.
+.. 
+ More generally, ``f.(args...)`` is actually equivalent to
+ ``broadcast(f, args...)``, which allows you to operate on multiple
+ arrays (even of different shapes), or a mix of arrays and scalars
+ (see :ref:`man-broadcasting`).  For example, if you have ``f(x,y) = 3x + 4y``,
+ then ``f.(pi,A)`` will return a new array consisting of ``f(pi,a)`` for each
+ ``a`` in ``A``, and ``f.(vector1,vector2)`` will return a new vector
+ consisting of ``f(vector1[i],vector2[i])`` for each index ``i``
+ (throwing an exception if the vectors have different length).
 
-(In future versions of Julia, operators like ``.*`` will also be handled with
-the same mechanism: they will be equivalent to ``broadcast`` calls and
-will be fused with other nested "dot" calls.  ``X .+= Y`` is equivalent
-to ``X .= X .+ Y`` and will eventually result in a fused in-place assignment.
-Similarly for ``.*=`` etcetera.)
+一般的には、 ``f.(args...)`` は ``broadcast(f, args...)`` と同一で、複数の配列（異なる形状のものでも）や配列と
+スカラーの組み合わせで操作できます。（詳細は :ref:`man-ブロードキャスティング` を参照してください。）例えば、
+``f(x,y) = 3x + 4y`` の場合、 ``f(pi,a)`` は各 ``a`` に ``A`` を入れた新しい配列を返し、 ``f.(vector1,vector2)`` は、
+各インデックス ``i`` に対して ``f(vector1[i],vector2[i])`` からなる新しいベクトルを返します。
+（ベクトルの長さが異なる場合はエラーを出力します。）
 
+.. 
+ Moreover, *nested* ``f.(args...)`` calls are *fused* into a single ``broadcast``
+ loop.  For example, ``sin.(cos.(X))`` is equivalent to ``broadcast(x -> sin(cos(x)), X)``,
+ similar to ``[sin(cos(x)) for x in X]``: there is only a single loop over ``X``,
+ and a single array is allocated for the result.   [In contrast, ``sin(cos(X))``
+ in a typical "vectorized" language would first allocate one temporary array for ``tmp=cos(X)``,
+ and then compute ``sin(tmp)`` in a separate loop, allocating a second array.]
+ This loop fusion is not a compiler optimization that may or may not occur, it
+ is a *syntactic guarantee* whenever nested ``f.(args...)`` calls are encountered.  Technically,
+ the fusion stops as soon as a "non-dot" function is encountered; for example,
+ in ``sin.(sort(cos.(X)))`` the ``sin`` and ``cos`` loops cannot be merged
+ because of the intervening ``sort`` function.
 
-Further Reading
+さらに、ネストされた ``f.(args...)`` 呼び出しは、単一の ``broadcast`` ループフュージョンされます。
+例えば ``sin.(cos.(X))`` は  ``[sin(cos(x)) for x in X]`` と同様に ``broadcast(x -> sin(cos(x)), X)`` と同一です。
+``X``上に1つのループがあり、結果のために1つの配列が割り当てられます。一方、典型的な「ベクトル化」言語の ``sin(cos(X))`` は、
+最初に ``tmp=cos(X)`` に対して1つの一時的な配列を割り当て、別のループで ``sin(tmp)`` を計算し、2番目の配列を割り当てます。
+このループフュージョンはコンパイラの最適化ではなく、最適化が発生しない場合もあります。これはネストされた ``f.(args...)`` の
+呼び出しが発生するたびに文法的に保証されます。技術的には、このフュージョンはドットが無い関数にあたるとすぐに止まります。
+例えば、 ``sin.(sort(cos.(X)))`` では、介在する ``sort`` 関数のために、 ``sin`` と ``cos`` のループはマージされません。
+
+.. 
+ Finally, the maximum efficiency is typically achieved when the output
+ array of a vectorized operation is *pre-allocated*, so that repeated
+ calls do not allocate new arrays over and over again for the results
+ (:ref:`man-preallocation`:).   A convenient syntax for this is
+ ``X .= ...``, which is equivalent to ``broadcast!(identity, X, ...)``
+ except that, as above, the ``broadcast!`` loop is fused with any nested
+ "dot" calls.  For example, ``X .= sin.(Y)`` is equivalent to
+ ``broadcast!(sin, X, Y)``, overwriting ``X`` with ``sin.(Y)`` in-place.
+ If the left-hand side is an array-indexing expression, e.g.
+ ``X[2:end] .= sin.(Y)``, then it translates to ``broadcast!`` on a ``view``,
+ e.g. ``broadcast!(sin, view(X, 2:endof(X)), Y)``, so that the left-hand
+ side is updated in-place.
+
+最後に、最大の効率化は、ベクトル化された処理の出力配列を事前に割り当て、繰り返し呼び出された際に
+毎回新しい配列を結果に割り当てないようにすることで通常達成されます。（ :ref:`man-出力の事前割り当て`: を参照）
+便利な構文は ``X .= ...`` です。これは、上記の通り ``broadcast!`` ループはネストされたドット付きの呼び出しと
+フュージョンすることを除き、 ``broadcast!(identity, X, ...)`` と同一です。例えば、 ``X .= sin.(Y)`` は
+``broadcast!(sin, X, Y)`` と同一であり、 ``X`` を ``sin.(Y)`` で上書きします。左辺が ``X[2:end] .= sin.(Y)`` のような
+配列インデックス式の場合、式は ``broadcast!(sin, view(X, 2:endof(X)), Y)`` のように ``view`` 上に
+``broadcast!`` に変換され、これにより左辺がその場で更新されます。
+
+.. 
+ (In future versions of Julia, operators like ``.*`` will also be handled with
+ the same mechanism: they will be equivalent to ``broadcast`` calls and
+ will be fused with other nested "dot" calls.  ``X .+= Y`` is equivalent
+ to ``X .= X .+ Y`` and will eventually result in a fused in-place assignment.
+ Similarly for ``.*=`` etcetera.)
+
+（Juliaの将来のバージョンでは、 ``.*`` のような演算子も同じメカニズムで処理されます。これは ``broadcast`` の呼び出しと同等で、
+他のネストされたドット付きの呼び出しとフュージョンします。 ``X .+= Y`` は ``X .= X .+ Y`` と同等で、フージョンされた割り当てが行われます。
+これは ``.*=`` などでも同様です。）
+
+.. 
+ Further Reading
+ ---------------
+
+参考資料
 ---------------
 
-We should mention here that this is far from a complete picture of
-defining functions. Julia has a sophisticated type system and allows
-multiple dispatch on argument types. None of the examples given here
-provide any type annotations on their arguments, meaning that they are
-applicable to all types of arguments. The type system is described in
-:ref:`man-types` and defining a function in terms of methods chosen
-by multiple dispatch on run-time argument types is described in
-:ref:`man-methods`.
+.. 
+ We should mention here that this is far from a complete picture of
+ defining functions. Julia has a sophisticated type system and allows
+ multiple dispatch on argument types. None of the examples given here
+ provide any type annotations on their arguments, meaning that they are
+ applicable to all types of arguments. The type system is described in
+ :ref:`man-types` and defining a function in terms of methods chosen
+ by multiple dispatch on run-time argument types is described in
+ :ref:`man-methods`.
+ 
+これは関数の定義の完全な説明とは言えません。Juliaは洗練された型システムを持ち、引数型の複数の展開が可能です。
+ここで示した例は、型の注釈を提供していません。注釈はすべての型の引数に適用できるます。
+型システムについては :ref:`man-型` セクションで説明されており、実行時引数型の複数の展開によって選択されたメソッドに関する関数を
+定義する方法については :ref:`man-メソッド` セクションで説明されています。
