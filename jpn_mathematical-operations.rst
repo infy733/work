@@ -1443,11 +1443,23 @@ erfc <http://www.johndcook.com/blog/2010/06/07/math-library-functions-that-seem-
 `hypot <http://www.johndcook.com/blog/2010/06/02/whats-so-hard-about-finding-a-hypotenuse/>`_ 
 に関するJohn D. Cookのブログ記事を参照してください。
 
+.. 
+ Trigonometric and hyperbolic functions
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Trigonometric and hyperbolic functions
+三角関数と双曲線関数
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-All the standard trigonometric and hyperbolic functions are also defined::
+.. 
+ All the standard trigonometric and hyperbolic functions are also defined::
+
+     sin    cos    tan    cot    sec    csc
+     sinh   cosh   tanh   coth   sech   csch
+     asin   acos   atan   acot   asec   acsc
+     asinh  acosh  atanh  acoth  asech  acsch
+     sinc   cosc   atan2
+    
+標準的な全ての三角関数と双曲線関数も定義されています。::
 
     sin    cos    tan    cot    sec    csc
     sinh   cosh   tanh   coth   sech   csch
@@ -1455,11 +1467,15 @@ All the standard trigonometric and hyperbolic functions are also defined::
     asinh  acosh  atanh  acoth  asech  acsch
     sinc   cosc   atan2
 
-These are all single-argument functions, with the exception of
-`atan2 <https://en.wikipedia.org/wiki/Atan2>`_, which gives the angle
-in `radians <https://en.wikipedia.org/wiki/Radian>`_ between the *x*-axis
-and the point specified by its arguments, interpreted as *x* and *y*
-coordinates.
+.. 
+ These are all single-argument functions, with the exception of
+ `atan2 <https://en.wikipedia.org/wiki/Atan2>`_, which gives the angle
+ in `radians <https://en.wikipedia.org/wiki/Radian>`_ between the *x*-axis
+ and the point specified by its arguments, interpreted as *x* and *y*
+ coordinates.
+
+これらはすべて引数が1つの関数ですが、 `atan2 <https://en.wikipedia.org/wiki/Atan2>`_ は例外で、角度を*x*軸と引数で
+指定された点の `ラジアン <https://en.wikipedia.org/wiki/Radian>`_ で表し、*x*座標と*y*座標として解釈します。
 
 Additionally, :func:`sinpi(x) <sinpi>` and :func:`cospi(x) <cospi>` are provided for more accurate computations
 of :func:`sin(pi*x) <sin>` and :func:`cos(pi*x) <cos>` respectively.
