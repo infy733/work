@@ -2131,7 +2131,7 @@ Juliaでは、正規表現は ``r`` で始まる様々な識別子の接頭辞�
         treated as a metacharacter introducing a comment, just as in
         ordinary code.
 
-閉じるダブルクオーテーションの後に、フラグ  ``i`` 、 ``m`` 、 ``s``　、および ``x`` の組み合わせによって
+閉じるダブルクオーテーションの後に、フラグ  ``i`` 、 ``m`` 、 ``s`` および ``x`` の組み合わせによって
 正規表現の挙動を変更することができます。これらのフラグは、 `Perlのマニュアルページ <http://perldoc.perl.org/perlre.html#Modifiers>`_ から
 抜粋したように、Perlで使用されるのと同じ意味を持っています。::
         
