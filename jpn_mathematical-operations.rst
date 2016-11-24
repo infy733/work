@@ -921,14 +921,21 @@ Juliaの推進体制は、複数の引数の型を含む算術演算が自然に
  standard <https://en.wikipedia.org/wiki/IEEE_754-2008>`_:
 
 整数は標準的な方法（ビットの比較）により比較されます。
-浮動小数点数は `IEEE 754規格 <https://en.wikipedia.org/wiki/IEEE_754-2008>`_に準拠して比較されます。
+浮動小数点数は `IEEE 754規格 <https://en.wikipedia.org/wiki/IEEE_754-2008>`_ に準拠して比較されます。
 
--  Finite numbers are ordered in the usual manner.
--  Positive zero is equal but not greater than negative zero.
--  ``Inf`` is equal to itself and greater than everything else except ``NaN``.
--  ``-Inf`` is equal to itself and less then everything else except ``NaN``.
--  ``NaN`` is not equal to, not less than, and not greater than anything,
-   including itself.
+.. 
+ -  Finite numbers are ordered in the usual manner.
+ -  Positive zero is equal but not greater than negative zero.
+ -  ``Inf`` is equal to itself and greater than everything else except ``NaN``.
+ -  ``-Inf`` is equal to itself and less then everything else except ``NaN``.
+ -  ``NaN`` is not equal to, not less than, and not greater than anything,
+    including itself.
+
+-  有限数は標準的な方法で順序付けされます。
+-  正のゼロは負のゼロに等しく、大きくはありません。
+-  ``Inf`` はそれ自体と等しく、 ``NaN`` を除く全てよりも大きいです。
+-  ``-Inf`` はそれ自体と等しく、 ``NaN`` を除く全てよりも小さいです。
+-  ``NaN`` はそれ自体を含め、全てに対し等しくなく、何よりも小さくなく、何よりも大きくありません。
 
 The last point is potentially surprising and thus worth noting:
 
