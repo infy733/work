@@ -1366,18 +1366,22 @@ Juliaは、不正確な変換の処理が異なる3つの形式の数値変換�
 :func:`lcm(x,y...) <lcm>`    ``x`` 、 ``y`` 、...の最小の正の公倍数
 ============================ =======================================================================
 
-Sign and absolute value functions
+.. 
+ Sign and absolute value functions
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+符号と絶対値関数
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ================================ ===========================================================
-Function                         Description
+関数                             概要
 ================================ ===========================================================
-:func:`abs(x) <abs>`             a positive value with the magnitude of ``x``
-:func:`abs2(x) <abs2>`           the squared magnitude of ``x``
-:func:`sign(x) <sign>`           indicates the sign of ``x``, returning -1, 0, or +1
-:func:`signbit(x) <signbit>`     indicates whether the sign bit is on (true) or off (false)
-:func:`copysign(x,y) <copysign>` a value with the magnitude of ``x`` and the sign of ``y``
-:func:`flipsign(x,y) <flipsign>` a value with the magnitude of ``x`` and the sign of ``x*y``
+:func:`abs(x) <abs>`             絶対値 ``x`` の正の値
+:func:`abs2(x) <abs2>`           絶対値 ``x`` の2乗
+:func:`sign(x) <sign>`           ``x`` の符号を示し、 -1、 0、 または +1を返す
+:func:`signbit(x) <signbit>`     符号ビットがオン（true）またはオフ（false）であるかを示す
+:func:`copysign(x,y) <copysign>` 絶対値 ``x`` と符号 ``y`` を持つ値
+:func:`flipsign(x,y) <flipsign>` 絶対値 ``x`` と符号 ``x*y`` を持つ値
 ================================ ===========================================================
 
 Powers, logs and roots
