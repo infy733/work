@@ -659,12 +659,22 @@ Juliaは、基本的な数値プリミティブ型の全ての算術演算子と
 ``x % y``   余り           ``rem(x,y)`` と同等
 ==========  ============== ======================================
 
-as well as the negation on ``Bool`` types:
+.. 
+ as well as the negation on ``Bool`` types:
+ 
+``Bool`` 型の否定形についても同様。
+
+.. 
+ ==========  ============== ============================================
+ Expression  Name           Description
+ ==========  ============== ============================================
+ ``!x``      negation       changes ``true`` to ``false`` and vice versa
+ ==========  ============== ============================================
 
 ==========  ============== ============================================
-Expression  Name           Description
+式          名称            概要
 ==========  ============== ============================================
-``!x``      negation       changes ``true`` to ``false`` and vice versa
+``!x``      否定形          ``true`` を ``false`` に、または ``false`` を ``true`` にえs変更する
 ==========  ============== ============================================
 
 Julia's promotion system makes arithmetic operations on mixtures of argument
