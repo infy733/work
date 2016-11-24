@@ -1055,26 +1055,19 @@ Juliaには、文字列に関する注目すべき高度な機能があります
     efficiently and simply for variable-width encodings of Unicode
     strings.
    
--  uliaにおける文字列を扱うビルトインの型は :obj:`String` です。これは、 `UTF-8 <https://en.wikipedia.org/wiki/UTF-8>`_ 
+-  Juliaにおける文字列を扱うビルトインの型は :obj:`String` です。これは、 `UTF-8 <https://en.wikipedia.org/wiki/UTF-8>`_ 
    エンコーディングによる全ての `Unicode <https://en.wikipedia.org/wiki/Unicode>`_ をサポートします。
    （Unicodeエンコードの変換を行うために :func:`transcode` 関数が提供されています。）
 -  全ての文字列型は抽象型 :obj:`AbstractString` のサブタイプであり、外部パッケージは
    追加の :obj:`AbstractString` サブタイプ（例えばその他のエンコーディング用）を定義します。
    文字列の引数を扱う関数を定義する場合は、任意の文字列型を使用するために :obj:`AbstractString` を型として宣言する必要があります。
--  Like C and Java, but unlike most dynamic languages, Julia has a
-   first-class type representing a single character, called :obj:`Char`.
-   This is just a special kind of 32-bit bitstype whose numeric value
-   represents a Unicode code point.
--  As in Java, strings are immutable: the value of an :obj:`AbstractString` object
-   cannot be changed. To construct a different string value, you
-   construct a new string from parts of other strings.
--  Conceptually, a string is a *partial function* from indices to
-   characters: for some index values, no character value is returned,
-   and instead an exception is thrown. This allows for efficient
-   indexing into strings by the byte index of an encoded representation
-   rather than by a character index, which cannot be implemented both
-   efficiently and simply for variable-width encodings of Unicode
-   strings.   
+-  C言語やJavaと同様に、しかしほとんどの動的言語とは異なり、Juliaには :obj:`Char` と呼ばれる1文字を表す第1級型があります。
+   これは数値がUnicodeコードポイントを表す特殊な種類の32ビットのビット型です。
+-  Javaと同様に、文字列は不変であり、 :obj:`AbstractString` オブジェクトの値は変更できません。
+   異なる文字列の値を作成するには、他の文字列の一部から新しい文字列を作成します。
+-  概念的には、文字列はインデックスから文字への部分的な関数です。インデックス値によっては文字値は返されず、
+   例外が出力されます。これは、Unicode文字列の可変幅のエンコードに対して効率的かつシンプルに実装できない
+   文字インデックスではなく、エンコードされた表現のバイトインデックスによる文字列への効率的なインデックスを可能とします。   
 
 .. _man-characters:
 
