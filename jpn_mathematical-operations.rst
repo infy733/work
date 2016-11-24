@@ -1326,16 +1326,37 @@ Juliaは、不正確な変換の処理が異なる3つの形式の数値変換�
 :func:`trunc(T, x) <trunc>` ``x`` を0に向かって丸めを行う                       ``T``
 =========================== =============================================== =============
 
-Division functions
+.. 
+ Division functions
+ ~~~~~~~~~~~~~~~~~~
+
+除算関数
 ~~~~~~~~~~~~~~~~~~
 
+.. 
+ ============================ =======================================================================
+ Function                     Description
+ ============================ =======================================================================
+ :func:`div(x,y) <div>`       truncated division; quotient rounded towards zero
+ :func:`fld(x,y) <fld>`       floored division; quotient rounded towards ``-Inf``
+ :func:`cld(x,y) <cld>`       ceiling division; quotient rounded towards ``+Inf``
+ :func:`rem(x,y) <rem>`       remainder; satisfies ``x == div(x,y)*y + rem(x,y)``; sign matches ``x``
+ :func:`mod(x,y) <mod>`       modulus; satisfies ``x == fld(x,y)*y + mod(x,y)``; sign matches ``y``
+ :func:`mod1(x,y) <mod1>`     ``mod()`` with offset 1; returns ``r∈(0,y]`` for ``y>0`` or ``r∈[y,0)`` for ``y<0``, where ``mod(r, y) == mod(x, y)``
+ :func:`mod2pi(x) <mod2pi>`   modulus with respect to 2pi;  ``0 <= mod2pi(x)  < 2pi``
+ :func:`divrem(x,y) <divrem>` returns ``(div(x,y),rem(x,y))``
+ :func:`fldmod(x,y) <fldmod>` returns ``(fld(x,y),mod(x,y))``
+ :func:`gcd(x,y...) <gcd>`    greatest positive common divisor of ``x``, ``y``,...
+ :func:`lcm(x,y...) <lcm>`    least positive common multiple of ``x``, ``y``,...
+ ============================ =======================================================================
+
 ============================ =======================================================================
-Function                     Description
+関数                         概要
 ============================ =======================================================================
-:func:`div(x,y) <div>`       truncated division; quotient rounded towards zero
-:func:`fld(x,y) <fld>`       floored division; quotient rounded towards ``-Inf``
-:func:`cld(x,y) <cld>`       ceiling division; quotient rounded towards ``+Inf``
-:func:`rem(x,y) <rem>`       remainder; satisfies ``x == div(x,y)*y + rem(x,y)``; sign matches ``x``
+:func:`div(x,y) <div>`       0に向かって丸めを行う除算
+:func:`fld(x,y) <fld>`       床関数のように ``-Inf`` に向かって丸めを行う除算
+:func:`cld(x,y) <cld>`       天井関数のように ``+Inf`` に向かって丸めを行う除算
+:func:`rem(x,y) <rem>`       余り； ``x == div(x,y)*y + rem(x,y)`` を満たす； 記号は ``x`` と一致
 :func:`mod(x,y) <mod>`       modulus; satisfies ``x == fld(x,y)*y + mod(x,y)``; sign matches ``y``
 :func:`mod1(x,y) <mod1>`     ``mod()`` with offset 1; returns ``r∈(0,y]`` for ``y>0`` or ``r∈[y,0)`` for ``y<0``, where ``mod(r, y) == mod(x, y)``
 :func:`mod2pi(x) <mod2pi>`   modulus with respect to 2pi;  ``0 <= mod2pi(x)  < 2pi``
