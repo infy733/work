@@ -1474,8 +1474,8 @@ erfc <http://www.johndcook.com/blog/2010/06/07/math-library-functions-that-seem-
  and the point specified by its arguments, interpreted as *x* and *y*
  coordinates.
 
-これらはすべて引数が1つの関数ですが、 `atan2 <https://en.wikipedia.org/wiki/Atan2>`_ は例外で、角度を*x*軸と引数で
-指定された点の `ラジアン <https://en.wikipedia.org/wiki/Radian>`_ で表し、*x*座標と*y*座標として解釈します。
+これらはすべて引数が1つの関数ですが、 `atan2 <https://en.wikipedia.org/wiki/Atan2>`_ は例外で、角度を *x* 軸と引数で
+指定された点の `ラジアン <https://en.wikipedia.org/wiki/Radian>`_ で表し、 *x* 座標と *y* 座標として解釈します。
 
 Additionally, :func:`sinpi(x) <sinpi>` and :func:`cospi(x) <cospi>` are provided for more accurate computations
 of :func:`sin(pi*x) <sin>` and :func:`cos(pi*x) <cos>` respectively.
