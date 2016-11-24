@@ -1507,6 +1507,49 @@ erfc <http://www.johndcook.com/blog/2010/06/07/math-library-functions-that-seem-
 特殊な関数
 ~~~~~~~~~~~~~~~~~
 
+.. 
+ =================================================== ==============================================================================
+ Function                                            Description
+ =================================================== ==============================================================================
+ :func:`erf(x) <erf>`                                `error function <https://en.wikipedia.org/wiki/Error_function>`_ at ``x``
+ :func:`erfc(x) <erfc>`                              complementary error function, i.e. the accurate version of ``1-erf(x)`` for large ``x``
+ :func:`erfinv(x) <erfinv>`                          inverse function to :func:`erf`
+ :func:`erfcinv(x) <erfinvc>`                        inverse function to :func:`erfc`
+ :func:`erfi(x) <erfi>`                              imaginary error function defined as ``-im * erf(x * im)``, where :const:`im` is the imaginary unit
+ :func:`erfcx(x) <erfcx>`                            scaled complementary error function, i.e. accurate ``exp(x^2) * erfc(x)`` for large ``x``
+ :func:`dawson(x) <dawson>`                          scaled imaginary error function, a.k.a. Dawson function, i.e. accurate ``exp(-x^2) * erfi(x) * sqrt(pi) / 2`` for large ``x``
+ :func:`gamma(x) <gamma>`                            `gamma function <https://en.wikipedia.org/wiki/Gamma_function>`_ at ``x``
+ :func:`lgamma(x) <lgamma>`                          accurate ``log(gamma(x))`` for large ``x``
+ :func:`lfact(x) <lfact>`                            accurate ``log(factorial(x))`` for large ``x``; same as ``lgamma(x+1)`` for ``x > 1``, zero otherwise
+ :func:`digamma(x) <digamma>`                        `digamma function <https://en.wikipedia.org/wiki/Digamma_function>`_ (i.e. the derivative of :func:`lgamma`) at ``x``
+ :func:`beta(x,y) <beta>`                            `beta function <https://en.wikipedia.org/wiki/Beta_function>`_ at ``x,y``
+ :func:`lbeta(x,y) <lbeta>`                          accurate ``log(beta(x,y))`` for large ``x`` or ``y``
+ :func:`eta(x) <eta>`                                `Dirichlet eta function <https://en.wikipedia.org/wiki/Dirichlet_eta_function>`_ at ``x``
+ :func:`zeta(x) <zeta>`                              `Riemann zeta function <https://en.wikipedia.org/wiki/Riemann_zeta_function>`_ at ``x``
+ |airylist|                                          `Airy Ai function <https://en.wikipedia.org/wiki/Airy_function>`_ at ``z``
+ |airyprimelist|                                     derivative of the Airy Ai function at ``z``
+ :func:`airybi(z) <airybi>`, ``airy(2,z)``           `Airy Bi function <https://en.wikipedia.org/wiki/Airy_function>`_ at ``z``
+ :func:`airybiprime(z) <airybiprime>`, ``airy(3,z)`` derivative of the Airy Bi function at ``z``
+ :func:`airyx(z) <airyx>`, ``airyx(k,z)``            scaled Airy AI function and ``k`` th derivatives at ``z``
+ :func:`besselj(nu,z) <besselj>`                     `Bessel function <https://en.wikipedia.org/wiki/Bessel_function>`_ of the first kind of order ``nu`` at ``z``
+ :func:`besselj0(z) <besselj0>`                      ``besselj(0,z)``
+ :func:`besselj1(z) <besselj1>`                      ``besselj(1,z)``
+ :func:`besseljx(nu,z) <besseljx>`                   scaled Bessel function of the first kind of order ``nu`` at ``z``
+ :func:`bessely(nu,z) <bessely>`                     `Bessel function <https://en.wikipedia.org/wiki/Bessel_function>`_ of the second kind of order ``nu`` at ``z``
+ :func:`bessely0(z) <bessely0>`                      ``bessely(0,z)``
+ :func:`bessely1(z) <bessely0>`                      ``bessely(1,z)``
+ :func:`besselyx(nu,z) <besselyx>`                   scaled Bessel function of the second kind of order ``nu`` at ``z``
+ :func:`besselh(nu,k,z) <besselh>`                   `Bessel function <https://en.wikipedia.org/wiki/Bessel_function>`_ of the third kind (a.k.a. Hankel function) of order ``nu`` at ``z``; ``k`` must be either ``1`` or ``2``
+ :func:`hankelh1(nu,z) <hankelh1>`                   ``besselh(nu, 1, z)``
+ :func:`hankelh1x(nu,z) <hankelh1x>`                 scaled ``besselh(nu, 1, z)``
+ :func:`hankelh2(nu,z) <hankelh2>`                   ``besselh(nu, 2, z)``
+ :func:`hankelh2x(nu,z) <hankelh2x>`                 scaled ``besselh(nu, 2, z)``
+ :func:`besseli(nu,z) <besseli>`                     modified `Bessel function <https://en.wikipedia.org/wiki/Bessel_function>`_ of the first kind of order ``nu`` at ``z``
+ :func:`besselix(nu,z) <besselix>`                   scaled modified Bessel function of the first kind of order ``nu`` at ``z``
+ :func:`besselk(nu,z) <besselk>`                     modified `Bessel function <https://en.wikipedia.org/wiki/Bessel_function>`_ of the second kind of order ``nu`` at ``z``
+ :func:`besselkx(nu,z) <besselkx>`                   scaled modified Bessel function of the second kind of order ``nu`` at ``z``
+ =================================================== ==============================================================================
+
 =================================================== ==============================================================================
 関数                                                概要
 =================================================== ==============================================================================
