@@ -394,7 +394,7 @@ Juliaは、複素数および有理数を表す定義済みの型を提供し、
 
 グローバル定数 :const:`im` は-1の平方根を表す複素数 *i* に紐付きます。 ``i`` は一般的なインデックス変数であるため、
 グローバル定数にそのような名前をつけることは混乱を招くと考えられてきました。Juliaでは数値リテラルを識別子を
-:ref:`伴う係数として並置 <man-numeric-literal-coefficients>`することができるため、従来の数学的表記法と同様に、
+:ref:`伴う係数として並置 <man-numeric-literal-coefficients>` することができるため、従来の数学的表記法と同様に、
 複素数を使用する際に便利な構文を提供することができます。
 
 .. doctest::
@@ -562,7 +562,7 @@ Juliaは、複素数および有理数を表す定義済みの型を提供し、
  does not work when constructing complex number from variables. Instead, the
  multiplication must be explicitly written out:
 
-:ref:`数値リテラル係数表現 <man-numeric-literal-coefficients>`は、変数から複素数を
+:ref:`数値リテラル係数表現 <man-numeric-literal-coefficients>` は、変数から複素数を
 構成する際には機能しません。代わりに、乗算は明示的に記載される必要があります。
 
 .. doctest::
@@ -606,8 +606,8 @@ Juliaは、複素数および有理数を表す定義済みの型を提供し、
 .. _man-rational-numbers:
 
 .. 
-Rational Numbers
-----------------
+ Rational Numbers
+ ----------------
 
 有理数
 ----------------
