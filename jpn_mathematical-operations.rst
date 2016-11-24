@@ -1474,25 +1474,41 @@ erfc <http://www.johndcook.com/blog/2010/06/07/math-library-functions-that-seem-
  and the point specified by its arguments, interpreted as *x* and *y*
  coordinates.
 
-これらはすべて引数が1つの関数ですが、 `atan2 <https://en.wikipedia.org/wiki/Atan2>`_ は例外で、角度を *x* 軸と引数で
-指定された点の `ラジアン <https://en.wikipedia.org/wiki/Radian>`_ で表し、 *x* 座標と *y* 座標として解釈します。
+これらはすべて引数が1つの関数ですが、 `atan2 <https://en.wikipedia.org/wiki/Atan2>`_ は例外で、角度をx軸と引数で
+指定された点の `ラジアン <https://en.wikipedia.org/wiki/Radian>`_ で表し、x座標とy座標として解釈します。
 
-Additionally, :func:`sinpi(x) <sinpi>` and :func:`cospi(x) <cospi>` are provided for more accurate computations
-of :func:`sin(pi*x) <sin>` and :func:`cos(pi*x) <cos>` respectively.
+.. 
+ Additionally, :func:`sinpi(x) <sinpi>` and :func:`cospi(x) <cospi>` are provided for more accurate computations
+ of :func:`sin(pi*x) <sin>` and :func:`cos(pi*x) <cos>` respectively.
 
-In order to compute trigonometric functions with degrees
-instead of radians, suffix the function with ``d``. For example, :func:`sind(x) <sind>`
-computes the sine of ``x`` where ``x`` is specified in degrees.
-The complete list of trigonometric functions with degree variants is::
+さらに、 :func:`sinpi(x) <sinpi>` および:func:`cospi(x) <cospi>` は、より正確な :func:`sin(pi*x) <sin>` 
+および :func:`cos(pi*x) <cos>` の計算のために提供されています。
 
+.. 
+ In order to compute trigonometric functions with degrees
+ instead of radians, suffix the function with ``d``. For example, :func:`sind(x) <sind>`
+ computes the sine of ``x`` where ``x`` is specified in degrees.
+ The complete list of trigonometric functions with degree variants is::
+
+     sind   cosd   tand   cotd   secd   cscd
+     asind  acosd  atand  acotd  asecd  acscd
+
+ラジアンではなく角度で三角関数を計算するためには、 ``d`` を関数の末尾に付与してください。
+例えば、 :func:`sind(x) <sind>` は、角度で指定された ``x`` の正弦を計算します。
+角度で計算できる三角関数のリストは以下の通りです。::
+    
     sind   cosd   tand   cotd   secd   cscd
-    asind  acosd  atand  acotd  asecd  acscd
+    asind  acosd  atand  acotd  asecd  acscd    
 
-Special functions
+.. 
+ Special functions
+ ~~~~~~~~~~~~~~~~~
+
+特殊な関数
 ~~~~~~~~~~~~~~~~~
 
 =================================================== ==============================================================================
-Function                                            Description
+関数                                                概要
 =================================================== ==============================================================================
 :func:`erf(x) <erf>`                                `error function <https://en.wikipedia.org/wiki/Error_function>`_ at ``x``
 :func:`erfc(x) <erfc>`                              complementary error function, i.e. the accurate version of ``1-erf(x)`` for large ``x``
