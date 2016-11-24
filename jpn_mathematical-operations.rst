@@ -1040,13 +1040,20 @@ Juliaでは、このような処理を正確に実施できるよう、細心の
 もし使用している等式の関数を定義したい場合は、 ``isequal(x,y)`` が ``hash(x) == hash(y)`` を
 表すことを保証する :func:`hash` メソッドを定義することをお勧めします。
 
+.. 
+ Chaining comparisons
+ ~~~~~~~~~~~~~~~~~~~~
 
-Chaining comparisons
+連続した比較
 ~~~~~~~~~~~~~~~~~~~~
 
-Unlike most languages, with the `notable exception of
-Python <https://en.wikipedia.org/wiki/Python_syntax_and_semantics#Comparison_operators>`_,
-comparisons can be arbitrarily chained:
+.. 
+ Unlike most languages, with the `notable exception of
+ Python <https://en.wikipedia.org/wiki/Python_syntax_and_semantics#Comparison_operators>`_,
+ comparisons can be arbitrarily chained:
+
+`Pythonのような例外 <https://en.wikipedia.org/wiki/Python_syntax_and_semantics#Comparison_operators>`_ を
+除いて、ほとんどの言語とは異なり、比較は任意に連続して使用することができます。
 
 .. doctest::
 
