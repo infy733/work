@@ -631,7 +631,7 @@ Juliaは、基本的な数値プリミティブ型の全ての算術演算子と
 全ての数値プリミティブ型でサポートされています。
 
 ==========  ============== ======================================
-Expression  Name           Description
+式          名称            概要
 ==========  ============== ======================================
 ``+x``      unary plus     the identity operation
 ``-x``      unary minus    maps values to their additive inverses
