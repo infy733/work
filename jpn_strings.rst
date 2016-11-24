@@ -2309,10 +2309,8 @@ Unicodeエスケープ文字 ``\u2200`` は、UTF-8で3バイト226、136、128�
  It's an excellent introduction to Unicode and UTF-8, and may help alleviate
  some confusion regarding the matter.
 
-もしこれらについて混乱している場合は、 `"The Absolute Minimum
- Every Software Developer Absolutely, Positively Must Know About Unicode
- and Character Sets" <http://www.joelonsoftware.com/articles/Unicode.html>`_ を参照してください。
- これはUnicodeおよびUTF-8に関するすばらしい紹介です。また、この問題に関する理解に役立つかもしれません。
+もしこれらについて混乱している場合は、 `"The Absolute Minimum Every Software Developer Absolutely, Positively Must Know About Unicode and Character Sets" <http://www.joelonsoftware.com/articles/Unicode.html>`_ を参照してください。
+これはUnicodeおよびUTF-8に関するすばらしい紹介です。また、この問題に関する理解に役立つかもしれません。
 
 .. _man-version-number-literals:
 
@@ -2356,7 +2354,7 @@ Unicodeエスケープ文字 ``\u2200`` は、UTF-8で3バイト226、136、128�
 
 :obj:`VersionNumber` オブジェクトは、2つ（またはそれ以上）のバージョンを簡単かつ正確に比較するのに最も役立ちます。
 例えば、定数 ``VERSION`` にはJuliaのバージョン番号が :obj:`VersionNumber` オブジェクトとして格納されているため、
-単純な文を使用してバージョン固有の動作を定義することができます。
+単純な文を使用してバージョン固有の動作を定義することができます。::
     
     if v"0.2" <= VERSION < v"0.3-"
         # do something specific to 0.2 release series
