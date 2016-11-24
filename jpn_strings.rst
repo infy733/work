@@ -2132,7 +2132,7 @@ Juliaでは、正規表現は ``r`` で始まる様々な識別子の接頭辞�
         ordinary code.
 
 閉じるダブルクオーテーションの後に、フラグ  ``i`` 、 ``m`` 、 ``s``　、および ``x`` の組み合わせによって
-正規表現の挙動を変更することができます。これらのフラグは、 `Perlのマニュアルページ <http://perldoc.perl.org/perlre.html#Modifiers>`_から
+正規表現の挙動を変更することができます。これらのフラグは、 `Perlのマニュアルページ <http://perldoc.perl.org/perlre.html#Modifiers>`_ から
 抜粋したように、Perlで使用されるのと同じ意味を持っています。::
         
         
