@@ -974,35 +974,56 @@
 
 .. currentmodule:: Base
 
+.. 
+ *********
+  Strings
+ *********
+
 *********
- Strings
+ 文字列
 *********
 
-Strings are finite sequences of characters. Of course, the real trouble
-comes when one asks what a character is. The characters that English
-speakers are familiar with are the letters ``A``, ``B``, ``C``, etc.,
-together with numerals and common punctuation symbols. These characters
-are standardized together with a mapping to integer values between 0 and
-127 by the `ASCII <https://en.wikipedia.org/wiki/ASCII>`_ standard. There
-are, of course, many other characters used in non-English languages,
-including variants of the ASCII characters with accents and other
-modifications, related scripts such as Cyrillic and Greek, and scripts
-completely unrelated to ASCII and English, including Arabic, Chinese,
-Hebrew, Hindi, Japanese, and Korean. The
-`Unicode <https://en.wikipedia.org/wiki/Unicode>`_ standard tackles the
-complexities of what exactly a character is, and is generally accepted
-as the definitive standard addressing this problem. Depending on your
-needs, you can either ignore these complexities entirely and just
-pretend that only ASCII characters exist, or you can write code that can
-handle any of the characters or encodings that one may encounter when
-handling non-ASCII text. Julia makes dealing with plain ASCII text
-simple and efficient, and handling Unicode is as simple and efficient as
-possible. In particular, you can write C-style string code to process
-ASCII strings, and they will work as expected, both in terms of
-performance and semantics. If such code encounters non-ASCII text, it
-will gracefully fail with a clear error message, rather than silently
-introducing corrupt results. When this happens, modifying the code to
-handle non-ASCII data is straightforward.
+.. 
+ Strings are finite sequences of characters. Of course, the real trouble
+ comes when one asks what a character is. The characters that English
+ speakers are familiar with are the letters ``A``, ``B``, ``C``, etc.,
+ together with numerals and common punctuation symbols. These characters
+ are standardized together with a mapping to integer values between 0 and
+ 127 by the `ASCII <https://en.wikipedia.org/wiki/ASCII>`_ standard. There
+ are, of course, many other characters used in non-English languages,
+ including variants of the ASCII characters with accents and other
+ modifications, related scripts such as Cyrillic and Greek, and scripts
+ completely unrelated to ASCII and English, including Arabic, Chinese,
+ Hebrew, Hindi, Japanese, and Korean. The
+ `Unicode <https://en.wikipedia.org/wiki/Unicode>`_ standard tackles the
+ complexities of what exactly a character is, and is generally accepted
+ as the definitive standard addressing this problem. Depending on your
+ needs, you can either ignore these complexities entirely and just
+ pretend that only ASCII characters exist, or you can write code that can
+ handle any of the characters or encodings that one may encounter when
+ handling non-ASCII text. Julia makes dealing with plain ASCII text
+ simple and efficient, and handling Unicode is as simple and efficient as
+ possible. In particular, you can write C-style string code to process
+ ASCII strings, and they will work as expected, both in terms of
+ performance and semantics. If such code encounters non-ASCII text, it
+ will gracefully fail with a clear error message, rather than silently
+ introducing corrupt results. When this happens, modifying the code to
+ handle non-ASCII data is straightforward.
+
+文字列は有限の文字の連続です。実際の問題は、文字が何であるかと尋ねた場合に発生します。
+英語を話す人にとって馴染みがある文字は、 ``A`` 、 ``B`` 、 ``C`` などの文字と、数字と句読記号です。
+これらの文字は、 `ASCII <https://en.wikipedia.org/wiki/ASCII>`_ 規格は0から127の整数へのマッピングされ標準化されています。
+英語以外の言語では、アクセント記号やその他の変形のASCII文字や、英語の言語体系に
+関連するキリル文字やギリシャ語、および英語の言語体系に関連しないアラビア語、中国語、
+ヘブライ語、ヒンディー語、日本語、韓国語があります。　`Unicode <https://en.wikipedia.org/wiki/Unicode>`_ 規格は、
+ある文字が正確に何であるかという複雑な問題に取り組み、また、この問題に対処する決定的な規格として
+一般的に認識されています。あなたの必要に応じて、これらの複雑な問題を気にせず
+ASCII文字だけを使用したり、非ASCIIテキストを扱う際に見かける様々な文字やエンコードを
+使用したコードを書くことができます。JuliaはASCIIテキストの取り扱いをシンプルかつ効率的にし、
+Unicodeの取り扱いを可能な限りシンプルかつ効率的にします。特に、ASCIIの文字列を処理するために
+C言語スタイルの文字列コードを書くことができ、パフォーマンスと構文的な意味の両面で期待通りの動作をします。
+JuliaはASCII以外のテキストが検出された場合、エラーをただ出力するのではなく、
+明確なエラーメッセージを出力して処理を終了します。この場合、非ASCIIデータを処理できるように修正するのは簡単です。
 
 There are a few noteworthy high-level features about Julia's strings:
 
