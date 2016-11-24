@@ -1384,25 +1384,48 @@ Juliaは、不正確な変換の処理が異なる3つの形式の数値変換�
 :func:`flipsign(x,y) <flipsign>` 絶対値 ``x`` と符号 ``x*y`` を持つ値
 ================================ ===========================================================
 
-Powers, logs and roots
+.. 
+ Powers, logs and roots
+ ~~~~~~~~~~~~~~~~~~~~~~
+
+累乗、対数、根
 ~~~~~~~~~~~~~~~~~~~~~~
 
+.. 
+ ==================================== ==============================================================================
+ Function                             Description
+ ==================================== ==============================================================================
+ :func:`sqrt(x) <sqrt>` ``√x``        square root of ``x``
+ :func:`cbrt(x) <cbrt>` ``∛x``        cube root of ``x``
+ :func:`hypot(x,y) <hypot>`           hypotenuse of right-angled triangle with other sides of length ``x`` and ``y``
+ :func:`exp(x) <exp>`                 natural exponential function at ``x``
+ :func:`expm1(x) <expm1>`             accurate ``exp(x)-1`` for ``x`` near zero
+ :func:`ldexp(x,n) <ldexp>`           ``x*2^n`` computed efficiently for integer values of ``n``
+ :func:`log(x) <log>`                 natural logarithm of ``x``
+ :func:`log(b,x) <log>`               base ``b`` logarithm of ``x``
+ :func:`log2(x) <log2>`               base 2 logarithm of ``x``
+ :func:`log10(x) <log10>`             base 10 logarithm of ``x``
+ :func:`log1p(x) <log1p>`             accurate ``log(1+x)`` for ``x`` near zero
+ :func:`exponent(x) <exponent>`       binary exponent of ``x``
+ :func:`significand(x) <significand>` binary significand (a.k.a. mantissa) of a floating-point number ``x``
+ ==================================== ==============================================================================
+
 ==================================== ==============================================================================
-Function                             Description
+関数                                 概要
 ==================================== ==============================================================================
-:func:`sqrt(x) <sqrt>` ``√x``        square root of ``x``
-:func:`cbrt(x) <cbrt>` ``∛x``        cube root of ``x``
-:func:`hypot(x,y) <hypot>`           hypotenuse of right-angled triangle with other sides of length ``x`` and ``y``
-:func:`exp(x) <exp>`                 natural exponential function at ``x``
-:func:`expm1(x) <expm1>`             accurate ``exp(x)-1`` for ``x`` near zero
-:func:`ldexp(x,n) <ldexp>`           ``x*2^n`` computed efficiently for integer values of ``n``
-:func:`log(x) <log>`                 natural logarithm of ``x``
-:func:`log(b,x) <log>`               base ``b`` logarithm of ``x``
-:func:`log2(x) <log2>`               base 2 logarithm of ``x``
-:func:`log10(x) <log10>`             base 10 logarithm of ``x``
-:func:`log1p(x) <log1p>`             accurate ``log(1+x)`` for ``x`` near zero
-:func:`exponent(x) <exponent>`       binary exponent of ``x``
-:func:`significand(x) <significand>` binary significand (a.k.a. mantissa) of a floating-point number ``x``
+:func:`sqrt(x) <sqrt>` ``√x``        ``x`` の平方根
+:func:`cbrt(x) <cbrt>` ``∛x``        ``x`` の立方根
+:func:`hypot(x,y) <hypot>`           長さ ``x`` および ``y`` をその他の辺に持つ直角三角形の斜辺
+:func:`exp(x) <exp>`                 ``x`` における自然指数関数
+:func:`expm1(x) <expm1>`             0に近い ``x`` の正確な ``exp(x)-1`` の結果
+:func:`ldexp(x,n) <ldexp>`           ``n`` の整数値に対して効率的に計算された ``x*2^n``
+:func:`log(x) <log>`                 ``x`` の自然対数
+:func:`log(b,x) <log>`               ``b`` を底とした ``x`` の対数
+:func:`log2(x) <log2>`               2を底とした ``x`` の対数
+:func:`log10(x) <log10>`             10を底とした ``x`` の対数
+:func:`log1p(x) <log1p>`             0に近い ``x`` の正確な ``log(1+x)`` の結果
+:func:`exponent(x) <exponent>`       ``x`` の2進指数
+:func:`significand(x) <significand>` 浮動小数点数 ``x`` の2進仮数
 ==================================== ==============================================================================
 
 For an overview of why functions like :func:`hypot`, :func:`expm1`, and :func:`log1p`
