@@ -966,19 +966,35 @@ Juliaの推進体制は、複数の引数の型を含む算術演算が自然に
     julia> [1 NaN] == [1 NaN]
     false
 
-Julia provides additional functions to test numbers for special values,
-which can be useful in situations like hash key comparisons:
+.. 
+ Julia provides additional functions to test numbers for special values,
+ which can be useful in situations like hash key comparisons:
+
+Juliaは、ハッシュ値の比較など、特別な値を比較するための機能を提供します。
+
+.. 
+ =============================== ==================================
+ Function                        Tests if
+ =============================== ==================================
+ :func:`isequal(x, y) <isequal>` ``x`` and ``y`` are identical
+ :func:`isfinite(x) <isfinite>`  ``x`` is a finite number
+ :func:`isinf(x) <isinf>`        ``x`` is infinite
+ :func:`isnan(x) <isnan>`        ``x`` is not a number
+ =============================== ==================================
 
 =============================== ==================================
-Function                        Tests if
+関数                            検証内容
 =============================== ==================================
-:func:`isequal(x, y) <isequal>` ``x`` and ``y`` are identical
-:func:`isfinite(x) <isfinite>`  ``x`` is a finite number
-:func:`isinf(x) <isinf>`        ``x`` is infinite
-:func:`isnan(x) <isnan>`        ``x`` is not a number
+:func:`isequal(x, y) <isequal>` ``x`` および ``y`` は一致するか
+:func:`isfinite(x) <isfinite>`  ``x`` は有限数であるか
+:func:`isinf(x) <isinf>`        ``x`` は無限であるか
+:func:`isnan(x) <isnan>`        ``x`` は数字以外であるか
 =============================== ==================================
 
+.. 
 :func:`isequal` considers ``NaN``\ s equal to each other:
+
+:func:`isequal` は、 ``NaN`` 同士は等しいと解釈します。
 
 .. doctest::
 
@@ -991,7 +1007,10 @@ Function                        Tests if
     julia> isequal(NaN,NaN32)
     true
 
-:func:`isequal` can also be used to distinguish signed zeros:
+.. 
+ :func:`isequal` can also be used to distinguish signed zeros:
+ 
+:func:`isequal` は符号付き0を区別するためにも使用することができます。 
 
 .. doctest::
 
@@ -1001,15 +1020,26 @@ Function                        Tests if
     julia> isequal(-0.0, 0.0)
     false
 
-Mixed-type comparisons between signed integers, unsigned integers, and
-floats can be tricky. A great deal of care has been taken to ensure
-that Julia does them correctly.
+.. 
+ Mixed-type comparisons between signed integers, unsigned integers, and
+ floats can be tricky. A great deal of care has been taken to ensure
+ that Julia does them correctly.
 
-For other types, :func:`isequal` defaults to calling :func:`==`, so if you want to
-define equality for your own types then you only need to add a :func:`==`
-method.  If you define your own equality function, you should probably
-define a corresponding :func:`hash` method to ensure that ``isequal(x,y)``
-implies ``hash(x) == hash(y)``.
+符号付き整数、符号がない整数、および浮動小数点数間の複数の型の比較は注意が必要です。
+Juliaでは、このような処理を正確に実施できるよう、細心の注意が払われています。
+
+.. 
+ For other types, :func:`isequal` defaults to calling :func:`==`, so if you want to
+ define equality for your own types then you only need to add a :func:`==`
+ method.  If you define your own equality function, you should probably
+ define a corresponding :func:`hash` method to ensure that ``isequal(x,y)``
+ implies ``hash(x) == hash(y)``.
+
+その他の型については、 :func:`isequal` はデフォルトで :func:`==` を呼び出すため、
+使用している型の等式を定義したい場合は、 :func:`==` メソッドを追加することで定義することができます。
+もし使用している等式の関数を定義したい場合は、 ``isequal(x,y)`` が ``hash(x) == hash(y)`` を
+表すことを保証する :func:`hash` メソッドを定義することをお勧めします。
+
 
 Chaining comparisons
 ~~~~~~~~~~~~~~~~~~~~
