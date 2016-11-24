@@ -1343,31 +1343,51 @@ Juliaの全てのインデックスは1ベースです。整数インデック�
 前者は :obj:`Char` 型の単一の文字値ですが、後者はこのケースでは1文字だけですが、
 文字列値です。Juliaではこれらは異なるものです。
 
-Unicode and UTF-8
+.. 
+ Unicode and UTF-8
+ -----------------
+
+UnicodeおよびTF-8
 -----------------
 
-Julia fully supports Unicode characters and strings. As `discussed
-above <#characters>`_, in character literals, Unicode code points can be
-represented using Unicode ``\u`` and ``\U`` escape sequences, as well as
-all the standard C escape sequences. These can likewise be used to write
-string literals:
+.. 
+ Julia fully supports Unicode characters and strings. As `discussed
+ above <#characters>`_, in character literals, Unicode code points can be
+ represented using Unicode ``\u`` and ``\U`` escape sequences, as well as
+ all the standard C escape sequences. These can likewise be used to write
+ string literals:
+
+JuliaはUnicode文字と文字列をサポートします。 `上記 <#文字>`_ の通り、文字リテラルでは、
+Unicodeコードポイントは、C言語の標準的なエスケープ方法と同様に、Unicodeの
+``\u`` および ``\U`` のエスケープを使用することで現すことができます。
+これらは同様に文字列リテラルを書くために使用することができます。
 
 .. doctest::
 
     julia> s = "\u2200 x \u2203 y"
     "∀ x ∃ y"
 
-Whether these Unicode characters are displayed as escapes or shown as
-special characters depends on your terminal's locale settings and its
-support for Unicode. String literals are encoded using the UTF-8
-encoding. UTF-8 is a variable-width encoding, meaning that not all
-characters are encoded in the same number of bytes. In UTF-8, ASCII
-characters — i.e. those with code points less than 0x80 (128) — are
-encoded as they are in ASCII, using a single byte, while code points
-0x80 and above are encoded using multiple bytes — up to four per
-character. This means that not every byte index into a UTF-8 string is
-necessarily a valid index for a character. If you index into a string at
-such an invalid byte index, an error is thrown:
+.. 
+ Whether these Unicode characters are displayed as escapes or shown as
+ special characters depends on your terminal's locale settings and its
+ support for Unicode. String literals are encoded using the UTF-8
+ encoding. UTF-8 is a variable-width encoding, meaning that not all
+ characters are encoded in the same number of bytes. In UTF-8, ASCII
+ characters — i.e. those with code points less than 0x80 (128) — are
+ encoded as they are in ASCII, using a single byte, while code points
+ 0x80 and above are encoded using multiple bytes — up to four per
+ character. This means that not every byte index into a UTF-8 string is
+ necessarily a valid index for a character. If you index into a string at
+ such an invalid byte index, an error is thrown:
+
+これらのUnicode文字がエスケープとして出力されるか特殊な文字として出力されるかは、
+あなたの端末のローカル設定とそのUnicodeのサポートの状況に依存します。文字列リテラルは
+UTF-8エンコードを使用してエンコードされます。UFT-8は可変幅のエンコードであり、
+全ての文字が同じバイト数でエンコードされるわけではありません。
+UTF-8では、0x80 (128)以下のコードポイントのASCII文字は、1バイトでASCIIとしてエンコードされ、
+0x80 とそれ以上のコードポイントは、1文字あたり最大4バイトの複数バイトでエンコードされます。
+これは、UTF-8文字列の全てのバイトインデックスが必ずしも文字の有効なインデックスであるとは
+限らないことを示しています。このような無効なバイトインデックスで文字列にインデックスを付けた場合、エラーが出力されます。
 
 .. doctest::
 
@@ -1391,19 +1411,33 @@ such an invalid byte index, an error is thrown:
     julia> s[4]
     ' '
 
-In this case, the character ``∀`` is a three-byte character, so the
-indices 2 and 3 are invalid and the next character's index is 4; this
-next valid index can be computed by :func:`nextind(s,1) <nextind>`,
-and the next index after that by ``nextind(s,4)`` and so on.
+.. 
+ In this case, the character ``∀`` is a three-byte character, so the
+ indices 2 and 3 are invalid and the next character's index is 4; this
+ next valid index can be computed by :func:`nextind(s,1) <nextind>`,
+ and the next index after that by ``nextind(s,4)`` and so on.
 
-Because of variable-length encodings, the number of characters in a
-string (given by :func:`length(s) <length>`) is not always the same as the last index.
-If you iterate through the indices 1 through :func:`endof(s) <endof>` and index
-into ``s``, the sequence of characters returned when errors aren't
-thrown is the sequence of characters comprising the string ``s``.
-Thus we have the identity that ``length(s) <= endof(s)``, since each
-character in a string must have its own index. The following is an
-inefficient and verbose way to iterate through the characters of ``s``:
+この場合、 ``∀`` は3バイト文字であるため、インデックス2と3は無効であり、
+次のインデックスは4となります。この場合次の有効なインデックスは :func:`nextind(s,1) <nextind>` により計算でき、
+この次のインデックスは ``nextind(s,4)`` により計算できます。
+
+.. 
+ Because of variable-length encodings, the number of characters in a
+ string (given by :func:`length(s) <length>`) is not always the same as the last index.
+ If you iterate through the indices 1 through :func:`endof(s) <endof>` and index
+ into ``s``, the sequence of characters returned when errors aren't
+ thrown is the sequence of characters comprising the string ``s``.
+ Thus we have the identity that ``length(s) <= endof(s)``, since each
+ character in a string must have its own index. The following is an
+ inefficient and verbose way to iterate through the characters of ``s``:
+
+可変長エンコーディングのため、文字列内の文字数（ :func:`length(s) <length>` により取得）は、
+常に最後のインデックスと同一というわけではありません。
+インデックス1から :func:`endof(s) <endof>` まで繰り返し処理を行い、 ``s`` にインデックスする場合、
+エラーが出力されなければ文字列 ``s`` を構成する一連の文字列が返されます。
+したがって、文字列内のそれぞれの文字は固有のインデックスを持つため、
+``length(s) <= endof(s)`` を使用して識別ができます。
+以下は、 ``s`` という文字を反復処理する非効率的で冗長的な方法です。
 
 .. doctest::
 
@@ -1422,10 +1456,14 @@ inefficient and verbose way to iterate through the characters of ``s``:
     <BLANKLINE>
     y
 
-The blank lines actually have spaces on them. Fortunately, the above
-awkward idiom is unnecessary for iterating through the characters in a
-string, since you can just use the string as an iterable object, no
-exception handling required:
+.. 
+ The blank lines actually have spaces on them. Fortunately, the above
+ awkward idiom is unnecessary for iterating through the characters in a
+ string, since you can just use the string as an iterable object, no
+ exception handling required:
+
+空白行には実際にスペースがあります。文字列を反復可能なオブジェクトとして使用することで
+例外処理は必要ないため、上記の冗長的な記述は不要です。
 
 .. doctest::
 
@@ -1440,16 +1478,24 @@ exception handling required:
     <BLANKLINE>
     y
 
-Julia uses the UTF-8 encoding by default, and support for new encodings can
-be added by packages. For example, the `LegacyStrings.jl
-<https://github.com/JuliaArchive/LegacyStrings.jl>`_ package implements
-``UTF16String`` and ``UTF32String`` types. Additional discussion of other
-encodings and how to implement support for them is beyond the scope of this
-document for the time being. For further discussion of UTF-8 encoding issues,
-see the section below on `byte array literals <#Byte+Array+Literals>`_.
-The :func:`transcode` function is provided to convert data between
-the various UTF-xx encodings, primarily for working with external
-data and libraries.
+.. 
+ Julia uses the UTF-8 encoding by default, and support for new encodings can
+ be added by packages. For example, the `LegacyStrings.jl
+ <https://github.com/JuliaArchive/LegacyStrings.jl>`_ package implements
+ ``UTF16String`` and ``UTF32String`` types. Additional discussion of other
+ encodings and how to implement support for them is beyond the scope of this
+ document for the time being. For further discussion of UTF-8 encoding issues,
+ see the section below on `byte array literals <#Byte+Array+Literals>`_.
+ The :func:`transcode` function is provided to convert data between
+ the various UTF-xx encodings, primarily for working with external
+ data and libraries.
+
+JuliaはデフォルトでUTF-8エンコーディングを使用し、パッケージで追加できる新しいエンコーディングをサポートしています。
+例えば、 `LegacyStrings.jl <https://github.com/JuliaArchive/LegacyStrings.jl>`_ パッケージは
+``UTF16String`` および ``UTF32String`` 型を実装します。
+その他のエンコーディングのとその実装方法は当ドキュメントの対象外となります。UTF-8エンコーディングに関する議論については、
+以下の `バイト配列リテラル <#Byte+Array+Literals>`_ のセクションを参照してください。 :func:`transcode` 関数は、
+様々なUTF-xxエンコーディング間のデータ変換するために用意されており、これは主に外部データとライブラリを扱うためです。
 
 .. _man-string-interpolation:
 
