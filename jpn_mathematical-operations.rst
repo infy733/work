@@ -839,21 +839,40 @@ Updating operators
 
 .. _man-numeric-comparisons:
 
+.. 
 Numeric Comparisons
 -------------------
 
-Standard comparison operations are defined for all the primitive numeric
-types:
+数値の比較
+-------------------
+
+.. 
+ Standard comparison operations are defined for all the primitive numeric
+ types:
+
+標準的な比較演算子は、全ての数値プリミティブ型に定義されています。
+
+.. 
+ =================== ========================
+ Operator            Name
+ =================== ========================
+ :obj:`==`           equality
+ :obj:`\!=` :obj:`≠` inequality
+ :obj:`<`            less than
+ :obj:`<=` :obj:`≤`  less than or equal to
+ :obj:`>`            greater than
+ :obj:`>=` :obj:`≥`  greater than or equal to
+ =================== ========================
 
 =================== ========================
-Operator            Name
+演算子               名称
 =================== ========================
-:obj:`==`           equality
-:obj:`\!=` :obj:`≠` inequality
-:obj:`<`            less than
-:obj:`<=` :obj:`≤`  less than or equal to
-:obj:`>`            greater than
-:obj:`>=` :obj:`≥`  greater than or equal to
+:obj:`==`           等しい
+:obj:`\!=` :obj:`≠` 等しくない
+:obj:`<`            より小さい
+:obj:`<=` :obj:`≤`  以下
+:obj:`>`            より大きい
+:obj:`>=` :obj:`≥`  以上
 =================== ========================
 
 Here are some simple examples:
