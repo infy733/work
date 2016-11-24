@@ -1428,12 +1428,21 @@ Juliaは、不正確な変換の処理が異なる3つの形式の数値変換�
 :func:`significand(x) <significand>` 浮動小数点数 ``x`` の2進仮数
 ==================================== ==============================================================================
 
-For an overview of why functions like :func:`hypot`, :func:`expm1`, and :func:`log1p`
-are necessary and useful, see John D. Cook's excellent pair
-of blog posts on the subject: `expm1, log1p,
-erfc <http://www.johndcook.com/blog/2010/06/07/math-library-functions-that-seem-unnecessary/>`_,
-and
-`hypot <http://www.johndcook.com/blog/2010/06/02/whats-so-hard-about-finding-a-hypotenuse/>`_.
+.. 
+ For an overview of why functions like :func:`hypot`, :func:`expm1`, and :func:`log1p`
+ are necessary and useful, see John D. Cook's excellent pair
+ of blog posts on the subject: `expm1, log1p,
+ erfc <http://www.johndcook.com/blog/2010/06/07/math-library-functions-that-seem-unnecessary/>`_,
+ and
+ `hypot <http://www.johndcook.com/blog/2010/06/02/whats-so-hard-about-finding-a-hypotenuse/>`_.
+
+:func:`hypot`、 :func:`expm1`、および :func:`log1p` などの関数が必要かつ有用な理由については、
+`expm1、 log1p、
+ erfc <http://www.johndcook.com/blog/2010/06/07/math-library-functions-that-seem-unnecessary/>`_ 、
+ および
+ `hypot <http://www.johndcook.com/blog/2010/06/02/whats-so-hard-about-finding-a-hypotenuse/>`_ 
+に関するJohn D. Cookのブログ記事を参照してください。
+
 
 Trigonometric and hyperbolic functions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
