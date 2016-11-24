@@ -1559,15 +1559,15 @@ erfc <http://www.johndcook.com/blog/2010/06/07/math-library-functions-that-seem-
 :func:`erfcinv(x) <erfinvc>`                        :func:`erfc` に対する逆関数
 :func:`erfi(x) <erfi>`                              :const:`im` が虚数単位の ``-im * erf(x * im)`` として定義される虚数誤差関数
 :func:`erfcx(x) <erfcx>`                            スケーリングされた相補誤差関数；大きな値 ``x`` に対する正確な ``exp(x^2) * erfc(x)`` 
-:func:`dawson(x) <dawson>`                          scaled imaginary error function, a.k.a. Dawson function, i.e. accurate ``exp(-x^2) * erfi(x) * sqrt(pi) / 2`` for large ``x``
-:func:`gamma(x) <gamma>`                            `gamma function <https://en.wikipedia.org/wiki/Gamma_function>`_ at ``x``
-:func:`lgamma(x) <lgamma>`                          accurate ``log(gamma(x))`` for large ``x``
-:func:`lfact(x) <lfact>`                            accurate ``log(factorial(x))`` for large ``x``; same as ``lgamma(x+1)`` for ``x > 1``, zero otherwise
-:func:`digamma(x) <digamma>`                        `digamma function <https://en.wikipedia.org/wiki/Digamma_function>`_ (i.e. the derivative of :func:`lgamma`) at ``x``
-:func:`beta(x,y) <beta>`                            `beta function <https://en.wikipedia.org/wiki/Beta_function>`_ at ``x,y``
-:func:`lbeta(x,y) <lbeta>`                          accurate ``log(beta(x,y))`` for large ``x`` or ``y``
-:func:`eta(x) <eta>`                                `Dirichlet eta function <https://en.wikipedia.org/wiki/Dirichlet_eta_function>`_ at ``x``
-:func:`zeta(x) <zeta>`                              `Riemann zeta function <https://en.wikipedia.org/wiki/Riemann_zeta_function>`_ at ``x``
+:func:`dawson(x) <dawson>`                          スケーリングされた虚数誤差関数（ドーソン関数）；大きな値 ``x`` に対する正確な  ``exp(-x^2) * erfi(x) * sqrt(pi) / 2``
+:func:`gamma(x) <gamma>`                            ``x`` における `ガンマ関数 <https://en.wikipedia.org/wiki/Gamma_function>`_
+:func:`lgamma(x) <lgamma>`                          大きな値 ``x`` における ``log(gamma(x))``
+:func:`lfact(x) <lfact>`                            大きな値 ``x`` における ``log(factorial(x))`` ； ``x > 1`` における ``lgamma(x+1)`` と同様（それ以外の場合は0）
+:func:`digamma(x) <digamma>`                        `ディガンマ関数 <https://en.wikipedia.org/wiki/Digamma_function>`_ （または  ``x`` における :func:`lgamma`) の微分）
+:func:`beta(x,y) <beta>`                            ``x,y`` における `ベータ関数 <https://en.wikipedia.org/wiki/Beta_function>`_
+:func:`lbeta(x,y) <lbeta>`                          大きな値  ``x`` または ``y`` における正確な ``log(beta(x,y))``
+:func:`eta(x) <eta>`                                ``x`` における `ディレクレイータ関数 <https://en.wikipedia.org/wiki/Dirichlet_eta_function>`_
+:func:`zeta(x) <zeta>`                              ``x`` における `リーマンゼータ関数 <https://en.wikipedia.org/wiki/Riemann_zeta_function>`_
 |airylist|                                          `Airy Ai function <https://en.wikipedia.org/wiki/Airy_function>`_ at ``z``
 |airyprimelist|                                     derivative of the Airy Ai function at ``z``
 :func:`airybi(z) <airybi>`, ``airy(2,z)``           `Airy Bi function <https://en.wikipedia.org/wiki/Airy_function>`_ at ``z``
