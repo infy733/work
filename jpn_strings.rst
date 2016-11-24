@@ -1818,6 +1818,10 @@ Juliaでは、Perlのように ``$`` を使用して文字列リテラルに補�
 
 .. _man-non-standard-string-literals:
 
+.. 
+Non-Standard String Literals
+----------------------------
+
 Non-Standard String Literals
 ----------------------------
 
