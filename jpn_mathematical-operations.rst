@@ -683,7 +683,7 @@ Juliaは、基本的な数値プリミティブ型の全ての算術演算子と
  for details of the promotion system.
 
 Juliaの推進体制は、複数の引数の型を含む算術演算が自然にかつ自動的に
-動作するようにしています。推進体制の詳細については :ref:`man-変換とプロモーション`を参照ください。
+動作するようにしています。プロモーションの詳細については :ref:`man-変換とプロモーション`を参照ください。
 
 .. 
  Here are some simple examples using arithmetic operators:
@@ -709,12 +709,20 @@ Juliaの推進体制は、複数の引数の型を含む算術演算が自然に
 （慣例的に、他の演算子が適用される場合は、スペースを開けずに記載する傾向があります。
 例えば、通常 ``-x + 2`` と記載しますが、これは最初に ``x`` を負の数にし、その後 ``2`` をその結果に足します。）
 
-Bitwise Operators
+.. 
+ Bitwise Operators
+ -----------------
+
+ビット単位の演算子
 -----------------
 
-The following `bitwise
-operators <https://en.wikipedia.org/wiki/Bitwise_operation#Bitwise_operators>`_
-are supported on all primitive integer types:
+.. 
+ The following `bitwise
+ operators <https://en.wikipedia.org/wiki/Bitwise_operation#Bitwise_operators>`_
+ are supported on all primitive integer types:
+ 
+以下の `ビット単位の演算子 <https://en.wikipedia.org/wiki/Bitwise_operation#Bitwise_operators>`_ は
+全ての数値プリミティブ型でサポートされています。
 
 ===========  =========================================================================
 Expression   Name
