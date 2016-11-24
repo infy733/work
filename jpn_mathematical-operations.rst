@@ -1438,8 +1438,8 @@ Juliaは、不正確な変換の処理が異なる3つの形式の数値変換�
 
 :func:`hypot`、 :func:`expm1`、および :func:`log1p` などの関数が必要かつ有用な理由については、
 `expm1、 log1p、
- erfc <http://www.johndcook.com/blog/2010/06/07/math-library-functions-that-seem-unnecessary/>`_ 、
- および
+erfc <http://www.johndcook.com/blog/2010/06/07/math-library-functions-that-seem-unnecessary/>`_ 、
+および
  `hypot <http://www.johndcook.com/blog/2010/06/02/whats-so-hard-about-finding-a-hypotenuse/>`_ 
 に関するJohn D. Cookのブログ記事を参照してください。
 
