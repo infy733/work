@@ -875,7 +875,10 @@ Juliaの推進体制は、複数の引数の型を含む算術演算が自然に
 :obj:`>=` :obj:`≥`  以上
 =================== ========================
 
-Here are some simple examples:
+.. 
+ Here are some simple examples:
+
+以下は使用例です。
 
 .. doctest::
 
