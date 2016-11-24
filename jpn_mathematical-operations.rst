@@ -937,7 +937,10 @@ Juliaの推進体制は、複数の引数の型を含む算術演算が自然に
 -  ``-Inf`` はそれ自体と等しく、 ``NaN`` を除く全てよりも小さいです。
 -  ``NaN`` はそれ自体を含め、全てに対し等しくなく、何よりも小さくなく、何よりも大きくありません。
 
-The last point is potentially surprising and thus worth noting:
+.. 
+ The last point is potentially surprising and thus worth noting:
+
+最後の記述は驚くべきものかもしれませんが、特段意味があるものではありません。
 
 .. doctest::
 
@@ -953,7 +956,10 @@ The last point is potentially surprising and thus worth noting:
     julia> NaN > NaN
     false
 
-and can cause especial headaches with :ref:`Arrays <man-arrays>`:
+.. 
+ and can cause especial headaches with :ref:`Arrays <man-arrays>`:
+
+これは、 :ref:`配列 <man-arrays>` と共に理解に苦しむものかもしれません。
 
 .. doctest::
 
