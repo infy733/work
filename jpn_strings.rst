@@ -1810,8 +1810,8 @@ Juliaでは、Perlのように ``$`` を使用して文字列リテラルに補�
 -  :func:`endof(str) <endof>` は ``str`` へのインデックス付けに使用できる最大の（バイト）のインデックスを返します。
 -  :func:`length(str) <length>` ： ``str`` の文字数
 -  :func:`i = start(str) <start>` は、文字が ``str`` （通常は1）にある最初の有効なインデックスを返します。
--  :func:`c, j = next(str,i) <next>` は、インデックスの文字またはインデックス ``i`` の次の文字とそれに続く有効な文字を返します。
-   :func:`start` および :func:`endof` を使って、 ``str`` の文字を反復処理をすることができます。
+-  :func:`c, j = next(str,i) <next>` は、インデックスの文字またはインデックス ``i`` の次の文字とそれに
+   続く有効な文字を返します。:func:`start` および :func:`endof` を使って、 ``str`` の文字を反復処理をすることができます。
 -  :func:`ind2chr(str,i) <ind2chr>` は、インデックス ``i`` を含めた ``str`` の文字数を与えます。
 -  :func:`chr2ind(str,j) <chr2ind>` は ``str`` の ``j`` 番目の文字があるインデックスを返します。 
    
