@@ -1681,11 +1681,18 @@ Juliaでは、Perlのように ``$`` を使用して文字列リテラルに補�
 文字列内の改行（LF）文字 ``\n`` になります。文字列にCRを含めるためには、明示的に ``\r`` でエスケープを使用してください。
 例えば、文字列リテラルに ``"a CRLF line ending\r\n"`` を入力することができます。
 
-Common Operations
+.. 
+ Common Operations
+ -----------------
+
+共通処理
 -----------------
 
-You can lexicographically compare strings using the standard comparison
-operators:
+.. 
+ You can lexicographically compare strings using the standard comparison
+ operators:
+ 
+文字列を標準比較演算子を使用して比較できます。 
 
 .. doctest::
 
@@ -1701,8 +1708,11 @@ operators:
     julia> "1 + 2 = 3" == "1 + 2 = $(1 + 2)"
     true
 
-You can search for the index of a particular character using the
-:func:`search` function:
+.. 
+ You can search for the index of a particular character using the
+ :func:`search` function:
+
+:func:`search` 関数を使用して特定の文字のインデックスを検索することができます。
 
 .. doctest::
 
@@ -1715,8 +1725,11 @@ You can search for the index of a particular character using the
     julia> search("xylophone", 'z')
     0
 
-You can start the search for a character at a given offset by providing
-a third argument:
+.. 
+ You can start the search for a character at a given offset by providing
+ a third argument:
+
+3番目の引数を指定することで、指定されたオフセットで文字の検索をすることができます。
 
 .. doctest::
 
@@ -1729,8 +1742,11 @@ a third argument:
     julia> search("xylophone", 'o', 8)
     0
 
-You can use the :func:`contains` function to check if a substring is
-contained in a string:
+.. 
+ You can use the :func:`contains` function to check if a substring is
+ contained in a string:
+
+:func:`contains` 関数を使用して、文字列に部分文字列が含まれているか確認することができます。
 
 .. doctest::
 
@@ -1750,11 +1766,18 @@ contained in a string:
       contains(::AbstractString, !Matched::AbstractString) at strings/search.jl:366
      ...
 
-The last error is because ``'o'`` is a character literal, and :func:`contains`
-is a generic function that looks for subsequences. To look for an element in a
-sequence, you must use :func:`in` instead.
+.. 
+ The last error is because ``'o'`` is a character literal, and :func:`contains`
+ is a generic function that looks for subsequences. To look for an element in a
+ sequence, you must use :func:`in` instead.
+ 
+最後のエラーは、 ``'o'`` が文字リテラルであり、 :func:`contains` は部分列を探す汎用関数であるためです。
+文字列内の要素を探すためには、 :func:`in` を使用する必要があります。 
 
-Two other handy string functions are :func:`repeat` and :func:`join`:
+.. 
+ Two other handy string functions are :func:`repeat` and :func:`join`:
+
+その他2つの便利な文字列関数は :func:`repeat` および :func:`join` 関数です。
 
 .. doctest::
 
@@ -1764,21 +1787,34 @@ Two other handy string functions are :func:`repeat` and :func:`join`:
     julia> join(["apples", "bananas", "pineapples"], ", ", " and ")
     "apples, bananas and pineapples"
 
-Some other useful functions include:
+.. 
+ Some other useful functions include:
 
--  :func:`endof(str) <endof>` gives the maximal (byte) index that can be used to
-   index into ``str``.
--  :func:`length(str) <length>` the number of characters in ``str``.
--  :func:`i = start(str) <start>` gives the first valid index at which a character
-   can be found in ``str`` (typically 1).
--  :func:`c, j = next(str,i) <next>` returns next character at or after the index
-   ``i`` and the next valid character index following that. With
-   :func:`start` and :func:`endof`, can be used to iterate through the
-   characters in ``str``.
--  :func:`ind2chr(str,i) <ind2chr>` gives the number of characters in ``str`` up to
-   and including any at index ``i``.
--  :func:`chr2ind(str,j) <chr2ind>` gives the index at which the ``j``\ th character
-   in ``str`` occurs.
+その他の便利な関数は以下です。
+
+.. 
+ -  :func:`endof(str) <endof>` gives the maximal (byte) index that can be used to
+    index into ``str``.
+ -  :func:`length(str) <length>` the number of characters in ``str``.
+ -  :func:`i = start(str) <start>` gives the first valid index at which a character
+    can be found in ``str`` (typically 1).
+ -  :func:`c, j = next(str,i) <next>` returns next character at or after the index
+    ``i`` and the next valid character index following that. With
+    :func:`start` and :func:`endof`, can be used to iterate through the
+    characters in ``str``.
+ -  :func:`ind2chr(str,i) <ind2chr>` gives the number of characters in ``str`` up to
+    and including any at index ``i``.
+ -  :func:`chr2ind(str,j) <chr2ind>` gives the index at which the ``j``\ th character
+    in ``str`` occurs.
+   
+-  :func:`endof(str) <endof>` は ``str`` へのインデックス付けに使用できる最大の（バイト）のインデックスを返します。
+-  :func:`length(str) <length>` ： ``str`` の文字数
+-  :func:`i = start(str) <start>` は、文字が ``str`` （通常は1）にある最初の有効なインデックスを返します。
+-  :func:`c, j = next(str,i) <next>` は、インデックスの文字またはインデックス ``i`` の次の文字とそれに続く有効な文字を返します。
+   :func:`start` および :func:`endof` を使って、 ``str`` の文字を反復処理をすることができます。
+-  :func:`ind2chr(str,i) <ind2chr>` は、インデックス ``i`` を含めた ``str`` の文字数を与えます。
+-  :func:`chr2ind(str,j) <chr2ind>` は ``str`` の ``j`` 番目の文字があるインデックスを返します。 
+   
 
 .. _man-non-standard-string-literals:
 
