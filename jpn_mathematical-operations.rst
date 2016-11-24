@@ -630,18 +630,33 @@ Juliaは、基本的な数値プリミティブ型の全ての算術演算子と
 以下の `算術演算子 <https://en.wikipedia.org/wiki/Arithmetic#Arithmetic_operations>`_ は
 全ての数値プリミティブ型でサポートされています。
 
+.. 
+ ==========  ============== ======================================
+ Expression  Name           Description
+ ==========  ============== ======================================
+ ``+x``      unary plus     the identity operation
+ ``-x``      unary minus    maps values to their additive inverses
+ ``x + y``   binary plus    performs addition
+ ``x - y``   binary minus   performs subtraction
+ ``x * y``   times          performs multiplication
+ ``x / y``   divide         performs division
+ ``x \ y``   inverse divide equivalent to ``y / x``
+ ``x ^ y``   power          raises ``x`` to the ``y``\ th power
+ ``x % y``   remainder      equivalent to ``rem(x,y)``
+ ==========  ============== ======================================
+
 ==========  ============== ======================================
 式          名称            概要
 ==========  ============== ======================================
 ``+x``      単一項加法      恒等作用素
 ``-x``      単一項減法      値を逆数と関連付ける
 ``x + y``   二項加法        加法を実施
-``x - y``   binary minus   performs subtraction
-``x * y``   times          performs multiplication
-``x / y``   divide         performs division
-``x \ y``   inverse divide equivalent to ``y / x``
-``x ^ y``   power          raises ``x`` to the ``y``\ th power
-``x % y``   remainder      equivalent to ``rem(x,y)``
+``x - y``   二項減法        減法を実施
+``x * y``   乗法           乗法を実施
+``x / y``   除法           除法を実施
+``x \ y``   逆数除法        ``y / x`` と同等
+``x ^ y``   累乗           ``x`` を ``y``\ 分だけ掛ける
+``x % y``   余り           ``rem(x,y)`` と同等
 ==========  ============== ======================================
 
 as well as the negation on ``Bool`` types:
