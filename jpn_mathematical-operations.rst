@@ -1553,12 +1553,12 @@ erfc <http://www.johndcook.com/blog/2010/06/07/math-library-functions-that-seem-
 =================================================== ==============================================================================
 関数                                                概要
 =================================================== ==============================================================================
-:func:`erf(x) <erf>`                                `error function <https://en.wikipedia.org/wiki/Error_function>`_ at ``x``
-:func:`erfc(x) <erfc>`                              complementary error function, i.e. the accurate version of ``1-erf(x)`` for large ``x``
-:func:`erfinv(x) <erfinv>`                          inverse function to :func:`erf`
-:func:`erfcinv(x) <erfinvc>`                        inverse function to :func:`erfc`
-:func:`erfi(x) <erfi>`                              imaginary error function defined as ``-im * erf(x * im)``, where :const:`im` is the imaginary unit
-:func:`erfcx(x) <erfcx>`                            scaled complementary error function, i.e. accurate ``exp(x^2) * erfc(x)`` for large ``x``
+:func:`erf(x) <erf>`                                ``x`` における`誤差関数 <https://en.wikipedia.org/wiki/Error_function>`_ 
+:func:`erfc(x) <erfc>`                              大きな値 ``x`` における ``1-erf(x)``のより正確な処理が可能な相補誤差関数 
+:func:`erfinv(x) <erfinv>`                          :func:`erf` に対する逆関数
+:func:`erfcinv(x) <erfinvc>`                        :func:`erfc` に対する逆関数
+:func:`erfi(x) <erfi>`                              :const:`im` が虚数単位の ``-im * erf(x * im)`` として定義される虚数誤差関数
+:func:`erfcx(x) <erfcx>`                            スケーリングされた相補誤差関数；大きな値 ``x`` に対する正確な ``exp(x^2) * erfc(x)`` 
 :func:`dawson(x) <dawson>`                          scaled imaginary error function, a.k.a. Dawson function, i.e. accurate ``exp(-x^2) * erfi(x) * sqrt(pi) / 2`` for large ``x``
 :func:`gamma(x) <gamma>`                            `gamma function <https://en.wikipedia.org/wiki/Gamma_function>`_ at ``x``
 :func:`lgamma(x) <lgamma>`                          accurate ``log(gamma(x))`` for large ``x``
