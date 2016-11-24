@@ -1025,17 +1025,42 @@ C言語スタイルの文字列コードを書くことができ、パフォー�
 JuliaはASCII以外のテキストが検出された場合、エラーをただ出力するのではなく、
 明確なエラーメッセージを出力して処理を終了します。この場合、非ASCIIデータを処理できるように修正するのは簡単です。
 
-There are a few noteworthy high-level features about Julia's strings:
+.. 
+ There are a few noteworthy high-level features about Julia's strings:
 
--  The built-in concrete type used for strings (and string literals) in Julia is :obj:`String`.
-   This supports the full range of `Unicode <https://en.wikipedia.org/wiki/Unicode>`_ characters
-   via the `UTF-8 <https://en.wikipedia.org/wiki/UTF-8>`_ encoding.
-   (A :func:`transcode` function is provided to convert to/from other Unicode encodings.)
--  All string types are subtypes of the abstract type :obj:`AbstractString`,
-   and external packages define additional :obj:`AbstractString` subtypes
-   (e.g. for other encodings).  If you define a function expecting
-   a string argument, you should declare the type as :obj:`AbstractString` in
-   order to accept any string type.
+Juliaには、文字列に関する注目すべき高度な機能があります。
+
+.. 
+ -  The built-in concrete type used for strings (and string literals) in Julia is :obj:`String`.
+    This supports the full range of `Unicode <https://en.wikipedia.org/wiki/Unicode>`_ characters
+    via the `UTF-8 <https://en.wikipedia.org/wiki/UTF-8>`_ encoding.
+    (A :func:`transcode` function is provided to convert to/from other Unicode encodings.)
+ -  All string types are subtypes of the abstract type :obj:`AbstractString`,
+    and external packages define additional :obj:`AbstractString` subtypes
+    (e.g. for other encodings).  If you define a function expecting
+    a string argument, you should declare the type as :obj:`AbstractString` in
+    order to accept any string type.
+ -  Like C and Java, but unlike most dynamic languages, Julia has a
+    first-class type representing a single character, called :obj:`Char`.
+    This is just a special kind of 32-bit bitstype whose numeric value
+    represents a Unicode code point.
+ -  As in Java, strings are immutable: the value of an :obj:`AbstractString` object
+    cannot be changed. To construct a different string value, you
+    construct a new string from parts of other strings.
+ -  Conceptually, a string is a *partial function* from indices to
+    characters: for some index values, no character value is returned,
+    and instead an exception is thrown. This allows for efficient
+    indexing into strings by the byte index of an encoded representation
+    rather than by a character index, which cannot be implemented both
+    efficiently and simply for variable-width encodings of Unicode
+    strings.
+   
+-  uliaにおける文字列を扱うビルトインの型は :obj:`String` です。これは、 `UTF-8 <https://en.wikipedia.org/wiki/UTF-8>`_ 
+   エンコーディングによる全ての `Unicode <https://en.wikipedia.org/wiki/Unicode>`_ をサポートします。
+   （Unicodeエンコードの変換を行うために :func:`transcode` 関数が提供されています。）
+-  全ての文字列型は抽象型 :obj:`AbstractString` のサブタイプであり、外部パッケージは
+   追加の :obj:`AbstractString` サブタイプ（例えばその他のエンコーディング用）を定義します。
+   文字列の引数を扱う関数を定義する場合は、任意の文字列型を使用するために :obj:`AbstractString` を型として宣言する必要があります。
 -  Like C and Java, but unlike most dynamic languages, Julia has a
    first-class type representing a single character, called :obj:`Char`.
    This is just a special kind of 32-bit bitstype whose numeric value
@@ -1049,7 +1074,7 @@ There are a few noteworthy high-level features about Julia's strings:
    indexing into strings by the byte index of an encoded representation
    rather than by a character index, which cannot be implemented both
    efficiently and simply for variable-width encodings of Unicode
-   strings.
+   strings.   
 
 .. _man-characters:
 
