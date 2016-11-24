@@ -2185,26 +2185,44 @@ Juliaでは、正規表現は ``r`` で始まる様々な識別子の接頭辞�
 ``r"""..."""`` 形式の3つのダブルクオーテーション付き正規表現文字列もサポートされています。
 （また、クオーテーションや改行を含む正規表現にも便利です。）
 
-Byte Array Literals
+.. 
+ Byte Array Literals
+ -------------------
+
+バイト配列リテラル
 -------------------
 
-Another useful non-standard string literal is the byte-array string
-literal: ``b"..."``. This form lets you use string notation to express
-literal byte arrays — i.e. arrays of ``UInt8`` values. The rules for
-byte array literals are the following:
+.. 
+ Another useful non-standard string literal is the byte-array string
+ literal: ``b"..."``. This form lets you use string notation to express
+ literal byte arrays — i.e. arrays of ``UInt8`` values. The rules for
+ byte array literals are the following:
 
--  ASCII characters and ASCII escapes produce a single byte.
--  ``\x`` and octal escape sequences produce the *byte* corresponding to
-   the escape value.
--  Unicode escape sequences produce a sequence of bytes encoding that
-   code point in UTF-8.
+その他の便利な非標準の文字列リテラルは、バイト配列文字列リテラル（ ``b"..."`` ）です。
+この形式は文字列表記を使用してバイト配列リテラル、つまり ``UInt8`` 値の配列を表現できます。バイト配列リテラルのルールは次の通りです。
 
-There is some overlap between these rules since the behavior of ``\x``
-and octal escapes less than 0x80 (128) are covered by both of the first
-two rules, but here these rules agree. Together, these rules allow one
-to easily use ASCII characters, arbitrary byte values, and UTF-8
-sequences to produce arrays of bytes. Here is an example using all
-three:
+.. 
+ -  ASCII characters and ASCII escapes produce a single byte.
+ -  ``\x`` and octal escape sequences produce the *byte* corresponding to
+    the escape value.
+ -  Unicode escape sequences produce a sequence of bytes encoding that
+    code point in UTF-8.
+   
+-  ASCII文字とASCIIエスケープは1バイトを生成します。
+-  ``\x`` と8進エスケープシーケンスは、エスケープした値に対応するバイトを生成します。
+-  Unicodeのエスケープシーケンスは、UTF-8でコードポイントをエンコードする一連のバイトを生成します。   
+
+.. 
+ There is some overlap between these rules since the behavior of ``\x``
+ and octal escapes less than 0x80 (128) are covered by both of the first
+ two rules, but here these rules agree. Together, these rules allow one
+ to easily use ASCII characters, arbitrary byte values, and UTF-8
+ sequences to produce arrays of bytes. Here is an example using all
+ three:
+
+``\x`` の動作と0x80（128）未満の8進エスケープは最初の2つのルールの両方が適用されるため、
+これらのルールの間にはいくつかの重複がありますが、。これらのルールは共存します。これらのルールにより、
+ASCII文字、任意のバイト値、およびUTF-8シーケンスを簡単に使用することができます。この3つの例では全てを使用しています。
 
 .. doctest::
 
@@ -2219,12 +2237,17 @@ three:
      0x88
      0x80
 
-The ASCII string "DATA" corresponds to the bytes 68, 65, 84, 65.
-``\xff`` produces the single byte 255. The Unicode escape ``\u2200`` is
-encoded in UTF-8 as the three bytes 226, 136, 128. Note that the
-resulting byte array does not correspond to a valid UTF-8 string — if
-you try to use this as a regular string literal, you will get a syntax
-error:
+.. 
+ The ASCII string "DATA" corresponds to the bytes 68, 65, 84, 65.
+ ``\xff`` produces the single byte 255. The Unicode escape ``\u2200`` is
+ encoded in UTF-8 as the three bytes 226, 136, 128. Note that the
+ resulting byte array does not correspond to a valid UTF-8 string — if
+ you try to use this as a regular string literal, you will get a syntax
+ error:
+
+ASCII文字列 「DATA」はバイト68、65、84、65に対応します。``\xff`` は1バイト255を生成します。
+Unicodeエスケープ文字 ``\u2200`` は、UTF-8で3バイト226、136、128としてエンコードされます。
+処理結果のバイト配列は有効なUTF-8文字列に対応しません。これを通常の文字列リテラルとして使用した場合、構文エラーが発生します。
 
 .. doctest::
 
@@ -2232,10 +2255,14 @@ error:
     ERROR: syntax: invalid UTF-8 sequence
      ...
 
-Also observe the significant distinction between ``\xff`` and ``\uff``:
-the former escape sequence encodes the *byte 255*, whereas the latter
-escape sequence represents the *code point 255*, which is encoded as two
-bytes in UTF-8:
+.. 
+ Also observe the significant distinction between ``\xff`` and ``\uff``:
+ the former escape sequence encodes the *byte 255*, whereas the latter
+ escape sequence represents the *code point 255*, which is encoded as two
+ bytes in UTF-8:
+ 
+``\xff`` および ``\uff`` の重要な違いについても確認してください。前者のエスケープシーケンスはバイト255をエンコードする一方、
+後者のエスケープシーケンスは、UTF-8で2バイトとしてエンコードされたコードポイント255を表します。 
 
 .. doctest::
 
@@ -2248,73 +2275,135 @@ bytes in UTF-8:
      0xc3
      0xbf
 
-In character literals, this distinction is glossed over and ``\xff`` is
-allowed to represent the code point 255, because characters *always*
-represent code points. In strings, however, ``\x`` escapes always
-represent bytes, not code points, whereas ``\u`` and ``\U`` escapes
-always represent code points, which are encoded in one or more bytes.
-For code points less than ``\u80``, it happens that the UTF-8
-encoding of each code point is just the single byte produced by the
-corresponding ``\x`` escape, so the distinction can safely be ignored.
-For the escapes ``\x80`` through ``\xff`` as compared to ``\u80``
-through ``\uff``, however, there is a major difference: the former
-escapes all encode single bytes, which — unless followed by very
-specific continuation bytes — do not form valid UTF-8 data, whereas the
-latter escapes all represent Unicode code points with two-byte
-encodings.
+.. 
+ In character literals, this distinction is glossed over and ``\xff`` is
+ allowed to represent the code point 255, because characters *always*
+ represent code points. In strings, however, ``\x`` escapes always
+ represent bytes, not code points, whereas ``\u`` and ``\U`` escapes
+ always represent code points, which are encoded in one or more bytes.
+ For code points less than ``\u80``, it happens that the UTF-8
+ encoding of each code point is just the single byte produced by the
+ corresponding ``\x`` escape, so the distinction can safely be ignored.
+ For the escapes ``\x80`` through ``\xff`` as compared to ``\u80``
+ through ``\uff``, however, there is a major difference: the former
+ escapes all encode single bytes, which — unless followed by very
+ specific continuation bytes — do not form valid UTF-8 data, whereas the
+ latter escapes all represent Unicode code points with two-byte
+ encodings.
 
-If this is all extremely confusing, try reading `"The Absolute Minimum
-Every Software Developer Absolutely, Positively Must Know About Unicode
-and Character Sets" <http://www.joelonsoftware.com/articles/Unicode.html>`_.
-It's an excellent introduction to Unicode and UTF-8, and may help alleviate
-some confusion regarding the matter.
+文字リテラルでは、文字は常にコードポイントを表すため、この違いは顕在化せず、
+ ``\xff`` はコードポイント255を表します。しかし文字列では、
+ ``\x`` エスケープはコードポイントではなく常にバイトを表し、一方で ``\u`` および ``\U`` エスケープは
+常に1またはそれ以上のバイトでエンコードされたコードポイントを表します。
+``\u80`` より小さいコードポイントの場合、各コードポイントのUTF-8エンコーディングは、
+対応する ``\x`` エスケープによって生成される1バイトだけなので、この区別は無視しても問題ありません。
+しかし、 ``\u80`` から ``\uff`` までと比較して、 ``\x80`` から ``\xff`` までの
+エスケープには大きな違いがあります。前者は、特定の継続バイトが続かない限り、
+有効なUTF-8データを構成しない全てのシングルバイトをエスケープします。一方で後者は、
+2バイトのエンコーディングでUnicodeコードポイントを表す全てをスケープします。
+
+.. 
+ If this is all extremely confusing, try reading `"The Absolute Minimum
+ Every Software Developer Absolutely, Positively Must Know About Unicode
+ and Character Sets" <http://www.joelonsoftware.com/articles/Unicode.html>`_.
+ It's an excellent introduction to Unicode and UTF-8, and may help alleviate
+ some confusion regarding the matter.
+
+もしこれらについて混乱している場合は、 `"The Absolute Minimum
+ Every Software Developer Absolutely, Positively Must Know About Unicode
+ and Character Sets" <http://www.joelonsoftware.com/articles/Unicode.html>`_ を参照してください。
+ これはUnicodeおよびUTF-8に関するすばらしい紹介です。また、この問題に関する理解に役立つかもしれません。
 
 .. _man-version-number-literals:
 
-Version Number Literals
+.. 
+ Version Number Literals
+ -----------------------
+
+バージョン番号リテラル
 -----------------------
 
-Version numbers can easily be expressed with non-standard string literals of
-the form ``v"..."``. Version number literals create :obj:`VersionNumber` objects
-which follow the specifications of `semantic versioning <http://semver.org>`_,
-and therefore are composed of major, minor and patch numeric values, followed
-by pre-release and build alpha-numeric annotations. For example,
-``v"0.2.1-rc1+win64"`` is broken into major version ``0``, minor version ``2``,
-patch version ``1``, pre-release ``rc1`` and build ``win64``. When entering a
-version literal, everything except the major version number is optional,
-therefore e.g.  ``v"0.2"`` is equivalent to ``v"0.2.0"`` (with empty
-pre-release/build annotations), ``v"2"`` is equivalent to ``v"2.0.0"``, and so
-on.
+.. 
+ Version numbers can easily be expressed with non-standard string literals of
+ the form ``v"..."``. Version number literals create :obj:`VersionNumber` objects
+ which follow the specifications of `semantic versioning <http://semver.org>`_,
+ and therefore are composed of major, minor and patch numeric values, followed
+ by pre-release and build alpha-numeric annotations. For example,
+ ``v"0.2.1-rc1+win64"`` is broken into major version ``0``, minor version ``2``,
+ patch version ``1``, pre-release ``rc1`` and build ``win64``. When entering a
+ version literal, everything except the major version number is optional,
+ therefore e.g.  ``v"0.2"`` is equivalent to ``v"0.2.0"`` (with empty
+ pre-release/build annotations), ``v"2"`` is equivalent to ``v"2.0.0"``, and so
+ on.
 
-:obj:`VersionNumber` objects are mostly useful to easily and correctly compare two
-(or more) versions. For example, the constant ``VERSION`` holds Julia version
-number as a :obj:`VersionNumber` object, and therefore one can define some
-version-specific behavior using simple statements as::
+バージョン番号は、 ``v"..."`` 形式の非標準文字列リテラルで簡単に表すことができます。
+バージョン番号リテラルは、`バージョン管理 <http://semver.org>`_ の仕様に従った :obj:`VersionNumber` オブジェクトを生成するため、
+バージョン番号リテラルはメジャー、マイナー、パッチの数値で構成され、プレリリース番号が続き、
+英数字注釈で構成されます。例えば、 ``v"0.2.1-rc1+win64"`` は、メジャー・バージョン ``0`` 、
+マイナー・バージョン ``2`` 、パッチ・バージョン ``1`` 、プレリリース ``rc1`` およびビルド ``win64`` に分割できます。
+バージョン番号リテラルを入力するとき、メジャーバージョン番号を除くすべてはオプショナルです。
+ ``v"0.2"`` は ``v"0.2.0"`` （空白のプレリリースおよびビルド注釈が空白の場合）に相当します。 ``v"2"`` は ``v"2.0.0"`` と同一です。
+
+.. 
+ :obj:`VersionNumber` objects are mostly useful to easily and correctly compare two
+ (or more) versions. For example, the constant ``VERSION`` holds Julia version
+ number as a :obj:`VersionNumber` object, and therefore one can define some
+ version-specific behavior using simple statements as::
 
     if v"0.2" <= VERSION < v"0.3-"
         # do something specific to 0.2 release series
     end
 
-Note that in the above example the non-standard version number ``v"0.3-"`` is
-used, with a trailing ``-``: this notation is a Julia extension of the
-standard, and it's used to indicate a version which is lower than any ``0.3``
-release, including all of its pre-releases. So in the above example the code
-would only run with stable ``0.2`` versions, and exclude such versions as
-``v"0.3.0-rc1"``. In order to also allow for unstable (i.e. pre-release)
-``0.2`` versions, the lower bound check should be modified like this: ``v"0.2-"
-<= VERSION``.
+:obj:`VersionNumber` オブジェクトは、2つ（またはそれ以上）のバージョンを簡単かつ正確に比較するのに最も役立ちます。
+例えば、定数 ``VERSION`` にはJuliaのバージョン番号が :obj:`VersionNumber` オブジェクトとして格納されているため、
+単純な文を使用してバージョン固有の動作を定義することができます。
+    
+    if v"0.2" <= VERSION < v"0.3-"
+        # do something specific to 0.2 release series
+    end    
 
-Another non-standard version specification extension allows one to use a trailing
-``+`` to express an upper limit on build versions, e.g.  ``VERSION >
-v"0.2-rc1+"`` can be used to mean any version above ``0.2-rc1`` and any of its
-builds: it will return ``false`` for version ``v"0.2-rc1+win64"`` and ``true``
-for ``v"0.2-rc2"``.
+.. 
+ Note that in the above example the non-standard version number ``v"0.3-"`` is
+ used, with a trailing ``-``: this notation is a Julia extension of the
+ standard, and it's used to indicate a version which is lower than any ``0.3``
+ release, including all of its pre-releases. So in the above example the code
+ would only run with stable ``0.2`` versions, and exclude such versions as
+ ``v"0.3.0-rc1"``. In order to also allow for unstable (i.e. pre-release)
+ ``0.2`` versions, the lower bound check should be modified like this: ``v"0.2-"
+ <= VERSION``.
 
-It is good practice to use such special versions in comparisons (particularly,
-the trailing ``-`` should always be used on upper bounds unless there's a good
-reason not to), but they must not be used as the actual version number of
-anything, as they are invalid in the semantic versioning scheme.
+上記の例では、非標準バージョン番号 ``v"0.3-"`` が使用され、末尾に ``-`` が付いています。
+この表記は標準のJuliaの拡張機能であり、これは、全てのプレリリースを含めて ``0.3`` リリースより
+低いバージョンをであることを示すために使用されます。したがって、上記の例では、コードは安定した
+ ``0.2`` バージョンでのみ実行され、 ``v"0.3.0-rc1"`` などのバージョンは除外されます。
+不安定な（例えばプレリリース） ``0.2`` バージョンを許容するため、下限チェックは次のように変更する必要があります。
+ ``v"0.2-" <= VERSION``
 
-Besides being used for the :const:`VERSION` constant, :obj:`VersionNumber` objects are
-widely used in the :mod:`Pkg <Base.Pkg>` module, to specify packages versions and their
-dependencies.
+.. 
+ Another non-standard version specification extension allows one to use a trailing
+ ``+`` to express an upper limit on build versions, e.g.  ``VERSION >
+ v"0.2-rc1+"`` can be used to mean any version above ``0.2-rc1`` and any of its
+ builds: it will return ``false`` for version ``v"0.2-rc1+win64"`` and ``true``
+ for ``v"0.2-rc2"``.
+
+別の非標準バージョン仕様拡張では、後続の ``+`` を使用してビルドバージョンの上限を表すことができます。
+例えば、 ``VERSION > v"0.2-rc1+"`` は、 ``0.2-rc1`` 以上の全てをバージョンを指定するために使用することができ、
+ ``v"0.2-rc1+win64"`` では ``false`` を返し、 ``v"0.2-rc2"`` では ``true`` を返します。
+
+.. 
+ It is good practice to use such special versions in comparisons (particularly,
+ the trailing ``-`` should always be used on upper bounds unless there's a good
+ reason not to), but they must not be used as the actual version number of
+ anything, as they are invalid in the semantic versioning scheme.
+
+このような特殊なバージョンを比較のために使用するのは有益です。（特に、後続の ``-`` は、必要の場合を除き、
+常に上限を上限を示すために使用すべきです。）しかし、それらはバージョンスキームでは無効であるため、
+実際のバージョン番号として使用できません。
+
+.. 
+ Besides being used for the :const:`VERSION` constant, :obj:`VersionNumber` objects are
+ widely used in the :mod:`Pkg <Base.Pkg>` module, to specify packages versions and their
+ dependencies.
+
+:const:`VERSION` 定数に使用されるほかに、 :obj:`VersionNumber` オブジェクトはパッケージのバージョンと
+その依存関係を指定するために :mod:`Pkg <Base.Pkg>` モジュールで広く使用されています。
