@@ -1110,33 +1110,62 @@ Juliaは :obj:`.* <Base..*>` 、 :obj:`.+ <Base..+>` といった要素単位演
     1
     false
 
-The middle expression is only evaluated once, rather than twice as it
-would be if the expression were written as
-``v(1) < v(2) && v(2) <= v(3)``. However, the order of evaluations in a
-chained comparison is undefined. It is strongly recommended not to use
-expressions with side effects (such as printing) in chained comparisons.
-If side effects are required, the short-circuit :obj:`&&` operator should
-be used explicitly (see :ref:`man-short-circuit-evaluation`).
+.. 
+ The middle expression is only evaluated once, rather than twice as it
+ would be if the expression were written as
+ ``v(1) < v(2) && v(2) <= v(3)``. However, the order of evaluations in a
+ chained comparison is undefined. It is strongly recommended not to use
+ expressions with side effects (such as printing) in chained comparisons.
+ If side effects are required, the short-circuit :obj:`&&` operator should
+ be used explicitly (see :ref:`man-short-circuit-evaluation`).
 
-Operator Precedence
+``v(1) < v(2) && v(2) <= v(3)`` と記載されている場合は2度処理されるかのように
+思われるかもしれませんが、中間の式は1度だけ処理されます。しかし、連続した比較の処理順は
+定義されていません。連続した比較で副次効果のある式（印刷など）を使用しないことを推奨します。
+副次効果が必要な場合は、短絡 :obj:`&&` 演算子を明示的に使用する必要があります。（ :ref:`man-短絡評価` 参照」）
+
+.. 
+ Operator Precedence
+ ~~~~~~~~~~~~~~~~~~~
+
+演算子の優先順位
 ~~~~~~~~~~~~~~~~~~~
 
-Julia applies the following order of operations, from highest precedence
-to lowest:
+.. 
+ Julia applies the following order of operations, from highest precedence
+ to lowest:
+ 
+Juliaは、優先順位の高いものから低いものまで、以下の処理順序を適用しています。 
+
+.. 
+ ================= =============================================================================================
+ Category          Operators
+ ================= =============================================================================================
+ Syntax            ``.`` followed by ``::``
+ Exponentiation    ``^`` and its elementwise equivalent ``.^``
+ Fractions         ``//`` and ``.//``
+ Multiplication    ``* / % & \`` and  ``.* ./ .% .\``
+ Bitshifts         ``<< >> >>>`` and ``.<< .>> .>>>``
+ Addition          ``+ - | $`` and ``.+ .-``
+ Syntax            ``: ..`` followed by ``|>``
+ Comparisons       ``> < >= <= == === != !== <:`` and ``.> .< .>= .<= .== .!=``
+ Control flow      ``&&`` followed by ``||`` followed by ``?``
+ Assignments       ``= += -= *= /= //= \= ^= ÷= %= |= &= $= <<= >>= >>>=`` and ``.+= .-= .*= ./= .//= .\= .^= .÷= .%=``
+ ================= =============================================================================================
 
 ================= =============================================================================================
-Category          Operators
+カテゴリ           演算子
 ================= =============================================================================================
-Syntax            ``.`` followed by ``::``
-Exponentiation    ``^`` and its elementwise equivalent ``.^``
-Fractions         ``//`` and ``.//``
-Multiplication    ``* / % & \`` and  ``.* ./ .% .\``
-Bitshifts         ``<< >> >>>`` and ``.<< .>> .>>>``
-Addition          ``+ - | $`` and ``.+ .-``
-Syntax            ``: ..`` followed by ``|>``
-Comparisons       ``> < >= <= == === != !== <:`` and ``.> .< .>= .<= .== .!=``
-Control flow      ``&&`` followed by ``||`` followed by ``?``
-Assignments       ``= += -= *= /= //= \= ^= ÷= %= |= &= $= <<= >>= >>>=`` and ``.+= .-= .*= ./= .//= .\= .^= .÷= .%=``
+構文              ``.`` followed by ``::``
+累乗              ``^`` and its elementwise equivalent ``.^``
+分数              ``//`` and ``.//``
+乗法              ``* / % & \`` and  ``.* ./ .% .\``
+ビットシフト        ``<< >> >>>`` and ``.<< .>> .>>>``
+加法              ``+ - | $`` and ``.+ .-``
+構文              ``: ..`` followed by ``|>``
+比較              ``> < >= <= == === != !== <:`` and ``.> .< .>= .<= .== .!=``
+制御フロー         ``&&`` followed by ``||`` followed by ``?``
+割り当て           ``= += -= *= /= //= \= ^= ÷= %= |= &= $= <<= >>= >>>=`` and ``.+= .-= .*= ./= .//= .\= .^= .÷= .%=``
 ================= =============================================================================================
 
 .. _man-elementary-functions:
