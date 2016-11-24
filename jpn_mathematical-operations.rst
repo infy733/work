@@ -633,9 +633,9 @@ Juliaは、基本的な数値プリミティブ型の全ての算術演算子と
 ==========  ============== ======================================
 式          名称            概要
 ==========  ============== ======================================
-``+x``      unary plus     the identity operation
-``-x``      unary minus    maps values to their additive inverses
-``x + y``   binary plus    performs addition
+``+x``      単一項加法      恒等作用素
+``-x``      単一項減法      値を逆数と関連付ける
+``x + y``   二項加法        加法を実施
 ``x - y``   binary minus   performs subtraction
 ``x * y``   times          performs multiplication
 ``x / y``   divide         performs division
