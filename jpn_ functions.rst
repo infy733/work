@@ -919,16 +919,26 @@ C言語やその他の命令型言語や関数型言語の場合のように、 
 *x* および *y* の値によってこの関数から返されるポイントは3つあり、3つの異なる式の値が返されます。
 最後の行の ``return`` は、最後の式であるため、省略することができます。
 
-Operators Are Functions
+.. 
+ Operators Are Functions
+ -----------------------
+
+演算子は関数
 -----------------------
 
-In Julia, most operators are just functions with support for special
-syntax. (The exceptions are operators with special evaluation semantics
-like ``&&`` and ``||``. These operators cannot be functions since
-:ref:`short-circuit evaluation <man-short-circuit-evaluation>` requires that
-their operands are not evaluated before evaluation of the operator.)
-Accordingly, you can also apply them using parenthesized argument lists,
-just as you would any other function:
+.. 
+ In Julia, most operators are just functions with support for special
+ syntax. (The exceptions are operators with special evaluation semantics
+ like ``&&`` and ``||``. These operators cannot be functions since
+ :ref:`short-circuit evaluation <man-short-circuit-evaluation>` requires that
+ their operands are not evaluated before evaluation of the operator.)
+ Accordingly, you can also apply them using parenthesized argument lists,
+ just as you would any other function:
+
+Juliaでは、ほとんどの演算子は特別な構文をサポートする関数であると言えます。（例外は、 ``&&`` や ``||`` のような
+特別な処理をする演算子があります。これらの演算子は、 :ref:`短絡評価 <man-short-circuit-evaluation>` では演算子を
+処理する前に被演算子が処理されないため、関数ではありません。）他の関数と同様に、
+括弧で囲まれた引数リストを使用して、それらを適用することもできます。
 
 .. doctest::
 
@@ -938,10 +948,14 @@ just as you would any other function:
     julia> +(1,2,3)
     6
 
-The infix form is exactly equivalent to the function application form —
-in fact the former is parsed to produce the function call internally.
-This also means that you can assign and pass around operators such as
-:func:`+` and :func:`*` just like you would with other function values:
+.. 
+ The infix form is exactly equivalent to the function application form —
+ in fact the former is parsed to produce the function call internally.
+ This also means that you can assign and pass around operators such as
+ :func:`+` and :func:`*` just like you would with other function values:
+
+挿入形式は、関数のアプリケーション形式と全く同じです。実際は、前者は内部的に関数呼び出しを生成する処理をします。
+他の関数値と同じように、 :func:`+` や :func:`*` などの演算子を指定し渡すこともできます。
 
 .. doctest:: f-plus
 
@@ -950,17 +964,41 @@ This also means that you can assign and pass around operators such as
     julia> f(1,2,3)
     6
 
-Under the name ``f``, the function does not support infix notation,
-however.
+.. 
+ Under the name ``f``, the function does not support infix notation,
+ however.
 
-Operators With Special Names
+しかし、 ``f`` 関数は、挿入法をサポートしていません。
+
+.. 
+ Operators With Special Names
+ ----------------------------
+
+特別な名前の演算子
 ----------------------------
 
-A few special expressions correspond to calls to functions with non-obvious
-names. These are:
+.. 
+ A few special expressions correspond to calls to functions with non-obvious
+ names. These are:
+
+以下のような特別な式は、明白でない名前の関数の呼び出しに対応しています。
+
+.. 
+ =================== ==================
+ Expression          Calls
+ =================== ==================
+ ``[A B C ...]``     :func:`hcat`
+ ``[A, B, C, ...]``  :func:`vcat`
+ ``[A B; C D; ...]`` :func:`hvcat`
+ ``A'``              :func:`ctranspose`
+ ``A.'``             :func:`transpose`
+ ``1:n``             :func:`colon`
+ ``A[i]``            :func:`getindex`
+ ``A[i]=x``          :func:`setindex!`
+ =================== ==================
 
 =================== ==================
-Expression          Calls
+式                  呼び出し
 =================== ==================
 ``[A B C ...]``     :func:`hcat`
 ``[A, B, C, ...]``  :func:`vcat`
@@ -972,10 +1010,17 @@ Expression          Calls
 ``A[i]=x``          :func:`setindex!`
 =================== ==================
 
-These functions are included in the ``Base.Operators`` module even
-though they do not have operator-like names.
+.. 
+ These functions are included in the ``Base.Operators`` module even
+ though they do not have operator-like names.
+
+これらの関数は、演算子のような名前ではありませんが ``Base.Operators`` モジュールに含まれています。
 
 .. _man-anonymous-functions:
+
+.. 
+ Anonymous Functions
+ -------------------
 
 Anonymous Functions
 -------------------
