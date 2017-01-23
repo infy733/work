@@ -1276,36 +1276,63 @@ finally文
 タスク（またはコルーチン）
 ----------------------
 
-Tasks are a control flow feature that allows computations to be
-suspended and resumed in a flexible manner. This feature is sometimes
-called by other names, such as symmetric coroutines, lightweight
-threads, cooperative multitasking, or one-shot continuations.
+..　
+  Tasks are a control flow feature that allows computations to be
+  suspended and resumed in a flexible manner. This feature is sometimes
+  called by other names, such as symmetric coroutines, lightweight
+  threads, cooperative multitasking, or one-shot continuations.
 
-When a piece of computing work (in practice, executing a particular
-function) is designated as a :class:`Task`, it becomes possible to interrupt
-it by switching to another :class:`Task`. The original :class:`Task` can later be
-resumed, at which point it will pick up right where it left off. At
-first, this may seem similar to a function call. However there are two
-key differences. First, switching tasks does not use any space, so any
-number of task switches can occur without consuming the call stack.
-Second, switching among tasks can occur in any order, unlike function calls,
-where the called function must finish executing before control returns
-to the calling function.
+タスクは、柔軟に計算を一時停止したり、再開できるようにする制御フロー機能です。
+この機能は、対称コルーチン、軽量スレッド、協調的マルチタスキング、
+one-shot continuationなど、他の名前で呼ばれることがあります。
 
-This kind of control flow can make it much easier to solve certain
-problems. In some problems, the various pieces of required work are not
-naturally related by function calls; there is no obvious "caller" or
-"callee" among the jobs that need to be done. An example is the
-producer-consumer problem, where one complex procedure is generating
-values and another complex procedure is consuming them. The consumer
-cannot simply call a producer function to get a value, because the
-producer may have more values to generate and so might not yet be ready
-to return. With tasks, the producer and consumer can both run as long as
-they need to, passing values back and forth as necessary.
+.. 
+  When a piece of computing work (in practice, executing a particular
+  function) is designated as a :class:`Task`, it becomes possible to interrupt
+  it by switching to another :class:`Task`. The original :class:`Task` can later be
+  resumed, at which point it will pick up right where it left off. At
+  first, this may seem similar to a function call. However there are two
+  key differences. First, switching tasks does not use any space, so any
+  number of task switches can occur without consuming the call stack.
+  Second, switching among tasks can occur in any order, unlike function calls,
+  where the called function must finish executing before control returns
+  to the calling function.
 
-Julia provides the functions :func:`produce` and :func:`consume` for solving
-this problem. A producer is a function that calls :func:`produce` on each
-value it needs to produce:
+処理（実際には特定の機能を実行する）が :class:`Task` として指定されると、別の :class:`Task` に切り替えることで
+中断することが可能になります。元の :class:`Task` は後で再開することができ、
+中断した箇所から再開されます。これは関数呼び出しと同じように見えるかもしれません。
+しかし、2つの重要な違いがあります。1つは、タスクの切り替えはスペースを使用しないため、
+コールスタックを消費せずに任意の数のタスクスイッチを実行できます。もう1つは、
+関数呼び出しとは異なり、タスク間の切り替えは任意の順序で行うことができます。
+関数呼び出しの場合、呼び出された関数は呼び出し元の関数に制御が戻る前に実行を終了する必要があります。
+
+.. 
+  This kind of control flow can make it much easier to solve certain
+  problems. In some problems, the various pieces of required work are not
+  naturally related by function calls; there is no obvious "caller" or
+  "callee" among the jobs that need to be done. An example is the
+  producer-consumer problem, where one complex procedure is generating
+  values and another complex procedure is consuming them. The consumer
+  cannot simply call a producer function to get a value, because the
+  producer may have more values to generate and so might not yet be ready
+  to return. With tasks, the producer and consumer can both run as long as
+  they need to, passing values back and forth as necessary.
+
+この種の制御フローにより、特定の問題を簡単に解決することができます。あるケースでは、
+処理の様々な部分は、関数呼び出しによってお互いに関連するものではなく、
+実行するジョブの中に明示的な「呼び出し元」または「呼び出し先」がありません。
+一例は、ある複雑な処理が値を生成し、別の複雑な処理がそれらを消費している生産側-消費側の問題です。
+生産側は生成する値が多く、返す準備ができていない可能性があるため、
+消費側は単に生産側の関数を呼び出して値を得ることはできません。
+タスクでは、生産側と消費側は、必要に応じてお互いに値を渡しながら、必要なだけ処理することができます。
+
+.. 
+  Julia provides the functions :func:`produce` and :func:`consume` for solving
+  this problem. A producer is a function that calls :func:`produce` on each
+  value it needs to produce:
+
+Juliaは、この問題を解決するために :func:`produce` および :func:`consume` 関数を提供しています。
+生産側は、生成する必要がある各値に対して :func:`produce` を呼び出す関数です。::
 
 .. doctest::
 
@@ -1317,8 +1344,11 @@ value it needs to produce:
              produce("stop")
            end;
 
-To consume values, first the producer is wrapped in a :class:`Task`,
-then :func:`consume` is called repeatedly on that object:
+.. 
+  To consume values, first the producer is wrapped in a :class:`Task`,
+  then :func:`consume` is called repeatedly on that object:
+
+値を使用するには、まず生産側を :class:`Task` にラッッピングし、そのオブジェクトに対して :func:`consume` を繰り返し呼び出します。::
 
 .. doctest::
 
@@ -1342,12 +1372,20 @@ then :func:`consume` is called repeatedly on that object:
     julia> consume(p)
     "stop"
 
-One way to think of this behavior is that ``producer`` was able to
-return multiple times. Between calls to :func:`produce`, the producer's
-execution is suspended and the consumer has control.
+.. 
+  One way to think of this behavior is that ``producer`` was able to
+  return multiple times. Between calls to :func:`produce`, the producer's
+  execution is suspended and the consumer has control.
 
-A Task can be used as an iterable object in a ``for`` loop, in which
-case the loop variable takes on all the produced values:
+この動作を考える方法の1つは、 ``producer`` は何度も処理を返すことができるということです。
+:func:`produce` への呼び出しの間、生産側の実行は一時停止され、消費側が制御権を持ちます。
+
+.. 
+  A Task can be used as an iterable object in a ``for`` loop, in which
+  case the loop variable takes on all the produced values:
+
+タスクは ``for`` ループ内の繰り返し処理可能オブジェクトとして使用できます。
+この場合、ループ変数は生成された全ての値を取ります。::
 
 .. doctest::
 
@@ -1361,11 +1399,16 @@ case the loop variable takes on all the produced values:
     8
     stop
 
-Note that the :func:`Task` constructor expects a 0-argument function. A
-common pattern is for the producer to be parameterized, in which case a
-partial function application is needed to create a 0-argument :ref:`anonymous
-function <man-anonymous-functions>`. This can be done either
-directly or by use of a convenience macro::
+.. 
+  Note that the :func:`Task` constructor expects a 0-argument function. A
+  common pattern is for the producer to be parameterized, in which case a
+  partial function application is needed to create a 0-argument :ref:`anonymous
+  function <man-anonymous-functions>`. This can be done either
+  directly or by use of a convenience macro::
+
+:func:`Task` コンストラクタは、引数を取らない関数が必要であることに注意してください。
+一般的なパターンは、生産側をパラメータ化することです。この場合、引数を取らない :ref:`無名関数 <man-anonymous-functions>` を
+作成するには部分関数アプリケーションが必要です。これは、直接または便利なマクロを使用することで行うことができます。::
 
     function mytask(myarg)
         ...
@@ -1375,80 +1418,159 @@ directly or by use of a convenience macro::
     # or, equivalently
     taskHdl = @task mytask(7)
 
-:func:`produce` and :func:`consume` do not launch threads that can run on separate CPUs.
-True kernel threads are discussed under the topic of :ref:`man-parallel-computing`.
+.. 
+  :func:`produce` and :func:`consume` do not launch threads that can run on separate CPUs.
+  True kernel threads are discussed under the topic of :ref:`man-parallel-computing`.
 
-Core task operations
+:func:`produce` と :func:`consume` は、別々のCPUで実行するスレッドを起動しません。
+カーネルスレッドについては、 :ref:`man-並列処理` のトピックで説明します。
+
+.. 
+  Core task operations
+  ~~~~~~~~~~~~~~~~~~~~
+
+コアタスク処理
 ~~~~~~~~~~~~~~~~~~~~
 
-While :func:`produce` and :func:`consume` illustrate the essential nature of tasks, they
-are actually implemented as library functions using a more primitive function,
-:func:`yieldto`. ``yieldto(task,value)`` suspends the current task, switches
-to the specified ``task``, and causes that task's last :func:`yieldto` call to return
-the specified ``value``. Notice that :func:`yieldto` is the only operation required
-to use task-style control flow; instead of calling and returning we are always
-just switching to a different task. This is why this feature is also called
-"symmetric coroutines"; each task is switched to and from using the same mechanism.
+.. 
+  While :func:`produce` and :func:`consume` illustrate the essential nature of tasks, they
+  are actually implemented as library functions using a more primitive function,
+  :func:`yieldto`. ``yieldto(task,value)`` suspends the current task, switches
+  to the specified ``task``, and causes that task's last :func:`yieldto` call to return
+  the specified ``value``. Notice that :func:`yieldto` is the only operation required
+  to use task-style control flow; instead of calling and returning we are always
+  just switching to a different task. This is why this feature is also called
+  "symmetric coroutines"; each task is switched to and from using the same mechanism.
 
-:func:`yieldto` is powerful, but most uses of tasks do not invoke it directly.
-Consider why this might be. If you switch away from the current task, you will
-probably want to switch back to it at some point, but knowing when to switch
-back, and knowing which task has the responsibility of switching back, can
-require considerable coordination. For example, :func:`produce` needs to maintain
-some state to remember who the consumer is. Not needing to manually keep track
-of the consuming task is what makes :func:`produce` easier to use than :func:`yieldto`.
+:func:`produce` と :func:`consume` はタスクの本質的な性質を示していますが、実際には、
+より基本的な関数 :func:`yieldto` を使用して、ライブラリ関数として実装されています。
+``yieldto(task,value)`` は、実行しているタスクの中断、指定されたタスクへの切り替え、
+およびそのタスクの最後の :func:`yieldto` 呼び出しで指定された値を返します。 :func:`yieldto` は、
+タスクスタイルの制御フローを使用する必要がある唯一の処理であることに注意してください。
+呼び出したり戻るのではなく、常に別のタスクに切り替えるだけです。
+このため、この機能は「対称コルーチン」とも呼ばれます。各タスクは同じメカニズムを使用して切り替えられます。
 
-In addition to :func:`yieldto`, a few other basic functions are needed to use tasks
-effectively.
+.. 
+  :func:`yieldto` is powerful, but most uses of tasks do not invoke it directly.
+  Consider why this might be. If you switch away from the current task, you will
+  probably want to switch back to it at some point, but knowing when to switch
+  back, and knowing which task has the responsibility of switching back, can
+  require considerable coordination. For example, :func:`produce` needs to maintain
+  some state to remember who the consumer is. Not needing to manually keep track
+  of the consuming task is what makes :func:`produce` easier to use than :func:`yieldto`.
 
-- :func:`current_task` gets a reference to the currently-running task.
-- :func:`istaskdone` queries whether a task has exited.
-- :func:`istaskstarted` queries whether a task has run yet.
-- :func:`task_local_storage` manipulates a key-value store specific to the current task.
+:func:`yieldto` は強力ですが、タスクの大半は直接呼び出しません。なぜか少し考えてみてください。
+現在のタスクを切り替えた場合は、ある時点で元のタスクに戻りたいと思うかもしれませんが、
+いつスイッチバックするのかを知り、どのタスクがスイッチバックの責任を持っているのかを知るにはかなりの調整が必要です。
+例えば、 :func:`produce` は、消費側が誰であるかを記憶するために、ある状態を維持する必要があります。
+消費側タスクを手動で追跡する必要がない分、 :func:`produce` は :func:`yieldto` よりも使いやすくなります。
 
-Tasks and events
+.. 
+  In addition to :func:`yieldto`, a few other basic functions are needed to use tasks
+  effectively.
+
+  - :func:`current_task` gets a reference to the currently-running task.
+  - :func:`istaskdone` queries whether a task has exited.
+  - :func:`istaskstarted` queries whether a task has run yet.
+  - :func:`task_local_storage` manipulates a key-value store specific to the current task.
+
+:func:`yieldto` 加えて、タスクを効果的に使用するには、いくつかの基本的な関数が必要です。
+
+- :func:`current_task` は、現在実行中のタスクへの参照を取得します。
+- :func:`istaskdone` は、タスクが終了したかどうかを照会します。
+- :func:`istaskstarted` は、タスクがまだ実行されているかどうかを照会します。
+- :func:`task_local_storage` は、現在のタスクの固有のキー値ストアを操作します。
+
+.. 
+  Tasks and events
+  ~~~~~~~~~~~~~~~~
+
+タスクとイベント
 ~~~~~~~~~~~~~~~~
 
-Most task switches occur as a result of waiting for events such as I/O
-requests, and are performed by a scheduler included in the standard library.
-The scheduler maintains a queue of runnable tasks, and executes an event loop
-that restarts tasks based on external events such as message arrival.
+.. 
+  Most task switches occur as a result of waiting for events such as I/O
+  requests, and are performed by a scheduler included in the standard library.
+  The scheduler maintains a queue of runnable tasks, and executes an event loop
+  that restarts tasks based on external events such as message arrival.
 
-The basic function for waiting for an event is :func:`wait`. Several objects
-implement :func:`wait`; for example, given a :class:`Process` object, :func:`wait` will
-wait for it to exit. :func:`wait` is often implicit; for example, a :func:`wait`
-can happen inside a call to :func:`read` to wait for data to be available.
+ほとんどのタスクの切り替えは、I/O要求などのイベントを待機した結果として発生し、
+また標準ライブラリに含まれるスケジューラによって実行されます。スケジューラは、
+実行可能なタスクのキューを維持し、メッセージの到着などの外部イベントに基づいてタスクを再開するイベントループを実行します。
 
-In all of these cases, :func:`wait` ultimately operates on a :class:`Condition`
-object, which is in charge of queueing and restarting tasks. When a task
-calls :func:`wait` on a :class:`Condition`, the task is marked as non-runnable, added
-to the condition's queue, and switches to the scheduler. The scheduler will
-then pick another task to run, or block waiting for external events.
-If all goes well, eventually an event handler will call :func:`notify` on the
-condition, which causes tasks waiting for that condition to become runnable
-again.
+.. 
+  The basic function for waiting for an event is :func:`wait`. Several objects
+  implement :func:`wait`; for example, given a :class:`Process` object, :func:`wait` will
+  wait for it to exit. :func:`wait` is often implicit; for example, a :func:`wait`
+  can happen inside a call to :func:`read` to wait for data to be available.
 
-A task created explicitly by calling :class:`Task` is initially not known to the
-scheduler. This allows you to manage tasks manually using :func:`yieldto` if
-you wish. However, when such a task waits for an event, it still gets restarted
-automatically when the event happens, as you would expect. It is also
-possible to make the scheduler run a task whenever it can, without necessarily
-waiting for any events. This is done by calling :func:`schedule`, or using
-the :obj:`@schedule` or :obj:`@async` macros (see :ref:`man-parallel-computing` for
-more details).
+イベントを待つための基本的な関数は :func:`wait` です。いくつかのオブジェクトは :func:`wait` を実装しています。
+例えば、 :class:`Process` オブジェクトでは :func:`wait` オブジェクトが終了するまで待機します。
+:func:`wait` はしばしば潜在的です。例えば、 :func:`wait` は :func:`read` の呼び出しの中でデータが
+利用可能になるのを待つことができます。
 
-Task states
+.. 
+  In all of these cases, :func:`wait` ultimately operates on a :class:`Condition`
+  object, which is in charge of queueing and restarting tasks. When a task
+  calls :func:`wait` on a :class:`Condition`, the task is marked as non-runnable, added
+  to the condition's queue, and switches to the scheduler. The scheduler will
+  then pick another task to run, or block waiting for external events.
+  If all goes well, eventually an event handler will call :func:`notify` on the
+  condition, which causes tasks waiting for that condition to become runnable
+  again.
+
+これらの全ての場合、 :func:`wait` は最終的にタスクのキューイングと再開を管理する :class:`Condition` オブジェクトで動作します。
+タスクが :class:`Condition` で :func:`wait` を呼び出すと、タスクは実行不可能とマークされ、条件のキューに追加され、
+スケジューラに切り替わります。スケジューラは、実行する別のタスクを選択するか、外部イベントの待機をブロックします。
+全てがうまくいった場合、最終的にイベントハンドラはその条件で :func:`notify` を呼び出し、その条件を待っているタスクを再度実行可能にします。
+
+.. 
+  A task created explicitly by calling :class:`Task` is initially not known to the
+  scheduler. This allows you to manage tasks manually using :func:`yieldto` if
+  you wish. However, when such a task waits for an event, it still gets restarted
+  automatically when the event happens, as you would expect. It is also
+  possible to make the scheduler run a task whenever it can, without necessarily
+  waiting for any events. This is done by calling :func:`schedule`, or using
+  the :obj:`@schedule` or :obj:`@async` macros (see :ref:`man-parallel-computing` for
+  more details).
+
+:class:`Task` を呼び出すことによって明示的に作成されたタスクは、最初はスケジューラには認識されません。
+これにより、必要に応じて :func:`yieldto` を使用して手動でタスクを管理することができます。
+しかし、このようなタスクがイベントを待っているときは、イベントが発生したときに自動的に再起動されます。
+また、イベントを待つことなく、可能な場合にスケジューラでタスクを実行させることも可能です。
+これは、 :func:`schedule` を呼び出すか :obj:`@schedule` マクロまたは :obj:`@async` マクロを
+使用して行うことができます（詳細は :ref:`man-並列処理` を参照）。
+
+.. 
+  Task states
+  ~~~~~~~~~~~
+
+タスクの状態
 ~~~~~~~~~~~
 
-Tasks have a ``state`` field that describes their execution status. A task
-state is one of the following symbols:
+.. 
+  Tasks have a ``state`` field that describes their execution status. A task
+  state is one of the following symbols:
+
+タスクには、実行状態を示す「state」フィールドがあります。タスクの状態は、次のシンボルのいずれかです。:
+
+.. 
+  =============  ==================================================
+  Symbol         Meaning
+  =============  ==================================================
+  ``:runnable``  Currently running, or available to be switched to
+  ``:waiting``   Blocked waiting for a specific event
+  ``:queued``    In the scheduler's run queue about to be restarted
+  ``:done``      Successfully finished executing
+  ``:failed``    Finished with an uncaught exception
+  =============  ==================================================
 
 =============  ==================================================
-Symbol         Meaning
+シンボル        概要
 =============  ==================================================
-``:runnable``  Currently running, or available to be switched to
-``:waiting``   Blocked waiting for a specific event
-``:queued``    In the scheduler's run queue about to be restarted
-``:done``      Successfully finished executing
-``:failed``    Finished with an uncaught exception
+``:runnable``  実行中、または切り替え可能
+``:waiting``   特定のイベントを待つためブロックされた
+``:queued``    スケジューラの実行キュー内で再開されようとしている
+``:done``      正常終了
+``:failed``    非定義の例外で終了
 =============  ==================================================
