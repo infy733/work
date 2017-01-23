@@ -805,43 +805,78 @@ Juliaでは、全ての値がオブジェクトですが、関数は操作対象
 または時間の経過とともに変更する必要があるかどうかを考慮します。それらが同一であると考えられる場合、
 その型は不変であるべきです。
 
-To recap, two essential properties define immutability
-in Julia:
+.. 
+  To recap, two essential properties define immutability
+  in Julia:
 
-* An object with an immutable type is passed around (both in assignment
-  statements and in function calls) by copying, whereas a mutable type is
-  passed around by reference.
+  * An object with an immutable type is passed around (both in assignment
+    statements and in function calls) by copying, whereas a mutable type is
+    passed around by reference.
 
-* It is not permitted to modify the fields of a composite immutable
-  type.
+  * It is not permitted to modify the fields of a composite immutable
+    type.
 
-It is instructive, particularly for readers whose background is C/C++, to consider
-why these two properties go hand in hand.  If they were separated,
-i.e., if the fields of objects passed around by copying could be modified,
-then it would become more difficult to reason about certain instances of generic code.  For example,
-suppose ``x`` is a function argument of an abstract type, and suppose that the function
-changes a field: ``x.isprocessed = true``.  Depending on whether ``x`` is passed by copying
-or by reference, this statement may or may not alter the actual argument in the
-calling routine.  Julia
-sidesteps the possibility of creating functions with unknown effects in this
-scenario by forbidding modification of fields
-of objects passed around by copying.
+要約すると、Juliaにおける不変性は以下2つの重要な特性により定義されています。::
 
+* 不変型のオブジェクトは、コピーによって代入文と関数呼び出しの両方で渡されますが、
+  変更可能な型は参照により渡しされます。
 
+* 不変コンポジット型のフィールドを変更することはできません。
+
+.. 
+  It is instructive, particularly for readers whose background is C/C++, to consider
+  why these two properties go hand in hand.  If they were separated,
+  i.e., if the fields of objects passed around by copying could be modified,
+  then it would become more difficult to reason about certain instances of generic code.  For example,
+  suppose ``x`` is a function argument of an abstract type, and suppose that the function
+  changes a field: ``x.isprocessed = true``.  Depending on whether ``x`` is passed by copying
+  or by reference, this statement may or may not alter the actual argument in the
+  calling routine.  Julia
+  sidesteps the possibility of creating functions with unknown effects in this
+  scenario by forbidding modification of fields
+  of objects passed around by copying.
+
+CまたはC ++のバックグラウンドを持つ読者にとっては、なぜこれらの2つのプロパティが
+連携しているのかを考えるのは有益なことです。それら2つのプロパティが分かれている場合、
+例えばコピーによって渡されたオブジェクトのフィールドが変更可能な場合、ジェネリックコードの
+特定のインスタンスを推測することはより困難になります。例えば、 ``x`` が抽象型の関数引数であり、
+関数がフィールドを変更し、 ``x.isprocessed = true`` とします。コピーまたは参照の
+どちらによって ``x`` が渡されるかに応じて、このステートメントは呼び出し側ルーチンの実際の
+引数を変更する場合と変更しない場合があります。Juliaは、コピーによって渡されたオブジェクトの
+フィールドの変更を禁止することで、このシナリオにおいて不明な効果を持つ関数を作成する可能性を回避します。
+
+.. 
 Declared Types
 --------------
 
-The three kinds of types discussed in the previous three sections
-are actually all closely related. They share the same key properties:
 
-- They are explicitly declared.
-- They have names.
-- They have explicitly declared supertypes.
-- They may have parameters.
+宣言型
+--------------
 
-Because of these shared properties, these types are internally
-represented as instances of the same concept, :obj:`DataType`, which
-is the type of any of these types:
+.. 
+  The three kinds of types discussed in the previous three sections
+  are actually all closely related. They share the same key properties:
+
+  - They are explicitly declared.
+  - They have names.
+  - They have explicitly declared supertypes.
+  - They may have parameters.
+
+前述のセクションで説明した3種類の型は、実際は全て密接に関連しています。
+それらは同じ重要な特性を共有しています。::
+
+- それらは明示的に宣言されています。
+- それらは名前を持ちます。
+- それらは明示的に上位タイプを宣言しています。
+- それらはパラメータを持つことができます。
+
+.. 
+  Because of these shared properties, these types are internally
+  represented as instances of the same concept, :obj:`DataType`, which
+  is the type of any of these types:
+
+これらの共有の特性のため、これらの型は内部的に同じコンセプトのインスタンスであり、
+３種類の型のいずれかの型である :obj:`DataType` として表されます。:: 
 
 .. doctest::
 
@@ -851,22 +886,38 @@ is the type of any of these types:
     julia> typeof(Int)
     DataType
 
-A :obj:`DataType` may be abstract or concrete. If it is concrete, it
-has a specified size, storage layout, and (optionally) field names.
-Thus a bits type is a :obj:`DataType` with nonzero size, but no field
-names. A composite type is a :obj:`DataType` that has field names or
-is empty (zero size).
+.. 
+  A :obj:`DataType` may be abstract or concrete. If it is concrete, it
+  has a specified size, storage layout, and (optionally) field names.
+  Thus a bits type is a :obj:`DataType` with nonzero size, but no field
+  names. A composite type is a :obj:`DataType` that has field names or
+  is empty (zero size).
 
-Every concrete value in the system is an instance of some :obj:`DataType`.
+:obj:`DataType` は、抽象または具体型のどちらに使用することができます。具体型の場合、指定されたサイズ、
+記憶域レイアウト、オプションでフィールド名を持ちます。したがって、ビット型は、
+サイズがゼロ以外のフィールド名を持たない :obj:`DataType` です。コンポジット型は、フィールド名を持つ、
+または空（ゼロサイズ）である :obj:`DataType` です。
 
-Type Unions
+.. 
+  Every concrete value in the system is an instance of some :obj:`DataType`.
+
+システムのあらゆる具体値は、なんらかの :obj:`DataType` のインスタンスです。
+
+.. 
+  Type Unions
+  -----------
+
+共用体
 -----------
 
-A type union is a special abstract type which includes as objects all
-instances of any of its argument types, constructed using the special
-``Union`` function::
+.. 
+  A type union is a special abstract type which includes as objects all
+  instances of any of its argument types, constructed using the special
+  ``Union`` function::
 
-    julia> IntOrString = Union{Int,AbstractString}
+共用体は特殊な抽象型であり、特殊な ``Union`` 関数を使用して構築され、引数型の全てのインスタンスをオブジェクトとして含みます。::
+
+    julia> IntOrString = Union{Int,AbstractString}
     Union{AbstractString,Int64}
 
     julia> 1 :: IntOrString
@@ -878,41 +929,69 @@ instances of any of its argument types, constructed using the special
     julia> 1.0 :: IntOrString
     ERROR: type: typeassert: expected Union{AbstractString,Int64}, got Float64
 
-The compilers for many languages have an internal union construct for
-reasoning about types; Julia simply exposes it to the programmer.
+.. 
+  The compilers for many languages have an internal union construct for
+  reasoning about types; Julia simply exposes it to the programmer.
+
+多くの言語のコンパイラには、型を推測のための内部構造がありますが、Juliaはそれをプログラマに任せています。
 
 .. _man-parametric-types:
 
+.. 
 Parametric Types
 ----------------
 
-An important and powerful feature of Julia's type system is that it is
-parametric: types can take parameters, so that type declarations
-actually introduce a whole family of new types — one for each possible
-combination of parameter values. There are many languages that support
-some version of `generic
-programming <https://en.wikipedia.org/wiki/Generic_programming>`_, wherein
-data structures and algorithms to manipulate them may be specified
-without specifying the exact types involved. For example, some form of
-generic programming exists in ML, Haskell, Ada, Eiffel, C++, Java, C#,
-F#, and Scala, just to name a few. Some of these languages support true
-parametric polymorphism (e.g. ML, Haskell, Scala), while others support
-ad-hoc, template-based styles of generic programming (e.g. C++, Java).
-With so many different varieties of generic programming and parametric
-types in various languages, we won't even attempt to compare Julia's
-parametric types to other languages, but will instead focus on
-explaining Julia's system in its own right. We will note, however, that
-because Julia is a dynamically typed language and doesn't need to make
-all type decisions at compile time, many traditional difficulties
-encountered in static parametric type systems can be relatively easily
-handled.
+パラメータ型
+----------------
 
-All declared types (the :obj:`DataType` variety) can be parameterized, with
-the same syntax in each case. We will discuss them in the following
-order: first, parametric composite types, then parametric abstract
-types, and finally parametric bits types.
+.. 
+  An important and powerful feature of Julia's type system is that it is
+  parametric: types can take parameters, so that type declarations
+  actually introduce a whole family of new types — one for each possible
+  combination of parameter values. There are many languages that support
+  some version of `generic
+  programming <https://en.wikipedia.org/wiki/Generic_programming>`_, wherein
+  data structures and algorithms to manipulate them may be specified
+  without specifying the exact types involved. For example, some form of
+  generic programming exists in ML, Haskell, Ada, Eiffel, C++, Java, C#,
+  F#, and Scala, just to name a few. Some of these languages support true
+  parametric polymorphism (e.g. ML, Haskell, Scala), while others support
+  ad-hoc, template-based styles of generic programming (e.g. C++, Java).
+  With so many different varieties of generic programming and parametric
+  types in various languages, we won't even attempt to compare Julia's
+  parametric types to other languages, but will instead focus on
+  explaining Julia's system in its own right. We will note, however, that
+  because Julia is a dynamically typed language and doesn't need to make
+  all type decisions at compile time, many traditional difficulties
+  encountered in static parametric type systems can be relatively easily
+  handled.
 
-Parametric Composite Types
+Juliaの型システムの重要かつ強力な機能は、パラメータを取ることができる点です。型はパラメータを取ることができるため、
+型宣言は新しい型の集合の導入を行います。 `汎用プログラミング <https://en.wikipedia.org/wiki/Generic_programming>`_ の
+いくつかのバージョンをサポートする多くの言語があり、
+これらの言語を操作するデータ構造とアルゴリズムは、正確な型を指定することなく指定することができます。
+例えば、ML、Haskell、Ada、Eiffel、C ++、Java、C＃、F＃、およびScalaには、
+いくつかの汎用プログラミング形式が存在します。これらの言語の中には真のパラメトリック多様型を
+サポートするもの（ML、Haskell、Scala）もあれば、一時的なテンプレートベースの汎用プログラミングの
+スタイルをサポートするもの（C++、Javaなど）もあります。様々な言語の汎用プログラミングと
+パラメータ型が多くありますが、ここではJuliaのパラメータ型と他の言語との比較はせず、
+代わりにJuliaのシステムを説明することに専念します。しかし、Juliaは動的型言語であり、
+コンパイル時に全ての型決定を行う必要がないため、静的パラメータ型システムで発生する従来の多くの問題を、比較的簡単に処理できる点は記しておきます。
+
+.. 
+  All declared types (the :obj:`DataType` variety) can be parameterized, with
+  the same syntax in each case. We will discuss them in the following
+  order: first, parametric composite types, then parametric abstract
+  types, and finally parametric bits types.
+
+全ての宣言された型（ :obj:`DataType` の派生）は、それぞれの場合に同じ構文でパラメータ化することができます。
+以下では、パラメータコンポジット型、パラメータ抽象型、パラメータビット型の順に説明します。
+
+.. 
+  Parametric Composite Types
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+パラメータコンポジット型
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. testsetup::
@@ -923,23 +1002,34 @@ Parametric Composite Types
         y::T
     end
 
-Type parameters are introduced immediately after the type name,
-surrounded by curly braces::
+.. 
+  Type parameters are introduced immediately after the type name,
+  surrounded by curly braces::
 
-    type Point{T}
+型パラメータは、中括弧で囲まれた型名の直後に挿入されます。::
+
+    type Point{T}
         x::T
         y::T
     end
 
-This declaration defines a new parametric type, ``Point{T}``, holding
-two "coordinates" of type ``T``. What, one may ask, is ``T``? Well,
-that's precisely the point of parametric types: it can be any type at
-all (or a value of any bits type, actually, although here it's clearly
-used as a type). ``Point{Float64}`` is a concrete type equivalent to the
-type defined by replacing ``T`` in the definition of ``Point`` with
-:class:`Float64`. Thus, this single declaration actually declares an
-unlimited number of types: ``Point{Float64}``, ``Point{AbstractString}``,
-``Point{Int64}``, etc. Each of these is now a usable concrete type:
+.. 
+  This declaration defines a new parametric type, ``Point{T}``, holding
+  two "coordinates" of type ``T``. What, one may ask, is ``T``? Well,
+  that's precisely the point of parametric types: it can be any type at
+  all (or a value of any bits type, actually, although here it's clearly
+  used as a type). ``Point{Float64}`` is a concrete type equivalent to the
+  type defined by replacing ``T`` in the definition of ``Point`` with
+  :class:`Float64`. Thus, this single declaration actually declares an
+  unlimited number of types: ``Point{Float64}``, ``Point{AbstractString}``,
+  ``Point{Int64}``, etc. Each of these is now a usable concrete type:
+
+この宣言は、 ``T`` 型の2つの「座標」を保持する新しいパラメータ型、 ``Point{T}`` を定義します。
+ここで、「 ``T`` とは何か？」と疑問を持つかもしれませんが、それはパラメータ型のポイントであり、
+これはどのような型、もしくはビット型の値になることができます（ここでは型として使用されています）。
+``Point{Float64}`` は、 ``Point`` の定義の ``T`` を :class:`Float64` に置き換えて定義した型に相当する具体型です。
+したがって、この1つの宣言は、実際には ``Point{Float64}`` 、 ``Point{AbstractString}`` および
+``Point{Int64}`` など、無制限の数の型を宣言します。それぞれは現在、使用可能な具体型です。::
 
 .. doctest::
 
@@ -949,20 +1039,28 @@ unlimited number of types: ``Point{Float64}``, ``Point{AbstractString}``,
     julia> Point{AbstractString}
     Point{AbstractString}
 
+..
 The type ``Point{Float64}`` is a point whose coordinates are 64-bit
 floating-point values, while the type ``Point{AbstractString}`` is a "point"
 whose "coordinates" are string objects (see :ref:`man-strings`).
 However, ``Point`` itself is also a valid type object:
+
+``Point{Float64}`` 型は座標が64ビットの浮動小数点値であり、一方で ``Point{AbstractString}`` 型は
+「座標」が文字列オブジェクト（ :ref:`man-文字列` を参照）です。しかし、 ``Point`` 自体も有効な型オブジェクトです。::
 
 .. doctest::
 
     julia> Point
     Point{T}
 
-Here the ``T`` is the dummy type symbol used in the original declaration
-of ``Point``. What does ``Point`` by itself mean? It is a type
-that contains all the specific instances ``Point{Float64}``,
-``Point{AbstractString}``, etc.:
+.. 
+  Here the ``T`` is the dummy type symbol used in the original declaration
+  of ``Point``. What does ``Point`` by itself mean? It is a type
+  that contains all the specific instances ``Point{Float64}``,
+  ``Point{AbstractString}``, etc.:
+
+ここでの ``T`` は ``Point`` のオリジナルの宣言で使用されたダミーの型シンボルです。 ``Point`` 自体は、
+全ての特定のインスタンス ``Point{Float64}`` 、 ``Point{AbstractString}`` などを含む型です。:: 
 
 .. doctest::
 
@@ -972,7 +1070,10 @@ that contains all the specific instances ``Point{Float64}``,
     julia> Point{AbstractString} <: Point
     true
 
-Other types, of course, are not subtypes of it:
+.. 
+  Other types, of course, are not subtypes of it:
+
+もちろん、他の型は「Point」のサブタイプではありません。::
 
 .. doctest::
 
@@ -982,8 +1083,11 @@ Other types, of course, are not subtypes of it:
     julia> AbstractString <: Point
     false
 
-Concrete ``Point`` types with different values of ``T`` are never
-subtypes of each other:
+.. 
+  Concrete ``Point`` types with different values of ``T`` are never
+  subtypes of each other:
+
+``T`` の値が異なる具体型 ``Point`` は、決してお互いのサブタイプではありません。::
 
 .. doctest::
 
@@ -993,36 +1097,62 @@ subtypes of each other:
     julia> Point{Float64} <: Point{Real}
     false
 
+.. 
 This last point is very important:
 
-- **Even though** ``Float64 <: Real`` **we DO NOT have**
-  ``Point{Float64} <: Point{Real}``\ **.**
+  - **Even though** ``Float64 <: Real`` **we DO NOT have**
+    ``Point{Float64} <: Point{Real}``\ **.**
 
-In other words, in the parlance of type theory, Julia's type parameters
-are *invariant*, rather than being covariant (or even contravariant).
-This is for practical reasons: while any instance of ``Point{Float64}``
-may conceptually be like an instance of ``Point{Real}`` as well, the two
-types have different representations in memory:
+この最後の点は非常に重要です。
 
--  An instance of ``Point{Float64}`` can be represented compactly and
-   efficiently as an immediate pair of 64-bit values;
--  An instance of ``Point{Real}`` must be able to hold any pair of
-   instances of :obj:`Real`. Since objects that are instances of :obj:`Real`
-   can be of arbitrary size and structure, in practice an instance of
-   ``Point{Real}`` must be represented as a pair of pointers to
-   individually allocated :obj:`Real` objects.
+- **たとえ** ``Float64 <: Real`` **we の場合でも、以下とはなりません。**
+  ``Point{Float64} <: Point{Real}``\ **.**  
 
-The efficiency gained by being able to store ``Point{Float64}`` objects
-with immediate values is magnified enormously in the case of arrays: an
-``Array{Float64}`` can be stored as a contiguous memory block of 64-bit
-floating-point values, whereas an ``Array{Real}`` must be an array of
-pointers to individually allocated :obj:`Real` objects — which may well be
-`boxed <https://en.wikipedia.org/wiki/Object_type_%28object-oriented_programming%29#Boxing>`_
-64-bit floating-point values, but also might be arbitrarily large,
-complex objects, which are declared to be implementations of the
-:obj:`Real` abstract type.
+.. 
+  In other words, in the parlance of type theory, Julia's type parameters
+  are *invariant*, rather than being covariant (or even contravariant).
+  This is for practical reasons: while any instance of ``Point{Float64}``
+  may conceptually be like an instance of ``Point{Real}`` as well, the two
+  types have different representations in memory:
 
-Since ``Point{Float64}`` is not a subtype of ``Point{Real}``, the following method can't be applied to arguments of type ``Point{Float64}``::
+  -  An instance of ``Point{Float64}`` can be represented compactly and
+     efficiently as an immediate pair of 64-bit values;
+  -  An instance of ``Point{Real}`` must be able to hold any pair of
+     instances of :obj:`Real`. Since objects that are instances of :obj:`Real`
+     can be of arbitrary size and structure, in practice an instance of
+     ``Point{Real}`` must be represented as a pair of pointers to
+     individually allocated :obj:`Real` objects.
+
+言い換えれば、型理論的な言い回しにおいて、Juliaの型パラメータは、共変（または反変）ではなく、
+むしろ不変です。これは実用的な理由によるものです。 ``Point{Float64}`` のインスタンスは概念的には
+``Point{Real}`` のインスタンスのようなものかもしれませんが、一方で2つの型はメモリ内で異なる表現を持ちます。::
+
+-  ``Point{Float64}`` のインスタンスは、64ビット値の直接のペアとしてコンパクトかつ効率的に表現できます。
+-  ``Point{Real}`` のインスタンスは、 :obj:`Real` のインスタンスのペアを保持できる必要があります。
+   :obj:`Real` のインスタンスであるオブジェクトは任意のサイズと構造にできるため、 ``Point{Real}`` のインスタンスは
+    個別に割り当てられた :obj:`Real` オブジェクトのポインタのペアとして表現されなければなりません。
+
+.. 
+  The efficiency gained by being able to store ``Point{Float64}`` objects
+  with immediate values is magnified enormously in the case of arrays: an
+  ``Array{Float64}`` can be stored as a contiguous memory block of 64-bit
+  floating-point values, whereas an ``Array{Real}`` must be an array of
+  pointers to individually allocated :obj:`Real` objects — which may well be
+  `boxed <https://en.wikipedia.org/wiki/Object_type_%28object-oriented_programming%29#Boxing>`_
+  64-bit floating-point values, but also might be arbitrarily large,
+  complex objects, which are declared to be implementations of the
+  :obj:`Real` abstract type.
+
+``Point{Float64}`` オブジェクトを直接の値と格納できることによって得られる効率性は、配列の場合に最大化します。
+``Array{Float64}`` は64ビット浮動小数点値の連続したメモリブロックとして格納できますが、 ``Array{Real}`` は
+個別に割り当てられた :obj:`Real` オブジェクトへのポインタの配列でなければなりません。
+個別に割り当てられた :obj:`Real` オブジェクトは、64ビット浮動小数点値の集まりであることもできますが、
+:obj:`Real` 抽象型の実装であると宣言されている任意に大きな複雑なオブジェクトであることもできます。
+
+.. 
+  Since ``Point{Float64}`` is not a subtype of ``Point{Real}``, the following method can't be applied to arguments of type ``Point{Float64}``::
+
+``Point{Float64}`` は ``Point{Real}`` のサブタイプではないため、 ``Point{Float64}`` 型の引数に次のメソッドを適用することはできません。::
 
     function norm(p::Point{Real})
        sqrt(p.x^2 + p.y^2)
