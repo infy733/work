@@ -341,32 +341,47 @@ REPLでは、現在型宣言はグローバルスコープでは使用できま�
 これは :obj:`Any` とは正反対です。いかなるオブジェクトは ``Union{}`` のインスタンスではなく、
 全ての型は ``Union{}`` の上位タイプとなります。
 
-Let's consider some of the abstract types that make up Julia's numerical
-hierarchy::
+.. 
+  Let's consider some of the abstract types that make up Julia's numerical
+  hierarchy::
 
-    abstract Number
+Juliaの数値階層を構成するいくつかの抽象型を考えてみましょう。::
+
+    abstract Number
     abstract Real     <: Number
     abstract AbstractFloat <: Real
     abstract Integer  <: Real
     abstract Signed   <: Integer
     abstract Unsigned <: Integer
 
-The :obj:`Number` type is a direct child type of :obj:`Any`, and :obj:`Real` is
-its child. In turn, :obj:`Real` has two children (it has more, but only two
-are shown here; we'll get to the others later): :class:`Integer` and
-:class:`AbstractFloat`, separating the world into representations of integers and
-representations of real numbers. Representations of real numbers
-include, of course, floating-point types, but also include other types,
-such as rationals. Hence, :class:`AbstractFloat` is a proper subtype of
-:obj:`Real`, including only floating-point representations of real numbers.
-Integers are further subdivided into :obj:`Signed` and :obj:`Unsigned`
-varieties.
+.. 
+  The :obj:`Number` type is a direct child type of :obj:`Any`, and :obj:`Real` is
+  its child. In turn, :obj:`Real` has two children (it has more, but only two
+  are shown here; we'll get to the others later): :class:`Integer` and
+  :class:`AbstractFloat`, separating the world into representations of integers and
+  representations of real numbers. Representations of real numbers
+  include, of course, floating-point types, but also include other types,
+  such as rationals. Hence, :class:`AbstractFloat` is a proper subtype of
+  :obj:`Real`, including only floating-point representations of real numbers.
+  Integers are further subdivided into :obj:`Signed` and :obj:`Unsigned`
+  varieties.
 
-The ``<:`` operator in general means "is a subtype of", and, used in
-declarations like this, declares the right-hand type to be an immediate
-supertype of the newly declared type. It can also be used in expressions
-as a subtype operator which returns ``true`` when its left operand is a
-subtype of its right operand:
+:obj:`Number` 型は :obj:`Any` の直接的な子の型であり、 :obj:`Real` はその子です。次に、 :obj:`Real` は2つの子をとります
+（実際にはもっとありますが、その他の子については別の場所で説明します）。 :class:`Integer` 、 :class:`AbstractFloat` が
+それに当たります。これらは世界を整数の表現と実数の表現に分けます。実数の表現には、もちろん浮動小数点型が含まれますが、
+有理数のような他の型も含まれます。したがって、 :class:`AbstractFloat` は、実数の浮動小数点表現だけを含む、
+:obj:`Real` の適切なサブタイプです。整数はさらに :obj:`Signed` および :obj:`Unsigned` に細分化されます。
+
+.. 
+  The ``<:`` operator in general means "is a subtype of", and, used in
+  declarations like this, declares the right-hand type to be an immediate
+  supertype of the newly declared type. It can also be used in expressions
+  as a subtype operator which returns ``true`` when its left operand is a
+  subtype of its right operand:
+
+``<:`` 演算子は一般的には「〜は〜のサブタイプ」を意味し、右側の型は新しく宣言された型の直接の
+上位タイプであることを宣言する場合などに使用されます。また、左辺の被演算子が右辺の被演算子の
+サブタイプである場合に ``true`` を返すサブタイプ演算子としての式で使用することもできます。::
 
 .. doctest::
 
@@ -376,52 +391,87 @@ subtype of its right operand:
     julia> Integer <: AbstractFloat
     false
 
-An important use of abstract types is to provide default implementations for
-concrete types. To give a simple example, consider::
+.. 
+  An important use of abstract types is to provide default implementations for
+  concrete types. To give a simple example, consider::
+
+抽象型の重要な用途は、具体型のデフォルトの実装を提供することです。簡単な例を挙げてみましょう。::
 
     function myplus(x,y)
         x+y
     end
 
-The first thing to note is that the above argument declarations are equivalent
-to ``x::Any`` and ``y::Any``. When this function is invoked, say as
-``myplus(2,5)``, the dispatcher chooses the most specific method named
-``myplus`` that matches the given arguments. (See :ref:`man-methods` for more
-information on multiple dispatch.)
+.. 
+  The first thing to note is that the above argument declarations are equivalent
+  to ``x::Any`` and ``y::Any``. When this function is invoked, say as
+  ``myplus(2,5)``, the dispatcher chooses the most specific method named
+  ``myplus`` that matches the given arguments. (See :ref:`man-methods` for more
+  information on multiple dispatch.)
 
-Assuming no method more specific than the above is found, Julia next internally
-defines and compiles a method called ``myplus`` specifically for two :class:`Int`
-arguments based on the generic function given above, i.e., it implicitly
-defines and compiles::
+最初の注意点は、上記の引数の宣言は ``x::Any`` および ``y::Any`` と同等であるということです。
+例えばこの関数が ``myplus(2,5)`` として呼び出されると、ディスパッチャは指定された引数に一致する
+特定のメソッド ``myplus`` を選択します。多重ディスパッチに関する詳細は :ref:`man-メソッド` を参照してください。
+
+.. 
+  Assuming no method more specific than the above is found, Julia next internally
+  defines and compiles a method called ``myplus`` specifically for two :class:`Int`
+  arguments based on the generic function given above, i.e., it implicitly
+  defines and compiles::
+
+上記よりも明確なメソッドが見つからないケースを仮定すると、Juliaは内部的に上記の汎用関数に基づいて、
+2つの :class:`Int` 引数に対して ``myplus`` というメソッドを内部的に定義してコンパイルします。
+言い換えれば、暗黙的に定義しコンパイルします。::
 
     function myplus(x::Int,y::Int)
         x+y
     end
 
-and finally, it invokes this specific method.
+.. 
+  and finally, it invokes this specific method.
 
-Thus, abstract types allow programmers to write generic functions that can
-later be used as the default method by many combinations of concrete types.
-Thanks to multiple dispatch, the programmer has full control over whether the
-default or more specific method is used.
+最終的に、この特定のメソッドを呼び出します。
 
-An important point to note is that there is no loss in performance if the
-programmer relies on a function whose arguments are abstract types, because it
-is recompiled for each tuple of argument concrete types with which it is
-invoked. (There may be a performance issue, however, in the case of function
-arguments that are containers of abstract types; see :ref:`man-performance-tips`.)
+.. 
+  Thus, abstract types allow programmers to write generic functions that can
+  later be used as the default method by many combinations of concrete types.
+  Thanks to multiple dispatch, the programmer has full control over whether the
+  default or more specific method is used.
 
+したがって、抽象型を使用することで、プログラマは後にデフォルトのメソッドとして使用できる汎用関数を
+具体型の組み合わせにより記述できます。多重ディスパッチのおかげで、プログラマは、デフォルトのメソッドまたは
+特定のメソッドを使用するかどうかを完全に制御することができます。
 
-Bits Types
+.. 
+  An important point to note is that there is no loss in performance if the
+  programmer relies on a function whose arguments are abstract types, because it
+  is recompiled for each tuple of argument concrete types with which it is
+  invoked. (There may be a performance issue, however, in the case of function
+  arguments that are containers of abstract types; see :ref:`man-performance-tips`.)
+
+注意すべき重要な点は、どれが呼び出されるかという引数の具体型の各チュープルに対して再コンパイルされるため、
+プログラマが引数が抽象型である関数に依存した場合、パフォーマンスに損失がないことです。
+しかし、抽象型のコンテナである関数の引数の場合は、パフォーマンスの問題がある可能性があります。
+詳細は :ref:`man-パフォーマスの助言` を参照してください。
+
+.. 
+  Bits Types
+  ----------
+
+ビット型
 ----------
 
-A bits type is a concrete type whose data consists of plain old bits.
-Classic examples of bits types are integers and floating-point values.
-Unlike most languages, Julia lets you declare your own bits types,
-rather than providing only a fixed set of built-in bits types. In fact,
-the standard bits types are all defined in the language itself::
+.. 
+  A bits type is a concrete type whose data consists of plain old bits.
+  Classic examples of bits types are integers and floating-point values.
+  Unlike most languages, Julia lets you declare your own bits types,
+  rather than providing only a fixed set of built-in bits types. In fact,
+  the standard bits types are all defined in the language itself::
 
-    bitstype 16 Float16 <: AbstractFloat
+ビット型は、データが平易な古いビットで構成される具象型です。ビット型の古典的な例は、整数と浮動小数点値です。
+多くの言語とは異なり、Juliaでは、固定的なビルトインのビット型のみを提供するのではなく、
+オリジナルのビット型を宣言することができます。実際、標準のビット型はすべて言語自体に定義されています。::
+
+    bitstype 16 Float16 <: AbstractFloat
     bitstype 32 Float32 <: AbstractFloat
     bitstype 64 Float64 <: AbstractFloat
 
@@ -439,70 +489,119 @@ the standard bits types are all defined in the language itself::
     bitstype 128 Int128  <: Signed
     bitstype 128 UInt128 <: Unsigned
 
-The general syntaxes for declaration of a ``bitstype`` are::
+.. 
+  The general syntaxes for declaration of a ``bitstype`` are::
 
-    bitstype «bits» «name»
+``bitstype`` の宣言の一般的な構文は次の通りです。::
+
+    bitstype «bits» «name»
     bitstype «bits» «name» <: «supertype»
 
-The number of bits indicates how much storage the type requires and the
-name gives the new type a name. A bits type can optionally be declared
-to be a subtype of some supertype. If a supertype is omitted, then the
-type defaults to having :obj:`Any` as its immediate supertype. The
-declaration of :obj:`Bool` above therefore means that a boolean value takes
-eight bits to store, and has :class:`Integer` as its immediate supertype.
-Currently, only sizes that are multiples of 8 bits are supported.
-Therefore, boolean values, although they really need just a single bit,
-cannot be declared to be any smaller than eight bits.
+.. 
+  The number of bits indicates how much storage the type requires and the
+  name gives the new type a name. A bits type can optionally be declared
+  to be a subtype of some supertype. If a supertype is omitted, then the
+  type defaults to having :obj:`Any` as its immediate supertype. The
+  declaration of :obj:`Bool` above therefore means that a boolean value takes
+  eight bits to store, and has :class:`Integer` as its immediate supertype.
+  Currently, only sizes that are multiples of 8 bits are supported.
+  Therefore, boolean values, although they really need just a single bit,
+  cannot be declared to be any smaller than eight bits.
 
-The types :obj:`Bool`, :class:`Int8` and :class:`UInt8` all have identical
-representations: they are eight-bit chunks of memory. Since Julia's type
-system is nominative, however, they are not interchangeable despite
-having identical structure. Another fundamental difference between them
-is that they have different supertypes: :obj:`Bool`'s direct supertype is
-:class:`Integer`, :class:`Int8`'s is :obj:`Signed`, and :class:`UInt8`'s is :obj:`Unsigned`.
-All other differences between :obj:`Bool`, :class:`Int8`, and :class:`UInt8` are
-matters of behavior — the way functions are defined to act when given
-objects of these types as arguments. This is why a nominative type
-system is necessary: if structure determined type, which in turn
-dictates behavior, then it would be impossible to make :obj:`Bool` behave any
-differently than :class:`Int8` or :class:`UInt8`.
+ビット数は、型が必要とするストレージの量を示し、nameは新しい型に名前を与えます。
+ビット型は、オプションで上位タイプのサブタイプとして宣言することができます。
+上位タイプが省略されている場合、その型のデフォルトは、直接の上位タイプとして :obj:`Any` を持ちます。
+したがって、上記の :obj:`Bool` の宣言は、ブール値は格納するのに8ビットを要し、
+:class:`Integer` を直接の上位タイプとして持つことを意味します。現在、8ビットの倍数であるサイズのみ
+サポートされています。したがって、ブール値は実際には1ビットのみ必要ですが、
+8ビットより小さく宣言することはできません。
+
+.. 
+  The types :obj:`Bool`, :class:`Int8` and :class:`UInt8` all have identical
+  representations: they are eight-bit chunks of memory. Since Julia's type
+  system is nominative, however, they are not interchangeable despite
+  having identical structure. Another fundamental difference between them
+  is that they have different supertypes: :obj:`Bool`'s direct supertype is
+  :class:`Integer`, :class:`Int8`'s is :obj:`Signed`, and :class:`UInt8`'s is :obj:`Unsigned`.
+  All other differences between :obj:`Bool`, :class:`Int8`, and :class:`UInt8` are
+  matters of behavior — the way functions are defined to act when given
+  objects of these types as arguments. This is why a nominative type
+  system is necessary: if structure determined type, which in turn
+  dictates behavior, then it would be impossible to make :obj:`Bool` behave any
+  differently than :class:`Int8` or :class:`UInt8`.
+
+:obj:`Bool` 、 :class:`Int8` および :class:`UInt8` は全て同じ表現を持ち、8ビットのメモリの固まりです。
+しかし、Juliaの型システムは名目上のものであるため、同じ構造を持っていても互換性はありません。
+もう一つの根本的な違いは、それぞれが異なる上位タイプを持つ点です。 :obj:`Bool` の直接的な上位タイプは :class:`Integer` 、
+:class:`Int8` では :obj:`Signed` 、 :class:`UInt8` の直接的な上位タイプは :obj:`Unsigned` となります。
+:obj:`Bool` 、 :class:`Int8` および :class:`UInt8` の間のその他の違いは全て、動作（引数としての型のオブジェクトが
+与えられた際にどのように動作するか定義される方法）の問題です。これは、名目上の型システムが必要な理由です。
+もし構造体が型を決定し、それが振る舞いを定義する場合、 :obj:`Bool` を :class:`Int8` や :class:`UInt8` とは
+異なるように動作させることは不可能です。
 
 .. _man-composite-types:
 
-Composite Types
+.. 
+  Composite Types
+  ---------------
+
+コンポジット型
 ---------------
 
-`Composite types <https://en.wikipedia.org/wiki/Composite_data_type>`_
-are called records, structures (``struct``\ s in C), or objects in various
-languages. A composite type is a collection of named fields, an instance
-of which can be treated as a single value. In many languages, composite
-types are the only kind of user-definable type, and they are by far the
-most commonly used user-defined type in Julia as well.
+.. 
+  `Composite types <https://en.wikipedia.org/wiki/Composite_data_type>`_
+  are called records, structures (``struct``\ s in C), or objects in various
+  languages. A composite type is a collection of named fields, an instance
+  of which can be treated as a single value. In many languages, composite
+  types are the only kind of user-definable type, and they are by far the
+  most commonly used user-defined type in Julia as well.
 
-In mainstream
-object oriented languages, such as C++, Java, Python and Ruby, composite
-types also have named functions associated with them, and the
-combination is called an "object". In purer object-oriented languages,
-such as Ruby or Smalltalk, all values are objects whether they are
-composites or not. In less pure object oriented languages, including C++
-and Java, some values, such as integers and floating-point values, are
-not objects, while instances of user-defined composite types are true
-objects with associated methods. In Julia, all values are objects,
-but functions are not bundled with the objects they
-operate on. This is necessary since Julia chooses which method of a
-function to use by multiple dispatch, meaning that the types of *all* of
-a function's arguments are considered when selecting a method, rather
-than just the first one (see :ref:`man-methods` for more
-information on methods and dispatch). Thus, it would be inappropriate
-for functions to "belong" to only their first argument. Organizing
-methods into function objects rather than having
-named bags of methods "inside" each object ends up being a highly
-beneficial aspect of the language design.
+`コンポジット型 <https://en.wikipedia.org/wiki/Composite_data_type>`_ は、様々な言語ではレコード、
+構造体（C言語では ``struct`` ）、またはオブジェクトと呼ばれています。
+コンポジット型は、名前付きフィールドのコレクションであり、インスタンスは1つの値として扱うことができます。
+多くの言語では、コンポジット型はユーザ定義可能な唯一の型であり、Juliaでも最も一般的に使用されるユーザ定義可能な型です。
 
-Since composite types are the most common form of user-defined concrete
-type, they are simply introduced with the ``type`` keyword followed by a
-block of field names, optionally annotated with types using the ``::``
-operator:
+.. 
+  In mainstream
+  object oriented languages, such as C++, Java, Python and Ruby, composite
+  types also have named functions associated with them, and the
+  combination is called an "object". In purer object-oriented languages,
+  such as Ruby or Smalltalk, all values are objects whether they are
+  composites or not. In less pure object oriented languages, including C++
+  and Java, some values, such as integers and floating-point values, are
+  not objects, while instances of user-defined composite types are true
+  objects with associated methods. In Julia, all values are objects,
+  but functions are not bundled with the objects they
+  operate on. This is necessary since Julia chooses which method of a
+  function to use by multiple dispatch, meaning that the types of *all* of
+  a function's arguments are considered when selecting a method, rather
+  than just the first one (see :ref:`man-methods` for more
+  information on methods and dispatch). Thus, it would be inappropriate
+  for functions to "belong" to only their first argument. Organizing
+  methods into function objects rather than having
+  named bags of methods "inside" each object ends up being a highly
+  beneficial aspect of the language design.
+
+C++、Java、Python、Rubyなどの主流なオブジェクト指向言語では、コンポジット型にもそれらに関連付けられた
+名前付き関数があり、その組み合わせを「オブジェクト」と呼びます。RubyやSmalltalkのようなより純粋な
+オブジェクト指向言語では、全ての値はコンポジットであろうとなかろうとオブジェクトです。
+C++やJavaなどの純粋ではないオブジェクト指向言語では、整数や浮動小数点値などの一部の値はオブジェクトではなく、
+一方でユーザー定義のコンポジット型のインスタンスは、関連するメソッドを持つ真のオブジェクトです。
+Juliaでは、全ての値がオブジェクトですが、関数は操作対象のオブジェクトに拘束されません。
+これは、Juliaが多重ディスパッチによりどの関数のメソッドを使用するのか選択するため必要となります。
+これは、最初のものだけでなく、メソッドを選択するときに関数の引数の全ての型が考慮されることを意味します
+（メソッドおよびディスパッチの詳細については :ref:`man-メソッド` を参照してください）。したがって、
+関数が最初の引数だけに属すことは不適切です。各オブジェクトの「内部」に名前のついたバッグを持たせるのではなく、
+メソッドを関数オブジェクトに構成することは、言語設計において非常に有益な側面になります。
+
+.. 
+  Since composite types are the most common form of user-defined concrete
+  type, they are simply introduced with the ``type`` keyword followed by a
+  block of field names, optionally annotated with types using the ``::``
+  operator:
+
+コンポジット型はユーザー定義の具体型の最も一般的な形式であるため、フィールド名のブロックが続く
+``type`` キーワードにより宣言され、オプションで ``::`` 演算子を使用する型の注釈を付けることができます。::
 
 .. doctest::
 
@@ -512,11 +611,18 @@ operator:
                qux::Float64
            end
 
-Fields with no type annotation default to :obj:`Any`, and can accordingly
-hold any type of value.
+.. 
+  Fields with no type annotation default to :obj:`Any`, and can accordingly
+  hold any type of value.
 
-New objects of composite type ``Foo`` are created by applying the
-``Foo`` type object like a function to values for its fields:
+型注釈のないフィールドは、デフォルトで :obj:`Any` となり、任意の型の値を保持することができます。
+
+.. 
+  New objects of composite type ``Foo`` are created by applying the
+  ``Foo`` type object like a function to values for its fields:
+
+コンポジット型 ``Foo`` の新しいオブジェクトは、フィールドの値に対する関数のような ``Foo`` 型オブジェクトを
+適用することで作成されます。::
 
 .. doctest::
 
@@ -526,16 +632,27 @@ New objects of composite type ``Foo`` are created by applying the
     julia> typeof(foo)
     Foo
 
-When a type is applied like a function it is called a *constructor*.
-Two constructors are generated automatically (these are called *default
-constructors*). One accepts any arguments and calls :func:`convert` to convert
-them to the types of the fields, and the other accepts arguments that
-match the field types exactly. The reason both of these are generated is
-that this makes it easier to add new definitions without inadvertently
-replacing a default constructor.
+.. 
+  When a type is applied like a function it is called a *constructor*.
+  Two constructors are generated automatically (these are called *default
+  constructors*). One accepts any arguments and calls :func:`convert` to convert
+  them to the types of the fields, and the other accepts arguments that
+  match the field types exactly. The reason both of these are generated is
+  that this makes it easier to add new definitions without inadvertently
+  replacing a default constructor.
 
-Since the ``bar`` field is unconstrained in type, any value will do.
-However, the value for ``baz`` must be convertible to :class:`Int`:
+型が関数のように適用される場合、型はコンストラクタと呼ばれます。2つのコンストラクタは自動的に生成されます
+（これらはデフォルトコンストラクタと呼ばれます）。1つはどのような引数も取り、
+:func:`convert` を呼び出してフィールドの型に変換します。もう1つはフィールドの型に完全に一致する引数を取ります。
+これらの両方が生成される理由は、これにより、不注意にデフォルトのコンストラクタを置き換えることなく、
+新しい定義を追加することが容易になるためです。
+
+.. 
+  Since the ``bar`` field is unconstrained in type, any value will do.
+  However, the value for ``baz`` must be convertible to :class:`Int`:
+
+``bar`` フィールドは型に制限されていないため、どのような値でも対応できます。
+しかし、 ``baz`` の値は :class:`Int` に変換可能でなければなりません。::
 
 .. doctest::
 
@@ -544,7 +661,10 @@ However, the value for ``baz`` must be convertible to :class:`Int`:
      in Foo(::Tuple{}, ::Float64, ::Int64) at ./none:2
      ...
 
-You may find a list of field names using the ``fieldnames`` function.
+.. 
+  You may find a list of field names using the ``fieldnames`` function.
+
+``fieldnames`` 関数を使用することで、フィールド名のリストを取得することができます。
 
 .. doctest::
 
