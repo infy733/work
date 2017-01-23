@@ -88,23 +88,23 @@ Juliaの型システムは動的ですが、ある特定の値はある特定の
 Juliaの型システムの他のハイレベルな側面は、以下の通りです。::
 
 .. 
- -  There is no division between object and non-object values: all values
-    in Julia are true objects having a type that belongs to a single,
-    fully connected type graph, all nodes of which are equally
-    first-class as types.
- -  There is no meaningful concept of a "compile-time type": the only
-    type a value has is its actual type when the program is running. This
-    is called a "run-time type" in object-oriented languages where the
-    combination of static compilation with polymorphism makes this
-    distinction significant.
- -  Only values, not variables, have types — variables are simply names
-    bound to values.
- -  Both abstract and concrete types can be parameterized by other types.
-    They can also be parameterized by symbols, by values of any type for
-    which :func:`isbits` returns true (essentially, things like numbers and bools
-    that are stored like C types or structs with no pointers to other objects),
-    and also by tuples thereof. Type parameters may be omitted when they
-    do not need to be referenced or restricted.
+   -  There is no division between object and non-object values: all values
+      in Julia are true objects having a type that belongs to a single,
+      fully connected type graph, all nodes of which are equally
+      first-class as types.
+   -  There is no meaningful concept of a "compile-time type": the only
+      type a value has is its actual type when the program is running. This
+      is called a "run-time type" in object-oriented languages where the
+      combination of static compilation with polymorphism makes this
+      distinction significant.
+   -  Only values, not variables, have types — variables are simply names
+      bound to values.
+   -  Both abstract and concrete types can be parameterized by other types.
+      They can also be parameterized by symbols, by values of any type for
+      which :func:`isbits` returns true (essentially, things like numbers and bools
+      that are stored like C types or structs with no pointers to other objects),
+      and also by tuples thereof. Type parameters may be omitted when they
+      do not need to be referenced or restricted.
 
 -  オブジェクトの値と非オブジェクトの値には違いがありません。Juliaの全ての値は、
    接続された1つの型グラフに属する型を持つオブジェクトであり、全てのノードが同様に第1級の型です。
