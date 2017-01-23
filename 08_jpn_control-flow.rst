@@ -531,10 +531,15 @@ C、MATLAB、Perl、Python、Rubyと異なり、しかしJavaやその他の厳�
     2
     true
 
-Just like condition expressions used in ``if``, ``elseif`` or the
-ternary operator, the operands of ``&&`` or ``||`` must be boolean
-values (``true`` or ``false``). Using a non-boolean value anywhere
-except for the last entry in a conditional chain is an error:
+.. 
+  Just like condition expressions used in ``if``, ``elseif`` or the
+  ternary operator, the operands of ``&&`` or ``||`` must be boolean
+  values (``true`` or ``false``). Using a non-boolean value anywhere
+  except for the last entry in a conditional chain is an error:
+
+``if`` 、 ``elseif`` または三項演算子で使用される条件式と同様に、 ``&&`` または ``||`` の被演算子は
+ブール値（ ``true`` または ``false`` ）である必要があります。条件付き連結の最後のエントリを除き、
+非ブール値を使用した場合はエラーとなります。::
 
 .. doctest::
 
@@ -542,8 +547,11 @@ except for the last entry in a conditional chain is an error:
     ERROR: TypeError: non-boolean (Int64) used in boolean context
      ...
 
-On the other hand, any type of expression can be used at the end of a conditional chain.
-It will be evaluated and returned depending on the preceding conditionals:
+.. 
+  On the other hand, any type of expression can be used at the end of a conditional chain.
+  It will be evaluated and returned depending on the preceding conditionals:
+
+一方で、条件付き連結の終わりには、任意の型の式を使用できます。これは、前の条件に応じて評価され、結果が返されます。::
 
 .. testsetup::
 
@@ -561,12 +569,19 @@ It will be evaluated and returned depending on the preceding conditionals:
 
 .. _man-loops:
 
-Repeated Evaluation: Loops
+.. 
+  Repeated Evaluation: Loops
+  --------------------------
+
+繰り返し評価：ループ
 --------------------------
 
-There are two constructs for repeated evaluation of expressions: the
-``while`` loop and the ``for`` loop. Here is an example of a ``while``
-loop:
+.. 
+  There are two constructs for repeated evaluation of expressions: the
+  ``while`` loop and the ``for`` loop. Here is an example of a ``while``
+  loop:
+
+式の繰り返し評価には、 ``while`` ループと ``for`` ループの2つの方法があります。以下は ``while`` ループの例となります。::
 
 .. doctest::
 
@@ -582,14 +597,22 @@ loop:
     4
     5
 
-The ``while`` loop evaluates the condition expression (``i <= 5`` in this
-case), and as long it remains ``true``, keeps also evaluating the body
-of the ``while`` loop. If the condition expression is ``false`` when the
-``while`` loop is first reached, the body is never evaluated.
+.. 
+  The ``while`` loop evaluates the condition expression (``i <= 5`` in this
+  case), and as long it remains ``true``, keeps also evaluating the body
+  of the ``while`` loop. If the condition expression is ``false`` when the
+  ``while`` loop is first reached, the body is never evaluated.
 
-The ``for`` loop makes common repeated evaluation idioms easier to
-write. Since counting up and down like the above ``while`` loop does is
-so common, it can be expressed more concisely with a ``for`` loop:
+``while`` ループは条件式を評価し（上記の場合は ``i <= 5`` ）、結果が ``true`` である限り ``while`` ループの
+本文を評価します。 ``while`` ループの最初の評価の際に、条件式の結果が ``false`` の場合、本文は評価されません。
+
+.. 
+  The ``for`` loop makes common repeated evaluation idioms easier to
+  write. Since counting up and down like the above ``while`` loop does is
+  so common, it can be expressed more concisely with a ``for`` loop:
+
+``for`` ループは、共通の繰り返し評価文を書きやすくします。上記の ``while`` ループのように、
+カウントダウンおよびカウントダウンは頻繁に使用するため、 ``for`` ループを使用することで簡潔に表現できます。::
 
 .. doctest::
 
@@ -602,15 +625,23 @@ so common, it can be expressed more concisely with a ``for`` loop:
     4
     5
 
-Here the ``1:5`` is a ``Range`` object, representing the sequence of
-numbers 1, 2, 3, 4, 5. The ``for`` loop iterates through these values,
-assigning each one in turn to the variable ``i``. One rather important
-distinction between the previous ``while`` loop form and the ``for``
-loop form is the scope during which the variable is visible. If the
-variable ``i`` has not been introduced in an other scope, in the ``for``
-loop form, it is visible only inside of the ``for`` loop, and not
-afterwards. You'll either need a new interactive session instance or a
-different variable name to test this:
+.. 
+  Here the ``1:5`` is a ``Range`` object, representing the sequence of
+  numbers 1, 2, 3, 4, 5. The ``for`` loop iterates through these values,
+  assigning each one in turn to the variable ``i``. One rather important
+  distinction between the previous ``while`` loop form and the ``for``
+  loop form is the scope during which the variable is visible. If the
+  variable ``i`` has not been introduced in an other scope, in the ``for``
+  loop form, it is visible only inside of the ``for`` loop, and not
+  afterwards. You'll either need a new interactive session instance or a
+  different variable name to test this:
+
+ここでは、 ``1:5`` は ``Range`` オブジェクトであり、一連の数字1、2、3、4、5を表します。
+``for`` ループはこれらの値を繰り返し処理し、それぞれを変数 ``i`` に順番に割り当てます。
+前述の ``while`` ループ形式と ``for`` ループ形式の重要な違いの1つは、
+どの変数が表示されるかというスコープです。変数 ``i`` が他のスコープで定義されていない場合、
+``for`` ループ形式では ``for`` ループの内部でのみ表示され、その後は表示されません。
+これをテストするには、新しい対話型セッションインスタンスまたは別の変数名が必要となります。::
 
 .. doctest::
 
@@ -627,13 +658,21 @@ different variable name to test this:
     ERROR: UndefVarError: j not defined
      ...
 
-See :ref:`man-variables-and-scoping` for a detailed
-explanation of variable scope and how it works in Julia.
+.. 
+  See :ref:`man-variables-and-scoping` for a detailed
+  explanation of variable scope and how it works in Julia.
 
-In general, the ``for`` loop construct can iterate over any container.
-In these cases, the alternative (but fully equivalent) keyword ``in``
-or ``∈`` is typically used instead of ``=``, since it makes the code read more
-clearly:
+変数のスコープの詳細な説明とJuliaでの動作の詳細については、:ref:`man-変数のスコープ` を参照してください。
+
+.. 
+  In general, the ``for`` loop construct can iterate over any container.
+  In these cases, the alternative (but fully equivalent) keyword ``in``
+  or ``∈`` is typically used instead of ``=``, since it makes the code read more
+  clearly:
+
+通常、 ``for`` ループ文はどのコンテナに対しても繰り返し処理が可能です。これらの場合、
+代替（または同等）キーワード ``in`` または ``∈`` は、コードがより明確になるため、
+通常は ``=`` の代わりに使用されます。::
 
 .. doctest::
 
@@ -651,13 +690,22 @@ clearly:
     bar
     baz
 
-Various types of iterable containers will be introduced and discussed in
-later sections of the manual (see, e.g., :ref:`man-arrays`).
+.. 
+  Various types of iterable containers will be introduced and discussed in
+  later sections of the manual (see, e.g., :ref:`man-arrays`).
 
-It is sometimes convenient to terminate the repetition of a ``while``
-before the test condition is falsified or stop iterating in a ``for``
-loop before the end of the iterable object is reached. This can be
-accomplished with the ``break`` keyword:
+様々なタイプの繰り返し処理可能なコンテナについては、マニュアルの後のセクションで紹介します
+（:ref:`man-配列` を参照してください）。
+
+.. 
+  It is sometimes convenient to terminate the repetition of a ``while``
+  before the test condition is falsified or stop iterating in a ``for``
+  loop before the end of the iterable object is reached. This can be
+  accomplished with the ``break`` keyword:
+
+テスト条件が改ざんされる前に ``while`` の繰り返し処理を終了する、または繰り返し処理可能な
+オブジェクトの終わりに達する前に ``for`` ループの繰り返し処理を停止することで、
+便利な場合があります。これは ``break`` キーワードを使用することで実現できます。::
 
 .. doctest::
 
@@ -688,13 +736,21 @@ accomplished with the ``break`` keyword:
     4
     5
 
-The above ``while`` loop would never terminate on its own, and the
-``for`` loop would iterate up to 1000. These loops are both exited early
-by using the ``break`` keyword.
+.. 
+  The above ``while`` loop would never terminate on its own, and the
+  ``for`` loop would iterate up to 1000. These loops are both exited early
+  by using the ``break`` keyword.
 
-In other circumstances, it is handy to be able to stop an iteration and
-move on to the next one immediately. The ``continue`` keyword
-accomplishes this:
+上記の ``while`` ループは終了することはなく、また ``for`` ループは1000まで繰り返されます。
+これらのループは、 ``break`` キーワードを使用することで、どちらも早期に終了することができます。
+
+.. 
+  In other circumstances, it is handy to be able to stop an iteration and
+  move on to the next one immediately. The ``continue`` keyword
+  accomplishes this:
+
+他の状況では、繰り返しを停止してすぐに次の処理に進むことで便利になる場合があります。
+``continue`` キーワードを使用することでこれを実現できます。::
 
 .. doctest::
 
@@ -708,14 +764,22 @@ accomplishes this:
     6
     9
 
-This is a somewhat contrived example since we could produce the same
-behavior more clearly by negating the condition and placing the
-``println`` call inside the ``if`` block. In realistic usage there is
-more code to be evaluated after the ``continue``, and often there are
-multiple points from which one calls ``continue``.
+.. 
+  This is a somewhat contrived example since we could produce the same
+  behavior more clearly by negating the condition and placing the
+  ``println`` call inside the ``if`` block. In realistic usage there is
+  more code to be evaluated after the ``continue``, and often there are
+  multiple points from which one calls ``continue``.
 
-Multiple nested ``for`` loops can be combined into a single outer loop,
-forming the cartesian product of its iterables:
+これは、条件を無効にして ``println`` 呼び出しを ``if`` ブロック内に置くことで同じ動作をより明確に実施できるため、
+説得力に欠ける例です。現実的な利用では、 ``continue`` の後に評価されるべきコードがさらにあり、
+また多くの場合、 ``continue`` を呼び出す複数のポイントが存在します。
+
+.. 
+  Multiple nested ``for`` loops can be combined into a single outer loop,
+  forming the cartesian product of its iterables:
+
+複数のネストされた ``for`` ループは、1つのアウターループに結合され、繰り返し処理のデカルト積を形成します。::
 
 .. doctest::
 
@@ -727,26 +791,47 @@ forming the cartesian product of its iterables:
     (2,3)
     (2,4)
 
-A ``break`` statement inside such a loop exits the entire nest of loops,
-not just the inner one.
+.. 
+  A ``break`` statement inside such a loop exits the entire nest of loops,
+  not just the inner one.
+
+このようなループ内の ``break`` 文は、内側のループだけでなく、ループのネスト全体を終了します。
 
 .. _man-exception-handling:
 
-Exception Handling
+.. 
+  Exception Handling
+  ------------------
+
+例外処理
 ------------------
 
-When an unexpected condition occurs, a function may be unable to return
-a reasonable value to its caller. In such cases, it may be best for the
-exceptional condition to either terminate the program, printing a
-diagnostic error message, or if the programmer has provided code to
-handle such exceptional circumstances, allow that code to take the
-appropriate action.
+.. 
+  When an unexpected condition occurs, a function may be unable to return
+  a reasonable value to its caller. In such cases, it may be best for the
+  exceptional condition to either terminate the program, printing a
+  diagnostic error message, or if the programmer has provided code to
+  handle such exceptional circumstances, allow that code to take the
+  appropriate action.
 
-Built-in :exc:`Exception`\ s
+予期しない状況が発生した場合、関数は呼び出し側に妥当な値を返すことができない場合があります。
+そのような場合、例外条件では、プログラムを終了させる、診断エラーメッセージを出力する、
+またはプログラマが例外的な状況を処理するコードを提供している場合、
+そのコードが適切な処置をとるようにすることができます。
+
+.. 
+  Built-in :exc:`Exception`\ s
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ビルトイン :exc:`Exception`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-:exc:`Exception`\ s are thrown when an unexpected condition has occurred. The
-built-in :exc:`Exception`\ s listed below all interrupt the normal flow of control.
+.. 
+  :exc:`Exception`\ s are thrown when an unexpected condition has occurred. The
+  built-in :exc:`Exception`\ s listed below all interrupt the normal flow of control.
+
+予期しない条件が発生した場合、 :exc:`Exception` が返されます。以下に記載されているビルトインの :exc:`Exception` は、
+すべて制御の通常の流れを中断します。
 
 +------------------------------+
 | :exc:`Exception`             |
@@ -801,8 +886,11 @@ built-in :exc:`Exception`\ s listed below all interrupt the normal flow of contr
 +------------------------------+
 
 
-For example, the :func:`sqrt` function throws a :exc:`DomainError` if applied to a
-negative real value:
+.. 
+  For example, the :func:`sqrt` function throws a :exc:`DomainError` if applied to a
+  negative real value:
+
+例えば、 :func:`sqrt` 関数は負の実数値に適用された場合、 :exc:`DomainError` を返します。::
 
 .. doctest::
 
@@ -812,18 +900,29 @@ negative real value:
      in sqrt(::Int64) at ./math.jl:252
      ...
 
-You may define your own exceptions in the following way:
+.. 
+  You may define your own exceptions in the following way:
+  
+独自の例外処理は、次のように定義することができます。::
 
 .. doctest::
 
     julia> type MyCustomException <: Exception end
 
+.. 
 The :func:`throw` function
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Exceptions can be created explicitly with :func:`throw`. For example, a function
-defined only for nonnegative numbers could be written to :func:`throw` a :exc:`DomainError`
-if the argument is negative:
+:func:`throw` 関数
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. 
+  Exceptions can be created explicitly with :func:`throw`. For example, a function
+  defined only for nonnegative numbers could be written to :func:`throw` a :exc:`DomainError`
+  if the argument is negative:
+
+例外処理は、 :func:`throw` 関数により明示的に作成することができます。例えば、負でない数値に対してのみ定義された関数は、
+引数が負の場合に :exc:`DomainError` を返すように :func:`throw` を使用して記述することができます。::
 
 .. doctest:: domain-error
 
@@ -838,8 +937,12 @@ if the argument is negative:
      in f(::Int64) at ./none:1
      ...
 
-Note that :exc:`DomainError` without parentheses is not an exception, but a type of
-exception. It needs to be called to obtain an :exc:`Exception` object:
+.. 
+  Note that :exc:`DomainError` without parentheses is not an exception, but a type of
+  exception. It needs to be called to obtain an :exc:`Exception` object:
+
+括弧無しの :exc:`DomainError` は例外処理ではなく、型の例外であることに注意してください。
+:exc:`Exception` オブジェクトを取得するには、これを呼び出す必要があります。::
 
 .. doctest:: throw-function
 
@@ -849,8 +952,11 @@ exception. It needs to be called to obtain an :exc:`Exception` object:
     julia> typeof(DomainError) <: Exception
     false
 
-Additionally, some exception types take one or more arguments that are used for
-error reporting:
+.. 
+  Additionally, some exception types take one or more arguments that are used for
+  error reporting:
+
+さらに、一部の例外処理では、エラー報告に使用される1つ以上の引数を使用します。::
 
 .. doctest::
 
@@ -858,8 +964,11 @@ error reporting:
     ERROR: UndefVarError: x not defined
      ...
 
-This mechanism can be implemented easily by custom exception types following
-the way :exc:`UndefVarError` is written:
+.. 
+  This mechanism can be implemented easily by custom exception types following
+  the way :exc:`UndefVarError` is written:
+
+この仕組みは、 :exc:`UndefVarError` が書き込まれた方法に従ったカスタムされた例外処理によって簡単に実装できます。::
 
 .. doctest::
 
@@ -868,28 +977,51 @@ the way :exc:`UndefVarError` is written:
            end
     julia> Base.showerror(io::IO, e::MyUndefVarError) = print(io, e.var, " not defined");
 
+.. 
+  .. note::
+      When writing an error message, it is preferred to make the first word
+      lowercase. For example,
+      ``size(A) == size(B) || throw(DimensionMismatch("size of A not equal to size of B"))``
+
+
+      is preferred over
+
+      ``size(A) == size(B) || throw(DimensionMismatch("Size of A not equal to size of B"))``.
+
+      However, sometimes it makes sense to keep the uppercase first letter,
+      for instance if an argument to a function is a capital letter:
+      ``size(A,1) == size(B,2) || throw(DimensionMismatch("A has first dimension..."))``.
+    
 .. note::
-    When writing an error message, it is preferred to make the first word
-    lowercase. For example,
-    ``size(A) == size(B) || throw(DimensionMismatch("size of A not equal to size of B"))``
+    エラーメッセージを書く際には、1文字目は小文字にするべきです。例えば、
+    ``size(A) == size(B) || throw(DimensionMismatch("size of A not equal to size of B"))``    
 
-    is preferred over
+     は以下よりも望ましいです。
+     
+     ``size(A) == size(B) || throw(DimensionMismatch("Size of A not equal to size of B"))``.
+     
+     しかし、1文字目を大文字にするほうがよい場合もあります。例えば、関数の引数が大文字の場合です。::
+     ``size(A,1) == size(B,2) || throw(DimensionMismatch("A has first dimension..."))``
+.. 
+  Errors
+  ~~~~~~
 
-    ``size(A) == size(B) || throw(DimensionMismatch("Size of A not equal to size of B"))``.
-
-    However, sometimes it makes sense to keep the uppercase first letter,
-    for instance if an argument to a function is a capital letter:
-    ``size(A,1) == size(B,2) || throw(DimensionMismatch("A has first dimension..."))``.
-
-Errors
+エラー
 ~~~~~~
 
-The :func:`error` function is used to produce an :exc:`ErrorException` that
-interrupts the normal flow of control.
+.. 
+  The :func:`error` function is used to produce an :exc:`ErrorException` that
+  interrupts the normal flow of control.
 
-Suppose we want to stop execution immediately if the square root of a
-negative number is taken. To do this, we can define a fussy version of
-the :func:`sqrt` function that raises an error if its argument is negative:
+:func:`error` 関数は、通常の制御フローを中断する :exc:`ErrorException` を生成するために使用されます。
+
+.. 
+  Suppose we want to stop execution immediately if the square root of a
+  negative number is taken. To do this, we can define a fussy version of
+  the :func:`sqrt` function that raises an error if its argument is negative:
+
+負の数の平方根が取られた場合、すぐに実行を停止したいとします。これを行うために、
+引数が負の場合にエラーを発生させる煩雑な :func:`sqrt` 関数を定義することができます。::
 
 .. doctest::
 
@@ -904,10 +1036,14 @@ the :func:`sqrt` function that raises an error if its argument is negative:
      in fussy_sqrt(::Int64) at ./none:1
      ...
 
-If ``fussy_sqrt`` is called with a negative value from another function,
-instead of trying to continue execution of the calling function, it
-returns immediately, displaying the error message in the interactive
-session:
+.. 
+  If ``fussy_sqrt`` is called with a negative value from another function,
+  instead of trying to continue execution of the calling function, it
+  returns immediately, displaying the error message in the interactive
+  session:
+
+``fussy_sqrt`` が別の関数から負の値で呼び出された場合、呼び出し元関数の処理を継続しようとするのではなく、
+すぐに戻り、対話型セッションでエラーメッセージを表示します。::
 
 .. doctest::
 
@@ -931,12 +1067,20 @@ session:
      in verbose_fussy_sqrt(::Int64) at ./none:3
      ...
 
-Warnings and informational messages
+.. 
+  Warnings and informational messages
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ワーニングおよびインフォメーションメッセージ
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Julia also provides other functions that write messages to the standard error
-I/O, but do not throw any :exc:`Exception`\ s and hence do not interrupt
-execution:
+.. 
+  Julia also provides other functions that write messages to the standard error
+  I/O, but do not throw any :exc:`Exception`\ s and hence do not interrupt
+  execution:
+
+Juliaは標準エラーI/Oにメッセージを書き込む他の関数も提供しますが、 :exc:`Exception` を返さないため、
+処理の実行を中断しません。::
 
 .. doctest::
 
@@ -954,13 +1098,21 @@ execution:
      ...
 
 
-The ``try/catch`` statement
+.. 
+  The ``try/catch`` statement
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``try/catch`` 文
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The ``try/catch`` statement allows for :exc:`Exception`\ s to be tested for. For
-example, a customized square root function can be written to automatically
-call either the real or complex square root method on demand using
-:exc:`Exception`\ s :
+.. 
+  The ``try/catch`` statement allows for :exc:`Exception`\ s to be tested for. For
+  example, a customized square root function can be written to automatically
+  call either the real or complex square root method on demand using
+  :exc:`Exception`\ s :
+
+``try/catch`` 文は :exc:`Exception` のテストを可能にします。例えば、カスタマイズされた平方根関数は、
+必要に応じて :exc:`Exception` を使って実数または複素平方根のいずれかのメソッドを自動的に呼び出すために使用できます。::
 
 .. doctest:: try-catch
 
@@ -977,14 +1129,24 @@ call either the real or complex square root method on demand using
     julia> f(-1)
     0.0 + 1.0im
 
-It is important to note that in real code computing this function, one would
-compare ``x`` to zero instead of catching an exception. The exception is much
-slower than simply comparing and branching.
+.. 
+  It is important to note that in real code computing this function, one would
+  compare ``x`` to zero instead of catching an exception. The exception is much
+  slower than simply comparing and branching.
 
-``try/catch`` statements also allow the :exc:`Exception` to be saved in a
-variable. In this contrived example, the following example calculates the
-square root of the second element of ``x`` if ``x`` is indexable, otherwise
-assumes ``x`` is a real number and returns its square root:
+この関数を計算する実際のコードでは、例外処理をとるのではなく、
+``x`` をゼロと比較することに注意することが重要です。例外処理は、
+単純に比較および分岐処理するよりも時間がかかります。
+
+.. 
+  ``try/catch`` statements also allow the :exc:`Exception` to be saved in a
+  variable. In this contrived example, the following example calculates the
+  square root of the second element of ``x`` if ``x`` is indexable, otherwise
+  assumes ``x`` is a real number and returns its square root:
+
+``try/catch`` 文は、 :exc:`Exception` を変数に保存することも可能にします。次の例では、
+``x`` がインデックス可能な場合は、 ``x`` の2番目の要素の平方根を計算し、
+それ以外の場合は ``x`` を実数とみなし、その平方根を返します。::
 
 .. doctest::
 
@@ -1013,14 +1175,21 @@ assumes ``x`` is a real number and returns its square root:
      in sqrt_second(::Int64) at ./none:7
      ...
 
-Note that the symbol following ``catch`` will always be interpreted as a
-name for the exception, so care is needed when writing ``try/catch`` expressions
-on a single line. The following code will *not* work to return the value of ``x``
-in case of an error::
+.. 
+  Note that the symbol following ``catch`` will always be interpreted as a
+  name for the exception, so care is needed when writing ``try/catch`` expressions
+  on a single line. The following code will *not* work to return the value of ``x``
+  in case of an error::
+
+``catch`` の後の文字列は常に例外処理の名前として解釈されるため、 ``try/catch`` 式を1行に書く際には
+注意が必要です。次のコードは、エラーが発生した場合に ``x`` の値を返すようには機能しません。::
 
     try bad() catch x end
 
-Instead, use a semicolon or insert a line break after ``catch``::
+..
+  Instead, use a semicolon or insert a line break after ``catch``::
+  
+代わりに、セミコロンを使用するか、 ``catch`` の後に改行を挿入します。::
 
     try bad() catch; x end
 
@@ -1029,31 +1198,54 @@ Instead, use a semicolon or insert a line break after ``catch``::
       x
     end
 
-The ``catch`` clause is not strictly necessary; when omitted, the default
-return value is ``nothing``.
+.. 
+  The ``catch`` clause is not strictly necessary; when omitted, the default
+  return value is ``nothing``.
+
+``catch`` 文は必ずしも必要ではありません。省略した場合、デフォルトの戻り値は ``nothing`` です。
 
 .. doctest::
 
     julia> try error() end #Returns nothing
 
-The power of the ``try/catch`` construct lies in the ability to unwind a deeply
-nested computation immediately to a much higher level in the stack of calling
-functions. There are situations where no error has occurred, but the ability to
-unwind the stack and pass a value to a higher level is desirable. Julia
-provides the :func:`rethrow`, :func:`backtrace` and :func:`catch_backtrace` functions for
-more advanced error handling.
+.. 
+  The power of the ``try/catch`` construct lies in the ability to unwind a deeply
+  nested computation immediately to a much higher level in the stack of calling
+  functions. There are situations where no error has occurred, but the ability to
+  unwind the stack and pass a value to a higher level is desirable. Julia
+  provides the :func:`rethrow`, :func:`backtrace` and :func:`catch_backtrace` functions for
+  more advanced error handling.
+  
+``try/catch`` 構造体の強みは、深くネストされた計算を、呼び出し関数のスタック内のより高いレベルに
+すぐに巻き戻す機能にあります。エラーが発生せず、スタックを巻き戻してより高いレベルに値を渡す機能が
+望ましい場合があります。Juliaは、より高度なエラー処理のために :func:`rethrow` 、
+:func:`backtrace` および :func:`catch_backtrace` 関数を提供しています。  
 
-finally Clauses
+.. 
+  finally Clauses
+  ~~~~~~~~~~~~~~~
+
+finally文
 ~~~~~~~~~~~~~~~
 
-In code that performs state changes or uses resources like files, there is
-typically clean-up work (such as closing files) that needs to be done when the
-code is finished. Exceptions potentially complicate this task, since they can
-cause a block of code to exit before reaching its normal end. The ``finally``
-keyword provides a way to run some code when a given block of code exits,
-regardless of how it exits.
+.. 
+  In code that performs state changes or uses resources like files, there is
+  typically clean-up work (such as closing files) that needs to be done when the
+  code is finished. Exceptions potentially complicate this task, since they can
+  cause a block of code to exit before reaching its normal end. The ``finally``
+  keyword provides a way to run some code when a given block of code exits,
+  regardless of how it exits.
 
-For example, here is how we can guarantee that an opened file is closed::
+状態の変更やファイルのようなリソースを使用するコードでは、コードの終了時に
+クリーンアップ作業（ファイルのクローズなど）を行う必要があることが一般的です。
+例外処理は、正常終了に達する前にコードのブロックを終了する可能性があるため、
+このタスクを複雑にする場合があります。 ``finally`` キーワードでは、コードブロックが
+どのように終了するかに関わらず、そのコードブロックが終了したときにコードを実行することができます。
+
+.. 
+  For example, here is how we can guarantee that an opened file is closed::
+  
+例えば、開いているファイルを閉じる方法は次の通りです。::
 
     f = open("file")
     try
@@ -1062,16 +1254,26 @@ For example, here is how we can guarantee that an opened file is closed::
         close(f)
     end
 
-When control leaves the ``try`` block (for example due to a ``return``, or
-just finishing normally), ``close(f)`` will be executed. If
-the ``try`` block exits due to an exception, the exception will continue
-propagating. A ``catch`` block may be combined with ``try`` and ``finally``
-as well. In this case the ``finally`` block will run after ``catch`` has
-handled the error.
+.. 
+  When control leaves the ``try`` block (for example due to a ``return``, or
+  just finishing normally), ``close(f)`` will be executed. If
+  the ``try`` block exits due to an exception, the exception will continue
+  propagating. A ``catch`` block may be combined with ``try`` and ``finally``
+  as well. In this case the ``finally`` block will run after ``catch`` has
+  handled the error.
+
+制御が ``try`` ブロックを離れた場合（例えば ``return`` や正常終了など）、 ``close(f)`` が実行されます。
+``try`` ブロックが例外処理のために終了した場合、例外処理は後続への伝達を続けます。
+``catch`` ブロックは、 ``try`` や ``finally`` も同様に組み合わせることができます。
+この場合、 ``finally`` ブロックは、 ``catch`` がエラーを処理した後に実行されます。
 
 .. _man-tasks:
 
-Tasks (aka Coroutines)
+.. 
+  Tasks (aka Coroutines)
+  ----------------------
+
+タスク（またはコルーチン）
 ----------------------
 
 Tasks are a control flow feature that allows computations to be
