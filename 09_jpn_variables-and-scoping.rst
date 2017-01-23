@@ -2,84 +2,143 @@
 
 .. currentmodule:: Base
 
+.. 
+ ********************
+  Scope of Variables
+ ********************
+
 ********************
- Scope of Variables
+ 変数のスコープ
 ********************
 
-The *scope* of a variable is the region of code within which a
-variable is visible. Variable scoping helps avoid variable naming
-conflicts. The concept is intuitive: two functions can both have
-arguments called ``x`` without the two ``x``'s referring to the same
-thing. Similarly there are many other cases where different blocks of
-code can use the same name without referring to the same thing. The
-rules for when the same variable name does or doesn't refer to the
-same thing are called scope rules; this section spells them out in
-detail.
+.. 
+ The *scope* of a variable is the region of code within which a
+ variable is visible. Variable scoping helps avoid variable naming
+ conflicts. The concept is intuitive: two functions can both have
+ arguments called ``x`` without the two ``x``'s referring to the same
+ thing. Similarly there are many other cases where different blocks of
+ code can use the same name without referring to the same thing. The
+ rules for when the same variable name does or doesn't refer to the
+ same thing are called scope rules; this section spells them out in
+ detail.
 
-Certain constructs in the language introduce *scope blocks*, which are
-regions of code that are eligible to be the scope of some set of
-variables. The scope of a variable cannot be an arbitrary set of
-source lines; instead, it will always line up with one of these
-blocks.  There are two main types of scopes in Julia, *global scope*
-and *local scope*, the latter can be nested.  The constructs
-introducing scope blocks are:
+変数のスコープは、変数が表示されるコードの範囲です。変数のスコープは、変数名の競合を避けるのに役立ちます。
+この概念は直感的です。例えば、2つの関数は、対象の引数が同じものを参照する場合を除いて、
+どちらも ``x`` という引数を持つことができます。同様に、異なるコードブロックが同じものを参照せずに
+同じ名前を使用できるケースがあります。同じ変数名が同じものを参照する・しないの規則は、
+スコープ規則と呼ばれます。これはこのセクションで詳しく説明します。
+
+.. 
+ Certain constructs in the language introduce *scope blocks*, which are
+ regions of code that are eligible to be the scope of some set of
+ variables. The scope of a variable cannot be an arbitrary set of
+ source lines; instead, it will always line up with one of these
+ blocks.  There are two main types of scopes in Julia, *global scope*
+ and *local scope*, the latter can be nested.  The constructs
+ introducing scope blocks are:
+ 
+言語内の特定の構文はスコープブロックを提示し、スコープブロックは一連の変数のスコープの範囲を示すことができます。
+変数のスコープは任意のソース行の集まりとすることはできず、これらのブロックのいずれかと常に並びます。
+Juliaにはグローバルスコープとローカルスコープの2つの主要なスコープがあり、
+後者はネストすることができます。スコープブロックを提示する構文は次のとおりです。::
 
 .. _man-scope-table:
 
+.. 
+ +--------------------------------+----------------------------------------------------------------------------------+
+ | Scope name                     | block/construct introducing this kind of scope                                   |
+ +================================+==================================================================================+
+ | :ref:`global <man-global>`     | module, baremodule, at interactive prompt (REPL)                                 |
+ +--------------------------------+------------------------------+---------------------------------------------------+
+ | :ref:`local <man-local-scope>` | :ref:`soft <man-soft-scope>` | for, while, comprehensions,                       |
+ |                                |                              | try-catch-finally, let                            |
+ |                                +------------------------------+---------------------------------------------------+
+ |                                | :ref:`hard <man-hard-scope>` | functions (either syntax, anonymous & do-blocks), |
+ |                                |                              | type, immutable, macro                            |
+ +--------------------------------+------------------------------+---------------------------------------------------+
+
 +--------------------------------+----------------------------------------------------------------------------------+
-| Scope name                     | block/construct introducing this kind of scope                                   |
+| スコープ名                       | この種のスコープを提示する構文                                                        |
 +================================+==================================================================================+
-| :ref:`global <man-global>`     | module, baremodule, at interactive prompt (REPL)                                 |
+| :ref:`global <man-global>`     | モジュール、ベアモジュール、インタラクティブプロンプト（REPL）                             |
 +--------------------------------+------------------------------+---------------------------------------------------+
-| :ref:`local <man-local-scope>` | :ref:`soft <man-soft-scope>` | for, while, comprehensions,                       |
-|                                |                              | try-catch-finally, let                            |
+| :ref:`local <man-local-scope>` | :ref:`soft <man-soft-scope>` | for、while、comprehensions、                       |
+|                                |                              | try-catch-finally、let                            |
 |                                +------------------------------+---------------------------------------------------+
-|                                | :ref:`hard <man-hard-scope>` | functions (either syntax, anonymous & do-blocks), |
-|                                |                              | type, immutable, macro                            |
+|                                | :ref:`hard <man-hard-scope>` | 関数（構文、無名、またはdoブロック）、                  |
+|                                |                              | type、immutable、マクロ                             |
 +--------------------------------+------------------------------+---------------------------------------------------+
 
-Notably missing from this table are :ref:`begin blocks
-<man-compound-expressions>` and :ref:`if blocks
-<man-conditional-evaluation>`, which do *not* introduce new scope
-blocks.  All three types of scopes follow somewhat different rules
-which will be explained below as well as some extra rules for
-certain blocks.
+.. 
+ Notably missing from this table are :ref:`begin blocks
+ <man-compound-expressions>` and :ref:`if blocks
+ <man-conditional-evaluation>`, which do *not* introduce new scope
+ blocks.  All three types of scopes follow somewhat different rules
+ which will be explained below as well as some extra rules for
+ certain blocks.
 
-Julia uses `lexical scoping <https://en.wikipedia.org/wiki/Scope_%28computer_science%29#Lexical_scoping_vs._dynamic_scoping>`_,
-meaning that a function's scope does not inherit from its caller's
-scope, but from the scope in which the function was defined.
-For example, in the following code the ``x`` inside ``foo`` refers
-to the ``x`` in the global scope of its module ``Bar``::
+注目すべきことは、新しいスコープブロックを導入しない :ref:`begin ブロック <man-compound-expressions>` と
+:ref:`if ブロック <man-conditional-evaluation>` が上記に無い点です。
+以下で説明するように、3つのスコープは全て、異なるいくつかのルールに従います。
 
-    module Bar
+.. 
+ Julia uses `lexical scoping <https://en.wikipedia.org/wiki/Scope_%28computer_science%29#Lexical_scoping_vs._dynamic_scoping>`_,
+ meaning that a function's scope does not inherit from its caller's
+ scope, but from the scope in which the function was defined.
+ For example, in the following code the ``x`` inside ``foo`` refers
+ to the ``x`` in the global scope of its module ``Bar``::
+
+Juliaは、関数のスコープは呼び出し元のスコープから継承されず、関数が定義されたスコープから継承される
+`レキシカルスコープ <https://en.wikipedia.org/wiki/Scope_%28computer_science%29#Lexical_scoping_vs._dynamic_scoping>`_ を
+使用しています。例えば、次のコードでは、 ``foo`` 内の ``x`` はモジュール ``Bar`` のグローバルスコープ内の ``x`` を参照します。::
+
+    module Bar
     x = 1
     foo() = x
     end
 
-and not a ``x`` in the scope where ``foo`` is used::
+.. 
+ and not a ``x`` in the scope where ``foo`` is used::
+ 
+``foo`` が使用されているスコープ内の ``x`` ではない場合、::
 
-    julia> import Bar
+    julia> import Bar
 
     julia> x = -1;
 
     julia> Bar.foo()
     1
 
-Thus *lexical scope* means that the scope of variables can be inferred
-from the source code alone.
+.. 
+ Thus *lexical scope* means that the scope of variables can be inferred
+ from the source code alone.
+
+従って、レキシカルスコープは、変数のスコープがソースコードだけから推測できることを意味します。
 
 .. _man-global:
 
-Global Scope
+.. 
+ Global Scope
+ ------------
+
+
+グローバルスコープ
 ------------
 
-*Each module introduces a new global scope*, separate from the global
-scope of all other modules; there is no all-encompassing global scope.
-Modules can introduce variables of other modules into their scope
-through the :ref:`using or import <man-modules>` statements or through
-qualified access using the dot-notation, i.e. each module is a
-so-called *namespace*.  Note that variable bindings can only be
-changed within their global scope and not from an outside module. ::
+.. 
+ *Each module introduces a new global scope*, separate from the global
+ scope of all other modules; there is no all-encompassing global scope.
+ Modules can introduce variables of other modules into their scope
+ through the :ref:`using or import <man-modules>` statements or through
+ qualified access using the dot-notation, i.e. each module is a
+ so-called *namespace*.  Note that variable bindings can only be
+ changed within their global scope and not from an outside module. ::
+
+各モジュールは、他の全てのモジュールのグローバルスコープとは別の新しいグローバルスコープを提示します。
+全てを包括するグローバルスコープは存在しません。モジュールは、 :ref:`using または import <man-modules>` 
+ステートメントを通じて、またはドット表記を使用した条件付きのアクセスを通じて、
+他のモジュールの変数をそのスコープに提示できます。各モジュールはいわゆる名前用のスペースです。
+変数のバインディングは、グローバルスコープ内でのみ変更でき、外部モジュールでは変更できないことに注意してください。::
 
     module A
     a = 1 # a global in A's scope
@@ -97,27 +156,46 @@ changed within their global scope and not from an outside module. ::
     # A.a = 2 # would error with: "ERROR: cannot assign variables in other modules"
     end
 
-Note that the interactive prompt (aka REPL) is in the global scope of
-the module ``Main``.
+.. 
+ Note that the interactive prompt (aka REPL) is in the global scope of
+ the module ``Main``.
+ 
+対話型プロンプト（別名REPL）はモジュール ``Main`` のグローバルスコープ内にあることに注意してください。
 
 .. _man-local-scope:
 
-Local Scope
+.. 
+ Local Scope
+ -----------
+
+ローカルスコープ
 -----------
 
-A new local scope is introduced by most code-blocks, see above
-:ref:`table <man-scope-table>` for a complete list.  A local scope
-*usually* inherits all the variables from its parent scope, both for
-reading and writing.  There are two subtypes of local scopes, hard and
-soft, with slightly different rules concerning what variables are
-inherited.  Unlike global scopes, local scopes are not namespaces,
-thus variables in an inner scope cannot be retrieved from the parent
-scope through some sort of qualified access.
+.. 
+ A new local scope is introduced by most code-blocks, see above
+ :ref:`table <man-scope-table>` for a complete list.  A local scope
+ *usually* inherits all the variables from its parent scope, both for
+ reading and writing.  There are two subtypes of local scopes, hard and
+ soft, with slightly different rules concerning what variables are
+ inherited.  Unlike global scopes, local scopes are not namespaces,
+ thus variables in an inner scope cannot be retrieved from the parent
+ scope through some sort of qualified access.
 
-The following rules and examples pertain to both hard and soft local
-scopes.  A newly introduced variable in a local scope does not
-back-propagate to its parent scope.  For example, here the ``z`` is not
-introduced into the top-level scope::
+新しいローカルスコープは、ほとんどのコードブロックで提示されます。詳細は上記の :ref:`table <man-scope-table>` を参照してください。
+ローカルスコープは、通常親スコープの全ての変数を読み書き用に継承します。
+ローカルスコープには、ハードとソフトの2つのサブタイプがあり、どの変数が継承されているかについて
+わずかに異なるルールがあります。グローバルスコープとは異なり、ローカルスコープは名前用のスペースではないため、
+内部スコープ内の変数は条件付きアクセスによって親スコープから取り出すことはできません。
+
+.. 
+ The following rules and examples pertain to both hard and soft local
+ scopes.  A newly introduced variable in a local scope does not
+ back-propagate to its parent scope.  For example, here the ``z`` is not
+ introduced into the top-level scope::
+
+次のルールと例は、ハードローカルスコープとソフトローカルスコープの両方に当てはまります。
+ローカルスコープ内に新しく提示された変数は、その親スコープに逆方向に伝達されません。
+例えば、 ``z`` は最上位のスコープに提示されません。::
 
     for i=1:10
         z = i
@@ -126,14 +204,21 @@ introduced into the top-level scope::
     julia> z
     ERROR: UndefVarError: z not defined
 
-(Note, in this and all following examples it is assumed that their
-top-level is a global scope with a clean workspace, for instance a
-newly started REPL.)
+.. 
+ (Note, in this and all following examples it is assumed that their
+ top-level is a global scope with a clean workspace, for instance a
+ newly started REPL.)
 
-Inside a local scope a variable can be forced to be a local variable
-using the ``local`` keyword::
+この例と次の全ての例では、最上位がクリーンな作業領域を持つグローバルスコープであること想定しています
+（例えば、新しく起動されたREPL）。
 
-    x = 0
+.. 
+ Inside a local scope a variable can be forced to be a local variable
+ using the ``local`` keyword::
+
+ローカルスコープの内部では、変数は ``local`` キーワードを使用して強制的にローカル変数にすることができます。::
+
+    x = 0
     for i=1:10
         local x
         x = i + 1
@@ -142,8 +227,11 @@ using the ``local`` keyword::
     julia> x
     0
 
-Inside a local scope a new global variable can be defined using the
-keyword ``global``::
+.. 
+ Inside a local scope a new global variable can be defined using the
+ keyword ``global``::
+
+ローカルスコープの内部では、 ``global`` グローバル変数を使用して新しいグローバル変数を定義できます。::
 
     for i=1:10
         global z
