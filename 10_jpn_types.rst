@@ -674,8 +674,11 @@ Juliaでは、全ての値がオブジェクトですが、関数は操作対象
      :baz
      :qux
 
-You can access the field values of a composite object using the
-traditional ``foo.bar`` notation:
+.. 
+  You can access the field values of a composite object using the
+  traditional ``foo.bar`` notation:
+
+伝統的な ``foo.bar`` 記号を使用することで、コンポジットオブジェクトのフィールド値にアクセスすることができます。::
 
 .. doctest::
 
@@ -688,7 +691,10 @@ traditional ``foo.bar`` notation:
     julia> foo.qux
     1.5
 
-You can also change the values as one would expect:
+.. 
+  You can also change the values as one would expect:
+  
+期待通りに値を変更することもできます。::
 
 .. doctest::
 
@@ -698,8 +704,11 @@ You can also change the values as one would expect:
     julia> foo.bar = 1//2
     1//2
 
-Composite types with no fields are singletons; there can be only one
-instance of such types::
+.. 
+  Composite types with no fields are singletons; there can be only one
+  instance of such types::
+
+フィールドのないコンポジット型は単体であり、そのような型のインスタンスは1つだけです。::
 
     type NoFields
     end
@@ -707,53 +716,94 @@ instance of such types::
     julia> is(NoFields(), NoFields())
     true
 
-The ``is`` function confirms that the "two" constructed instances of
-``NoFields`` are actually one and the same. Singleton types are
-described in further detail `below <#man-singleton-types>`_.
+.. 
+  The ``is`` function confirms that the "two" constructed instances of
+  ``NoFields`` are actually one and the same. Singleton types are
+  described in further detail `below <#man-singleton-types>`_.
 
-There is much more to say about how instances of composite types are
-created, but that discussion depends on both `Parametric
-Types <#man-parametric-types>`_ and on :ref:`man-methods`, and is
-sufficiently important to be addressed in its own section:
-:ref:`man-constructors`.
+``is`` 関数を使用することで、 ``NoFields`` の2つの構築されたインスタンスは実際には1つの同じものであるかということを
+確認することができます。単体型については、`以下 <#man-singleton-types>`_ でさらに詳しく説明します。
+
+.. 
+  There is much more to say about how instances of composite types are
+  created, but that discussion depends on both `Parametric
+  Types <#man-parametric-types>`_ and on :ref:`man-methods`, and is
+  sufficiently important to be addressed in its own section:
+  :ref:`man-constructors`.
+
+コンポジット型のインスタンスがどのように作成されるかについては多くのことが言えますが、
+その議論は `パラメータ型 <#man-parametric-types>`_ と :ref:`man-メソッド` の両方に依存するため、
+関連する :ref:`man-コンストラクタ` のセクションの中で説明されます。
 
 .. _man-immutable-composite-types:
 
-Immutable Composite Types
+.. 
+  Immutable Composite Types
+  -------------------------
+
+不変なコンポジット型
 -------------------------
 
-It is also possible to define *immutable* composite types by using
-the keyword ``immutable`` instead of ``type``::
+.. 
+  It is also possible to define *immutable* composite types by using
+  the keyword ``immutable`` instead of ``type``::
+
+``type`` の代わりに ``immutable`` というキーワードを使用することで、
+不変なコンポジット型を定義することもできます。::
 
     immutable Complex
         real::Float64
         imag::Float64
     end
 
-Such types behave much like other composite types, except that instances
-of them cannot be modified. Immutable types have several advantages:
+.. 
+  Such types behave much like other composite types, except that instances
+  of them cannot be modified. Immutable types have several advantages:
 
-- They are more efficient in some cases. Types like the ``Complex``
-  example above can be packed efficiently into arrays, and in some
-  cases the compiler is able to avoid allocating immutable objects
-  entirely.
-- It is not possible to violate the invariants provided by the
-  type's constructors.
-- Code using immutable objects can be easier to reason about.
+このような型は、他のコンポジット型と同じように動作しますが、そのインスタンスは変更できません。
+不変型にはいくつかの利点があります。::
 
-An immutable object might contain mutable objects, such as arrays, as
-fields. Those contained objects will remain mutable; only the fields of the
-immutable object itself cannot be changed to point to different objects.
+.. 
+  - They are more efficient in some cases. Types like the ``Complex``
+    example above can be packed efficiently into arrays, and in some
+    cases the compiler is able to avoid allocating immutable objects
+    entirely.
+  - It is not possible to violate the invariants provided by the
+    type's constructors.
+  - Code using immutable objects can be easier to reason about.
 
-A useful way to think about immutable composites is that each instance is
-associated with specific field values --- the field values alone tell
-you everything about the object. In contrast, a mutable object is like a
-little container that might hold different values over time, and so is
-not identified with specific field values. In deciding whether to make a
-type immutable, ask whether two instances with the same field values
-would be considered identical, or if they might need to change independently
-over time. If they would be considered identical, the type should probably
-be immutable.
+- これらは場合によってはより効率的です。上記の例のような ``Complex`` 型は、
+  効率的に配列にパックすることができ、場合によっては、コンパイラが不変のオブジェクトを
+  割り当てることを避けることができます。
+- 型のコンストラクタによって提供される不変性を違反することはできません。
+- 不変オブジェクトを使用するコードは、推論するのが簡単になります。
+
+.. 
+  An immutable object might contain mutable objects, such as arrays, as
+  fields. Those contained objects will remain mutable; only the fields of the
+  immutable object itself cannot be changed to point to different objects.
+
+不変オブジェクトには、配列などの変更可能なオブジェクトがフィールドとして含まれている場合があります。
+これらのフィールドとして含まれているオブジェクトは変更可能なままです。不変オブジェクトそのもののフィールドだけを変更し、
+異なるオブジェクトを示すことはできません。
+
+.. 
+  A useful way to think about immutable composites is that each instance is
+  associated with specific field values --- the field values alone tell
+  you everything about the object. In contrast, a mutable object is like a
+  little container that might hold different values over time, and so is
+  not identified with specific field values. In deciding whether to make a
+  type immutable, ask whether two instances with the same field values
+  would be considered identical, or if they might need to change independently
+  over time. If they would be considered identical, the type should probably
+  be immutable.
+
+不変なコンポジットは、それぞれのインスタンスが特定のフィールド値に関連付けられている点が有益です。
+フィールド値だけでオブジェクトに関する全てのことがわかります。対照的に、変更可能なオブジェクトは、
+時間の経過とともに異なる値を保持する小さなコンテナのようなものであり、フィールド値では特定はできません。
+型を不変にするかどうかを決めるには、同じフィールド値を持つ2つのインスタンスが同一であるとみなされるか、
+または時間の経過とともに変更する必要があるかどうかを考慮します。それらが同一であると考えられる場合、
+その型は不変であるべきです。
 
 To recap, two essential properties define immutability
 in Julia:
