@@ -245,9 +245,13 @@ Juliaは、関数のスコープは呼び出し元のスコープから継承さ
    However, there is no keyword to introduce a new local variable into a
    parent local scope.
 
-The location of both the ``local`` and ``global`` keywords within the
-scope block is irrelevant.  The following is equivalent to the last
-example (although stylistically worse)::
+..
+  The location of both the ``local`` and ``global`` keywords within the
+  scope block is irrelevant.  The following is equivalent to the last
+  example (although stylistically worse)::
+  
+スコープブロック内の ``local`` キーワードと ``global`` キーワードの両方の位置は重要ではありません。
+見た目は一部異なりますが、以下は最後の例と同じです。::
 
     for i=1:10
         z = i
@@ -257,8 +261,11 @@ example (although stylistically worse)::
     julia> z
     10
 
-Multiple global or local definitions can be on one line and can also
-be paired with assignments::
+.. 
+  Multiple global or local definitions can be on one line and can also
+  be paired with assignments::
+
+複数のグローバル定義またはローカル定義を1行に含めることもできますし、割り当てとペアにすることもできます。::
 
     for i=1:10
         global x=i, y, z
@@ -268,21 +275,37 @@ be paired with assignments::
 
 .. _man-soft-scope:
 
-Soft Local Scope
+.. 
+  Soft Local Scope
+  ^^^^^^^^^^^^^^^^
+
+ソフトローカルスコープ
 ^^^^^^^^^^^^^^^^
 
+.. 
   In a soft local scope, all variables are inherited from its parent
   scope unless a variable is specifically marked with the keyword
   ``local``.
+  
+ソフトローカルスコープでは、変数に特に ``local`` キーワードでマークされていない限り、全ての変数は親スコープから継承されます。
 
-Soft local scopes are introduced by for-loops, while-loops,
-comprehensions, try-catch-finally-blocks, and let-blocks.  There
-are some extra rules for :ref:`let-blocks <man-let-blocks>` and for
-:ref:`for-loops and comprehensions <man-for-loops-scope>`.
+.. 
+  Soft local scopes are introduced by for-loops, while-loops,
+  comprehensions, try-catch-finally-blocks, and let-blocks.  There
+  are some extra rules for :ref:`let-blocks <man-let-blocks>` and for
+  :ref:`for-loops and comprehensions <man-for-loops-scope>`.
 
-In the following example the ``x`` and ``y`` refer always to the same
-variables as the soft local scope inherits both read and write
-variables::
+ソフトループスコープは、for-loops、while-loops、comprehensions、try-catch-finally-block、
+およびlet-blocksによって提示されます。 :ref:`let-blocks <man-let-blocks>` と
+:ref:`for-loops および comprehensions <man-for-loops-scope>` には
+いくつかの特別なルールがあります。
+
+.. 
+  In the following example the ``x`` and ``y`` refer always to the same
+  variables as the soft local scope inherits both read and write
+  variables::
+
+次の例では、 ``x`` と ``y`` は常にソフトローカルスコープと同じ変数を参照し、読み取りと書き込みの両方の変数を継承します。::
 
     x,y = 0, 1
     for i = 1:10
@@ -292,9 +315,13 @@ variables::
     julia> x
     12
 
-Within soft scopes, the `global` keyword is never necessary, although
-allowed.  The only case when it would change the semantics is
-(currently) a syntax error::
+.. 
+  Within soft scopes, the `global` keyword is never necessary, although
+  allowed.  The only case when it would change the semantics is
+  (currently) a syntax error::
+
+ソフトスコープ内では、 `global` キーワードは決して必須ではありませんが、使用することができます。
+セマンティックを変更する唯一のケースは、（現在時点では）構文エラーのみです。::
 
     let
         local x = 2
@@ -307,22 +334,37 @@ allowed.  The only case when it would change the semantics is
 
 .. _man-hard-scope:
 
-Hard Local Scope
+.. 
+  Hard Local Scope
+  ^^^^^^^^^^^^^^^^
+
+ハードローカルスコープ
 ^^^^^^^^^^^^^^^^
 
-Hard local scopes are introduced by function definitions (in all their
-forms), type & immutable-blocks, and macro-definitions.
+.. 
+  Hard local scopes are introduced by function definitions (in all their
+  forms), type & immutable-blocks, and macro-definitions.
 
    In a hard local scope, all variables are inherited from its parent
    scope unless:
 
    - an assignment would result in a modified *global* variable, or
    - a variable is specifically marked with the keyword ``local``.
+   
+ハードローカルスコープは、関数定義（全ての形式）、型および不変ブロック、およびマクロ定義によって提示されます。
 
-Thus global variables are only inherited for reading but not for
-writing::
+ ハードローカルスコープでは、次の場合を除き、全ての変数は親スコープから継承されます。
+ 
+ - 割り当てによってグローバル変数が変更される
+ - 変数に ``local`` キーワードが付いている
 
-    x,y = 1,2
+.. 
+  Thus global variables are only inherited for reading but not for
+  writing::
+
+したがって、グローバル変数は、読み込みのためだけに継承され、書き込みのためには継承されません。::
+
+    x,y = 1,2
     function foo()
         x = 2 # assignment introduces a new local
         return x + y # y refers to the global
@@ -334,9 +376,12 @@ writing::
     julia> x
     1
 
-An explicit ``global`` is needed to assign to a global variable::
+.. 
+  An explicit ``global`` is needed to assign to a global variable::
+  
+グローバル変数に割り当てるには、明示的な ``global`` が必要です。::
 
-    x = 1
+    x = 1
     function foo()
         global x = 2
     end
@@ -345,11 +390,15 @@ An explicit ``global`` is needed to assign to a global variable::
     julia> x
     2
 
-Note that *nested functions* can behave differently to functions
-defined in the global scope as they can modify their parent scope's
-*local* variables::
+.. 
+  Note that *nested functions* can behave differently to functions
+  defined in the global scope as they can modify their parent scope's
+  *local* variables::
 
-    x,y = 1,2
+ネストされた関数は、親スコープのローカル変数を変更できるため、
+グローバルスコープで定義された関数とは動作が異なることに注意してください。::
+
+    x,y = 1,2
     function foo()
         x = 2 # introduces a new local
         function bar()
@@ -362,10 +411,15 @@ defined in the global scope as they can modify their parent scope's
     julia> foo()
     22  # (x,y unchanged)
 
-The distinction between inheriting global and local variables for
-assignment can lead to some slight differences between functions
-defined in local vs. global scopes.  Consider the modification of the
-last example by moving ``bar`` to the global scope::
+.. 
+  The distinction between inheriting global and local variables for
+  assignment can lead to some slight differences between functions
+  defined in local vs. global scopes.  Consider the modification of the
+  last example by moving ``bar`` to the global scope::
+
+割り当てにおけるグローバル変数とローカル変数の継承の違いは、ローカルスコープと
+グローバルスコープとで定義された関数の若干の違いを生むことがあります。
+最後の例について、 ``bar`` をグローバルスコープに移動する変更を見て見ましょう。::
 
     x,y = 1,2
     function bar()
@@ -381,15 +435,22 @@ last example by moving ``bar`` to the global scope::
     14 # as x is not modified anymore.
        # (x,y unchanged)
 
-Note that above subtlety does not pertain to type and macro
-definitions as they can only appear at the global scope.
-There are special scoping rules concerning the evaluation of default
-and keyword function arguments which are described in the
-:ref:`Function section <man-evaluation-scope-default-values>`.
+.. 
+  Note that above subtlety does not pertain to type and macro
+  definitions as they can only appear at the global scope.
+  There are special scoping rules concerning the evaluation of default
+  and keyword function arguments which are described in the
+  :ref:`Function section <man-evaluation-scope-default-values>`.
 
+型およびマクロの定義はグローバルスコープにのみ現れるため、上記の細部はそれらの定義に当てはまりません。
+:ref:`関数セクション <man-evaluation-scope-default-values>` で説明されているように、
+デフォルトおよびキーワード関数の引数の評価に関する特別なスコープのルールがあります。
 
-An assignment introducing a variable used inside a function, type or
-macro definition need not come before its inner usage:
+.. 
+  An assignment introducing a variable used inside a function, type or
+  macro definition need not come before its inner usage:
+
+関数、型、またはマクロ定義内で使用される変数を提示する代入は、その内部の使用の前に定義必要はありません。::
 
 .. doctest::
 
@@ -407,16 +468,23 @@ macro definition need not come before its inner usage:
     julia> f(3)
     4
 
-This behavior may seem slightly odd for a normal variable, but allows
-for named functions — which are just normal variables holding function
-objects — to be used before they are defined. This allows functions to
-be defined in whatever order is intuitive and convenient, rather than
-forcing bottom up ordering or requiring forward declarations, as long
-as they are defined by the time they are actually called.  As an
-example, here is an inefficient, mutually recursive way to test if
-positive integers are even or odd::
+.. 
+  This behavior may seem slightly odd for a normal variable, but allows
+  for named functions — which are just normal variables holding function
+  objects — to be used before they are defined. This allows functions to
+  be defined in whatever order is intuitive and convenient, rather than
+  forcing bottom up ordering or requiring forward declarations, as long
+  as they are defined by the time they are actually called.  As an
+  example, here is an inefficient, mutually recursive way to test if
+  positive integers are even or odd::
 
-    even(n) = n == 0 ? true  :  odd(n-1)
+この動作は、通常の変数では少し奇妙に見えるかもしれませんが、関数オブジェクトを持つ通常の変数である、
+名前付き関数をそれが定義される前に使用することができます。これにより、
+実際に呼び出されたタイミングで定義されている限り、ボトムアップの順序付けや事前宣言が必要なく、
+直感的で便利な順序で関数を定義できます。例として、正の整数が偶数か奇数かをテストする非効率的な、
+相互再帰的な方法を次に示します。::
+
+    even(n) = n == 0 ? true  :  odd(n-1)
     odd(n)  = n == 0 ? false : even(n-1)
 
     julia> even(3)
@@ -425,11 +493,19 @@ positive integers are even or odd::
     julia> odd(3)
     true
 
-Julia provides built-in, efficient functions to test for oddness and evenness
-called :func:`iseven` and :func:`isodd` so the above definitions should only be
-taken as examples.
+.. 
+  Julia provides built-in, efficient functions to test for oddness and evenness
+  called :func:`iseven` and :func:`isodd` so the above definitions should only be
+  taken as examples.
 
-Hard vs. Soft Local Scope
+Juliaは、 :func:`iseven` と :func:`isodd` という奇数か偶数かをテストするためのビルトインの
+効率的な関数を提供しているため、上記は例として考えてください。
+
+.. 
+  Hard vs. Soft Local Scope
+  ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ハードローカルスコープvsソフトローカルスコープ
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Blocks which introduce a soft local scope, such as loops, are
