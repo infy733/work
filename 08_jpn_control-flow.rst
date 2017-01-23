@@ -101,7 +101,7 @@ Juliaには、これを実現する ``begin`` ブロックおよび ``(;)`` チ�
  or that ``(;)`` chains be single-line:
 
 この構文は、 :ref:`man-関数` で説明された簡潔な単一行の関数定義の際に特に便利です。
- ``begin`` ブロックを複数行にする必要はなく、「（;）」チェーンを単一行にする必要はありません。:
+``begin`` ブロックを複数行にする必要はなく、「（;）」チェーンを単一行にする必要はありません。:
 
 .. doctest::
 
@@ -128,7 +128,7 @@ if文
  anatomy of the ``if``-``elseif``-``else`` conditional syntax::
 
 if文は、ブール式の値に応じてコードの一部を評価したり評価しなかったりすることができます。
- ``if``-``elseif``-``else`` 条件構文の例は次のとおりです。:
+``if``-``elseif``-``else`` 条件構文の例は次のとおりです。:
  
     if x < y
       println("x is less than y")
