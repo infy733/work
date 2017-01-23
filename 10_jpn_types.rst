@@ -2,101 +2,170 @@
 
 .. currentmodule:: Base
 
+.. 
+ *********
+  Types
+ *********
+
 *********
- Types
+ 型
 *********
 
-Type systems have traditionally fallen into two quite different camps:
-static type systems, where every program expression must have a type
-computable before the execution of the program, and dynamic type
-systems, where nothing is known about types until run time, when the
-actual values manipulated by the program are available. Object
-orientation allows some flexibility in statically typed languages by
-letting code be written without the precise types of values being known
-at compile time. The ability to write code that can operate on different
-types is called polymorphism. All code in classic dynamically typed
-languages is polymorphic: only by explicitly checking types, or when
-objects fail to support operations at run-time, are the types of any
-values ever restricted.
+.. 
+ Type systems have traditionally fallen into two quite different camps:
+ static type systems, where every program expression must have a type
+ computable before the execution of the program, and dynamic type
+ systems, where nothing is known about types until run time, when the
+ actual values manipulated by the program are available. Object
+ orientation allows some flexibility in statically typed languages by
+ letting code be written without the precise types of values being known
+ at compile time. The ability to write code that can operate on different
+ types is called polymorphism. All code in classic dynamically typed
+ languages is polymorphic: only by explicitly checking types, or when
+ objects fail to support operations at run-time, are the types of any
+ values ever restricted.
 
-Julia's type system is dynamic, but gains some of the advantages of
-static type systems by making it possible to indicate that certain
-values are of specific types. This can be of great assistance in
-generating efficient code, but even more significantly, it allows method
-dispatch on the types of function arguments to be deeply integrated with
-the language. Method dispatch is explored in detail in
-:ref:`man-methods`, but is rooted in the type system presented
-here.
+型システムは伝統的に2つの全く異なる系統に分類されます。静的型付きは、
+プログラムの実行前に計算可能な型を持つ必要があります。また、動的型付きは、
+操作される実際の値が有効になる実行時まで型は定義されません。オブジェクト指向は、
+コンパイル時に正確な値の型が定義されていなくてもコードを記述できるようにすることで、
+静的型付けされた言語の柔軟性を可能にします。異なる型で動作できるコードの性質をポリモーフィズムと呼ばれます。
+動的に型定義された古典的な言語のコードは全て多相性です。型が明示的にチェックされるか、
+または実行時にオブジェクトが処理を継続できない場合にのみ、値の型が制限されます。
 
-The default behavior in Julia when types are omitted is to allow values
-to be of any type. Thus, one can write many useful Julia programs
-without ever explicitly using types. When additional expressiveness is
-needed, however, it is easy to gradually introduce explicit type
-annotations into previously "untyped" code. Doing so will typically
-increase both the performance and robustness of these systems, and
-perhaps somewhat counterintuitively, often significantly simplify them.
+.. 
+ Julia's type system is dynamic, but gains some of the advantages of
+ static type systems by making it possible to indicate that certain
+ values are of specific types. This can be of great assistance in
+ generating efficient code, but even more significantly, it allows method
+ dispatch on the types of function arguments to be deeply integrated with
+ the language. Method dispatch is explored in detail in
+ :ref:`man-methods`, but is rooted in the type system presented
+ here.
 
-Describing Julia in the lingo of `type
-systems <https://en.wikipedia.org/wiki/Type_system>`_, it is: dynamic,
-nominative and parametric. Generic types can be parameterized,
-and the hierarchical relationships
-between types are explicitly declared, rather than implied by compatible
-structure. One particularly distinctive feature of Julia's type system
-is that concrete types may not subtype each other: all concrete types
-are final and may only have abstract types as their supertypes. While
-this might at first seem unduly restrictive, it has many beneficial
-consequences with surprisingly few drawbacks. It turns out that being
-able to inherit behavior is much more important than being able to
-inherit structure, and inheriting both causes significant difficulties
-in traditional object-oriented languages. Other high-level aspects of
-Julia's type system that should be mentioned up front are:
+Juliaの型システムは動的ですが、ある特定の値はある特定の型であることを示すことができるようにすることで、
+静的型付けの利点のいくつかを得ています。これは、効率的なコードを生成する上で大きな助けになる可能性がありますが、
+さらに重要なことに、関数の引数の型に対するメソッドのディスパッチを言語と深く統合することができます。
+メソッドのディスパッチは :ref:`man-メソッド` で詳細に説明されていますが、ここに示す型システムに関連しています。
 
--  There is no division between object and non-object values: all values
-   in Julia are true objects having a type that belongs to a single,
-   fully connected type graph, all nodes of which are equally
-   first-class as types.
--  There is no meaningful concept of a "compile-time type": the only
-   type a value has is its actual type when the program is running. This
-   is called a "run-time type" in object-oriented languages where the
-   combination of static compilation with polymorphism makes this
-   distinction significant.
--  Only values, not variables, have types — variables are simply names
-   bound to values.
--  Both abstract and concrete types can be parameterized by other types.
-   They can also be parameterized by symbols, by values of any type for
-   which :func:`isbits` returns true (essentially, things like numbers and bools
-   that are stored like C types or structs with no pointers to other objects),
-   and also by tuples thereof. Type parameters may be omitted when they
-   do not need to be referenced or restricted.
+.. 
+ The default behavior in Julia when types are omitted is to allow values
+ to be of any type. Thus, one can write many useful Julia programs
+ without ever explicitly using types. When additional expressiveness is
+ needed, however, it is easy to gradually introduce explicit type
+ annotations into previously "untyped" code. Doing so will typically
+ increase both the performance and robustness of these systems, and
+ perhaps somewhat counterintuitively, often significantly simplify them.
 
-Julia's type system is designed to be powerful and expressive, yet
-clear, intuitive and unobtrusive. Many Julia programmers may never feel
-the need to write code that explicitly uses types. Some kinds of
-programming, however, become clearer, simpler, faster and more robust
-with declared types.
+型が省略されたときのJuliaのデフォルトの動作は、値がどの型であっても許容します。
+従って、型を明示的に使用することなく、有用なJuliaプログラムを書くことができます。
+しかし、さらなる表現が必要な場合、以前の「型なし」コードに明示的な型の注釈を徐々に提示することができます。
+こうすることにより、システムのパフォーマンスと堅牢性の両方が向上し、反直感的にかつ大幅に単純化されます。
 
-Type Declarations
+.. 
+ Describing Julia in the lingo of `type
+ systems <https://en.wikipedia.org/wiki/Type_system>`_, it is: dynamic,
+ nominative and parametric. Generic types can be parameterized,
+ and the hierarchical relationships
+ between types are explicitly declared, rather than implied by compatible
+ structure. One particularly distinctive feature of Julia's type system
+ is that concrete types may not subtype each other: all concrete types
+ are final and may only have abstract types as their supertypes. While
+ this might at first seem unduly restrictive, it has many beneficial
+ consequences with surprisingly few drawbacks. It turns out that being
+ able to inherit behavior is much more important than being able to
+ inherit structure, and inheriting both causes significant difficulties
+ in traditional object-oriented languages. Other high-level aspects of
+ Julia's type system that should be mentioned up front are:
+
+`型システム <https://en.wikipedia.org/wiki/Type_system>`_ の用語でJuliaを説明すると、
+動的、主格、パラメトリックです。総括的な型をパラメータ化することができ、
+型間の階層関係は、暗黙的な互換性のある構造ではなく、明示的に宣言されます。Juliaの型システムの特に特徴的な点は、
+具体的な型は互いにサブタイプを持たないかもしれないということです。全ての具体的な型は最終的なものであり、
+抽象型のみをその上位タイプとして持つことができます。これは最初は過度に制限されているように見えるかもしれませんが、
+驚くほどわずかな欠点を伴う有益な結果をもたらします。動作を継承できることは構造を継承することよりも重要であり、
+両方を継承することは従来のオブジェクト指向言語では大きな困難を引き起こすことがわかっています。
+Juliaの型システムの他のハイレベルな側面は、以下の通りです。::
+
+.. 
+ -  There is no division between object and non-object values: all values
+    in Julia are true objects having a type that belongs to a single,
+    fully connected type graph, all nodes of which are equally
+    first-class as types.
+ -  There is no meaningful concept of a "compile-time type": the only
+    type a value has is its actual type when the program is running. This
+    is called a "run-time type" in object-oriented languages where the
+    combination of static compilation with polymorphism makes this
+    distinction significant.
+ -  Only values, not variables, have types — variables are simply names
+    bound to values.
+ -  Both abstract and concrete types can be parameterized by other types.
+    They can also be parameterized by symbols, by values of any type for
+    which :func:`isbits` returns true (essentially, things like numbers and bools
+    that are stored like C types or structs with no pointers to other objects),
+    and also by tuples thereof. Type parameters may be omitted when they
+    do not need to be referenced or restricted.
+
+-  オブジェクトの値と非オブジェクトの値には違いがありません。Juliaの全ての値は、
+   接続された1つの型グラフに属する型を持つオブジェクトであり、全てのノードが同様に第1級の型です。
+-  「コンパイル時の型」という概念はありません。値が持つ唯一の型は、プログラムが実行されている際の実際の型となります。
+   これは、オブジェクト指向言語では実行時型と呼ばれ、静的コンパイルとポリモーフィズムの組み合わせによってこの区別が重要になります。
+-  変数ではなく値だけが型を持ちます。変数は単に値に結び付けられた名前です。
+-  抽象型および具象型は、他の型でパラメータ化できます。記号や、 :func:`isbits` がtrueを返す型の値
+  （基本的には、C型のように格納された数値やブールや、他のオブジェクトへのポインタを持たない構造体）や、
+   それらのチュープルによってパラメータ化することもできます。型パラメータは、参照または制限する必要がない場合に省略することができます。
+
+.. 
+ Julia's type system is designed to be powerful and expressive, yet
+ clear, intuitive and unobtrusive. Many Julia programmers may never feel
+ the need to write code that explicitly uses types. Some kinds of
+ programming, however, become clearer, simpler, faster and more robust
+ with declared types.
+
+Juliaの型システムは、強力で表現力豊かでありますが、それでいて明確でわかりやすく、直観的で作業の妨げにならないように
+設計されています。Juliaプログラマは、明示的に型を使用するコードを書く必要性を感じることはないかもしれません。
+しかし、いくつかのプログラミングは、型の宣言によってより明確で、より簡単に、より早く、より堅牢になります。
+
+.. 
+ Type Declarations
+ -----------------
+
+型宣言
 -----------------
 
-The ``::`` operator can be used to attach type annotations to
-expressions and variables in programs. There are two primary reasons to
-do this:
+.. 
+ The ``::`` operator can be used to attach type annotations to
+ expressions and variables in programs. There are two primary reasons to
+ do this:
 
-1. As an assertion to help confirm that your program works the way you
-   expect,
-2. To provide extra type information to the compiler, which can then
-   improve performance in some cases
+ 1. As an assertion to help confirm that your program works the way you
+    expect,
+ 2. To provide extra type information to the compiler, which can then
+    improve performance in some cases
+   
+``::`` 演算子を使用することで、プログラム内の式や変数に型の注釈を付けることができます。これには主に2つの理由があります。::
 
-When appended to an expression computing a value, the ``::``
-operator is read as "is an instance of". It can be used
-anywhere to assert that the value of the expression on the left is an
-instance of the type on the right. When the type on the right is
-concrete, the value on the left must have that type as its
-implementation — recall that all concrete types are final, so no
-implementation is a subtype of any other. When the type is abstract, it
-suffices for the value to be implemented by a concrete type that is a
-subtype of the abstract type. If the type assertion is not true, an
-exception is thrown, otherwise, the left-hand value is returned:
+1. プログラムが期待通りに動作することを確認するための表明として使用するため
+2. コンパイラに追加の型情報を提供することで、場合によってはパフォーマンスを向上させることができるため
+
+.. 
+ When appended to an expression computing a value, the ``::``
+ operator is read as "is an instance of". It can be used
+ anywhere to assert that the value of the expression on the left is an
+ instance of the type on the right. When the type on the right is
+ concrete, the value on the left must have that type as its
+ implementation — recall that all concrete types are final, so no
+ implementation is a subtype of any other. When the type is abstract, it
+ suffices for the value to be implemented by a concrete type that is a
+ subtype of the abstract type. If the type assertion is not true, an
+ exception is thrown, otherwise, the left-hand value is returned:
+
+値を計算する式に追加した場合、 ``::`` 演算子は「is an instance of（〜のインスタンスである）」と読み込まれます。
+左辺の式の値が右辺の型のインスタンスであることを宣言するために、どこでも使用することができます。
+右辺の型が具体型である場合、左側の値はその実装としてその型を持たなければなりません。
+前述の通り全ての具体型は最終的であり、実装は他の型のサブタイプとはならないことに注意してください。
+型が抽象型である場合、値は抽象型のサブタイプである具体型によって実装さるには十分です。
+型宣言が真でない場合は例外が出力され、それ以外の場合は左辺の値が返されます。::
 
 .. doctest::
 
@@ -107,15 +176,23 @@ exception is thrown, otherwise, the left-hand value is returned:
     julia> (1+2)::Int
     3
 
-This allows a type assertion to be attached to any expression
-in-place.
+.. 
+ This allows a type assertion to be attached to any expression
+ in-place.
 
-When appended to a variable on the left-hand side of an assignment,
-or as part of a ``local`` declaration, the ``::`` operator means something
-a bit different: it declares the variable to always have the specified type,
-like a type declaration in a statically-typed language such as C. Every
-value assigned to the variable will be converted to the declared type
-using :func:`convert`:
+これにより、型宣言を任意の式に適切に付与することができます。
+
+.. 
+ When appended to a variable on the left-hand side of an assignment,
+ or as part of a ``local`` declaration, the ``::`` operator means something
+ a bit different: it declares the variable to always have the specified type,
+ like a type declaration in a statically-typed language such as C. Every
+ value assigned to the variable will be converted to the declared type
+ using :func:`convert`:
+
+割り当ての左側の変数に追加する、またはローカル宣言の一部として追加した場合、 ``::`` 演算子意味は少し変わります。
+この場合変数は、C言語などの静的型言語における型宣言のように、常に指定された型を持つように宣言します。
+変数に割り当てられた全ての値は、 :func:`convert` を使用することで宣言された型に変換されます。::
 
 .. doctest:: foo-func
 
@@ -131,20 +208,34 @@ using :func:`convert`:
     julia> typeof(ans)
     Int8
 
-This feature is useful for avoiding performance "gotchas" that could
-occur if one of the assignments to a variable changed its type
-unexpectedly.
+.. 
+ This feature is useful for avoiding performance "gotchas" that could
+ occur if one of the assignments to a variable changed its type
+ unexpectedly.
 
-This "declaration" behavior only occurs in specific contexts::
+この機能は、変数への割り当ての1つが予期せずその型を変更した場合に発生する可能性のある
+パフォーマンスの「落とし穴」を回避するのに便利です。
+
+.. 
+ This "declaration" behavior only occurs in specific contexts::
+
+この「宣言」動作は、特定の文脈でのみ発生します。::
 
     local x::Int8  # in a local declaration
     x::Int8 = 10   # as the left-hand side of an assignment
 
-and applies to the whole current scope, even before the declaration.
-Currently, type declarations cannot be used in global scope, e.g. in
-the REPL, since Julia does not yet have constant-type globals.
+.. 
+ and applies to the whole current scope, even before the declaration.
+ Currently, type declarations cannot be used in global scope, e.g. in
+ the REPL, since Julia does not yet have constant-type globals.
 
-Declarations can also be attached to function definitions::
+宣言の前であっても、現在のスコープ全体に適用されます。Juliaはまだ定型のグローバルがないため、
+REPLでは、現在型宣言はグローバルスコープでは使用できません。
+
+.. 
+ Declarations can also be attached to function definitions::
+
+宣言は関数定義に付加することもできます。::
 
     function sinc(x)::Float64
         if x == 0
@@ -153,60 +244,102 @@ Declarations can also be attached to function definitions::
         return sin(pi*x)/(pi*x)
     end
 
-Returning from this function behaves just like an assignment to
-a variable with a declared type: the value is always converted to
-``Float64``.
+.. 
+ Returning from this function behaves just like an assignment to
+ a variable with a declared type: the value is always converted to
+ ``Float64``.
+
+この関数からの戻り値は、宣言された型を持つ変数への割り当てと同様に動作します。
+値は常に ``Float64`` に変換されます。
 
 
 .. _man-abstract-types:
 
-Abstract Types
+.. 
+ Abstract Types
+ --------------
+
+抽象型
 --------------
 
-Abstract types cannot be instantiated, and serve only as nodes in the
-type graph, thereby describing sets of related concrete types: those
-concrete types which are their descendants. We begin with abstract types
-even though they have no instantiation because they are the backbone of
-the type system: they form the conceptual hierarchy which makes Julia's
-type system more than just a collection of object implementations.
+.. 
+ Abstract types cannot be instantiated, and serve only as nodes in the
+ type graph, thereby describing sets of related concrete types: those
+ concrete types which are their descendants. We begin with abstract types
+ even though they have no instantiation because they are the backbone of
+ the type system: they form the conceptual hierarchy which makes Julia's
+ type system more than just a collection of object implementations.
 
-Recall that in :ref:`man-integers-and-floating-point-numbers`, we
-introduced a variety of concrete types of numeric values: :class:`Int8`,
-:class:`UInt8`, :class:`Int16`, :class:`UInt16`, :class:`Int32`, :class:`UInt32`, :class:`Int64`,
-:class:`UInt64`, :class:`Int128`, :class:`UInt128`, :class:`Float16`, :class:`Float32`, and
-:class:`Float64`.  Although they have different representation sizes, :class:`Int8`,
-:class:`Int16`, :class:`Int32`, :class:`Int64`  and :class:`Int128` all have in common that
-they are signed integer types. Likewise :class:`UInt8`, :class:`UInt16`, :class:`UInt32`,
-:class:`UInt64` and :class:`UInt128` are all unsigned integer types, while
-:class:`Float16`, :class:`Float32` and :class:`Float64` are distinct in being
-floating-point types rather than integers. It is common for a piece of code
-to make sense, for example, only if its arguments are some kind of integer,
-but not really depend on what particular *kind* of integer.  For example,
-the greatest common denominator algorithm works for all kinds of integers,
-but will not work for floating-point numbers.  Abstract types allow the
-construction of a hierarchy of types, providing a context into which
-concrete types can fit.  This allows you, for example, to easily program to
-any type that is an integer, without restricting an algorithm to a specific
-type of integer.
+抽象型はインスタンス化することはできず、型グラフ内のノードとしてのみ機能し、それによって
+関連するそれらの子孫である具体型の集合を記述します。インスタンス化できない関わらず
+抽象型から説明を始める理由は、抽象型は型システムの根幹であるためです。抽象型はJuliaの
+型システムを単なるオブジェクト実装の集合体以上にする概念的階層を形成します。
 
-Abstract types are declared using the ``abstract`` keyword. The general
-syntaxes for declaring an abstract type are::
+.. 
+ Recall that in :ref:`man-integers-and-floating-point-numbers`, we
+ introduced a variety of concrete types of numeric values: :class:`Int8`,
+ :class:`UInt8`, :class:`Int16`, :class:`UInt16`, :class:`Int32`, :class:`UInt32`, :class:`Int64`,
+ :class:`UInt64`, :class:`Int128`, :class:`UInt128`, :class:`Float16`, :class:`Float32`, and
+ :class:`Float64`.  Although they have different representation sizes, :class:`Int8`,
+ :class:`Int16`, :class:`Int32`, :class:`Int64`  and :class:`Int128` all have in common that
+ they are signed integer types. Likewise :class:`UInt8`, :class:`UInt16`, :class:`UInt32`,
+ :class:`UInt64` and :class:`UInt128` are all unsigned integer types, while
+ :class:`Float16`, :class:`Float32` and :class:`Float64` are distinct in being
+ floating-point types rather than integers. It is common for a piece of code
+ to make sense, for example, only if its arguments are some kind of integer,
+ but not really depend on what particular *kind* of integer.  For example,
+ the greatest common denominator algorithm works for all kinds of integers,
+ but will not work for floating-point numbers.  Abstract types allow the
+ construction of a hierarchy of types, providing a context into which
+ concrete types can fit.  This allows you, for example, to easily program to
+ any type that is an integer, without restricting an algorithm to a specific
+ type of integer.
+
+「整数と浮動小数点数」にて、様々な数値の具体型を説明したことを思い出してください（:class:`Int8`、
+ :class:`UInt8`、 :class:`Int16`、 :class:`UInt16`、 :class:`Int32`、 :class:`UInt32`、 :class:`Int64`、
+ :class:`UInt64`、 :class:`Int128`、 :class:`UInt128`、 :class:`Float16`、 :class:`Float32`、
+および :class:`Float64`）。それらの表現サイズは異なりますが、 :class:`Int8`:class:、 `Int16`、
+ :class:`Int32`、 :class:`Int64`  および :class:`Int128` はすべて符号付き整数型であるという
+共通点があります。同様に、 :class:`UInt8`、 :class:`UInt16`、 :class:`UInt32`、
+ :class:`UInt64` および :class:`UInt128` はすべて符号なし整数型ですが、 :class:`Float16`、 :class:`Float32`
+および :class:`Float64` は整数ではなく、浮動小数点型として区別されます。例えば、ある引数が何らかの種類の整数であっても、
+特定の種類の整数に依存していない場合に限って、コードが意味をなすということは一般的です。
+例えば、最大公約数アルゴリズムはあらゆる種類の整数で機能しますが、浮動小数点数では機能しません。
+抽象型は、型の階層の構築を可能にし、具体型が適合できる文脈を提供します。これにより、
+アルゴリズムを特定の整数型に制限することなく、整数型の任意の型に簡単にプログラムすることが可能になります。
+
+.. 
+ Abstract types are declared using the ``abstract`` keyword. The general
+ syntaxes for declaring an abstract type are::
+
+抽象型は、 ``abstract`` キーワードを使用して宣言されます。抽象型を宣言するための一般的な構文は次の通りです。::
 
     abstract «name»
     abstract «name» <: «supertype»
 
-The ``abstract`` keyword introduces a new abstract type, whose name is
-given by ``«name»``. This name can be optionally followed by ``<:`` and
-an already-existing type, indicating that the newly declared abstract
-type is a subtype of this "parent" type.
+.. 
+ The ``abstract`` keyword introduces a new abstract type, whose name is
+ given by ``«name»``. This name can be optionally followed by ``<:`` and
+ an already-existing type, indicating that the newly declared abstract
+ type is a subtype of this "parent" type.
 
-When no supertype is given, the default supertype is :obj:`Any` — a
-predefined abstract type that all objects are instances of and all types
-are subtypes of. In type theory, :obj:`Any` is commonly called "top"
-because it is at the apex of the type graph. Julia also has a predefined
-abstract "bottom" type, at the nadir of the type graph, which is written as
-``Union{}``. It is the exact opposite of :obj:`Any`: no object is an instance
-of ``Union{}`` and all types are supertypes of ``Union{}``.
+``abstract`` キーワード新しい抽象型を宣言し、その名前は ``«name»`` により与えられます。
+この名前の後にオプションで ``<:`` と既存の型が続き、新しく宣言された抽象型がこの「親」の型のサブタイプであることを示します。
+
+.. 
+ When no supertype is given, the default supertype is :obj:`Any` — a
+ predefined abstract type that all objects are instances of and all types
+ are subtypes of. In type theory, :obj:`Any` is commonly called "top"
+ because it is at the apex of the type graph. Julia also has a predefined
+ abstract "bottom" type, at the nadir of the type graph, which is written as
+ ``Union{}``. It is the exact opposite of :obj:`Any`: no object is an instance
+ of ``Union{}`` and all types are supertypes of ``Union{}``.
+
+上位タイプが指定されていない場合、デフォルトの上位タイプは :obj:`Any` となります。これは、全てのオブジェクトがインスタンスであり、
+また全ての型がサブタイプである、事前に定義された抽象型です。型の理論では、型グラフの頂点にあるため、 :obj:`Any` は一般に
+「トップ」と呼ばれます。またJuliaには、 ``Union{}`` と記述できる、あらかじめ定義された抽象的な「ボトム」型があります。
+これは :obj:`Any` とは正反対です。いかなるオブジェクトは ``Union{}`` のインスタンスではなく、
+全ての型は ``Union{}`` の上位タイプとなります。
 
 Let's consider some of the abstract types that make up Julia's numerical
 hierarchy::
