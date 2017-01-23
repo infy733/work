@@ -101,7 +101,7 @@ Juliaには、これを実現する ``begin`` ブロックおよび ``(;)`` チ�
  or that ``(;)`` chains be single-line:
 
 この構文は、 :ref:`man-関数` で説明された簡潔な単一行の関数定義の際に特に便利です。
-``begin`` ブロックを複数行にする必要はなく、「（;）」チェーンを単一行にする必要はありません。:
+``begin`` ブロックを複数行にする必要はなく、 ``(;)`` チェーンを単一行にする必要はありません。:
 
 .. doctest::
 
@@ -510,11 +510,14 @@ C、MATLAB、Perl、Python、Rubyと異なり、しかしJavaやその他の厳�
      in fact(::Int64) at ./none:2
      ...
 
+.. 
+  Boolean operations *without* short-circuit evaluation can be done with the
+  bitwise boolean operators introduced in :ref:`man-mathematical-operations`:
+  ``&`` and ``|``. These are normal functions, which happen to support
+  infix operator syntax, but always evaluate their arguments:
 
-Boolean operations *without* short-circuit evaluation can be done with the
-bitwise boolean operators introduced in :ref:`man-mathematical-operations`:
-``&`` and ``|``. These are normal functions, which happen to support
-infix operator syntax, but always evaluate their arguments:
+短絡評価のないブール演算は、 :ref:`man-算術処理と基本的な関数`で紹介されたビット単位の論理演算子（ ``&`` および ``|`` ）で
+行うことができます。これらは通常の関数であり、中置演算子の構文をサポートしますが、常に引数を評価します。::
 
 .. doctest::
 
