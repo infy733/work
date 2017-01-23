@@ -508,24 +508,39 @@ Juliaは、 :func:`iseven` と :func:`isodd` という奇数か偶数かをテ�
 ハードローカルスコープvsソフトローカルスコープ
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Blocks which introduce a soft local scope, such as loops, are
-generally used to manipulate the variables in their parent scope.
-Thus their default is to fully access all variables in their parent
-scope.
+.. 
+  Blocks which introduce a soft local scope, such as loops, are
+  generally used to manipulate the variables in their parent scope.
+  Thus their default is to fully access all variables in their parent
+  scope.
 
-Conversely, the code inside blocks which introduce a hard local scope
-(function, type, and macro definitions) can be executed at any place in
-a program.  Remotely changing the state of global variables in other
-modules should be done with care and thus this is an opt-in feature
-requiring the ``global`` keyword.
+ループなどのソフトローカルスコープを提示するブロックは、通常親スコープ内の変数を操作するために使用されます。
+従って、デフォルトでは親スコープ内の全ての変数にアクセスすることができます。
 
-The reason to allow *modifying local* variables of parent scopes in
-nested functions is to allow constructing `closures
-<https://en.wikipedia.org/wiki/Closure_%28computer_programming%29>`_
-which have a private state, for instance the ``state`` variable in the
-following example::
+.. 
+  Conversely, the code inside blocks which introduce a hard local scope
+  (function, type, and macro definitions) can be executed at any place in
+  a program.  Remotely changing the state of global variables in other
+  modules should be done with care and thus this is an opt-in feature
+  requiring the ``global`` keyword.
+  
+一方で、ハードローカルスコープ（関数、型、およびマクロ定義）を提示するブロック内のコードは、
+プログラム内の任意の場所で実行することができます。他のモジュールでグローバル変数の状態を
+遠隔で変更する場合は注意が必要です。これは ``global`` キーワードを必要とするオプトイン機能です。  
 
-    let
+.. 
+  The reason to allow *modifying local* variables of parent scopes in
+  nested functions is to allow constructing `closures
+  <https://en.wikipedia.org/wiki/Closure_%28computer_programming%29>`_
+  which have a private state, for instance the ``state`` variable in the
+  following example::
+
+ネストされた関数で親スコープのローカル変数を変更できるようにする理由は、
+プライベート状態を持つ `クロージャ 
+<https://en.wikipedia.org/wiki/Closure_%28computer_programming%29>`_ を作成できるようにするためです。
+例えば、次の例の「state」変数です。::
+
+    let
         state = 0
         global counter
         counter() = state += 1
@@ -537,30 +552,48 @@ following example::
     julia> counter()
     2
 
-See also the closures in the examples in the next two sections.
+.. 
+  See also the closures in the examples in the next two sections.
+  
+次の2つのセクションの例のクロージャも参照してください。  
 
 .. _man-let-blocks:
 
-Let Blocks
+.. 
+  Let Blocks
+  ^^^^^^^^^^
+
+letブロック
 ^^^^^^^^^^
 
-Unlike assignments to local variables, ``let`` statements allocate new
-variable bindings each time they run. An assignment modifies an
-existing value location, and ``let`` creates new locations. This
-difference is usually not important, and is only detectable in the
-case of variables that outlive their scope via closures. The ``let``
-syntax accepts a comma-separated series of assignments and variable
-names::
+.. 
+  Unlike assignments to local variables, ``let`` statements allocate new
+  variable bindings each time they run. An assignment modifies an
+  existing value location, and ``let`` creates new locations. This
+  difference is usually not important, and is only detectable in the
+  case of variables that outlive their scope via closures. The ``let``
+  syntax accepts a comma-separated series of assignments and variable
+  names::
+
+ローカル変数への代入とは異なり、 ``let`` 文は実行するたびに新しい変数のバインディングを割り当てます。
+割り当てによって既存の値の場所が変更され、 ``let`` によって新しい場所が作成されます。
+この違いは通常は重要ではなく、クロージャによって想定以上に長く存在する変数がある場合にのみ発見することが可能です。
+``let`` 構文は、カンマで区切られた一連の代入と変数名を受け入れます。::
 
     let var1 = value1, var2, var3 = value3
         code
     end
 
-The assignments are evaluated in order, with each right-hand side
-evaluated in the scope before the new variable on the left-hand side
-has been introduced. Therefore it makes sense to write something like
-``let x = x`` since the two ``x`` variables are distinct and have separate
-storage. Here is an example where the behavior of ``let`` is needed::
+.. 
+  The assignments are evaluated in order, with each right-hand side
+  evaluated in the scope before the new variable on the left-hand side
+  has been introduced. Therefore it makes sense to write something like
+  ``let x = x`` since the two ``x`` variables are distinct and have separate
+  storage. Here is an example where the behavior of ``let`` is needed::
+
+代入は、左辺の新しい変数が提示される前に右辺がスコープ内で順番に評価されます。したがって、
+2つの　``x`` 変数が区別され、別々の記憶域を持つため、　``let x = x`` のような構文を書くことは理にかなっています。
+``let`` の動作が必要な場合の例を次に示します。::
 
     Fs = Array{Any}(2)
     i = 1
@@ -575,10 +608,14 @@ storage. Here is an example where the behavior of ``let`` is needed::
     julia> Fs[2]()
     3
 
-Here we create and store two closures that return variable ``i``.
-However, it is always the same variable ``i``, so the two closures
-behave identically. We can use ``let`` to create a new binding for
-``i``::
+.. 
+  Here we create and store two closures that return variable ``i``.
+  However, it is always the same variable ``i``, so the two closures
+  behave identically. We can use ``let`` to create a new binding for
+  ``i``::
+
+ここでは、変数「i」を返す2つのクロージャを作成して格納しています。しかし、これらは同じ変数 ``i`` であるため、
+2つのクロージャは同じように動作します。そこで ``let`` を使って ``i`` の新しいバインディングを作成することができます。::
 
     Fs = Array{Any}(2)
     i = 1
@@ -595,9 +632,13 @@ behave identically. We can use ``let`` to create a new binding for
     julia> Fs[2]()
     2
 
-Since the ``begin`` construct does not introduce a new scope, it can be
-useful to use a zero-argument ``let`` to just introduce a new scope
-block without creating any new bindings:
+.. 
+  Since the ``begin`` construct does not introduce a new scope, it can be
+  useful to use a zero-argument ``let`` to just introduce a new scope
+  block without creating any new bindings:
+
+``begin`` 構造体は新しいスコープを提示しないため、新しいバインディングを作成せずに
+新しいスコープブロックを提示する引数のない ``let`` を使用すると便利です。::
 
 .. doctest::
 
@@ -610,22 +651,32 @@ block without creating any new bindings:
            end
     1
 
-Since ``let`` introduces a new scope block, the inner local ``x``
-is a different variable than the outer local ``x``.
+.. 
+  Since ``let`` introduces a new scope block, the inner local ``x``
+  is a different variable than the outer local ``x``.
 
+``let`` は新しいスコープブロックを提示するため、内部ローカル ``x`` は外部ローカル ``x`` とは異なる変数となります。
 
 .. _man-for-loops-scope:
 
-For Loops and Comprehensions
+.. 
+  For Loops and Comprehensions
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+forループとコンプリへンション(comprehension)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+.. 
+  ``for`` loops and :ref:`comprehensions <comprehensions>` have the
+  following behavior: any new variables introduced in their body scopes
+  are freshly allocated for each loop iteration.  This is in contrast to
+  ``while`` loops which reuse the variables for all
+  iterations. Therefore these constructs are similar to ``while`` loops
+  with ``let`` blocks inside::
 
-``for`` loops and :ref:`comprehensions <comprehensions>` have the
-following behavior: any new variables introduced in their body scopes
-are freshly allocated for each loop iteration.  This is in contrast to
-``while`` loops which reuse the variables for all
-iterations. Therefore these constructs are similar to ``while`` loops
-with ``let`` blocks inside::
+``for`` ループと「コンプリへンション(comprehension)」には、ボディスコープに提示された新しい変数は、
+ループの繰り返し処理ごとに新たに割り当てる機能があります。これは、全ての繰り返し処理で変数を
+再利用する ``while`` ループとは対照的です。従って、これらの構造体は ``let`` ブロックを内部に持つ ``while`` ループと似ています。::
 
     Fs = Array{Any}(2)
     for i = 1:2
@@ -638,44 +689,76 @@ with ``let`` blocks inside::
     julia> Fs[2]()
     2
 
-``for`` loops will reuse existing variables for its iteration variable::
+.. 
+  ``for`` loops will reuse existing variables for its iteration variable::
+
+``for`` ループは、繰り返し処理用の変数に既存の変数を再利用します。::
 
     i = 0
     for i = 1:3
     end
     i  # here equal to 3
 
-However, comprehensions do not do this, and always freshly allocate their
-iteration variables::
+.. 
+  However, comprehensions do not do this, and always freshly allocate their
+  iteration variables::
+
+しかし、コンプリへンション(comprehension)はこれを行わず、いつも新しく繰り返し処理用の変数を割り当てます。::
 
     x = 0
     [ x for x=1:3 ]
     x  # here still equal to 0
 
-Constants
+.. 
+  Constants
+  ---------
+
+定数
 ---------
 
-A common use of variables is giving names to specific, unchanging
-values. Such variables are only assigned once. This intent can be
-conveyed to the compiler using the ``const`` keyword::
+.. 
+  A common use of variables is giving names to specific, unchanging
+  values. Such variables are only assigned once. This intent can be
+  conveyed to the compiler using the ``const`` keyword::
+
+変数の一般的な使用は、特定の変更されない値に名前を付けることです。そのような変数は1度だけ割り当てられます。
+この目的は、 ``const`` キーワードを使用してコンパイラに伝えることができます。::
 
     const e  = 2.71828182845904523536
     const pi = 3.14159265358979323846
 
-The ``const`` declaration is allowed on both global and local variables,
-but is especially useful for globals. It is difficult for the compiler
-to optimize code involving global variables, since their values (or even
-their types) might change at almost any time. If a global variable will
-not change, adding a ``const`` declaration solves this performance
-problem.
+.. 
+  The ``const`` declaration is allowed on both global and local variables,
+  but is especially useful for globals. It is difficult for the compiler
+  to optimize code involving global variables, since their values (or even
+  their types) might change at almost any time. If a global variable will
+  not change, adding a ``const`` declaration solves this performance
+  problem.
 
-Local constants are quite different. The compiler is able to determine
-automatically when a local variable is constant, so local constant
-declarations are not necessary for performance purposes.
+``const`` の宣言は、グローバル変数とローカル変数の両方で可能ですが、特にグローバルに便利です。
+グローバル変数の値（または型）はほとんどいつでも変更される可能性があるため、
+コンパイラはグローバル変数を含むコードを最適化することは難しいです。グローバル変数が変更されない場合、
+``const`` 宣言を追加すると、このパフォーマンスの問題を解決することができます。
 
-Special top-level assignments, such as those performed by the
-``function`` and ``type`` keywords, are constant by default.
+.. 
+  Local constants are quite different. The compiler is able to determine
+  automatically when a local variable is constant, so local constant
+  declarations are not necessary for performance purposes.
 
-Note that ``const`` only affects the variable binding; the variable may
-be bound to a mutable object (such as an array), and that object may
-still be modified.
+ローカル定数は異なっています。コンパイラは、ローカル変数が定数の場合は自動的に認識することができるため、
+パフォーマンス上の目的でローカル定数の宣言は必要ありません。
+
+.. 
+  Special top-level assignments, such as those performed by the
+  ``function`` and ``type`` keywords, are constant by default.
+
+``function`` と ``type`` キーワードによって実行されるような特別なトップレベルの割り当ては、
+デフォルトで定数です。
+
+.. 
+  Note that ``const`` only affects the variable binding; the variable may
+  be bound to a mutable object (such as an array), and that object may
+  still be modified.
+  
+``const`` は変数のバインディングにのみ影響することに注意してください。変数は配列などの変更可能な
+オブジェクトにバインドされており、そのオブジェクトは変更されている可能性があります。
