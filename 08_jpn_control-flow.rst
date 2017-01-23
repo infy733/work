@@ -2,41 +2,76 @@
 
 .. currentmodule:: Base
 
+.. 
+ **************
+  Control Flow
+ **************
+
 **************
- Control Flow
+ 制御フロー
 **************
 
-Julia provides a variety of control flow constructs:
+.. 
+ Julia provides a variety of control flow constructs:
 
--  :ref:`man-compound-expressions`: ``begin`` and ``(;)``.
--  :ref:`man-conditional-evaluation`:
-   ``if``-``elseif``-``else`` and ``?:`` (ternary operator).
--  :ref:`man-short-circuit-evaluation`:
-   ``&&``, ``||`` and chained comparisons.
--  :ref:`man-loops`: ``while`` and ``for``.
--  :ref:`man-exception-handling`:
-   ``try``-``catch``, :func:`error` and :func:`throw`.
--  :ref:`man-tasks`: :func:`yieldto`.
+ -  :ref:`man-compound-expressions`: ``begin`` and ``(;)``.
+ -  :ref:`man-conditional-evaluation`:
+    ``if``-``elseif``-``else`` and ``?:`` (ternary operator).
+ -  :ref:`man-short-circuit-evaluation`:
+    ``&&``, ``||`` and chained comparisons.
+ -  :ref:`man-loops`: ``while`` and ``for``.
+ -  :ref:`man-exception-handling`:
+    ``try``-``catch``, :func:`error` and :func:`throw`.
+ -  :ref:`man-tasks`: :func:`yieldto`.
 
-The first five control flow mechanisms are standard to high-level
-programming languages. :class:`Task`\ s are not so standard: they provide non-local
-control flow, making it possible to switch between temporarily-suspended
-computations. This is a powerful construct: both exception handling and
-cooperative multitasking are implemented in Julia using tasks. Everyday
-programming requires no direct usage of tasks, but certain problems can
-be solved much more easily by using tasks.
+Juliaはさまざまな制御フロー構成を提供しています。
+
+-  :ref:`man-複合式`: ``begin`` および ``(;)``
+-  :ref:`man-if文`:
+   ``if``-``elseif``-``else`` および ``?:`` (三項演算子)
+-  :ref:`man-短絡評価`:
+   ``&&``、 ``||`` および連結比較
+-  :ref:`man-繰り返し評価`: ``while`` および ``for``
+-  :ref:`man-例外処理`:
+   ``try``-``catch``、 :func:`error` および :func:`throw`
+-  :ref:`man-タスク`: :func:`yieldto`
+
+.. 
+ The first five control flow mechanisms are standard to high-level
+ programming languages. :class:`Task`\ s are not so standard: they provide non-local
+ control flow, making it possible to switch between temporarily-suspended
+ computations. This is a powerful construct: both exception handling and
+ cooperative multitasking are implemented in Julia using tasks. Everyday
+ programming requires no direct usage of tasks, but certain problems can
+ be solved much more easily by using tasks.
+
+上記の最初の5つの制御フローは、ハイレベルなプログラミング言語の標準的機能です。 :class:`Task`\ は標準ではなく、
+これは一時的に中断された計算を切り替えることができる非ローカル制御フローを提供します。
+これは強力な機能であり、例外処理および協同マルチタスクの両方がタスクを使用してJuliaに実装されています。
+日々のプログラミングでは、タスクを直接使用する必要はありませんが、特定の問題はタスクを使用することで簡単に解決することができます。
+
 
 .. _man-compound-expressions:
 
-Compound Expressions
+.. 
+ Compound Expressions
+ --------------------
+
+複合式
 --------------------
 
-Sometimes it is convenient to have a single expression which evaluates
-several subexpressions in order, returning the value of the last
-subexpression as its value. There are two Julia constructs that
-accomplish this: ``begin`` blocks and ``(;)`` chains. The value of both
-compound expression constructs is that of the last subexpression. Here's
-an example of a ``begin`` block:
+
+.. 
+ Sometimes it is convenient to have a single expression which evaluates
+ several subexpressions in order, returning the value of the last
+ subexpression as its value. There are two Julia constructs that
+ accomplish this: ``begin`` blocks and ``(;)`` chains. The value of both
+ compound expression constructs is that of the last subexpression. Here's
+ an example of a ``begin`` block:
+
+複数の部分式を順番に評価し、最後の部分式の値をその値として返す単一の式を利用することは便利です。
+Juliaには、これを実現する ``begin`` ブロックおよび ``(;)`` チェーンの2つの構成があります。
+両方の複合式構成の値は、最後の部分式の値となります。以下は ``begin`` ブロックの例です。:
 
 .. doctest::
 
@@ -47,19 +82,26 @@ an example of a ``begin`` block:
            end
     3
 
-Since these are fairly small, simple expressions, they could easily be
-placed onto a single line, which is where the ``(;)`` chain syntax comes
-in handy:
+.. 
+ Since these are fairly small, simple expressions, they could easily be
+ placed onto a single line, which is where the ``(;)`` chain syntax comes
+ in handy:
+
+これらは単純な式であるため、 ``(;)`` チェーン構文を使用することで簡単に単一の行に置き換えることができます。:
 
 .. doctest::
 
     julia> z = (x = 1; y = 2; x + y)
     3
 
-This syntax is particularly useful with the terse single-line function
-definition form introduced in :ref:`man-functions`. Although it
-is typical, there is no requirement that ``begin`` blocks be multiline
-or that ``(;)`` chains be single-line:
+.. 
+ This syntax is particularly useful with the terse single-line function
+ definition form introduced in :ref:`man-functions`. Although it
+ is typical, there is no requirement that ``begin`` blocks be multiline
+ or that ``(;)`` chains be single-line:
+
+この構文は、 :ref:`man-関数` で説明された簡潔な単一行の関数定義の際に特に便利です。
+ ``begin`` ブロックを複数行にする必要はなく、「（;）」チェーンを単一行にする必要はありません。:
 
 .. doctest::
 
@@ -73,13 +115,21 @@ or that ``(;)`` chains be single-line:
 
 .. _man-conditional-evaluation:
 
-Conditional Evaluation
+.. 
+ Conditional Evaluation
+ ----------------------
+
+if文
 ----------------------
 
-Conditional evaluation allows portions of code to be evaluated or not
-evaluated depending on the value of a boolean expression. Here is the
-anatomy of the ``if``-``elseif``-``else`` conditional syntax::
+.. 
+ Conditional evaluation allows portions of code to be evaluated or not
+ evaluated depending on the value of a boolean expression. Here is the
+ anatomy of the ``if``-``elseif``-``else`` conditional syntax::
 
+if文は、ブール式の値に応じてコードの一部を評価したり評価しなかったりすることができます。
+ ``if``-``elseif``-``else`` 条件構文の例は次のとおりです。:
+ 
     if x < y
       println("x is less than y")
     elseif x > y
@@ -88,10 +138,15 @@ anatomy of the ``if``-``elseif``-``else`` conditional syntax::
       println("x is equal to y")
     end
 
-If the condition expression ``x < y`` is ``true``, then the corresponding block
-is evaluated; otherwise the condition expression ``x > y`` is evaluated, and if
-it is ``true``, the corresponding block is evaluated; if neither expression is
-true, the ``else`` block is evaluated. Here it is in action:
+.. 
+ If the condition expression ``x < y`` is ``true``, then the corresponding block
+ is evaluated; otherwise the condition expression ``x > y`` is evaluated, and if
+ it is ``true``, the corresponding block is evaluated; if neither expression is
+ true, the ``else`` block is evaluated. Here it is in action:
+
+条件式 ``x < y`` が ``true`` の場合、対応するブロックが評価されます。それ以外の場合は、
+条件式 ``x > y`` が評価され、 ``true`` の場合は対応するブロックが評価されます。
+どちらの式も真でない場合、 ``else`` ブロックが評価されます。以下は処理の例です。:
 
 .. doctest::
 
@@ -115,16 +170,26 @@ true, the ``else`` block is evaluated. Here it is in action:
     julia> test(1, 1)
     x is equal to y
 
-The ``elseif`` and ``else`` blocks are optional, and as many ``elseif``
-blocks as desired can be used. The condition expressions in the
-``if``-``elseif``-``else`` construct are evaluated until the first one
-evaluates to ``true``, after which the associated block is evaluated,
-and no further condition expressions or blocks are evaluated.
+.. 
+ The ``elseif`` and ``else`` blocks are optional, and as many ``elseif``
+ blocks as desired can be used. The condition expressions in the
+ ``if``-``elseif``-``else`` construct are evaluated until the first one
+ evaluates to ``true``, after which the associated block is evaluated,
+ and no further condition expressions or blocks are evaluated.
 
-``if`` blocks are "leaky", i.e. they do not introduce a local scope.
-This means that new variables defined inside the ``ìf`` clauses can
-be used after the ``if`` block, even if they weren't defined before.
-So, we could have defined the ``test`` function above as
+``elseif`` および ``else`` ブロックはオプションであり、必要に応じた数の ``elseif`` ブロックを使用できます。
+``if``-``elseif``-``else`` 構文の条件式は、最初のものが ``true`` と評価されるまで評価され、
+その後に関連するブロックが評価され、それ以外の条件式やブロックは評価されません。
+
+.. 
+ ``if`` blocks are "leaky", i.e. they do not introduce a local scope.
+ This means that new variables defined inside the ``ìf`` clauses can
+ be used after the ``if`` block, even if they weren't defined before.
+ So, we could have defined the ``test`` function above as
+
+``if`` ブロックはフレキシブルであり、ローカルスコープとはなりません。
+これは、 ``ìf`` 節の中で定義された新しい変数は、たとえ前に定義されていないとしても、
+``ìf`` ブロックの後に使用できることを意味します。これにより、上記の ``test`` 関数を次のように定義することができます。
 
 .. doctest:: leaky
 
@@ -140,10 +205,15 @@ So, we could have defined the ``test`` function above as
            end
     test (generic function with 1 method)
 
-The variable ``relation`` is declared inside the ``if`` block, but used
-outside. However, when depending on this behavior, make sure all possible
-code paths define a value for the variable. The following change to
-the above function results in a runtime error
+.. 
+ The variable ``relation`` is declared inside the ``if`` block, but used
+ outside. However, when depending on this behavior, make sure all possible
+ code paths define a value for the variable. The following change to
+ the above function results in a runtime error
+
+``relation`` 関数は ``if`` ブロック内で宣言されていますが、ブロックの外側で使用されています。
+しかし、この動作を利用する際には、すべてのコードパスが変数の値を定義していることを確認してください。
+上記の関数を次のように変更すると、ランタイムエラーが発生します。
 
 .. doctest:: bad-leaky
 
@@ -165,9 +235,13 @@ the above function results in a runtime error
      in test(::Int64, ::Int64) at ./none:7
      ...
 
-``if`` blocks also return a value, which may seem unintuitive to users
-coming from many other languages. This value is simply the return value
-of the last executed statement in the branch that was chosen, so
+.. 
+ ``if`` blocks also return a value, which may seem unintuitive to users
+ coming from many other languages. This value is simply the return value
+ of the last executed statement in the branch that was chosen, so
+
+``if`` ブロックが値を返すというのは、他の多くの言語を経験したユーザーにとっては直感的ではないように
+思えるかもしれません。この値は、単に選択された分岐で最後に実行されたステートメントの戻り値です。
 
 .. doctest::
 
@@ -181,12 +255,19 @@ of the last executed statement in the branch that was chosen, so
            end
     "positive!"
 
-Note that very short conditional statements (one-liners) are frequently expressed using
-Short-Circuit Evaluation in Julia, as outlined in the next section.
+.. 
+ Note that very short conditional statements (one-liners) are frequently expressed using
+ Short-Circuit Evaluation in Julia, as outlined in the next section.
 
-Unlike C, MATLAB, Perl, Python, and Ruby — but like Java, and a few
-other stricter, typed languages — it is an error if the value of a
-conditional expression is anything but ``true`` or ``false``:
+非常に短い条件文（1行）は、次のセクションで説明するように、多くの場合Juliaの短絡評価を使用して表現されることに注意してください。
+
+.. 
+ Unlike C, MATLAB, Perl, Python, and Ruby — but like Java, and a few
+ other stricter, typed languages — it is an error if the value of a
+ conditional expression is anything but ``true`` or ``false``:
+
+C、MATLAB、Perl、Python、Rubyと異なり、しかしJavaやその他の厳密に型付けされた言語のように、
+条件式の値が ``true`` または ``false`` 以外の場合はエラーとなります。:
 
 .. doctest::
 
@@ -196,27 +277,44 @@ conditional expression is anything but ``true`` or ``false``:
     ERROR: TypeError: non-boolean (Int64) used in boolean context
      ...
 
-This error indicates that the conditional was of the wrong type:
-:obj:`Int64` rather than the required :obj:`Bool`.
+.. 
+ This error indicates that the conditional was of the wrong type:
+ :obj:`Int64` rather than the required :obj:`Bool`.
 
-The so-called "ternary operator", ``?:``, is closely related to the
-``if``-``elseif``-``else`` syntax, but is used where a conditional
-choice between single expression values is required, as opposed to
-conditional execution of longer blocks of code. It gets its name from
-being the only operator in most languages taking three operands::
+このエラーは、条件文が間違った型であることを示します。この場合、 :obj:`Bool` ではなく :obj:`Int64` です。
+
+.. 
+ The so-called "ternary operator", ``?:``, is closely related to the
+ ``if``-``elseif``-``else`` syntax, but is used where a conditional
+ choice between single expression values is required, as opposed to
+ conditional execution of longer blocks of code. It gets its name from
+ being the only operator in most languages taking three operands::
+
+いわゆる「三項演算子」の ``?:`` は、 ``if``-``elseif``-``else`` 構文と密接に関連していますが、
+長いコードブロックを条件付きで実行する場合とは反対に、単一の式の値の条件付き選択が必要な場合に使用されます。
+これは、3つのオペランドを取るほとんどの言語で唯一の演算子であることから、その名前が付けられています。:
 
     a ? b : c
 
-The expression ``a``, before the ``?``, is a condition expression, and
-the ternary operation evaluates the expression ``b``, before the ``:``,
-if the condition ``a`` is ``true`` or the expression ``c``, after the
-``:``, if it is ``false``.
+.. 
+ The expression ``a``, before the ``?``, is a condition expression, and
+ the ternary operation evaluates the expression ``b``, before the ``:``,
+ if the condition ``a`` is ``true`` or the expression ``c``, after the
+ ``:``, if it is ``false``.
 
-The easiest way to understand this behavior is to see an example. In the
-previous example, the ``println`` call is shared by all three branches:
-the only real choice is which literal string to print. This could be
-written more concisely using the ternary operator. For the sake of
-clarity, let's try a two-way version first:
+``?`` の前の式 ``a`` は条件式であり、式 ``a`` が ``true`` の場合、
+または ``:`` の後の式 ``c`` が ``false`` の場合に三項演算子は式 ``b`` を評価します。
+
+.. 
+ The easiest way to understand this behavior is to see an example. In the
+ previous example, the ``println`` call is shared by all three branches:
+ the only real choice is which literal string to print. This could be
+ written more concisely using the ternary operator. For the sake of
+ clarity, let's try a two-way version first:
+
+例を見ることでこの動作を良く理解できます。前の例では、 ``println`` 呼び出しは3つの分岐すべてで共有されています。
+実際の選択肢は、どのリテラル文字を出力するかです。これは、三項演算子を使うことでより簡潔に書くことができます。
+わかりやすくするために、最初に双方向バージョンを見てみましょう。:
 
 .. doctest::
 
@@ -230,11 +328,16 @@ clarity, let's try a two-way version first:
     julia> println(x < y ? "less than" : "not less than")
     not less than
 
-If the expression ``x < y`` is true, the entire ternary operator
-expression evaluates to the string ``"less than"`` and otherwise it
-evaluates to the string ``"not less than"``. The original three-way
-example requires chaining multiple uses of the ternary operator
-together:
+.. 
+ If the expression ``x < y`` is true, the entire ternary operator
+ expression evaluates to the string ``"less than"`` and otherwise it
+ evaluates to the string ``"not less than"``. The original three-way
+ example requires chaining multiple uses of the ternary operator
+ together:
+
+式 ``x < y`` が真の場合、三項演算子式全体が文字列 ``"less than"`` と評価され、
+そうでない場合は ``"not less than"`` と評価されます。最初の例では、
+三項演算子の複数の使用を連結させる必要があります。:
 
 .. doctest:: ternary-operator
 
@@ -251,11 +354,18 @@ together:
     julia> test(1, 1)
     x is equal to y
 
-To facilitate chaining, the operator associates from right to left.
+.. 
+ To facilitate chaining, the operator associates from right to left.
 
-It is significant that like ``if``-``elseif``-``else``, the expressions
-before and after the ``:`` are only evaluated if the condition
-expression evaluates to ``true`` or ``false``, respectively:
+連結を容易にするために、演算子は右から左に関連付けると良いでしょう。
+
+.. 
+ It is significant that like ``if``-``elseif``-``else``, the expressions
+ before and after the ``:`` are only evaluated if the condition
+ expression evaluates to ``true`` or ``false``, respectively:
+
+``if``-``elseif``-``else`` のように、 ``:`` の前後の式は、それぞれ条件式が ``true`` または ``false`` と
+評価された場合にのみ評価されます。:
 
 .. doctest::
 
@@ -273,27 +383,45 @@ expression evaluates to ``true`` or ``false``, respectively:
 
 .. _man-short-circuit-evaluation:
 
-Short-Circuit Evaluation
+.. 
+ Short-Circuit Evaluation
+ ------------------------
+
+短絡評価
 ------------------------
 
-Short-circuit evaluation is quite similar to conditional evaluation. The
-behavior is found in most imperative programming languages having the
-``&&`` and ``||`` boolean operators: in a series of boolean expressions
-connected by these operators, only the minimum number of expressions are
-evaluated as are necessary to determine the final boolean value of the
-entire chain. Explicitly, this means that:
+.. 
+ Short-circuit evaluation is quite similar to conditional evaluation. The
+ behavior is found in most imperative programming languages having the
+ ``&&`` and ``||`` boolean operators: in a series of boolean expressions
+ connected by these operators, only the minimum number of expressions are
+ evaluated as are necessary to determine the final boolean value of the
+ entire chain. Explicitly, this means that:
 
--  In the expression ``a && b``, the subexpression ``b`` is only
-   evaluated if ``a`` evaluates to ``true``.
--  In the expression ``a || b``, the subexpression ``b`` is only
-   evaluated if ``a`` evaluates to ``false``.
+ -  In the expression ``a && b``, the subexpression ``b`` is only
+    evaluated if ``a`` evaluates to ``true``.
+ -  In the expression ``a || b``, the subexpression ``b`` is only
+    evaluated if ``a`` evaluates to ``false``.
 
-The reasoning is that ``a && b`` must be ``false`` if ``a`` is
-``false``, regardless of the value of ``b``, and likewise, the value of
-``a || b`` must be true if ``a`` is ``true``, regardless of the value of
-``b``. Both ``&&`` and ``||`` associate to the right, but ``&&`` has
-higher precedence than ``||`` does. It's easy to experiment with
-this behavior:
+短絡評価は条件付き評価と非常によく似ています。この動作は、 ``&&`` および ``||`` ブール演算子を持つ
+ほとんどの命令型プログラミング言語で見られます。これらの演算子で連結された一連のブール式では、
+連結全体の最終的なブール値を決定するのに必要な最低限の式だけが評価されます。明示的には、これは次のことを意味します。:
+
+-  ``a && b`` の式では、 ``a`` が ``true`` と評価された場合にのみ部分式 ``b`` が評価されます。
+-  ``a || b`` の式では、 ``a`` が ``false`` と評価された場合にのみ部分式 ``b`` が評価されます。
+
+.. 
+ The reasoning is that ``a && b`` must be ``false`` if ``a`` is
+ ``false``, regardless of the value of ``b``, and likewise, the value of
+ ``a || b`` must be true if ``a`` is ``true``, regardless of the value of
+ ``b``. Both ``&&`` and ``||`` associate to the right, but ``&&`` has
+ higher precedence than ``||`` does. It's easy to experiment with
+ this behavior:
+
+論理的理由として、 ``a && b`` の式は、 ``b`` の値に関係なく、 ``a`` が ``false`` の場合は ``false`` でなければならず、
+また同様に ``a || b`` の式は、 ``b`` の値に関係なく、 ``a`` が ``true`` の場合は ``true`` でなければならないためです。
+``&&`` および ``||`` は共に右の式に関連付けるますが、 ``&&`` は ``||`` よりも高い優先順位を持ちます。
+この動作を試してみましょう。:
 
 .. doctest::
 
@@ -339,16 +467,28 @@ this behavior:
     2
     false
 
-You can easily experiment in the same way with the associativity and
-precedence of various combinations of ``&&`` and ``||`` operators.
+.. 
+ You can easily experiment in the same way with the associativity and
+ precedence of various combinations of ``&&`` and ``||`` operators.
 
-This behavior is frequently used in Julia to form an alternative to very short
-``if`` statements. Instead of ``if <cond> <statement> end``, one can write
-``<cond> && <statement>`` (which could be read as: <cond> *and then* <statement>).
-Similarly, instead of ``if ! <cond> <statement> end``, one can write
-``<cond> || <statement>`` (which could be read as: <cond> *or else* <statement>).
+``&&`` および ``||`` 演算子の様々な組み合わせの結合性と優先度について、簡単な実験で確認することができます。
 
-For example, a recursive factorial routine could be defined like this:
+.. 
+ This behavior is frequently used in Julia to form an alternative to very short
+ ``if`` statements. Instead of ``if <cond> <statement> end``, one can write
+ ``<cond> && <statement>`` (which could be read as: <cond> *and then* <statement>).
+ Similarly, instead of ``if ! <cond> <statement> end``, one can write
+ ``<cond> || <statement>`` (which could be read as: <cond> *or else* <statement>).
+
+この動作は、Juliaでは非常に短い ``if`` 文の代わりに頻繁に使用されます。 ``if <cond> <statement> end`` の代わりに、
+``<cond> && <statement>`` （「<cond>とその次に<statement>」と読むことができる）と書くことができます。
+同様に、 ``if ! <cond> <statement> end`` の代わりに、 ``<cond> || <statement>`` （これは
+「<cond>または <statement>」として読み取ることができる）と書くことができます。
+
+.. 
+ For example, a recursive factorial routine could be defined like this:
+
+例えば、再帰的階乗ルーチンは次のように定義することができます。:
 
 .. doctest::
 
