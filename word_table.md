@@ -81,7 +81,7 @@
 | constructor   | コンストラクタ
 | singleton   |  単体
 | parametric type   |  パラメータ型
-| composite : コンポジット
+| composite   |  コンポジット
 | generic programming   |  汎用プログラミング
 | parametric polymorphism   |  パラメトリック多様型
 | Singleton Types   |  シングルトン型                 
