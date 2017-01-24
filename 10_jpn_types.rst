@@ -1098,10 +1098,10 @@ However, ``Point`` itself is also a valid type object:
     false
 
 .. 
-This last point is very important:
+  This last point is very important:
 
-  - **Even though** ``Float64 <: Real`` **we DO NOT have**
-    ``Point{Float64} <: Point{Real}``\ **.**
+    - **Even though** ``Float64 <: Real`` **we DO NOT have**
+      ``Point{Float64} <: Point{Real}``\ **.**
 
 この最後の点は非常に重要です。
 
@@ -1302,7 +1302,7 @@ This last point is very important:
   each such instance is a subtype of ``Pointy``:
 
 この宣言では、 ``Pointy{T}`` は、 ``T`` の各型または整数値の異なる抽象型です。パラメータコンポジット型と同様に、
-そのようなインスタンスはそれぞれ ``Pointy`` のサブタイプです。::
+そのようなインスタンスはそれぞれ ``Pointy`` のサブタイプです。
 
 .. doctest::
 
@@ -2121,7 +2121,7 @@ Juliaの一貫性を保つため、呼び出し側はインスタンスを作成
 好ましくないケースでは、コードのパフォーマンスを大幅に悪化させることになります。
 特に、上記のようなコードを実際の記述することは決して好ましいことではありません。
 ``Val`` の適切な（そして不適切な）使い方の詳細については、 :ref:`パフォーマンスに関するヒント
-   <man-performance-val>` の広範な議論を参照してください。
+  <man-performance-val>` の広範な議論を参照してください。
 
 .. _man-nullable-types:
 
