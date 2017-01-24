@@ -85,7 +85,7 @@ Juliaの型システムは動的ですが、ある特定の値はある特定の
 抽象型のみをその上位タイプとして持つことができます。これは最初は過度に制限されているように見えるかもしれませんが、
 驚くほどわずかな欠点を伴う有益な結果をもたらします。動作を継承できることは構造を継承することよりも重要であり、
 両方を継承することは従来のオブジェクト指向言語では大きな困難を引き起こすことがわかっています。
-Juliaの型システムの他のハイレベルな側面は、以下の通りです。::
+Juliaの型システムの他のハイレベルな側面は、以下の通りです。
 
 .. 
    -  There is no division between object and non-object values: all values
@@ -143,7 +143,7 @@ Juliaの型システムは、強力で表現力豊かでありますが、それ
  2. To provide extra type information to the compiler, which can then
     improve performance in some cases
    
-``::`` 演算子を使用することで、プログラム内の式や変数に型の注釈を付けることができます。これには主に2つの理由があります。::
+``::`` 演算子を使用することで、プログラム内の式や変数に型の注釈を付けることができます。これには主に2つの理由があります。
 
 1. プログラムが期待通りに動作することを確認するための表明として使用するため
 2. コンパイラに追加の型情報を提供することで、場合によってはパフォーマンスを向上させることができるため
@@ -165,7 +165,7 @@ Juliaの型システムは、強力で表現力豊かでありますが、それ
 右辺の型が具体型である場合、左側の値はその実装としてその型を持たなければなりません。
 前述の通り全ての具体型は最終的であり、実装は他の型のサブタイプとはならないことに注意してください。
 型が抽象型である場合、値は抽象型のサブタイプである具体型によって実装さるには十分です。
-型宣言が真でない場合は例外が出力され、それ以外の場合は左辺の値が返されます。::
+型宣言が真でない場合は例外が出力され、それ以外の場合は左辺の値が返されます。
 
 .. doctest::
 
@@ -192,7 +192,7 @@ Juliaの型システムは、強力で表現力豊かでありますが、それ
 
 割り当ての左側の変数に追加する、またはローカル宣言の一部として追加した場合、 ``::`` 演算子意味は少し変わります。
 この場合変数は、C言語などの静的型言語における型宣言のように、常に指定された型を持つように宣言します。
-変数に割り当てられた全ての値は、 :func:`convert` を使用することで宣言された型に変換されます。::
+変数に割り当てられた全ての値は、 :func:`convert` を使用することで宣言された型に変換されます。
 
 .. doctest:: foo-func
 
@@ -381,7 +381,7 @@ Juliaの数値階層を構成するいくつかの抽象型を考えてみまし
 
 ``<:`` 演算子は一般的には「〜は〜のサブタイプ」を意味し、右側の型は新しく宣言された型の直接の
 上位タイプであることを宣言する場合などに使用されます。また、左辺の被演算子が右辺の被演算子の
-サブタイプである場合に ``true`` を返すサブタイプ演算子としての式で使用することもできます。::
+サブタイプである場合に ``true`` を返すサブタイプ演算子としての式で使用することもできます。
 
 .. doctest::
 
@@ -601,7 +601,7 @@ Juliaでは、全ての値がオブジェクトですが、関数は操作対象
   operator:
 
 コンポジット型はユーザー定義の具体型の最も一般的な形式であるため、フィールド名のブロックが続く
-``type`` キーワードにより宣言され、オプションで ``::`` 演算子を使用する型の注釈を付けることができます。::
+``type`` キーワードにより宣言され、オプションで ``::`` 演算子を使用する型の注釈を付けることができます。
 
 .. doctest::
 
@@ -622,7 +622,7 @@ Juliaでは、全ての値がオブジェクトですが、関数は操作対象
   ``Foo`` type object like a function to values for its fields:
 
 コンポジット型 ``Foo`` の新しいオブジェクトは、フィールドの値に対する関数のような ``Foo`` 型オブジェクトを
-適用することで作成されます。::
+適用することで作成されます。
 
 .. doctest::
 
@@ -652,7 +652,7 @@ Juliaでは、全ての値がオブジェクトですが、関数は操作対象
   However, the value for ``baz`` must be convertible to :class:`Int`:
 
 ``bar`` フィールドは型に制限されていないため、どのような値でも対応できます。
-しかし、 ``baz`` の値は :class:`Int` に変換可能でなければなりません。::
+しかし、 ``baz`` の値は :class:`Int` に変換可能でなければなりません。
 
 .. doctest::
 
@@ -678,7 +678,7 @@ Juliaでは、全ての値がオブジェクトですが、関数は操作対象
   You can access the field values of a composite object using the
   traditional ``foo.bar`` notation:
 
-伝統的な ``foo.bar`` 記号を使用することで、コンポジットオブジェクトのフィールド値にアクセスすることができます。::
+伝統的な ``foo.bar`` 記号を使用することで、コンポジットオブジェクトのフィールド値にアクセスすることができます。
 
 .. doctest::
 
@@ -694,7 +694,7 @@ Juliaでは、全ての値がオブジェクトですが、関数は操作対象
 .. 
   You can also change the values as one would expect:
   
-期待通りに値を変更することもできます。::
+期待通りに値を変更することもできます。
 
 .. doctest::
 
@@ -761,7 +761,7 @@ Juliaでは、全ての値がオブジェクトですが、関数は操作対象
   of them cannot be modified. Immutable types have several advantages:
 
 このような型は、他のコンポジット型と同じように動作しますが、そのインスタンスは変更できません。
-不変型にはいくつかの利点があります。::
+不変型にはいくつかの利点があります。
 
 .. 
   - They are more efficient in some cases. Types like the ``Complex``
@@ -816,7 +816,7 @@ Juliaでは、全ての値がオブジェクトですが、関数は操作対象
   * It is not permitted to modify the fields of a composite immutable
     type.
 
-要約すると、Juliaにおける不変性は以下2つの重要な特性により定義されています。::
+要約すると、Juliaにおける不変性は以下2つの重要な特性により定義されています。
 
 * 不変型のオブジェクトは、コピーによって代入文と関数呼び出しの両方で渡されますが、
   変更可能な型は参照により渡しされます。
@@ -846,8 +846,8 @@ CまたはC ++のバックグラウンドを持つ読者にとっては、なぜ
 フィールドの変更を禁止することで、このシナリオにおいて不明な効果を持つ関数を作成する可能性を回避します。
 
 .. 
-Declared Types
---------------
+  Declared Types
+  --------------
 
 
 宣言型
@@ -863,7 +863,7 @@ Declared Types
   - They may have parameters.
 
 前述のセクションで説明した3種類の型は、実際は全て密接に関連しています。
-それらは同じ重要な特性を共有しています。::
+それらは同じ重要な特性を共有しています。
 
 - それらは明示的に宣言されています。
 - それらは名前を持ちます。
@@ -876,7 +876,7 @@ Declared Types
   is the type of any of these types:
 
 これらの共有の特性のため、これらの型は内部的に同じコンセプトのインスタンスであり、
-３種類の型のいずれかの型である :obj:`DataType` として表されます。:: 
+３種類の型のいずれかの型である :obj:`DataType` として表されます。
 
 .. doctest::
 
@@ -1029,7 +1029,7 @@ Juliaの型システムの重要かつ強力な機能は、パラメータを取
 これはどのような型、もしくはビット型の値になることができます（ここでは型として使用されています）。
 ``Point{Float64}`` は、 ``Point`` の定義の ``T`` を :class:`Float64` に置き換えて定義した型に相当する具体型です。
 したがって、この1つの宣言は、実際には ``Point{Float64}`` 、 ``Point{AbstractString}`` および
-``Point{Int64}`` など、無制限の数の型を宣言します。それぞれは現在、使用可能な具体型です。::
+``Point{Int64}`` など、無制限の数の型を宣言します。それぞれは現在、使用可能な具体型です。
 
 .. doctest::
 
@@ -1046,7 +1046,7 @@ whose "coordinates" are string objects (see :ref:`man-strings`).
 However, ``Point`` itself is also a valid type object:
 
 ``Point{Float64}`` 型は座標が64ビットの浮動小数点値であり、一方で ``Point{AbstractString}`` 型は
-「座標」が文字列オブジェクト（ :ref:`man-文字列` を参照）です。しかし、 ``Point`` 自体も有効な型オブジェクトです。::
+「座標」が文字列オブジェクト（ :ref:`man-文字列` を参照）です。しかし、 ``Point`` 自体も有効な型オブジェクトです。
 
 .. doctest::
 
@@ -1060,7 +1060,7 @@ However, ``Point`` itself is also a valid type object:
   ``Point{AbstractString}``, etc.:
 
 ここでの ``T`` は ``Point`` のオリジナルの宣言で使用されたダミーの型シンボルです。 ``Point`` 自体は、
-全ての特定のインスタンス ``Point{Float64}`` 、 ``Point{AbstractString}`` などを含む型です。:: 
+全ての特定のインスタンス ``Point{Float64}`` 、 ``Point{AbstractString}`` などを含む型です。
 
 .. doctest::
 
@@ -1073,7 +1073,7 @@ However, ``Point`` itself is also a valid type object:
 .. 
   Other types, of course, are not subtypes of it:
 
-もちろん、他の型は「Point」のサブタイプではありません。::
+もちろん、他の型は「Point」のサブタイプではありません。
 
 .. doctest::
 
@@ -1087,7 +1087,7 @@ However, ``Point`` itself is also a valid type object:
   Concrete ``Point`` types with different values of ``T`` are never
   subtypes of each other:
 
-``T`` の値が異なる具体型 ``Point`` は、決してお互いのサブタイプではありません。::
+``T`` の値が異なる具体型 ``Point`` は、決してお互いのサブタイプではありません。
 
 .. doctest::
 
@@ -1105,7 +1105,7 @@ This last point is very important:
 
 この最後の点は非常に重要です。
 
-- **たとえ** ``Float64 <: Real`` **we の場合でも、以下とはなりません。**
+- **たとえ** ``Float64 <: Real`` **の場合でも、以下とはなりません。**
   ``Point{Float64} <: Point{Real}``\ **.**  
 
 .. 
@@ -1125,7 +1125,7 @@ This last point is very important:
 
 言い換えれば、型理論的な言い回しにおいて、Juliaの型パラメータは、共変（または反変）ではなく、
 むしろ不変です。これは実用的な理由によるものです。 ``Point{Float64}`` のインスタンスは概念的には
-``Point{Real}`` のインスタンスのようなものかもしれませんが、一方で2つの型はメモリ内で異なる表現を持ちます。::
+``Point{Real}`` のインスタンスのようなものかもしれませんが、一方で2つの型はメモリ内で異なる表現を持ちます。
 
 -  ``Point{Float64}`` のインスタンスは、64ビット値の直接のペアとしてコンパクトかつ効率的に表現できます。
 -  ``Point{Real}`` のインスタンスは、 :obj:`Real` のインスタンスのペアを保持できる必要があります。
@@ -1193,7 +1193,7 @@ This last point is very important:
   as a constructor accordingly:
 
 ``Point{Float64}`` 型は、 ``T`` の代わりに「Float64」で宣言された ``Point`` に相当する具体型であるため、
-それに応じてコンストラクタとして適用することができます。::
+それに応じてコンストラクタとして適用することができます。
 
 .. doctest::
 
@@ -1207,7 +1207,7 @@ This last point is very important:
   For the default constructor, exactly one argument must be supplied for
   each field:
 
-デフォルトコンストラクタでは、各フィールドに1つの引数を指定する必要があります。::
+デフォルトコンストラクタでは、各フィールドに1つの引数を指定する必要があります。
 
 .. doctest::
 
@@ -1243,7 +1243,7 @@ This last point is very important:
 多くの場合、コンストラクタ呼び出しの引数の型はすでに暗黙的に型情報を持っているため、
 作成したい ``Point`` オブジェクトの型を指定することは冗長的です。
 そのため、パラメータ型 ``T`` の非明示的な値が明確であれば、
-``Point`` 自体をコンストラクタとして適用することもできます。::
+``Point`` 自体をコンストラクタとして適用することもできます。
 
 .. doctest::
 
@@ -1265,7 +1265,7 @@ This last point is very important:
   isn't the case, the constructor will fail with a :exc:`MethodError`:
 
 ``Point`` の場合、 ``T`` の型は、 ``Point`` への2つの引数が同じ型を持つ場合に限り、明確に示唆されます。
-そうでない場合、コンストラクタは :exc:`MethodError` で処理に失敗します。::
+そうでない場合、コンストラクタは :exc:`MethodError` で処理に失敗します。
 
 .. doctest::
 
@@ -1316,7 +1316,7 @@ This last point is very important:
   Parametric abstract types are invariant, much as parametric composite
   types are:
 
-パラメータ抽象型は、パラメータコンポジット型と同じように不変です。::
+パラメータ抽象型は、パラメータコンポジット型と同じように不変です。
 
 .. doctest::
 
@@ -1345,7 +1345,7 @@ This last point is very important:
   Given such a declaration, for each choice of ``T``, we have ``Point{T}``
   as a subtype of ``Pointy{T}``:
 
-このような宣言の場合、 ``T`` の各選択に対して、 ``Point{T}`` を ``Pointy{T}`` のサブタイプとして持ちます。::
+このような宣言の場合、 ``T`` の各選択に対して、 ``Point{T}`` を ``Pointy{T}`` のサブタイプとして持ちます。
 
 .. doctest::
 
@@ -1361,7 +1361,7 @@ This last point is very important:
 .. 
   This relationship is also invariant:
 
-この関係性も不変です。::
+この関係性も不変です。
 
 .. doctest::
 
@@ -1411,7 +1411,7 @@ This last point is very important:
   subtypes of :obj:`Real`:
 
 このような宣言では、 ``T`` の代わりに :obj:`Real` のサブタイプである型の使用はできますが、
-:obj:`Real` のサブタイプではない型は使用できません。::
+:obj:`Real` のサブタイプではない型は使用できません。
 
 .. testsetup:: real-pointy
 
@@ -1501,7 +1501,7 @@ This last point is very important:
     and tuple types are only concrete if their parameters are.
   - Tuples do not have field names; fields are only accessed by index.
 
-しかし、3つの重要な違いがあります。::
+しかし、3つの重要な違いがあります。
 
 - チュープル型は、任意の数のパラメータを持つことができます。
 - チュープル型は、そのパラメータにおいて共変です。 ``Tuple{Int}`` は ``Tuple{Any}`` のサブタイプです。
@@ -1512,7 +1512,7 @@ This last point is very important:
   Tuple values are written with parentheses and commas. When a tuple is constructed,
   an appropriate tuple type is generated on demand:
 
-チュープル値は、括弧とカンマで書かれます。チュープルが構築されると、必要に応じて適切なチュープル型が生成されます。::
+チュープル値は、括弧とカンマで書かれます。チュープルが構築されると、必要に応じて適切なチュープル型が生成されます。
 
 .. doctest::
 
@@ -1522,7 +1522,7 @@ This last point is very important:
 .. 
   Note the implications of covariance:
 
-共変の意味に注意してください。::
+共変の意味に注意してください。
 
 .. doctest::
 
@@ -1552,7 +1552,7 @@ Varargチュープル型
   The last parameter of a tuple type can be the special type ``Vararg``,
   which denotes any number of trailing elements:
 
-チュープル型の最後のパラメータは特殊な型 ``Vararg`` とすることができ、これは任意の数の末尾の要素を表します。::
+チュープル型の最後のパラメータは特殊な型 ``Vararg`` とすることができ、これは任意の数の末尾の要素を表します。
 
 .. doctest::
 
@@ -1603,7 +1603,7 @@ varargsメソッドで受け入れられる引数を表すために使用され�
 
 ここで言及しなければならない特別な種類の抽象パラメータ型があります。それはシングルトン型です。
 それぞれの型 ``T`` について、「シングルトン型」 ``Type{T}`` は抽象型であり、インスタンスのみが
-オブジェクト ``T`` となります。この定義は少し難しいため、いくつかの例を見てみましょう。::
+オブジェクト ``T`` となります。この定義は少し難しいため、いくつかの例を見てみましょう。
 
 .. doctest::
 
@@ -1626,7 +1626,7 @@ varargsメソッドで受け入れられる引数を表すために使用され�
   objects as its instances, including, of course, singleton types:
 
 言い換えれば、 :func:`isa(A,Type{B}) <isa>` は、 ``A`` と ``B`` が同じオブジェクトで、そのオブジェクトが型である場合にのみ真です。
-パラメータがなければ、 :obj:`Type` は単なる抽象型であり、シングルトン型を含めた全ての型オブジェクトをインスタンスとして持ちます。::
+パラメータがなければ、 :obj:`Type` は単なる抽象型であり、シングルトン型を含めた全ての型オブジェクトをインスタンスとして持ちます。
 
 .. doctest::
 
@@ -1642,7 +1642,7 @@ varargsメソッドで受け入れられる引数を表すために使用され�
 .. 
   Any object that is not a type is not an instance of ``Type``:
   
-型ではないオブジェクトは、 ``Type`` のインスタンスではありません。::
+型ではないオブジェクトは、 ``Type`` のインスタンスではありません。
 
 .. doctest::
 
@@ -1713,7 +1713,7 @@ Haskell、Scala、Rubyなどのいくつかの一般的な言語には、シン�
 型パラメータ ``T`` が型自体の定義に使用されていない点です。これは、同じ構造を持つ型の集合の全体を
 定義する抽象タグであり、型パラメータによってのみ区別されます。したがって、 ``Ptr{Float64}`` と
 ``Ptr{Int64}`` は、同じ表現を持っていますが、異なる型です。もちろん、全ての特定のポインタ型は、
-傘である ``Ptr`` 型のサブタイプです。::
+傘である ``Ptr`` 型のサブタイプです。
 
 .. doctest::
 
@@ -1777,7 +1777,7 @@ Haskell、Scala、Rubyなどのいくつかの一般的な言語には、シン�
 パラメータ型では、 ``typealias`` は、いくつかのパラメーターの選択肢が固定されている場合に
 名前を提供するのに便利です。Juliaの配列には型 ``Array{T,N}`` があり、 ``T`` は要素の型、
 ``N`` は配列の次元数を表します。便宜上、 ``Array{Float64}`` と書くことで、
-次元を指定せずに要素の型を指定することができます。::
+次元を指定せずに要素の型を指定することができます。
 
 .. doctest::
 
@@ -1854,7 +1854,7 @@ Juliaの型はそれ自体がオブジェクトであるため、通常の関数
   The ``isa`` function tests if an object is of a given type and returns
   true or false:
 
-``isa`` 関数は、オブジェクトが指定された型かどうかをチェックし、trueまたはfalseを返します。::
+``isa`` 関数は、オブジェクトが指定された型かどうかをチェックし、trueまたはfalseを返します。
 
 .. doctest::
 
@@ -1870,7 +1870,7 @@ Juliaの型はそれ自体がオブジェクトであるため、通常の関数
   objects, they also have types, and we can ask what their types are:
 
 このマニュアルの例の中で既に使用されている :func:`typeof` 関数は、引数の型を返します。上記のように、
-型はオブジェクトであるため、型を持ち、型が何であるかを確認することができます。::
+型はオブジェクトであるため、型を持ち、型が何であるかを確認することができます。
 
 .. doctest::
 
@@ -1889,7 +1889,7 @@ Juliaの型はそれ自体がオブジェクトであるため、通常の関数
   :obj:`DataType`:
 
 もしこの処理を繰り返したらどうなるのでしょうか。ある型の型の型は何になるのでしょうか。
-この場合、型は全てコンポジット値であり、 :obj:`DataType` の型を持ちます。::
+この場合、型は全てコンポジット値であり、 :obj:`DataType` の型を持ちます。
 
 .. doctest::
 
@@ -1910,7 +1910,7 @@ Juliaの型はそれ自体がオブジェクトであるため、通常の関数
   Only declared types (:obj:`DataType`) have unambiguous supertypes:
 
 型に適用される別の処理は、型の上位タイプを示す :func:`supertype` です。
-宣言された型（ :obj:`DataType` ）のみが曖昧さのない上位タイプを持ちます。::
+宣言された型（ :obj:`DataType` ）のみが曖昧さのない上位タイプを持ちます。
 
 .. doctest::
 
@@ -2082,7 +2082,7 @@ Juliaでは、 ``true`` や ``false`` などの値をディスパッチするこ
   example:
 
 これ以上の ``Val`` の実装はありません。Juliaの標準ライブラリのいくつかの関数は、
-``Val`` 型を引数として受け付け、それを使って独自の関数を書くこともできます。例えば、::
+``Val`` 型を引数として受け付け、それを使って独自の関数を書くこともできます。例えば、
 
 .. testsetup:: value-types
 
@@ -2151,7 +2151,7 @@ null可能な型：欠損値の表現
 Juliaは ``Nullable{T}`` というパラメータ型を提供しています。これは、
 ゼロまたは1つの値を持つ特殊なコンテナ型と考えることができます。 ``Nullable{T}`` は、
 欠損値とのやり取りが安全であることを保証するように設計された、最小限のインターフェースを提供します。
-現在、このインタフェースは4つの対話から構成されています。::
+現在、このインタフェースは4つの対話から構成されています。
 
 - :obj:`Nullable` オブジェクトの構築
 - :obj:`Nullable` オブジェクトが欠損値を持っているかの確認
@@ -2171,7 +2171,7 @@ Juliaは ``Nullable{T}`` というパラメータ型を提供しています。�
   To construct an object representing a missing value of type ``T``, use the
   ``Nullable{T}()`` function:
 
-型 ``T`` の欠損値を表すオブジェクトを作成するには、 ``Nullable{T}()`` 関数を使用します。::
+型 ``T`` の欠損値を表すオブジェクトを作成するには、 ``Nullable{T}()`` 関数を使用します。
 
 .. doctest::
 
@@ -2188,7 +2188,7 @@ Juliaは ``Nullable{T}`` というパラメータ型を提供しています。�
   To construct an object representing a non-missing value of type ``T``, use the
   ``Nullable(x::T)`` function:
 
-型 ``T`` の非欠損値を表すオブジェクトを作成するには、 ``Nullable(x::T)`` 関数を使用します。::
+型 ``T`` の非欠損値を表すオブジェクトを作成するには、 ``Nullable(x::T)`` 関数を使用します。
 
 .. doctest::
 
@@ -2219,7 +2219,7 @@ Juliaは ``Nullable{T}`` というパラメータ型を提供しています。�
 .. 
   You can check if a :obj:`Nullable` object has any value using :func:`isnull`:
 
-:func:`isnull` を使用することで、 :obj:`Nullable` オブジェクトに値があるかどうかを確認することができます。::
+:func:`isnull` を使用することで、 :obj:`Nullable` オブジェクトに値があるかどうかを確認することができます。
 
 .. doctest::
 
@@ -2239,7 +2239,7 @@ Juliaは ``Nullable{T}`` というパラメータ型を提供しています。�
 .. 
   You can safely access the value of a :obj:`Nullable` object using :func:`get`:
 
-:func:`get` を使用することで、 :obj:`Nullable` オブジェクトの値に安全にアクセスすることができます。::
+:func:`get` を使用することで、 :obj:`Nullable` オブジェクトの値に安全にアクセスすることができます。
 
 .. doctest::
 
@@ -2266,7 +2266,7 @@ Juliaは ``Nullable{T}`` というパラメータ型を提供しています。�
   default value as a second argument to :func:`get`:
 
 :obj:`Nullable` オブジェクトの値が不足していることが判明したときに使用できる合理的なデフォルト値が存在する場合は、
-このデフォルト値を :func:`get` の第2引数として指定することができます。::
+このデフォルト値を :func:`get` の第2引数として指定することができます。
 
 .. doctest::
 
