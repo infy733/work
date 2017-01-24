@@ -292,7 +292,7 @@ C、MATLAB、Perl、Python、Rubyと異なり、しかしJavaやその他の厳�
 
 いわゆる「三項演算子」の ``?:`` は、 ``if``-``elseif``-``else`` 構文と密接に関連していますが、
 長いコードブロックを条件付きで実行する場合とは反対に、単一の式の値の条件付き選択が必要な場合に使用されます。
-これは、3つのオペランドを取るほとんどの言語で唯一の演算子であることから、その名前が付けられています。:
+これは、3つのオペランドを取るほとんどの言語で唯一の演算子であることから、その名前が付けられています。::
 
     a ? b : c
 
@@ -314,7 +314,7 @@ C、MATLAB、Perl、Python、Rubyと異なり、しかしJavaやその他の厳�
 
 例を見ることでこの動作を良く理解できます。前の例では、 ``println`` 呼び出しは3つの分岐すべてで共有されています。
 実際の選択肢は、どのリテラル文字を出力するかです。これは、三項演算子を使うことでより簡潔に書くことができます。
-わかりやすくするために、最初に双方向バージョンを見てみましょう。:
+わかりやすくするために、最初に双方向バージョンを見てみましょう。
 
 .. doctest::
 
@@ -337,7 +337,7 @@ C、MATLAB、Perl、Python、Rubyと異なり、しかしJavaやその他の厳�
 
 式 ``x < y`` が真の場合、三項演算子式全体が文字列 ``"less than"`` と評価され、
 そうでない場合は ``"not less than"`` と評価されます。最初の例では、
-三項演算子の複数の使用を連結させる必要があります。:
+三項演算子の複数の使用を連結させる必要があります。
 
 .. doctest:: ternary-operator
 
@@ -365,7 +365,7 @@ C、MATLAB、Perl、Python、Rubyと異なり、しかしJavaやその他の厳�
  expression evaluates to ``true`` or ``false``, respectively:
 
 ``if``-``elseif``-``else`` のように、 ``:`` の前後の式は、それぞれ条件式が ``true`` または ``false`` と
-評価された場合にのみ評価されます。:
+評価された場合にのみ評価されます。
 
 .. doctest::
 
@@ -405,7 +405,7 @@ C、MATLAB、Perl、Python、Rubyと異なり、しかしJavaやその他の厳�
 
 短絡評価は条件付き評価と非常によく似ています。この動作は、 ``&&`` および ``||`` ブール演算子を持つ
 ほとんどの命令型プログラミング言語で見られます。これらの演算子で連結された一連のブール式では、
-連結全体の最終的なブール値を決定するのに必要な最低限の式だけが評価されます。明示的には、これは次のことを意味します。:
+連結全体の最終的なブール値を決定するのに必要な最低限の式だけが評価されます。明示的には、これは次のことを意味します。
 
 -  ``a && b`` の式では、 ``a`` が ``true`` と評価された場合にのみ部分式 ``b`` が評価されます。
 -  ``a || b`` の式では、 ``a`` が ``false`` と評価された場合にのみ部分式 ``b`` が評価されます。
@@ -420,8 +420,8 @@ C、MATLAB、Perl、Python、Rubyと異なり、しかしJavaやその他の厳�
 
 論理的理由として、 ``a && b`` の式は、 ``b`` の値に関係なく、 ``a`` が ``false`` の場合は ``false`` でなければならず、
 また同様に ``a || b`` の式は、 ``b`` の値に関係なく、 ``a`` が ``true`` の場合は ``true`` でなければならないためです。
-``&&`` および ``||`` は共に右の式に関連付けるますが、 ``&&`` は ``||`` よりも高い優先順位を持ちます。
-この動作を試してみましょう。:
+``&&`` および ``||`` は共に右の式に関連付けますが、 ``&&`` は ``||`` よりも高い優先順位を持ちます。
+この動作を試してみましょう。
 
 .. doctest::
 
@@ -488,7 +488,7 @@ C、MATLAB、Perl、Python、Rubyと異なり、しかしJavaやその他の厳�
 .. 
  For example, a recursive factorial routine could be defined like this:
 
-例えば、再帰的階乗ルーチンは次のように定義することができます。:
+例えば、再帰的階乗ルーチンは次のように定義することができます。
 
 .. doctest::
 
@@ -517,7 +517,7 @@ C、MATLAB、Perl、Python、Rubyと異なり、しかしJavaやその他の厳�
   infix operator syntax, but always evaluate their arguments:
 
 短絡評価のないブール演算は、 :ref:`man-算術処理と基本的な関数`で紹介されたビット単位の論理演算子（ ``&`` および ``|`` ）で
-行うことができます。これらは通常の関数であり、中置演算子の構文をサポートしますが、常に引数を評価します。::
+行うことができます。これらは通常の関数であり、中置演算子の構文をサポートしますが、常に引数を評価します。
 
 .. doctest::
 
@@ -539,7 +539,7 @@ C、MATLAB、Perl、Python、Rubyと異なり、しかしJavaやその他の厳�
 
 ``if`` 、 ``elseif`` または三項演算子で使用される条件式と同様に、 ``&&`` または ``||`` の被演算子は
 ブール値（ ``true`` または ``false`` ）である必要があります。条件付き連結の最後のエントリを除き、
-非ブール値を使用した場合はエラーとなります。::
+非ブール値を使用した場合はエラーとなります。
 
 .. doctest::
 
@@ -551,7 +551,7 @@ C、MATLAB、Perl、Python、Rubyと異なり、しかしJavaやその他の厳�
   On the other hand, any type of expression can be used at the end of a conditional chain.
   It will be evaluated and returned depending on the preceding conditionals:
 
-一方で、条件付き連結の終わりには、任意の型の式を使用できます。これは、前の条件に応じて評価され、結果が返されます。::
+一方で、条件付き連結の終わりには、任意の型の式を使用できます。これは、前の条件に応じて評価され、結果が返されます。
 
 .. testsetup::
 
@@ -581,7 +581,7 @@ C、MATLAB、Perl、Python、Rubyと異なり、しかしJavaやその他の厳�
   ``while`` loop and the ``for`` loop. Here is an example of a ``while``
   loop:
 
-式の繰り返し評価には、 ``while`` ループと ``for`` ループの2つの方法があります。以下は ``while`` ループの例となります。::
+式の繰り返し評価には、 ``while`` ループと ``for`` ループの2つの方法があります。以下は ``while`` ループの例となります。
 
 .. doctest::
 
@@ -612,7 +612,7 @@ C、MATLAB、Perl、Python、Rubyと異なり、しかしJavaやその他の厳�
   so common, it can be expressed more concisely with a ``for`` loop:
 
 ``for`` ループは、共通の繰り返し評価文を書きやすくします。上記の ``while`` ループのように、
-カウントダウンおよびカウントダウンは頻繁に使用するため、 ``for`` ループを使用することで簡潔に表現できます。::
+カウントダウンおよびカウントダウンは頻繁に使用するため、 ``for`` ループを使用することで簡潔に表現できます。
 
 .. doctest::
 
@@ -641,7 +641,7 @@ C、MATLAB、Perl、Python、Rubyと異なり、しかしJavaやその他の厳�
 前述の ``while`` ループ形式と ``for`` ループ形式の重要な違いの1つは、
 どの変数が表示されるかというスコープです。変数 ``i`` が他のスコープで定義されていない場合、
 ``for`` ループ形式では ``for`` ループの内部でのみ表示され、その後は表示されません。
-これをテストするには、新しい対話型セッションインスタンスまたは別の変数名が必要となります。::
+これをテストするには、新しい対話型セッションインスタンスまたは別の変数名が必要となります。
 
 .. doctest::
 
@@ -672,7 +672,7 @@ C、MATLAB、Perl、Python、Rubyと異なり、しかしJavaやその他の厳�
 
 通常、 ``for`` ループ文はどのコンテナに対しても繰り返し処理が可能です。これらの場合、
 代替（または同等）キーワード ``in`` または ``∈`` は、コードがより明確になるため、
-通常は ``=`` の代わりに使用されます。::
+通常は ``=`` の代わりに使用されます。
 
 .. doctest::
 
@@ -705,7 +705,7 @@ C、MATLAB、Perl、Python、Rubyと異なり、しかしJavaやその他の厳�
 
 テスト条件が改ざんされる前に ``while`` の繰り返し処理を終了する、または繰り返し処理可能な
 オブジェクトの終わりに達する前に ``for`` ループの繰り返し処理を停止することで、
-便利な場合があります。これは ``break`` キーワードを使用することで実現できます。::
+便利な場合があります。これは ``break`` キーワードを使用することで実現できます。
 
 .. doctest::
 
@@ -750,7 +750,7 @@ C、MATLAB、Perl、Python、Rubyと異なり、しかしJavaやその他の厳�
   accomplishes this:
 
 他の状況では、繰り返しを停止してすぐに次の処理に進むことで便利になる場合があります。
-``continue`` キーワードを使用することでこれを実現できます。::
+``continue`` キーワードを使用することでこれを実現できます。
 
 .. doctest::
 
@@ -779,7 +779,7 @@ C、MATLAB、Perl、Python、Rubyと異なり、しかしJavaやその他の厳�
   Multiple nested ``for`` loops can be combined into a single outer loop,
   forming the cartesian product of its iterables:
 
-複数のネストされた ``for`` ループは、1つのアウターループに結合され、繰り返し処理のデカルト積を形成します。::
+複数のネストされた ``for`` ループは、1つのアウターループに結合され、繰り返し処理のデカルト積を形成します。
 
 .. doctest::
 
@@ -890,7 +890,7 @@ C、MATLAB、Perl、Python、Rubyと異なり、しかしJavaやその他の厳�
   For example, the :func:`sqrt` function throws a :exc:`DomainError` if applied to a
   negative real value:
 
-例えば、 :func:`sqrt` 関数は負の実数値に適用された場合、 :exc:`DomainError` を返します。::
+例えば、 :func:`sqrt` 関数は負の実数値に適用された場合、 :exc:`DomainError` を返します。
 
 .. doctest::
 
@@ -903,7 +903,7 @@ C、MATLAB、Perl、Python、Rubyと異なり、しかしJavaやその他の厳�
 .. 
   You may define your own exceptions in the following way:
   
-独自の例外処理は、次のように定義することができます。::
+独自の例外処理は、次のように定義することができます。
 
 .. doctest::
 
@@ -922,7 +922,7 @@ The :func:`throw` function
   if the argument is negative:
 
 例外処理は、 :func:`throw` 関数により明示的に作成することができます。例えば、負でない数値に対してのみ定義された関数は、
-引数が負の場合に :exc:`DomainError` を返すように :func:`throw` を使用して記述することができます。::
+引数が負の場合に :exc:`DomainError` を返すように :func:`throw` を使用して記述することができます。
 
 .. doctest:: domain-error
 
@@ -942,7 +942,7 @@ The :func:`throw` function
   exception. It needs to be called to obtain an :exc:`Exception` object:
 
 括弧無しの :exc:`DomainError` は例外処理ではなく、型の例外であることに注意してください。
-:exc:`Exception` オブジェクトを取得するには、これを呼び出す必要があります。::
+:exc:`Exception` オブジェクトを取得するには、これを呼び出す必要があります。
 
 .. doctest:: throw-function
 
@@ -956,7 +956,7 @@ The :func:`throw` function
   Additionally, some exception types take one or more arguments that are used for
   error reporting:
 
-さらに、一部の例外処理では、エラー報告に使用される1つ以上の引数を使用します。::
+さらに、一部の例外処理では、エラー報告に使用される1つ以上の引数を使用します。
 
 .. doctest::
 
@@ -968,7 +968,7 @@ The :func:`throw` function
   This mechanism can be implemented easily by custom exception types following
   the way :exc:`UndefVarError` is written:
 
-この仕組みは、 :exc:`UndefVarError` が書き込まれた方法に従ったカスタムされた例外処理によって簡単に実装できます。::
+この仕組みは、 :exc:`UndefVarError` が書き込まれた方法に従ったカスタムされた例外処理によって簡単に実装できます。
 
 .. doctest::
 
@@ -1000,7 +1000,7 @@ The :func:`throw` function
      
      ``size(A) == size(B) || throw(DimensionMismatch("Size of A not equal to size of B"))``.
      
-     しかし、1文字目を大文字にするほうがよい場合もあります。例えば、関数の引数が大文字の場合です。::
+     しかし、1文字目を大文字にするほうがよい場合もあります。例えば、関数の引数が大文字の場合です。
      ``size(A,1) == size(B,2) || throw(DimensionMismatch("A has first dimension..."))``
 .. 
   Errors
@@ -1021,7 +1021,7 @@ The :func:`throw` function
   the :func:`sqrt` function that raises an error if its argument is negative:
 
 負の数の平方根が取られた場合、すぐに実行を停止したいとします。これを行うために、
-引数が負の場合にエラーを発生させる煩雑な :func:`sqrt` 関数を定義することができます。::
+引数が負の場合にエラーを発生させる煩雑な :func:`sqrt` 関数を定義することができます。
 
 .. doctest::
 
@@ -1043,7 +1043,7 @@ The :func:`throw` function
   session:
 
 ``fussy_sqrt`` が別の関数から負の値で呼び出された場合、呼び出し元関数の処理を継続しようとするのではなく、
-すぐに戻り、対話型セッションでエラーメッセージを表示します。::
+すぐに戻り、対話型セッションでエラーメッセージを表示します。
 
 .. doctest::
 
@@ -1080,7 +1080,7 @@ The :func:`throw` function
   execution:
 
 Juliaは標準エラーI/Oにメッセージを書き込む他の関数も提供しますが、 :exc:`Exception` を返さないため、
-処理の実行を中断しません。::
+処理の実行を中断しません。
 
 .. doctest::
 
@@ -1112,7 +1112,7 @@ Juliaは標準エラーI/Oにメッセージを書き込む他の関数も提供
   :exc:`Exception`\ s :
 
 ``try/catch`` 文は :exc:`Exception` のテストを可能にします。例えば、カスタマイズされた平方根関数は、
-必要に応じて :exc:`Exception` を使って実数または複素平方根のいずれかのメソッドを自動的に呼び出すために使用できます。::
+必要に応じて :exc:`Exception` を使って実数または複素平方根のいずれかのメソッドを自動的に呼び出すために使用できます。
 
 .. doctest:: try-catch
 
@@ -1146,7 +1146,7 @@ Juliaは標準エラーI/Oにメッセージを書き込む他の関数も提供
 
 ``try/catch`` 文は、 :exc:`Exception` を変数に保存することも可能にします。次の例では、
 ``x`` がインデックス可能な場合は、 ``x`` の2番目の要素の平方根を計算し、
-それ以外の場合は ``x`` を実数とみなし、その平方根を返します。::
+それ以外の場合は ``x`` を実数とみなし、その平方根を返します。
 
 .. doctest::
 
@@ -1332,7 +1332,7 @@ one-shot continuationなど、他の名前で呼ばれることがあります�
   value it needs to produce:
 
 Juliaは、この問題を解決するために :func:`produce` および :func:`consume` 関数を提供しています。
-生産側は、生成する必要がある各値に対して :func:`produce` を呼び出す関数です。::
+生産側は、生成する必要がある各値に対して :func:`produce` を呼び出す関数です。
 
 .. doctest::
 
@@ -1348,7 +1348,7 @@ Juliaは、この問題を解決するために :func:`produce` および :func:
   To consume values, first the producer is wrapped in a :class:`Task`,
   then :func:`consume` is called repeatedly on that object:
 
-値を使用するには、まず生産側を :class:`Task` にラッッピングし、そのオブジェクトに対して :func:`consume` を繰り返し呼び出します。::
+値を使用するには、まず生産側を :class:`Task` にラッッピングし、そのオブジェクトに対して :func:`consume` を繰り返し呼び出します。
 
 .. doctest::
 
@@ -1385,7 +1385,7 @@ Juliaは、この問題を解決するために :func:`produce` および :func:
   case the loop variable takes on all the produced values:
 
 タスクは ``for`` ループ内の繰り返し処理可能オブジェクトとして使用できます。
-この場合、ループ変数は生成された全ての値を取ります。::
+この場合、ループ変数は生成された全ての値を取ります。
 
 .. doctest::
 
@@ -1410,7 +1410,7 @@ Juliaは、この問題を解決するために :func:`produce` および :func:
 一般的なパターンは、生産側をパラメータ化することです。この場合、引数を取らない :ref:`無名関数 <man-anonymous-functions>` を
 作成するには部分関数アプリケーションが必要です。これは、直接または便利なマクロを使用することで行うことができます。::
 
-    function mytask(myarg)
+    function mytask(myarg)
         ...
     end
 
@@ -1552,7 +1552,7 @@ Juliaは、この問題を解決するために :func:`produce` および :func:
   Tasks have a ``state`` field that describes their execution status. A task
   state is one of the following symbols:
 
-タスクには、実行状態を示す「state」フィールドがあります。タスクの状態は、次のシンボルのいずれかです。:
+タスクには、実行状態を示す「state」フィールドがあります。タスクの状態は、次のシンボルのいずれかです。
 
 .. 
   =============  ==================================================
