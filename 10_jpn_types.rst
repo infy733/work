@@ -1158,26 +1158,42 @@ This last point is very important:
        sqrt(p.x^2 + p.y^2)
     end
 
-The correct way to define a method that accepts all arguments of type ``Point{T}`` where ``T`` is a subtype of ``Real`` is::
+.. 
+  The correct way to define a method that accepts all arguments of type ``Point{T}`` where ``T`` is a subtype of ``Real`` is::
 
-    function norm{T<:Real}(p::Point{T})
+``T`` が ``Real`` のサブタイプである ``Point{T}`` 型の全ての引数を受け入れるメソッドを定義する正しい方法は、次の通りです。::
+
+    function norm{T<:Real}(p::Point{T})
        sqrt(p.x^2 + p.y^2)
     end
 
-More examples will be discussed later in :ref:`man-methods`.
+.. 
+  More examples will be discussed later in :ref:`man-methods`.
+
+その他の例については、後の :ref:`man-メソッド` セクションで説明します。
 
 
-How does one construct a ``Point`` object? It is possible to define
-custom constructors for composite types, which will be discussed in
-detail in :ref:`man-constructors`, but in the absence of any
-special constructor declarations, there are two default ways of creating
-new composite objects, one in which the type parameters are explicitly
-given and the other in which they are implied by the arguments to the
-object constructor.
+.. 
+  How does one construct a ``Point`` object? It is possible to define
+  custom constructors for composite types, which will be discussed in
+  detail in :ref:`man-constructors`, but in the absence of any
+  special constructor declarations, there are two default ways of creating
+  new composite objects, one in which the type parameters are explicitly
+  given and the other in which they are implied by the arguments to the
+  object constructor.
 
-Since the type ``Point{Float64}`` is a concrete type equivalent to
-``Point`` declared with :class:`Float64` in place of ``T``, it can be applied
-as a constructor accordingly:
+``Point`` オブジェクトはどのように構築されるのでしょうか。コンポジット型のカスタムコンストラクタを
+定義することは可能であり、その方法は :ref:`man-コンストラクタ` で詳しく説明します。特別なコンストラクタ宣言がない場合、
+新しいコンポジットオブジェクトを作成するデフォルトの方法が2つあります。1つは型パラメータを明示的に与える方法と、
+もう一つはオブジェクトコンストラクタへの引数によって暗示的に与える方法です。
+
+.. 
+  Since the type ``Point{Float64}`` is a concrete type equivalent to
+  ``Point`` declared with :class:`Float64` in place of ``T``, it can be applied
+  as a constructor accordingly:
+
+``Point{Float64}`` 型は、 ``T`` の代わりに「Float64」で宣言された ``Point`` に相当する具体型であるため、
+それに応じてコンストラクタとして適用することができます。::
 
 .. doctest::
 
@@ -1187,8 +1203,11 @@ as a constructor accordingly:
     julia> typeof(ans)
     Point{Float64}
 
-For the default constructor, exactly one argument must be supplied for
-each field:
+.. 
+  For the default constructor, exactly one argument must be supplied for
+  each field:
+
+デフォルトコンストラクタでは、各フィールドに1つの引数を指定する必要があります。::
 
 .. doctest::
 
@@ -1206,15 +1225,25 @@ each field:
       Point{Float64}{T}(::Any) at sysimg.jl:53
      ...
 
-Only one default constructor is generated for parametric types, since
-overriding it is not possible. This constructor accepts any arguments
-and converts them to the field types.
+.. 
+  Only one default constructor is generated for parametric types, since
+  overriding it is not possible. This constructor accepts any arguments
+  and converts them to the field types.
 
-In many cases, it is redundant to provide the type of ``Point`` object
-one wants to construct, since the types of arguments to the constructor
-call already implicitly provide type information. For that reason, you
-can also apply ``Point`` itself as a constructor, provided that the
-implied value of the parameter type ``T`` is unambiguous:
+オーバーライドできないため、パラメータ型に対しては、デフォルトのコンストラクタは1つだけ生成されます。
+このコンストラクタはあらゆる引数を受け取り、それらをフィールド型に変換します。
+
+.. 
+  In many cases, it is redundant to provide the type of ``Point`` object
+  one wants to construct, since the types of arguments to the constructor
+  call already implicitly provide type information. For that reason, you
+  can also apply ``Point`` itself as a constructor, provided that the
+  implied value of the parameter type ``T`` is unambiguous:
+
+多くの場合、コンストラクタ呼び出しの引数の型はすでに暗黙的に型情報を持っているため、
+作成したい ``Point`` オブジェクトの型を指定することは冗長的です。
+そのため、パラメータ型 ``T`` の非明示的な値が明確であれば、
+``Point`` 自体をコンストラクタとして適用することもできます。::
 
 .. doctest::
 
@@ -1230,9 +1259,13 @@ implied value of the parameter type ``T`` is unambiguous:
     julia> typeof(ans)
     Point{Int64}
 
-In the case of ``Point``, the type of ``T`` is unambiguously implied if
-and only if the two arguments to ``Point`` have the same type. When this
-isn't the case, the constructor will fail with a :exc:`MethodError`:
+.. 
+  In the case of ``Point``, the type of ``T`` is unambiguously implied if
+  and only if the two arguments to ``Point`` have the same type. When this
+  isn't the case, the constructor will fail with a :exc:`MethodError`:
+
+``Point`` の場合、 ``T`` の型は、 ``Point`` への2つの引数が同じ型を持つ場合に限り、明確に示唆されます。
+そうでない場合、コンストラクタは :exc:`MethodError` で処理に失敗します。::
 
 .. doctest::
 
@@ -1240,21 +1273,36 @@ isn't the case, the constructor will fail with a :exc:`MethodError`:
     ERROR: MethodError: no method matching Point{T}(::Int64, ::Float64)
     ...
 
-Constructor methods to appropriately handle such mixed cases can be
-defined, but that will not be discussed until later on in
-:ref:`man-constructors`.
+.. 
+  Constructor methods to appropriately handle such mixed cases can be
+  defined, but that will not be discussed until later on in
+  :ref:`man-constructors`.
 
-Parametric Abstract Types
+このような混合したケースを適切に処理するためのコンストラクタメソッドは定義可能ですが、
+後の :ref:`man-コンストラクタ` で説明されます。
+
+.. 
+  Parametric Abstract Types
+  ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+パラメータ抽象型
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Parametric abstract type declarations declare a collection of abstract
-types, in much the same way::
+.. 
+  Parametric abstract type declarations declare a collection of abstract
+  types, in much the same way::
 
-    abstract Pointy{T}
+パラメトリック抽象型宣言は、ほぼ同じ方法で抽象型のコレクションを宣言します。::
 
-With this declaration, ``Pointy{T}`` is a distinct abstract type for
-each type or integer value of ``T``. As with parametric composite types,
-each such instance is a subtype of ``Pointy``:
+    abstract Pointy{T}
+
+.. 
+  With this declaration, ``Pointy{T}`` is a distinct abstract type for
+  each type or integer value of ``T``. As with parametric composite types,
+  each such instance is a subtype of ``Pointy``:
+
+この宣言では、 ``Pointy{T}`` は、 ``T`` の各型または整数値の異なる抽象型です。パラメータコンポジット型と同様に、
+そのようなインスタンスはそれぞれ ``Pointy`` のサブタイプです。::
 
 .. doctest::
 
@@ -1264,8 +1312,11 @@ each such instance is a subtype of ``Pointy``:
     julia> Pointy{1} <: Pointy
     true
 
-Parametric abstract types are invariant, much as parametric composite
-types are:
+.. 
+  Parametric abstract types are invariant, much as parametric composite
+  types are:
+
+パラメータ抽象型は、パラメータコンポジット型と同じように不変です。::
 
 .. doctest::
 
@@ -1275,19 +1326,26 @@ types are:
     julia> Pointy{Real} <: Pointy{Float64}
     false
 
-Much as plain old abstract types serve to create a useful hierarchy of
-types over concrete types, parametric abstract types serve the same
-purpose with respect to parametric composite types. We could, for
-example, have declared ``Point{T}`` to be a subtype of ``Pointy{T}`` as
-follows::
+.. 
+  Much as plain old abstract types serve to create a useful hierarchy of
+  types over concrete types, parametric abstract types serve the same
+  purpose with respect to parametric composite types. We could, for
+  example, have declared ``Point{T}`` to be a subtype of ``Pointy{T}`` as
+  follows::
 
-    type Point{T} <: Pointy{T}
+通常の抽象型は、具体型よりも型の有用な階層を作成するのに役立ちますが、パラメータ抽象型はパラメータコンポジット型に関して、
+同じ目的を果たします。例えば、 ``Point{T}`` を ``Pointy{T}`` のサブタイプにするには、次のように宣言できます。::
+
+    type Point{T} <: Pointy{T}
         x::T
         y::T
     end
 
-Given such a declaration, for each choice of ``T``, we have ``Point{T}``
-as a subtype of ``Pointy{T}``:
+.. 
+  Given such a declaration, for each choice of ``T``, we have ``Point{T}``
+  as a subtype of ``Pointy{T}``:
+
+このような宣言の場合、 ``T`` の各選択に対して、 ``Point{T}`` を ``Pointy{T}`` のサブタイプとして持ちます。::
 
 .. doctest::
 
@@ -1300,38 +1358,60 @@ as a subtype of ``Pointy{T}``:
     julia> Point{AbstractString} <: Pointy{AbstractString}
     true
 
-This relationship is also invariant:
+.. 
+  This relationship is also invariant:
+
+この関係性も不変です。::
 
 .. doctest::
 
     julia> Point{Float64} <: Pointy{Real}
     false
 
-What purpose do parametric abstract types like ``Pointy`` serve?
-Consider if we create a point-like implementation that only requires a
-single coordinate because the point is on the diagonal line *x = y*::
+.. 
+  What purpose do parametric abstract types like ``Pointy`` serve?
+  Consider if we create a point-like implementation that only requires a
+  single coordinate because the point is on the diagonal line *x = y*::
 
-    type DiagPoint{T} <: Pointy{T}
+``Pointy`` のようなパラメータ抽象型はどのような役割があるのでしょうか。点が対角線 *x = y* にあるため、
+単一の座標だけを必要とする点のような実装を作成した場合を考えてみましょう。::
+
+    type DiagPoint{T} <: Pointy{T}
         x::T
     end
 
-Now both ``Point{Float64}`` and ``DiagPoint{Float64}`` are
-implementations of the ``Pointy{Float64}`` abstraction, and similarly
-for every other possible choice of type ``T``. This allows programming
-to a common interface shared by all ``Pointy`` objects, implemented for
-both ``Point`` and ``DiagPoint``. This cannot be fully demonstrated,
-however, until we have introduced methods and dispatch in the next
-section, :ref:`man-methods`.
+.. 
+  Now both ``Point{Float64}`` and ``DiagPoint{Float64}`` are
+  implementations of the ``Pointy{Float64}`` abstraction, and similarly
+  for every other possible choice of type ``T``. This allows programming
+  to a common interface shared by all ``Pointy`` objects, implemented for
+  both ``Point`` and ``DiagPoint``. This cannot be fully demonstrated,
+  however, until we have introduced methods and dispatch in the next
+  section, :ref:`man-methods`.
 
-There are situations where it may not make sense for type parameters to
-range freely over all possible types. In such situations, one can
-constrain the range of ``T`` like so::
+``Point{Float64}`` と ``DiagPoint{Float64}`` は両方とも ``Pointy{Float64}`` 抽象化の実装であり、
+``T`` 型の他の全ての可能な選択についても同様です。これにより、 ``Point`` および ``DiagPoint`` の両方に
+実装されたすべての ``Pointy`` オブジェクトで共有される共通インタフェースへのプログラミングが可能になります。
+しかし、次のセクション :ref:`man-メソッド` にてメソッドおよびディスパッチの説明をするまで、
+これを完全に証明することはできません。
 
-    abstract Pointy{T<:Real}
+.. 
+  There are situations where it may not make sense for type parameters to
+  range freely over all possible types. In such situations, one can
+  constrain the range of ``T`` like so::
 
-With such a declaration, it is acceptable to use any type that is a
-subtype of :obj:`Real` in place of ``T``, but not types that are not
-subtypes of :obj:`Real`:
+型パラメータがすべての可能な型に自由に及ぶことが意味を成さない場合があります。
+このような状況では、 ``T`` の範囲を次のように制限することができます。::
+
+    abstract Pointy{T<:Real}
+
+.. 
+  With such a declaration, it is acceptable to use any type that is a
+  subtype of :obj:`Real` in place of ``T``, but not types that are not
+  subtypes of :obj:`Real`:
+
+このような宣言では、 ``T`` の代わりに :obj:`Real` のサブタイプである型の使用はできますが、
+:obj:`Real` のサブタイプではない型は使用できません。::
 
 .. testsetup:: real-pointy
 
@@ -1353,61 +1433,96 @@ subtypes of :obj:`Real`:
     ERROR: TypeError: Pointy: in T, expected T<:Real, got Int64
      ...
 
-Type parameters for parametric composite types can be restricted in the
-same manner::
+.. 
+  Type parameters for parametric composite types can be restricted in the
+  same manner::
 
-    type Point{T<:Real} <: Pointy{T}
+パラメータコンポジット型の型パラメータは、同じ方法で制限できます。::
+
+    type Point{T<:Real} <: Pointy{T}
         x::T
         y::T
     end
 
-To give a real-world example of how all this parametric type
-machinery can be useful, here is the actual definition of Julia's
-:obj:`Rational` immutable type (except that we omit the constructor here
-for simplicity), representing an exact ratio of integers::
+.. 
+  To give a real-world example of how all this parametric type
+  machinery can be useful, here is the actual definition of Julia's
+  :obj:`Rational` immutable type (except that we omit the constructor here
+  for simplicity), representing an exact ratio of integers::
 
-    immutable Rational{T<:Integer} <: Real
+このパラメータ型の機能がどれほど有用であるかの現実的な例を示すために、
+整数の正確な比を表すJuliaの :obj:`Rational` 不変型の実際の定義を紹介します
+（ここでは単純化のためにコンストラクタを省略しています）。::
+
+    immutable Rational{T<:Integer} <: Real
         num::T
         den::T
     end
 
-It only makes sense to take ratios of integer values, so the parameter
-type ``T`` is restricted to being a subtype of :class:`Integer`, and a ratio
-of integers represents a value on the real number line, so any
-:obj:`Rational` is an instance of the :obj:`Real` abstraction.
+.. 
+  It only makes sense to take ratios of integer values, so the parameter
+  type ``T`` is restricted to being a subtype of :class:`Integer`, and a ratio
+  of integers represents a value on the real number line, so any
+  :obj:`Rational` is an instance of the :obj:`Real` abstraction.
 
-Tuple Types
+整数型の比率を取るのは理にかなっているので、パラメータ型 ``T`` は :class:`Integer` のサブタイプに制限され、
+整数の比は数直線上の値を表します。したがって、任意の :obj:`Rational` は :obj:`Real` 抽象化のインスタンスです。
+
+.. 
+  Tuple Types
+  ~~~~~~~~~~~
+
+チュープル型
 ~~~~~~~~~~~
 
-Tuples are an abstraction of the arguments of a function — without the
-function itself. The salient aspects of a function's arguments are their
-order and their types. Therefore a tuple type is similar to a
-parameterized immutable type where each parameter is the type
-of one field. For example, a 2-element tuple type resembles the following
-immutable type::
+.. 
+  Tuples are an abstraction of the arguments of a function — without the
+  function itself. The salient aspects of a function's arguments are their
+  order and their types. Therefore a tuple type is similar to a
+  parameterized immutable type where each parameter is the type
+  of one field. For example, a 2-element tuple type resembles the following
+  immutable type::
 
-    immutable Tuple2{A,B}
+チュープルは関数の引数の抽象化ですが、関数自体はありません。関数の引数の顕著な側面は、その順序と型です。
+したがって、チュープル型は、各パラメータが1つのフィールドの型であるパラメータ化された不変型に似ています。
+例えば、2要素チュープル型は、次の不変型に似ています。::
+
+    immutable Tuple2{A,B}
         a::A
         b::B
     end
 
-However, there are three key differences:
+.. 
+  However, there are three key differences:
 
-- Tuple types may have any number of parameters.
-- Tuple types are *covariant* in their parameters: ``Tuple{Int}`` is a subtype
-  of ``Tuple{Any}``. Therefore ``Tuple{Any}`` is considered an abstract type,
-  and tuple types are only concrete if their parameters are.
-- Tuples do not have field names; fields are only accessed by index.
+  - Tuple types may have any number of parameters.
+  - Tuple types are *covariant* in their parameters: ``Tuple{Int}`` is a subtype
+    of ``Tuple{Any}``. Therefore ``Tuple{Any}`` is considered an abstract type,
+    and tuple types are only concrete if their parameters are.
+  - Tuples do not have field names; fields are only accessed by index.
 
-Tuple values are written with parentheses and commas. When a tuple is constructed,
-an appropriate tuple type is generated on demand:
+しかし、3つの重要な違いがあります。::
+
+- チュープル型は、任意の数のパラメータを持つことができます。
+- チュープル型は、そのパラメータにおいて共変です。 ``Tuple{Int}`` は ``Tuple{Any}`` のサブタイプです。
+  したがって、 ``Tuple{Any}`` は抽象型とみなされ、チュープル型はパラメータがある場合にのみ具体型となります。
+- チュープルはフィールド名を持ちません。フィールドはインデックスによってのみアクセスされます。
+
+.. 
+  Tuple values are written with parentheses and commas. When a tuple is constructed,
+  an appropriate tuple type is generated on demand:
+
+チュープル値は、括弧とカンマで書かれます。チュープルが構築されると、必要に応じて適切なチュープル型が生成されます。::
 
 .. doctest::
 
     julia> typeof((1,"foo",2.5))
     Tuple{Int64,String,Float64}
 
-Note the implications of covariance:
+.. 
+  Note the implications of covariance:
+
+共変の意味に注意してください。::
 
 .. doctest::
 
@@ -1420,14 +1535,24 @@ Note the implications of covariance:
     julia> Tuple{Int,AbstractString} <: Tuple{Real,}
     false
 
-Intuitively, this corresponds to the type of a function's arguments
-being a subtype of the function's signature (when the signature matches).
+.. 
+  Intuitively, this corresponds to the type of a function's arguments
+  being a subtype of the function's signature (when the signature matches).
 
-Vararg Tuple Types
+直感的には、これは（署名が一致する場合において）関数の署名のサブタイプである関数の引数に対応します。
+
+.. 
+  Vararg Tuple Types
+  ~~~~~~~~~~~~~~~~~~
+
+Varargチュープル型
 ~~~~~~~~~~~~~~~~~~
 
-The last parameter of a tuple type can be the special type ``Vararg``,
-which denotes any number of trailing elements:
+.. 
+  The last parameter of a tuple type can be the special type ``Vararg``,
+  which denotes any number of trailing elements:
+
+チュープル型の最後のパラメータは特殊な型 ``Vararg`` とすることができ、これは任意の数の末尾の要素を表します。::
 
 .. doctest::
 
@@ -1443,25 +1568,42 @@ which denotes any number of trailing elements:
     julia> isa(("1",1,2,3.0), Tuple{AbstractString,Vararg{Int}})
     false
 
-Notice that ``Vararg{T}`` corresponds to zero or more elements of type ``T``.
-Vararg tuple types are used to represent the arguments accepted by varargs
-methods (see :ref:`man-varargs-functions`).
+.. 
+  Notice that ``Vararg{T}`` corresponds to zero or more elements of type ``T``.
+  Vararg tuple types are used to represent the arguments accepted by varargs
+  methods (see :ref:`man-varargs-functions`).
 
-The type ``Vararg{T,N}`` corresponds to exactly ``N`` elements of type ``T``.  ``NTuple{N,T}`` is
-a convenient alias for ``Tuple{Vararg{T,N}}``, i.e. a tuple type containing exactly
-``N`` elements of type ``T``.
+``Vararg{T}`` が型 ``T`` の0個以上の要素に対応することに注意してください。Varargチュープル型は、
+varargsメソッドで受け入れられる引数を表すために使用されます（ :ref:`man-varargs関数` を参照）。
+
+.. 
+  The type ``Vararg{T,N}`` corresponds to exactly ``N`` elements of type ``T``.  ``NTuple{N,T}`` is
+  a convenient alias for ``Tuple{Vararg{T,N}}``, i.e. a tuple type containing exactly
+  ``N`` elements of type ``T``.
+
+``Vararg{T,N}`` 型は、型 ``T`` の正確に ``N`` 個の要素に対応します。 ``NTuple{N,T}`` は ``Tuple{Vararg{T,N}}`` の
+便利なエイリアスであり、これは型 ``T`` の ``N`` 個の要素を正確に含むチュープル型です。
 
 
 .. _man-singleton-types:
 
-Singleton Types
+.. 
+  Singleton Types
+  ^^^^^^^^^^^^^^^
+
+シングルトン型
 ^^^^^^^^^^^^^^^
 
-There is a special kind of abstract parametric type that must be
-mentioned here: singleton types. For each type, ``T``, the "singleton
-type" ``Type{T}`` is an abstract type whose only instance is the object
-``T``. Since the definition is a little difficult to parse, let's look
-at some examples:
+.. 
+  There is a special kind of abstract parametric type that must be
+  mentioned here: singleton types. For each type, ``T``, the "singleton
+  type" ``Type{T}`` is an abstract type whose only instance is the object
+  ``T``. Since the definition is a little difficult to parse, let's look
+  at some examples:
+
+ここで言及しなければならない特別な種類の抽象パラメータ型があります。それはシングルトン型です。
+それぞれの型 ``T`` について、「シングルトン型」 ``Type{T}`` は抽象型であり、インスタンスのみが
+オブジェクト ``T`` となります。この定義は少し難しいため、いくつかの例を見てみましょう。::
 
 .. doctest::
 
@@ -1477,10 +1619,14 @@ at some examples:
     julia> isa(Float64, Type{Real})
     false
 
-In other words, :func:`isa(A,Type{B}) <isa>` is true if and only if ``A`` and
-``B`` are the same object and that object is a type. Without the
-parameter, :obj:`Type` is simply an abstract type which has all type
-objects as its instances, including, of course, singleton types:
+.. 
+  In other words, :func:`isa(A,Type{B}) <isa>` is true if and only if ``A`` and
+  ``B`` are the same object and that object is a type. Without the
+  parameter, :obj:`Type` is simply an abstract type which has all type
+  objects as its instances, including, of course, singleton types:
+
+言い換えれば、 :func:`isa(A,Type{B}) <isa>` は、 ``A`` と ``B`` が同じオブジェクトで、そのオブジェクトが型である場合にのみ真です。
+パラメータがなければ、 :obj:`Type` は単なる抽象型であり、シングルトン型を含めた全ての型オブジェクトをインスタンスとして持ちます。::
 
 .. doctest::
 
@@ -1493,7 +1639,10 @@ objects as its instances, including, of course, singleton types:
     julia> isa(Real,Type)
     true
 
-Any object that is not a type is not an instance of ``Type``:
+.. 
+  Any object that is not a type is not an instance of ``Type``:
+  
+型ではないオブジェクトは、 ``Type`` のインスタンスではありません。::
 
 .. doctest::
 
@@ -1503,42 +1652,68 @@ Any object that is not a type is not an instance of ``Type``:
     julia> isa("foo",Type)
     false
 
-Until we discuss :ref:`man-parametric-methods`
-and :ref:`conversions <man-conversion>`, it is
-difficult to explain the utility of the singleton type construct, but in
-short, it allows one to specialize function behavior on specific type
-*values*. This is useful for writing
-methods (especially parametric ones) whose behavior depends on a type
-that is given as an explicit argument rather than implied by the type of
-one of its arguments.
+.. 
+  Until we discuss :ref:`man-parametric-methods`
+  and :ref:`conversions <man-conversion>`, it is
+  difficult to explain the utility of the singleton type construct, but in
+  short, it allows one to specialize function behavior on specific type
+  *values*. This is useful for writing
+  methods (especially parametric ones) whose behavior depends on a type
+  that is given as an explicit argument rather than implied by the type of
+  one of its arguments.
 
-A few popular languages have singleton types, including Haskell, Scala
-and Ruby. In general usage, the term "singleton type" refers to a type
-whose only instance is a single value. This meaning applies to Julia's
-singleton types, but with that caveat that only type objects have
-singleton types.
+:ref:`man-パラメータメソッド` と :ref:`変換 <man-変換>` について説明するまで、シングルトン型の
+コンストラクタの有用性を説明することは難しいですが、端的に言うと、
+特定の型の値に対して関数の動きを特化させることができます。これは、その引数の型によって暗示されるのではなく、
+明示的な引数として与えられる型に依存する処理を持つメソッド（特にパラメータを取るもの）を書くのに便利です。
 
-Parametric Bits Types
+.. 
+  A few popular languages have singleton types, including Haskell, Scala
+  and Ruby. In general usage, the term "singleton type" refers to a type
+  whose only instance is a single value. This meaning applies to Julia's
+  singleton types, but with that caveat that only type objects have
+  singleton types.
+
+Haskell、Scala、Rubyなどのいくつかの一般的な言語には、シングルトン型があります。
+一般的な使用では、「シングルトン型」はインスタンスが単一の値である型を指します。
+この意味はJuliaのシングルトン型にも適用されますが、型オブジェクトだけがシングルトン型を持つという点に注意してください。
+
+.. 
+  Parametric Bits Types
+  ~~~~~~~~~~~~~~~~~~~~~
+
+パラメータビット型
 ~~~~~~~~~~~~~~~~~~~~~
 
-Bits types can also be declared parametrically. For example, pointers
-are represented as boxed bits types which would be declared in Julia
-like this::
+.. 
+  Bits types can also be declared parametrically. For example, pointers
+  are represented as boxed bits types which would be declared in Julia
+  like this::
 
-    # 32-bit system:
+ビット型はパラメトリックに宣言することもできます。例えば、ポインタは次のようにJuliaで宣言される
+ボックス化されたビット型として表すことができます。::
+
+    # 32-bit system:
     bitstype 32 Ptr{T}
 
     # 64-bit system:
     bitstype 64 Ptr{T}
 
-The slightly odd feature of these declarations as compared to typical
-parametric composite types, is that the type parameter ``T`` is not used
-in the definition of the type itself — it is just an abstract tag,
-essentially defining an entire family of types with identical structure,
-differentiated only by their type parameter. Thus, ``Ptr{Float64}`` and
-``Ptr{Int64}`` are distinct types, even though they have identical
-representations. And of course, all specific pointer types are subtype
-of the umbrella ``Ptr`` type:
+.. 
+  The slightly odd feature of these declarations as compared to typical
+  parametric composite types, is that the type parameter ``T`` is not used
+  in the definition of the type itself — it is just an abstract tag,
+  essentially defining an entire family of types with identical structure,
+  differentiated only by their type parameter. Thus, ``Ptr{Float64}`` and
+  ``Ptr{Int64}`` are distinct types, even though they have identical
+  representations. And of course, all specific pointer types are subtype
+  of the umbrella ``Ptr`` type:
+
+典型的なパラメータコンポジット型と比較して、これらの宣言の少し奇妙な特徴は、
+型パラメータ ``T`` が型自体の定義に使用されていない点です。これは、同じ構造を持つ型の集合の全体を
+定義する抽象タグであり、型パラメータによってのみ区別されます。したがって、 ``Ptr{Float64}`` と
+``Ptr{Int64}`` は、同じ表現を持っていますが、異なる型です。もちろん、全ての特定のポインタ型は、
+傘である ``Ptr`` 型のサブタイプです。::
 
 .. doctest::
 
@@ -1548,15 +1723,24 @@ of the umbrella ``Ptr`` type:
     julia> Ptr{Int64} <: Ptr
     true
 
-Type Aliases
+.. 
+  Type Aliases
+  ------------
+
+型エイリアス
 ------------
 
-Sometimes it is convenient to introduce a new name for an already
-expressible type. For such occasions, Julia provides the ``typealias``
-mechanism. For example, :class:`UInt` is type aliased to either :class:`UInt32` or
-:class:`UInt64` as is appropriate for the size of pointers on the system::
+.. 
+  Sometimes it is convenient to introduce a new name for an already
+  expressible type. For such occasions, Julia provides the ``typealias``
+  mechanism. For example, :class:`UInt` is type aliased to either :class:`UInt32` or
+  :class:`UInt64` as is appropriate for the size of pointers on the system::
 
-    # 32-bit system:
+すでに表現可能である型の新しい名前を導入すると便利な場合があります。
+このような場合、Juliaは ``typealias`` を提供します。例えば、 :class:`UInt` は :class:`UInt32` または
+:class:`UInt64` のエイリアスであり、システム上のポインタのサイズに適した値を返します。::
+
+    # 32-bit system:
     julia> UInt
     UInt32
 
@@ -1564,68 +1748,113 @@ mechanism. For example, :class:`UInt` is type aliased to either :class:`UInt32` 
     julia> UInt
     UInt64
 
-This is accomplished via the following code in ``base/boot.jl``::
+.. 
+  This is accomplished via the following code in ``base/boot.jl``::
 
-    if is(Int,Int64)
+これは、以下の ``base/boot.jl`` のコードにより実現されます。::
+
+    if is(Int,Int64)
         typealias UInt UInt64
     else
         typealias UInt UInt32
     end
 
-Of course, this depends on what :class:`Int` is aliased to — but that is
-predefined to be the correct type — either :class:`Int32` or :class:`Int64`.
+.. 
+  Of course, this depends on what :class:`Int` is aliased to — but that is
+  predefined to be the correct type — either :class:`Int32` or :class:`Int64`.
 
-For parametric types, ``typealias`` can be convenient for providing
-names for cases where some of the parameter choices are fixed.
-Julia's arrays have type ``Array{T,N}`` where ``T`` is the element type
-and ``N`` is the number of array dimensions. For convenience, writing
-``Array{Float64}`` allows one to specify the element type without
-specifying the dimension:
+もちろん、これは :class:`Int` が何のエイリアスがあるかによって異なりますが、
+:class:`Int32` または :class:`Int64` のいずれかの正しい型があらかじめ定義されています。
+
+.. 
+  For parametric types, ``typealias`` can be convenient for providing
+  names for cases where some of the parameter choices are fixed.
+  Julia's arrays have type ``Array{T,N}`` where ``T`` is the element type
+  and ``N`` is the number of array dimensions. For convenience, writing
+  ``Array{Float64}`` allows one to specify the element type without
+  specifying the dimension:
+
+パラメータ型では、 ``typealias`` は、いくつかのパラメーターの選択肢が固定されている場合に
+名前を提供するのに便利です。Juliaの配列には型 ``Array{T,N}`` があり、 ``T`` は要素の型、
+``N`` は配列の次元数を表します。便宜上、 ``Array{Float64}`` と書くことで、
+次元を指定せずに要素の型を指定することができます。::
 
 .. doctest::
 
     julia> Array{Float64,1} <: Array{Float64} <: Array
     true
 
-However, there is no way to equally simply restrict just the dimension
-but not the element type. Yet, one often needs to ensure an object
-is a vector or a matrix (imposing restrictions on the number of dimensions).
-For that reason, the following type aliases are provided::
+.. 
+  However, there is no way to equally simply restrict just the dimension
+  but not the element type. Yet, one often needs to ensure an object
+  is a vector or a matrix (imposing restrictions on the number of dimensions).
+  For that reason, the following type aliases are provided::
 
-    typealias Vector{T} Array{T,1}
+しかし、要素のように次元数だけを単純に制限する方法はありません。
+ただし、オブジェクトがベクトルまたはマトリクスであることを保証する（次元の数に制限を課す）必要が
+ある場合があります。そのため、以下の型のエイリアスが用意されています。::
+
+    typealias Vector{T} Array{T,1}
     typealias Matrix{T} Array{T,2}
 
-Writing ``Vector{Float64}`` is equivalent to writing
-``Array{Float64,1}``, and the umbrella type ``Vector`` has as instances
-all ``Array`` objects where the second parameter — the number of array
-dimensions — is 1, regardless of what the element type is. In languages
-where parametric types must always be specified in full, this is not
-especially helpful, but in Julia, this allows one to write just
-``Matrix`` for the abstract type including all two-dimensional dense
-arrays of any element type.
+.. 
+  Writing ``Vector{Float64}`` is equivalent to writing
+  ``Array{Float64,1}``, and the umbrella type ``Vector`` has as instances
+  all ``Array`` objects where the second parameter — the number of array
+  dimensions — is 1, regardless of what the element type is. In languages
+  where parametric types must always be specified in full, this is not
+  especially helpful, but in Julia, this allows one to write just
+  ``Matrix`` for the abstract type including all two-dimensional dense
+  arrays of any element type.
 
-This declaration of ``Vector`` creates a subtype relation
-``Vector{Int} <: Vector``.  However, it is not always the case that a parametric
-``typealias`` statement creates such a relation; for example, the statement::
+``Vector{Float64}`` と書くことは ``Array{Float64,1}`` と書くことと同等であり、傘型 ``Vector`` は、
+要素の種類に関係なく、配列の次元数を示す二番目のパラメータが1である全ての ``Array`` オブジェクトを
+インスタンスとして持ちます。パラメータ型を常に完全に指定する必要がある言語では、
+これは特に有用ではありませんが、Juliaでは、任意の要素型のすべての2次元の高密度な配列を含む抽象型の ``Matrix`` を書くことができます。
 
-    typealias AA{T} Array{Array{T,1},1}
+.. 
+  This declaration of ``Vector`` creates a subtype relation
+  ``Vector{Int} <: Vector``.  However, it is not always the case that a parametric
+  ``typealias`` statement creates such a relation; for example, the statement::
 
-does not create the relation ``AA{Int} <: AA``.  The reason is that ``Array{Array{T,1},1}`` is not
-an abstract type at all; in fact, it is a concrete type describing a
-1-dimensional array in which each entry
-is an object of type ``Array{T,1}`` for some value of ``T``.
+この ``Vector`` の宣言は、サブタイプの関係 ``Vector{Int} <: Vector`` を作成します。
+しかし、以下のステートメントのように、必ずしもパラメータ ``typealias`` ステートメントが
+このような関係を作成するとは限りません。::
 
-Operations on Types
+    typealias AA{T} Array{Array{T,1},1}
+
+.. 
+  does not create the relation ``AA{Int} <: AA``.  The reason is that ``Array{Array{T,1},1}`` is not
+  an abstract type at all; in fact, it is a concrete type describing a
+  1-dimensional array in which each entry
+  is an object of type ``Array{T,1}`` for some value of ``T``.
+
+上記の例は ``AA{Int} <: AA`` の関係を作成しません。その理由は、 ``Array{Array{T,1},1}`` は抽象型ではないからです。
+これは1次元配列を記述する具体型であり、各エントリは ``T`` の値に対する ``Array{T,1}`` 型のオブジェクトです。
+
+.. 
+  Operations on Types
+  -------------------
+
+型の操作
 -------------------
 
-Since types in Julia are themselves objects, ordinary functions can
-operate on them. Some functions that are particularly useful for working
-with or exploring types have already been introduced, such as the ``<:``
-operator, which indicates whether its left hand operand is a subtype of
-its right hand operand.
+.. 
+  Since types in Julia are themselves objects, ordinary functions can
+  operate on them. Some functions that are particularly useful for working
+  with or exploring types have already been introduced, such as the ``<:``
+  operator, which indicates whether its left hand operand is a subtype of
+  its right hand operand.
 
-The ``isa`` function tests if an object is of a given type and returns
-true or false:
+Juliaの型はそれ自体がオブジェクトであるため、通常の関数は型に対し処理することができます。
+左辺の被演算子が右辺の被演算子のサブタイプであるかどうかを示す ``<:`` 演算子など、
+型の処理や検索に役立つ関数は既に説明されています。
+
+.. 
+  The ``isa`` function tests if an object is of a given type and returns
+  true or false:
+
+``isa`` 関数は、オブジェクトが指定された型かどうかをチェックし、trueまたはfalseを返します。::
 
 .. doctest::
 
@@ -1635,9 +1864,13 @@ true or false:
     julia> isa(1,AbstractFloat)
     false
 
-The :func:`typeof` function, already used throughout the manual in examples,
-returns the type of its argument. Since, as noted above, types are
-objects, they also have types, and we can ask what their types are:
+.. 
+  The :func:`typeof` function, already used throughout the manual in examples,
+  returns the type of its argument. Since, as noted above, types are
+  objects, they also have types, and we can ask what their types are:
+
+このマニュアルの例の中で既に使用されている :func:`typeof` 関数は、引数の型を返します。上記のように、
+型はオブジェクトであるため、型を持ち、型が何であるかを確認することができます。::
 
 .. doctest::
 
@@ -1650,9 +1883,13 @@ objects, they also have types, and we can ask what their types are:
     julia> typeof(Union{Real,String})
     Union
 
-What if we repeat the process? What is the type of a type of a type?
-As it happens, types are all composite values and thus all have a type of
-:obj:`DataType`:
+.. 
+  What if we repeat the process? What is the type of a type of a type?
+  As it happens, types are all composite values and thus all have a type of
+  :obj:`DataType`:
+
+もしこの処理を繰り返したらどうなるのでしょうか。ある型の型の型は何になるのでしょうか。
+この場合、型は全てコンポジット値であり、 :obj:`DataType` の型を持ちます。::
 
 .. doctest::
 
@@ -1662,11 +1899,18 @@ As it happens, types are all composite values and thus all have a type of
     julia> typeof(Union)
     DataType
 
-:obj:`DataType` is its own type.
+.. 
+  :obj:`DataType` is its own type.
 
-Another operation that applies to some types is :func:`supertype`, which
-reveals a type's supertype.
-Only declared types (:obj:`DataType`) have unambiguous supertypes:
+:obj:`DataType` はそれ自体の型です。
+
+.. 
+  Another operation that applies to some types is :func:`supertype`, which
+  reveals a type's supertype.
+  Only declared types (:obj:`DataType`) have unambiguous supertypes:
+
+型に適用される別の処理は、型の上位タイプを示す :func:`supertype` です。
+宣言された型（ :obj:`DataType` ）のみが曖昧さのない上位タイプを持ちます。::
 
 .. doctest::
 
@@ -1682,10 +1926,13 @@ Only declared types (:obj:`DataType`) have unambiguous supertypes:
     julia> supertype(Any)
     Any
 
-If you apply :func:`supertype` to other type objects (or non-type objects), a
-:exc:`MethodError` is raised::
+.. 
+  If you apply :func:`supertype` to other type objects (or non-type objects), a
+  :exc:`MethodError` is raised::
 
-    julia> supertype(Union{Float64,Int64})
+:func:`supertype` を他の型オブジェクト（または非型オブジェクト）に適用した場合、 :exc:`MethodError` が発生します。::
+
+    julia> supertype(Union{Float64,Int64})
     ERROR: `supertype` has no method matching supertype(::Type{Union{Float64,Int64}})
 
 Custom pretty-printing
