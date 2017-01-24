@@ -1935,131 +1935,154 @@ Juliaの型はそれ自体がオブジェクトであるため、通常の関数
     julia> supertype(Union{Float64,Int64})
     ERROR: `supertype` has no method matching supertype(::Type{Union{Float64,Int64}})
 
-Custom pretty-printing
-----------------------
+.. 
+  Custom pretty-printing
+  ----------------------
 
-Often, one wants to customize how instances of a type are displayed.  This
-is accomplished by overloading the :func:`show` function.  For example,
-suppose we define a type to represent complex numbers in polar form:
+  Often, one wants to customize how instances of a type are displayed.  This
+  is accomplished by overloading the :func:`show` function.  For example,
+  suppose we define a type to represent complex numbers in polar form:
 
-.. testcode::
+  .. testcode::
 
-    type Polar{T<:Real} <: Number
-        r::T
-        Θ::T
-    end
-    Polar(r::Real,Θ::Real) = Polar(promote(r,Θ)...)
+      type Polar{T<:Real} <: Number
+          r::T
+          Θ::T
+      end
+      Polar(r::Real,Θ::Real) = Polar(promote(r,Θ)...)
 
-.. testoutput::
-   :hide:
+  .. testoutput::
+     :hide:
 
-   Polar{T<:Real}
+     Polar{T<:Real}
 
-Here, we've added a custom constructor function so that it can take arguments of
-different ``Real`` types and promote them to a commmon type (see
-:ref:`man-constructors` and :ref:`man-conversion-and-promotion`). (Of course, we
-would have to define lots of other methods, too, to make it act like a
-``Number``, e.g. ``+``, ``*``, ``one``, ``zero``, promotion rules and so on.) By
-default, instances of this type display rather simply, with information about
-the type name and the field values, as e.g. ``Polar{Float64}(3.0,4.0)``.
+  Here, we've added a custom constructor function so that it can take arguments of
+  different ``Real`` types and promote them to a commmon type (see
+  :ref:`man-constructors` and :ref:`man-conversion-and-promotion`). (Of course, we
+  would have to define lots of other methods, too, to make it act like a
+  ``Number``, e.g. ``+``, ``*``, ``one``, ``zero``, promotion rules and so on.) By
+  default, instances of this type display rather simply, with information about
+  the type name and the field values, as e.g. ``Polar{Float64}(3.0,4.0)``.
 
-If we want it to display instead as ``3.0 * exp(4.0im)``, we would
-define the following method to print the object to a given output
-object ``io`` (representing a file, terminal, buffer, etcetera; see
-:ref:`man-networking-and-streams`):
+  If we want it to display instead as ``3.0 * exp(4.0im)``, we would
+  define the following method to print the object to a given output
+  object ``io`` (representing a file, terminal, buffer, etcetera; see
+  :ref:`man-networking-and-streams`):
 
-.. testcode::
+  .. testcode::
 
-    Base.show(io::IO, z::Polar) = print(io, z.r, " * exp(", z.Θ, "im)")
+      Base.show(io::IO, z::Polar) = print(io, z.r, " * exp(", z.Θ, "im)")
 
-More fine-grained control over display of ``Polar`` objects is possible.
-In particular, sometimes one wants both a verbose multi-line printing
-format, used for displaying a single object in the REPL and other interactive
-environments, and also a more compact single-line format used for :func:`print`
-or for displaying the object as part of another object (e.g. in an array).
-Although by default the ``show(io, z)`` function is called in both cases,
-you can define a *different* multi-line format for displaying an object
-by overloading a three-argument form of ``show`` that takes the ``text/plain``
-MIME type as its second argument (see :ref:`man-multimedia-io`), for example:
+  More fine-grained control over display of ``Polar`` objects is possible.
+  In particular, sometimes one wants both a verbose multi-line printing
+  format, used for displaying a single object in the REPL and other interactive
+  environments, and also a more compact single-line format used for :func:`print`
+  or for displaying the object as part of another object (e.g. in an array).
+  Although by default the ``show(io, z)`` function is called in both cases,
+  you can define a *different* multi-line format for displaying an object
+  by overloading a three-argument form of ``show`` that takes the ``text/plain``
+  MIME type as its second argument (see :ref:`man-multimedia-io`), for example:
 
-.. testcode::
+  .. testcode::
 
-    Base.show{T}(io::IO, ::MIME"text/plain", z::Polar{T}) =
-        print(io, "Polar{$T} complex number:\n   ", z)
+      Base.show{T}(io::IO, ::MIME"text/plain", z::Polar{T}) =
+          print(io, "Polar{$T} complex number:\n   ", z)
 
-(Note that ``print(..., z)`` here will call the 2-argument ``show(io, z)`` method.)
-This results in:
+  (Note that ``print(..., z)`` here will call the 2-argument ``show(io, z)`` method.)
+  This results in:
 
-.. doctest::
+  .. doctest::
 
-    julia> Polar(3, 4.0)
-    Polar{Float64} complex number:
+      julia> Polar(3, 4.0)
+      Polar{Float64} complex number:
+         3.0 * exp(4.0im)
+
+      julia> [Polar(3, 4.0), Polar(4.0,5.3)]
+      2-element Array{Polar{Float64},1}:
        3.0 * exp(4.0im)
+       4.0 * exp(5.3im)
 
-    julia> [Polar(3, 4.0), Polar(4.0,5.3)]
-    2-element Array{Polar{Float64},1}:
-     3.0 * exp(4.0im)
-     4.0 * exp(5.3im)
+  where the single-line ``show(io, z)`` form is still used for an array of ``Polar``
+  values.   Technically, the REPL calls ``display(z)`` to display the result of
+  executing a line, which defaults to ``show(STDOUT, MIME("text/plain"), z)``, which
+  in turn defaults to ``show(STDOUT, z)``, but you should *not* define new :func:`display`
+  methods unless you are defining a new multimedia display handler
+  (see :ref:`man-multimedia-io`).
 
-where the single-line ``show(io, z)`` form is still used for an array of ``Polar``
-values.   Technically, the REPL calls ``display(z)`` to display the result of
-executing a line, which defaults to ``show(STDOUT, MIME("text/plain"), z)``, which
-in turn defaults to ``show(STDOUT, z)``, but you should *not* define new :func:`display`
-methods unless you are defining a new multimedia display handler
-(see :ref:`man-multimedia-io`).
+  Moreover, you can also define ``show`` methods for other MIME types in order
+  to enable richer display (HTML, images, etcetera) of objects in environments
+  that support this (e.g. IJulia).   For example, we can define formatted
+  HTML display of ``Polar`` objects, with superscripts and italics, via:
 
-Moreover, you can also define ``show`` methods for other MIME types in order
-to enable richer display (HTML, images, etcetera) of objects in environments
-that support this (e.g. IJulia).   For example, we can define formatted
-HTML display of ``Polar`` objects, with superscripts and italics, via:
+  .. testcode::
 
-.. testcode::
+      Base.show{T}(io::IO, ::MIME"text/html", z::Polar{T}) =
+          println(io, "<code>Polar{$T}</code> complex number: ",
+                  z.r, " <i>e</i><sup>", z.Θ, " <i>i</i></sup>")
 
-    Base.show{T}(io::IO, ::MIME"text/html", z::Polar{T}) =
-        println(io, "<code>Polar{$T}</code> complex number: ",
-                z.r, " <i>e</i><sup>", z.Θ, " <i>i</i></sup>")
+  A ``Polar`` object will then display automatically using HTML in an environment
+  that supports HTML display, but you can call ``show`` manually to get HTML
+  output if you want:
 
-A ``Polar`` object will then display automatically using HTML in an environment
-that supports HTML display, but you can call ``show`` manually to get HTML
-output if you want:
+  .. doctest::
 
-.. doctest::
+     julia> show(STDOUT, "text/html", Polar(3.0,4.0))
+     <code>Polar{Float64}</code> complex number: 3.0 <i>e</i><sup>4.0 <i>i</i></sup>
 
-   julia> show(STDOUT, "text/html", Polar(3.0,4.0))
-   <code>Polar{Float64}</code> complex number: 3.0 <i>e</i><sup>4.0 <i>i</i></sup>
+  .. raw:: html
 
-.. raw:: html
-
-   <p>An HTML renderer would display this as: <code>Polar{Float64}</code> complex number: 3.0 <i>e</i><sup>4.0 <i>i</i></sup></p>
+     <p>An HTML renderer would display this as: <code>Polar{Float64}</code> complex number: 3.0 <i>e</i><sup>4.0 <i>i</i></sup></p>
 
 .. _man-val-trick:
 
-"Value types"
+.. 
+  "Value types"
+  -------------
+
+「値型」
 -------------
 
-In Julia, you can't dispatch on a *value* such as ``true`` or
-``false``. However, you can dispatch on parametric types, and Julia
-allows you to include "plain bits" values (Types, Symbols,
-Integers, floating-point numbers, tuples, etc.) as type parameters.  A
-common example is the dimensionality parameter in ``Array{T,N}``,
-where ``T`` is a type (e.g., ``Float64``) but ``N`` is just an
-``Int``.
+.. 
+  In Julia, you can't dispatch on a *value* such as ``true`` or
+  ``false``. However, you can dispatch on parametric types, and Julia
+  allows you to include "plain bits" values (Types, Symbols,
+  Integers, floating-point numbers, tuples, etc.) as type parameters.  A
+  common example is the dimensionality parameter in ``Array{T,N}``,
+  where ``T`` is a type (e.g., ``Float64``) but ``N`` is just an
+  ``Int``.
 
-You can create your own custom types that take values as parameters,
-and use them to control dispatch of custom types. By way of
-illustration of this idea, let's introduce a parametric type,
-``Val{T}``, which serves as a customary way to exploit this technique
-for cases where you don't need a more elaborate hierarchy.
+Juliaでは、 ``true`` や ``false`` などの値をディスパッチすることはできません。
+しかし、パラメータ型ではディスパッチすることができ、型、記号、整数、浮動小数点数チュープルなど
+「プレーンなビット」値を含めることができます。一般的な例は、 ``T`` が ``Float64`` のような型を表し、
+``N`` が ``Int`` を表す ``Array{T,N}`` の次元数パラメータです。
 
-``Val`` is defined as::
+.. 
+  You can create your own custom types that take values as parameters,
+  and use them to control dispatch of custom types. By way of
+  illustration of this idea, let's introduce a parametric type,
+  ``Val{T}``, which serves as a customary way to exploit this technique
+  for cases where you don't need a more elaborate hierarchy.
 
-    immutable Val{T}
+値をパラメータとして使用する独自の型を作成し、それらを使用して自作の型のディスパッチを制御することができます。
+このアイデアを説明するために、パラメータ型の ``Val{T}`` を見てみましょう。
+これは、より洗練された階層を必要としない場合にこの手法を活用する一般的な方法として機能します。
+
+.. 
+  ``Val`` is defined as::
+
+``Val`` を次のように定義します。::
+
+    immutable Val{T}
     end
 
-There is no more to the implementation of ``Val`` than this.  Some
-functions in Julia's standard library accept ``Val`` types as
-arguments, and you can also use it to write your own functions.  For
-example:
+.. 
+  There is no more to the implementation of ``Val`` than this.  Some
+  functions in Julia's standard library accept ``Val`` types as
+  arguments, and you can also use it to write your own functions.  For
+  example:
+
+これ以上の ``Val`` の実装はありません。Juliaの標準ライブラリのいくつかの関数は、
+``Val`` 型を引数として受け付け、それを使って独自の関数を書くこともできます。例えば、::
 
 .. testsetup:: value-types
 
@@ -2077,42 +2100,78 @@ example:
     julia> firstlast(Val{false})
     "Last"
 
-For consistency across Julia, the call site should always pass a
-``Val`` *type* rather than creating an *instance*, i.e., use
-``foo(Val{:bar})`` rather than ``foo(Val{:bar}())``.
+.. 
+  For consistency across Julia, the call site should always pass a
+  ``Val`` *type* rather than creating an *instance*, i.e., use
+  ``foo(Val{:bar})`` rather than ``foo(Val{:bar}())``.
 
-It's worth noting that it's extremely easy to mis-use parametric
-"value" types, including ``Val``; in unfavorable cases, you can easily
-end up making the performance of your code much *worse*.  In
-particular, you would never want to write actual code as illustrated
-above.  For more information about the proper (and improper) uses of
-``Val``, please read the more extensive discussion in :ref:`the
-performance tips <man-performance-val>`.
+Juliaの一貫性を保つため、呼び出し側はインスタンスを作成するのではなく、常に ``Val`` 型を受け渡す必要があります。
+例えば、 ``foo(Val{:bar}())`` ではなく ``foo(Val{:bar})`` を使用すべきです。
+
+.. 
+  It's worth noting that it's extremely easy to mis-use parametric
+  "value" types, including ``Val``; in unfavorable cases, you can easily
+  end up making the performance of your code much *worse*.  In
+  particular, you would never want to write actual code as illustrated
+  above.  For more information about the proper (and improper) uses of
+  ``Val``, please read the more extensive discussion in :ref:`the
+  performance tips <man-performance-val>`.
+
+``Val`` を含むパラメータ「値」型を誤って使用してしまうことは簡単に発生しますが、取るに足りません。
+好ましくないケースでは、コードのパフォーマンスを大幅に悪化させることになります。
+特に、上記のようなコードを実際の記述することは決して好ましいことではありません。
+``Val`` の適切な（そして不適切な）使い方の詳細については、 :ref:`パフォーマンスに関するヒント
+   <man-performance-val>` の広範な議論を参照してください。
 
 .. _man-nullable-types:
 
-Nullable Types: Representing Missing Values
+.. 
+  Nullable Types: Representing Missing Values
+  -------------------------------------------
+
+null可能な型：欠損値の表現
 -------------------------------------------
 
-In many settings, you need to interact with a value of type ``T`` that may or
-may not exist. To handle these settings, Julia provides a parametric type
-called ``Nullable{T}``, which can be thought of as a specialized container
-type that can contain either zero or one values. ``Nullable{T}`` provides a
-minimal interface designed to ensure that interactions with missing values
-are safe. At present, the interface consists of four possible interactions:
+.. 
+  In many settings, you need to interact with a value of type ``T`` that may or
+  may not exist. To handle these settings, Julia provides a parametric type
+  called ``Nullable{T}``, which can be thought of as a specialized container
+  type that can contain either zero or one values. ``Nullable{T}`` provides a
+  minimal interface designed to ensure that interactions with missing values
+  are safe. At present, the interface consists of four possible interactions:
 
-- Construct a :obj:`Nullable` object.
-- Check if a :obj:`Nullable` object has a missing value.
-- Access the value of a :obj:`Nullable` object with a guarantee that a
-  :exc:`NullException` will be thrown if the object's value is missing.
-- Access the value of a :obj:`Nullable` object with a guarantee that a default
-  value of type ``T`` will be returned if the object's value is missing.
+  - Construct a :obj:`Nullable` object.
+  - Check if a :obj:`Nullable` object has a missing value.
+  - Access the value of a :obj:`Nullable` object with a guarantee that a
+    :exc:`NullException` will be thrown if the object's value is missing.
+  - Access the value of a :obj:`Nullable` object with a guarantee that a default
+    value of type ``T`` will be returned if the object's value is missing.
 
-Constructing :obj:`Nullable` objects
+多くの設定では、存在が不明確な型 ``T`` の値と向き合う必要があります。これらの設定を処理するために、
+Juliaは ``Nullable{T}`` というパラメータ型を提供しています。これは、
+ゼロまたは1つの値を持つ特殊なコンテナ型と考えることができます。 ``Nullable{T}`` は、
+欠損値とのやり取りが安全であることを保証するように設計された、最小限のインターフェースを提供します。
+現在、このインタフェースは4つの対話から構成されています。::
+
+- :obj:`Nullable` オブジェクトの構築
+- :obj:`Nullable` オブジェクトが欠損値を持っているかの確認
+- オブジェクトの値が無い場合に :exc:`NullException` がスローされる保証を持って、
+  :obj:`Nullable` オブジェクトの値にアクセス
+- オブジェクトの値が無い場合に、型 ``T`` のデフォルト値が返される保証を持って、
+  :obj:`Nullable` オブジェクトの値にアクセス
+
+.. 
+  Constructing :obj:`Nullable` objects
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:obj:`Nullable` オブジェクトの構築
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To construct an object representing a missing value of type ``T``, use the
-``Nullable{T}()`` function:
+.. 
+  To construct an object representing a missing value of type ``T``, use the
+  ``Nullable{T}()`` function:
+
+型 ``T`` の欠損値を表すオブジェクトを作成するには、 ``Nullable{T}()`` 関数を使用します。::
 
 .. doctest::
 
@@ -2125,8 +2184,11 @@ To construct an object representing a missing value of type ``T``, use the
     julia> x3 = Nullable{Vector{Int64}}()
     Nullable{Array{Int64,1}}()
 
-To construct an object representing a non-missing value of type ``T``, use the
-``Nullable(x::T)`` function:
+.. 
+  To construct an object representing a non-missing value of type ``T``, use the
+  ``Nullable(x::T)`` function:
+
+型 ``T`` の非欠損値を表すオブジェクトを作成するには、 ``Nullable(x::T)`` 関数を使用します。::
 
 .. doctest::
 
@@ -2139,14 +2201,25 @@ To construct an object representing a non-missing value of type ``T``, use the
     julia> x3 = Nullable([1, 2, 3])
     Nullable{Array{Int64,1}}([1,2,3])
 
-Note the core distinction between these two ways of constructing a :obj:`Nullable`
-object: in one style, you provide a type, ``T``, as a function parameter; in
-the other style, you provide a single value of type ``T`` as an argument.
+.. 
+  Note the core distinction between these two ways of constructing a :obj:`Nullable`
+  object: in one style, you provide a type, ``T``, as a function parameter; in
+  the other style, you provide a single value of type ``T`` as an argument.
 
-Checking if a :obj:`Nullable` object has a value
+:obj:`Nullable` オブジェクトを構築するこれらの2つの方法の重要な違いに注目してください。
+一方では、関数のパラメータとして型 ``T`` を指定し、もう一方では、型 ``T`` の単一の値を引数として指定しています。
+
+.. 
+  Checking if a :obj:`Nullable` object has a value
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:obj:`Nullable` オブジェクトが値を持っているかの確認
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can check if a :obj:`Nullable` object has any value using :func:`isnull`:
+.. 
+  You can check if a :obj:`Nullable` object has any value using :func:`isnull`:
+
+:func:`isnull` を使用することで、 :obj:`Nullable` オブジェクトに値があるかどうかを確認することができます。::
 
 .. doctest::
 
@@ -2156,10 +2229,17 @@ You can check if a :obj:`Nullable` object has any value using :func:`isnull`:
     julia> isnull(Nullable(0.0))
     false
 
-Safely accessing the value of a :obj:`Nullable` object
+.. 
+  Safely accessing the value of a :obj:`Nullable` object
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:obj:`Nullable` オブジェクトの値への安全なアクセス
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can safely access the value of a :obj:`Nullable` object using :func:`get`:
+.. 
+  You can safely access the value of a :obj:`Nullable` object using :func:`get`:
+
+:func:`get` を使用することで、 :obj:`Nullable` オブジェクトの値に安全にアクセスすることができます。::
 
 .. doctest::
 
@@ -2171,14 +2251,22 @@ You can safely access the value of a :obj:`Nullable` object using :func:`get`:
     julia> get(Nullable(1.0))
     1.0
 
-If the value is not present, as it would be for ``Nullable{Float64}``, a
-:exc:`NullException` error will be thrown. The error-throwing nature of the
-:func:`get` function ensures that any attempt to access a missing value immediately
-fails.
+.. 
+  If the value is not present, as it would be for ``Nullable{Float64}``, a
+  :exc:`NullException` error will be thrown. The error-throwing nature of the
+  :func:`get` function ensures that any attempt to access a missing value immediately
+  fails.
 
-In cases for which a reasonable default value exists that could be used
-when a :obj:`Nullable` object's value turns out to be missing, you can provide this
-default value as a second argument to :func:`get`:
+値が存在しない場合、 ``Nullable{Float64}`` の場合と同様に、 :exc:`NullException` エラーが返されます。
+:func:`get` 関数のエラースローの性質は、欠損値にアクセスしようとする試みがすぐに失敗することを保証します。
+
+.. 
+  In cases for which a reasonable default value exists that could be used
+  when a :obj:`Nullable` object's value turns out to be missing, you can provide this
+  default value as a second argument to :func:`get`:
+
+:obj:`Nullable` オブジェクトの値が不足していることが判明したときに使用できる合理的なデフォルト値が存在する場合は、
+このデフォルト値を :func:`get` の第2引数として指定することができます。::
 
 .. doctest::
 
@@ -2188,9 +2276,15 @@ default value as a second argument to :func:`get`:
     julia> get(Nullable(1.0), 0.0)
     1.0
 
-Note that this default value will automatically be converted to the type of
-the :obj:`Nullable` object that you attempt to access using the :func:`get` function.
-For example, in the code shown above the value ``0`` would be automatically
-converted to a :class:`Float64` value before being returned. The presence of default
-replacement values makes it easy to use the :func:`get` function to write
-type-stable code that interacts with sources of potentially missing values.
+.. 
+  Note that this default value will automatically be converted to the type of
+  the :obj:`Nullable` object that you attempt to access using the :func:`get` function.
+  For example, in the code shown above the value ``0`` would be automatically
+  converted to a :class:`Float64` value before being returned. The presence of default
+  replacement values makes it easy to use the :func:`get` function to write
+  type-stable code that interacts with sources of potentially missing values.
+
+このデフォルト値は、 :func:`get` 関数を使用してアクセスしようとする :obj:`Nullable` オブジェクトの型に自動的に
+変換されることに注意してください。例えば、上記のコードでは、値 ``0`` は自動的に :class:`Float64` 値に変換されて
+返されます。デフォルトの値の変換は、欠損値の可能性があるソースを扱う、型が安定したコードを書くために
+使用する :func:`get` 関数の利用を容易にします。
