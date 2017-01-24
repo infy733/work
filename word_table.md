@@ -47,17 +47,41 @@
 | primitive numeric type / numeric primitive type                 | 数値プリミティブ型
 | Arbitrary Precision Arithmetic        | 任意精度計算
 | elementwise  |  要素単位
-| 
-| 
-| 
-| 
-| 
-| 
-| 
-| 
-| 
-| 
-| 
-| 
-| 
-                      |
+| short-circuit evaluation   |  短絡評価
+| Dot Syntax for Vectorizing Functions   |  ベクトル化関数のドット構文
+| modulus, modulo   |  合同式の法、余剰演算
+| derivative   |  微分
+| arithmetic operation   |  算術処理
+| variable-width   |  可変幅
+| variable-length   |  可変長
+| byte array literals   |  バイト配列リテラル
+| assignment form   |  代入形式
+| anonymous function   |  無名関数
+| tuple   |  チュープル
+| tuple “destructuring”   |  チュープル「構造解除」
+| Varargs   |  可変引数
+| Parametrically-constrained Varargs methods   |  パラメトリック制約付き可変引数メソッド
+| Performance Tip   |  パフォーマンスに関するヒント
+| Pre-allocating outputs   |  出力の事前割り当て
+| ternary operator   |  三項演算子
+| Short-Circuit Evaluation   |  短絡評価
+| infix operator   |  中置演算子
+| conditional chain   |  条件付き連結
+| Multi-dimensional Arrays   |  多次元配列
+| Parallel Computing   |  並列処理
+| scope rule   |  スコープ規則
+| region of code   |  スコープの範囲
+| lexical scope   |  レキシカルスコープ
+| comprehension   |  コンプリヘンション
+| static type system   |  静的型付け
+| dynamic type system   |  動的型付け
+| polymorphism   |  ポリモーフィズム
+| supertype   |  上位タイプ
+| multiple dispatch   |  多重ディスパッチ
+| constructor   | コンストラクタ
+| singleton   |  単体
+| parametric type   |  パラメータ型
+| composite : コンポジット
+| generic programming   |  汎用プログラミング
+| parametric polymorphism   |  パラメトリック多様型
+| Singleton Types   |  シングルトン型                 
