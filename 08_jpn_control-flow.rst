@@ -910,8 +910,8 @@ C、MATLAB、Perl、Python、Rubyと異なり、しかしJavaやその他の厳�
     julia> type MyCustomException <: Exception end
 
 .. 
-The :func:`throw` function
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+  The :func:`throw` function
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :func:`throw` 関数
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -996,12 +996,12 @@ The :func:`throw` function
     エラーメッセージを書く際には、1文字目は小文字にするべきです。例えば、
     ``size(A) == size(B) || throw(DimensionMismatch("size of A not equal to size of B"))``    
 
-     は以下よりも望ましいです。
+    は以下よりも望ましいです。
      
-     ``size(A) == size(B) || throw(DimensionMismatch("Size of A not equal to size of B"))``.
+    ``size(A) == size(B) || throw(DimensionMismatch("Size of A not equal to size of B"))``.
      
-     しかし、1文字目を大文字にするほうがよい場合もあります。例えば、関数の引数が大文字の場合です。
-     ``size(A,1) == size(B,2) || throw(DimensionMismatch("A has first dimension..."))``
+    しかし、1文字目を大文字にするほうがよい場合もあります。例えば、関数の引数が大文字の場合です。
+    ``size(A,1) == size(B,2) || throw(DimensionMismatch("A has first dimension..."))``
 .. 
   Errors
   ~~~~~~
