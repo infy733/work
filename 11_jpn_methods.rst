@@ -9,63 +9,104 @@
  メソッド
 *********
 
-Recall from :ref:`man-functions` that a function is an object
-that maps a tuple of arguments to a return value, or throws an exception
-if no appropriate value can be returned. It is common for the same
-conceptual function or operation to be implemented quite differently for
-different types of arguments: adding two integers is very different from
-adding two floating-point numbers, both of which are distinct from
-adding an integer to a floating-point number. Despite their
-implementation differences, these operations all fall under the general
-concept of "addition". Accordingly, in Julia, these behaviors all belong
-to a single object: the ``+`` function.
+.. 
+ Recall from :ref:`man-functions` that a function is an object
+ that maps a tuple of arguments to a return value, or throws an exception
+ if no appropriate value can be returned. It is common for the same
+ conceptual function or operation to be implemented quite differently for
+ different types of arguments: adding two integers is very different from
+ adding two floating-point numbers, both of which are distinct from
+ adding an integer to a floating-point number. Despite their
+ implementation differences, these operations all fall under the general
+ concept of "addition". Accordingly, in Julia, these behaviors all belong
+ to a single object: the ``+`` function.
 
-To facilitate using many different implementations of the same concept
-smoothly, functions need not be defined all at once, but can rather be
-defined piecewise by providing specific behaviors for certain
-combinations of argument types and counts. A definition of one possible
-behavior for a function is called a *method*. Thus far, we have
-presented only examples of functions defined with a single method,
-applicable to all types of arguments. However, the signatures of method
-definitions can be annotated to indicate the types of arguments in
-addition to their number, and more than a single method definition may
-be provided. When a function is applied to a particular tuple of
-arguments, the most specific method applicable to those arguments is
-applied. Thus, the overall behavior of a function is a patchwork of the
-behaviors of its various method definitions. If the patchwork is well
-designed, even though the implementations of the methods may be quite
-different, the outward behavior of the function will appear seamless and
-consistent.
+:ref:`man-関数`セクションの内容を思い出してください。関数は、引数のタプルを戻り値にマップするオブジェクトであり、
+もし適切な値が返されない場合は、例外がスローされます。概念上同様な関数または処理が、
+異なる引数の型に対して全く異なる実装がされることは一般的です。例えば、2つの整数を加算することは、
+2つの浮動小数点数を加算することとは異なり、またどちらも浮動小数点数に整数を足すこととは異なります。
+実装の違いはありますが、これらの処理は全て「追加」という概念に当てはまります。
+したがって、Juliaではこれらの動作はすべて単一のオブジェクト``+``関数に属します。
 
-The choice of which method to execute when a function is applied is
-called *dispatch*. Julia allows the dispatch process to choose which of
-a function's methods to call based on the number of arguments given, and
-on the types of all of the function's arguments. This is different than
-traditional object-oriented languages, where dispatch occurs based only
-on the first argument, which often has a special argument syntax, and is
-sometimes implied rather than explicitly written as an
-argument. [#]_ Using all of a function's arguments to
-choose which method should be invoked, rather than just the first, is
-known as `multiple dispatch
-<https://en.wikipedia.org/wiki/Multiple_dispatch>`_. Multiple
-dispatch is particularly useful for mathematical code, where it makes
-little sense to artificially deem the operations to "belong" to one
-argument more than any of the others: does the addition operation in
-``x + y`` belong to ``x`` any more than it does to ``y``? The
-implementation of a mathematical operator generally depends on the types
-of all of its arguments. Even beyond mathematical operations, however,
-multiple dispatch ends up being a powerful and convenient paradigm
-for structuring and organizing programs.
+.. 
+ To facilitate using many different implementations of the same concept
+ smoothly, functions need not be defined all at once, but can rather be
+ defined piecewise by providing specific behaviors for certain
+ combinations of argument types and counts. A definition of one possible
+ behavior for a function is called a *method*. Thus far, we have
+ presented only examples of functions defined with a single method,
+ applicable to all types of arguments. However, the signatures of method
+ definitions can be annotated to indicate the types of arguments in
+ addition to their number, and more than a single method definition may
+ be provided. When a function is applied to a particular tuple of
+ arguments, the most specific method applicable to those arguments is
+ applied. Thus, the overall behavior of a function is a patchwork of the
+ behaviors of its various method definitions. If the patchwork is well
+ designed, even though the implementations of the methods may be quite
+ different, the outward behavior of the function will appear seamless and
+ consistent.
 
-.. [#] In C++ or Java, for example, in a method call like
-  ``obj.meth(arg1,arg2)``, the object obj "receives" the method call and is
-  implicitly passed to the method via the ``this`` keyword, rather than as an
-  explicit method argument. When the current ``this`` object is the receiver of a
-  method call, it can be omitted altogether, writing just ``meth(arg1,arg2)``,
-  with ``this`` implied as the receiving object.
+同じ概念の様々な実装をスムーズに使用するために、一度に関数の全てを定義する必要はなく、
+引数型とカウントの特定の組み合わせに対して特定の動作を指定することによって、
+区分的に定義することができます。関数が可能な動作の定義は、メソッドと呼ばれます。
+ここまででは、1つのメソッドで定義された、全ての型の引数に適応できる関数の例のみを見てきました。
+しかし、メソッド定義の特徴は、メソッドには引数の種類とその数を示す注釈を付けることができ、
+複数のメソッド定義を与えることができます。関数が特定の引数のタプルに適用される場合、
+それらの引数に適用可能な最も具体的な方法が適用されます。したがって、関数の動作は、
+様々なメソッド定義の動作のパッチワークのようなものです。このパッチワークが適切に設計されていれば、
+たとえメソッドの実装が大きく異なっていたとしても、関数の外見上の動作はシームレスで一貫性があります。
 
+.. 
+ The choice of which method to execute when a function is applied is
+ called *dispatch*. Julia allows the dispatch process to choose which of
+ a function's methods to call based on the number of arguments given, and
+ on the types of all of the function's arguments. This is different than
+ traditional object-oriented languages, where dispatch occurs based only
+ on the first argument, which often has a special argument syntax, and is
+ sometimes implied rather than explicitly written as an
+ argument. [#]_ Using all of a function's arguments to
+ choose which method should be invoked, rather than just the first, is
+ known as `multiple dispatch
+ <https://en.wikipedia.org/wiki/Multiple_dispatch>`_. Multiple
+ dispatch is particularly useful for mathematical code, where it makes
+ little sense to artificially deem the operations to "belong" to one
+ argument more than any of the others: does the addition operation in
+ ``x + y`` belong to ``x`` any more than it does to ``y``? The
+ implementation of a mathematical operator generally depends on the types
+ of all of its arguments. Even beyond mathematical operations, however,
+ multiple dispatch ends up being a powerful and convenient paradigm
+ for structuring and organizing programs.
 
-Defining Methods
+関数が適用されたときに実行するメソッドの選択は、ディスパッチと呼ばれます。
+Juliaでは、与えられた引数の数および対象の関数の引数の型に基づいて、
+ディスパッチプロセスがどの関数のメソッドを呼び出すかを選択することができます。
+これは、通常特殊な引数構文を持ち、引数として明示的に記述されるのではなく暗示的に使用される、
+最初の引数のみに基づいてディスパッチが行われる従来のオブジェクト指向言語とは異なります。
+[#]_ 最初の引数だけでなく、関数の引数の全てを使用して呼び出すメソッドを選択することは、
+`多重ディスパッチ
+ <https://en.wikipedia.org/wiki/Multiple_dispatch>`_ と呼ばれます。多重ディスパッチは、作為的に処理が複数ではなく1つの引数に「属する」と
+見なすことでスムーズに動作する、数学的コードに対して特に便利です。例えば、 ``x + y`` 内の加算処理は、 ``y`` よりも ``x`` に
+属するのかといった点です。算術演算子の実装は、一般的に、全ての引数の型に依存します。しかし、数学的な処理を以外でも、
+多重ディスパッチはプログラムの構造化と整理のためのパワフルで便利なパラダイムになります。
+
+.. 
+ .. [#] In C++ or Java, for example, in a method call like
+   ``obj.meth(arg1,arg2)``, the object obj "receives" the method call and is
+   implicitly passed to the method via the ``this`` keyword, rather than as an
+   explicit method argument. When the current ``this`` object is the receiver of a
+   method call, it can be omitted altogether, writing just ``meth(arg1,arg2)``,
+   with ``this`` implied as the receiving object.
+
+.. [#] 例えば、C++やJavaの ``obj.meth(arg1,arg2)`` のようなメソッドの呼び出しでは、オブジェクトobjはメソッド呼び出しを
+ 「受け取り」、明示的なメソッド引数ではなく ``this`` キーワードを介して暗黙的にメソッドに渡されます。
+ カレントの ``this`` オブジェクトがメソッドの呼び出しの受け手の場合、 ``this`` が受け取りオブジェクトとして暗示されていて
+ ``meth(arg1,arg2)`` と記述することで、省略することができます。
+ 
+.. 
+ Defining Methods
+ ----------------
+
+メソッドの定義
 ----------------
 
 Until now, we have, in our examples, defined only functions with a
