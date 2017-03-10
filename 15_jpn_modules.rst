@@ -274,15 +274,26 @@ Coreには、使用している言語に「ビルトイン」とみなされる�
 Baseは標準ライブラリ（base/の内容）です。多くの場合に必要となるため、全てのモジュールは、暗黙的に ``using Base`` を持ちます。
 
 
-Default top-level definitions and bare modules
+.. 
+ Default top-level definitions and bare modules
+ ----------------------------------------------
+
+デフォルトの最上位定義とベアモジュール
 ----------------------------------------------
 
-In addition to ``using Base``, modules also automatically contain a definition
-of the ``eval`` function, which evaluates expressions within the context of that module.
+.. 
+ In addition to ``using Base``, modules also automatically contain a definition
+ of the ``eval`` function, which evaluates expressions within the context of that module.
 
-If these default definitions are not wanted, modules can be defined using the
-keyword ``baremodule`` instead (note: ``Core`` is still imported, as per above).
-In terms of ``baremodule``, a standard ``module`` looks like this::
+``using Base`` に加え、モジュールは、コンテキスト内の式を評価する ``eval`` 関数の定義を自動的に持ちます。
+
+.. 
+ If these default definitions are not wanted, modules can be defined using the
+ keyword ``baremodule`` instead (note: ``Core`` is still imported, as per above).
+ In terms of ``baremodule``, a standard ``module`` looks like this::
+
+これらのデフォルト定義が望ましくない場合は、代わりにキーワード ``baremodule`` を使用してモジュールを定義することができます
+（上記のように ``Core`` はインポートされます）。 ``baremodule`` に関して、標準モジュールは次のようになります。::
 
     baremodule Mod
 
@@ -296,20 +307,35 @@ In terms of ``baremodule``, a standard ``module`` looks like this::
     end
 
 
-Relative and absolute module paths
+.. 
+ Relative and absolute module paths
+ ----------------------------------
+
+相対モジュールパスと絶対モジュールパス
 ----------------------------------
 
-Given the statement ``using Foo``, the system looks for ``Foo``
-within ``Main``. If the module does not exist, the system
-attempts to ``require("Foo")``, which typically results in loading
-code from an installed package.
+.. 
+ Given the statement ``using Foo``, the system looks for ``Foo``
+ within ``Main``. If the module does not exist, the system
+ attempts to ``require("Foo")``, which typically results in loading
+ code from an installed package.
 
-However, some modules contain submodules, which means you sometimes
-need to access a module that is not directly available in ``Main``.
-There are two ways to do this. The first is to use an absolute path,
-for example ``using Base.Sort``. The second is to use a relative path,
-which makes it easier to import submodules of the current module or
-any of its enclosing modules::
+``using Foo`` のステートメントが与えられた場合、システムは ``Main`` 内の ``Foo`` を検索します。
+モジュールが存在しない場合、システムは ``require("Foo")`` を試み、
+これはインストールされたパッケージからコードをロードします。
+
+.. 
+ However, some modules contain submodules, which means you sometimes
+ need to access a module that is not directly available in ``Main``.
+ There are two ways to do this. The first is to use an absolute path,
+ for example ``using Base.Sort``. The second is to use a relative path,
+ which makes it easier to import submodules of the current module or
+ any of its enclosing modules::
+
+しかし、モジュールの中にはサブモジュールが含まれているものがあり、
+これは ``Main`` で直接利用できないモジュールにアクセスする必要がある場合があります。
+これを行うには2つの方法があります。1つ目は ``using Base.Sort`` などの絶対パスを使用する方法です。
+2つ目は、カレントモジュールまたはそのモジュールを含むサブモジュールのインポートを容易にする相対パスを使用する方法です。::
 
     module Parent
 
@@ -322,49 +348,96 @@ any of its enclosing modules::
     ...
     end
 
-Here module ``Parent`` contains a submodule ``Utils``, and code in
-``Parent`` wants the contents of ``Utils`` to be visible. This is
-done by starting the ``using`` path with a period. Adding more leading
-periods moves up additional levels in the module hierarchy. For example
-``using ..Utils`` would look for ``Utils`` in ``Parent``'s enclosing
-module rather than in ``Parent`` itself.
+.. 
+ Here module ``Parent`` contains a submodule ``Utils``, and code in
+ ``Parent`` wants the contents of ``Utils`` to be visible. This is
+ done by starting the ``using`` path with a period. Adding more leading
+ periods moves up additional levels in the module hierarchy. For example
+ ``using ..Utils`` would look for ``Utils`` in ``Parent``'s enclosing
+ module rather than in ``Parent`` itself.
+ 
+ここではモジュール ``Parent`` にサブモジュール ``Utils`` が含まれ、
+``Utils`` の内容は ``Parent`` のコードに対し表示される必要があります。
+これは、 ``using`` パスをピリオドで開始することで行われます。先頭のピリオドを追加すると、
+モジュール階層の追加レベルが上がります。例えば ``using ..Utils`` は、
+``Parent`` 自体ではなく ``Parent`` に含まれるモジュール内で ``Utils`` を検索します。 
 
-Note that relative-import qualifiers are only valid in ``using`` and
-``import`` statements.
+.. 
+ Note that relative-import qualifiers are only valid in ``using`` and
+ ``import`` statements.
 
-Module file paths
+相対インポート修飾子は、 ``using`` および ``import`` ステートメントでのみ有効であることに注意してください。
+
+.. 
+ Module file paths
+ -----------------
+
+モジュールファイルパス
 -----------------
 
-The global variable LOAD_PATH contains the directories Julia searches for
-modules when calling ``require``. It can be extended using ``push!``::
+.. 
+ The global variable LOAD_PATH contains the directories Julia searches for
+ modules when calling ``require``. It can be extended using ``push!``::
+
+グローバル変数LOAD_PATHには、 ``require`` を呼び出すときにJuliaがモジュールを検索するディレクトリが含まれています。
+これは ``push!`` を使うことで拡張できます。::
 
     push!(LOAD_PATH, "/Path/To/My/Module/")
 
-Putting this statement in the file ``~/.juliarc.jl`` will extend LOAD_PATH
-on every Julia startup. Alternatively, the module load path can be
-extended by defining the environment variable JULIA_LOAD_PATH.
+.. 
+ Putting this statement in the file ``~/.juliarc.jl`` will extend LOAD_PATH
+ on every Julia startup. Alternatively, the module load path can be
+ extended by defining the environment variable JULIA_LOAD_PATH.
+
+このステートメントを ``~/.juliarc.jl`` 内に記述すると、Juliaの起動時にLOAD_PATHを拡張します。
+または、環境変数JULIA_LOAD_PATHを定義することでモジュールのロードパスを拡張することもできます。
 
 
-Namespace miscellanea
+.. 
+ Namespace miscellanea
+ ---------------------
+
+ネームスペースの集まり
 ---------------------
 
-If a name is qualified (e.g. ``Base.sin``), then it can be accessed even if
-it is not exported. This is often useful when debugging.
+.. 
+ If a name is qualified (e.g. ``Base.sin``), then it can be accessed even if
+ it is not exported. This is often useful when debugging.
 
-Macro names are written with ``@`` in import and export statements, e.g.
-``import Mod.@mac``. Macros in other modules can be invoked as ``Mod.@mac``
-or ``@Mod.mac``.
+名前が修飾されている場合（ ``Base.sin`` など）、エクスポートされていなくてもアクセスできます。
+これはデバッグの際に便利です。
 
-The syntax ``M.x = y`` does not work to assign a global in another module;
-global assignment is always module-local.
+.. 
+ Macro names are written with ``@`` in import and export statements, e.g.
+ ``import Mod.@mac``. Macros in other modules can be invoked as ``Mod.@mac``
+ or ``@Mod.mac``.
 
-A variable can be "reserved" for the current module without assigning to
-it by declaring it as ``global x`` at the top level. This can be used to
-prevent name conflicts for globals initialized after load time.
+マクロ名は、 ``import Mod.@mac`` のように、インポートおよびエクスポートステートメントで ``@`` を使って記述されます。
+他のモジュールのマクロは、 ``Mod.@mac`` または ``@Mod.mac`` として呼び出すことができます。
+
+.. 
+ The syntax ``M.x = y`` does not work to assign a global in another module;
+ global assignment is always module-local.
+
+構文 ``M.x = y`` は、別のモジュールでグローバルを割り当てることはできません。
+グローバル割り当ては、常にモジュールローカルとなります。
+
+.. 
+ A variable can be "reserved" for the current module without assigning to
+ it by declaring it as ``global x`` at the top level. This can be used to
+ prevent name conflicts for globals initialized after load time.
+
+変数は、上位で ``global x`` として宣言することによって、実際に割り当てることなく、
+カレントモジュールの「予約済み」とすることができます。
+これは、ロード後に初期化されたグローバルの名前の競合を防ぐために使用できます。
 
 .. _man-modules-initialization-precompilation:
 
-Module initialization and precompilation
+.. 
+ Module initialization and precompilation
+ ----------------------------------------
+
+モジュールの初期化とプリコンパイル
 ----------------------------------------
 
 Large modules can take several seconds to load because executing all of
