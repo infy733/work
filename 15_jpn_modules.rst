@@ -662,8 +662,11 @@ Juliaは、実行時に発生する必要がある初期化処理を実行する
 
 その他の既知の潜在的な障害シナリオは以下です。:
 
-1. Global counters (for example, for attempting to uniquely identify objects)
-   Consider the following code snippet::
+.. 
+ 1. Global counters (for example, for attempting to uniquely identify objects)
+    Consider the following code snippet::
+
+1. グローバルカウンタ（例えば、オブジェクトを一意に識別しようとする場合）次のコードの一部を考えてみましょう。::
 
     type UniquedById
         myid::Int
@@ -672,29 +675,56 @@ Juliaは、実行時に発生する必要がある初期化処理を実行する
         end
     end
 
-   while the intent of this code was to give every instance a unique id,
-   the counter value is recorded at the end of compilation.
-   All subsequent usages of this incrementally compiled module
-   will start from that same counter value.
+.. 
+    while the intent of this code was to give every instance a unique id,
+    the counter value is recorded at the end of compilation.
+    All subsequent usages of this incrementally compiled module
+    will start from that same counter value.
+  
+このコードの目的は全てのインスタンスに一意のIDを与えることでしたが、
+コンパイルの最後にカウンタ値が記録されます。このインクリメントするようにコンパイルされたモジュールの以降の使用は、
+全て同じカウンタ値から開始されます。
 
-   Note that ``object_id`` (which works by hashing the memory pointer)
+.. 
+   Note that ``object_id`` (which works by hashing the memory pointer)
    has similar issues (see notes on Dict usage below).
 
-   One alternative is to store both ``current_module()`` and the current ``counter`` value,
+``object_id`` （メモリポインタをハッシュ化することによって動作する）にも同様の問題があることに注意してください
+（下記のDictの使用方法に関する注意を参照してください）。
+
+.. 
+   One alternative is to store both ``current_module()`` and the current ``counter`` value,
    however, it may be better to redesign the code to not depend on this global state.
 
-2. Associative collections (such as ``Dict`` and ``Set``) need to be re-hashed in ``__init__``.
-   (In the future, a mechanism may be provided to register an initializer function.)
+1つの代替案は、 ``current_module()`` と現在の ``counter`` 値の両方を格納することですが、
+このグローバル状態に依存しないようにコードを再設計するほうがよい場合があります。
 
-3. Depending on compile-time side-effects persisting through load-time.
-   Example include:
-   modifying arrays or other variables in other Julia modules;
-   maintaining handles to open files or devices;
-   storing pointers to other system resources (including memory);
+.. 
+ 2. Associative collections (such as ``Dict`` and ``Set``) need to be re-hashed in ``__init__``.
+    (In the future, a mechanism may be provided to register an initializer function.)
 
-4. Creating accidental "copies" of global state from another module,
-   by referencing it directly instead of via its lookup path.
-   For example, (in global scope)::
+2. 連結コレクション（ ``Dict`` および ``Set`` ）は ``__init__`` で再ハッシュ化する必要があります
+  （将来、初期化関数を登録するための仕組みが提供されるかもしれません）。
+
+.. 
+ 3. Depending on compile-time side-effects persisting through load-time.
+    Example include:
+    modifying arrays or other variables in other Julia modules;
+    maintaining handles to open files or devices;
+    storing pointers to other system resources (including memory);
+
+3. 障害シナリオとして、ロード時間中に持続するコンパイル時間の副作用の依存があります。
+   例として、配列またはそのJuliaモジュールの他の変数の変更、ファイルやデバイスを開くためのハンドルの維持、
+   他のシステムリソース（メモリを含む）へのポインタの格納が挙げられます。
+
+.. 
+ 4. Creating accidental "copies" of global state from another module,
+    by referencing it directly instead of via its lookup path.
+    For example, (in global scope)::
+
+4. 障害シナリオとして、ルックアップパス経由ではなく直接参照することにより、
+   別のモジュールからグローバル状態の「コピー」を偶発的に作成することが挙げられます。
+   例えば、（グローバルスコープにおいて）::
 
        #mystdout = Base.STDOUT #= will not work correctly, since this will copy Base.STDOUT into this module =#
        # instead use accessor functions:
@@ -702,42 +732,91 @@ Juliaは、実行時に発生する必要がある初期化処理を実行する
        # or move the assignment into the runtime:
        __init__() = global mystdout = Base.STDOUT #= also works =#
 
-Several additional restrictions are placed on the operations that can be done while precompiling code
-to help the user avoid other wrong-behavior situations:
+.. 
+ Several additional restrictions are placed on the operations that can be done while precompiling code
+ to help the user avoid other wrong-behavior situations:
 
-1. Calling ``eval`` to cause a side-effect in another module.
-   This will also cause a warning to be emitted when the incremental precompile flag is set.
+コードのプリコンパイル中に実行できる、ユーザが誤った処理による問題を回避するための操作には、
+いくつかの追加の制限があります。:
 
-2. ``global const`` statements from local scope after ``__init__()`` has been started (see issue #12010 for plans to add an error for this)
+.. 
+ 1. Calling ``eval`` to cause a side-effect in another module.
+    This will also cause a warning to be emitted when the incremental precompile flag is set.
 
-3. Replacing a module (or calling ``workspace()``) is a runtime error while doing an incremental precompile.
+1. 1つは他のモジュールに副作用を引き起こす、 ``eval`` の呼び出しです。増分プリコンパイルフラグが設定されている場合、警告が出されます。
 
-A few other points to be aware of:
+.. 
+ 2. ``global const`` statements from local scope after ``__init__()`` has been started (see issue #12010 for plans to add an error for this)
 
-1. No code reload / cache invalidation is performed after changes are made to the source files themselves,
-   (including by ``Pkg.update``), and no cleanup is done after ``Pkg.rm``
+2. ``__init__()`` の後のローカルスコープからの ``global const`` ステートメントが開始されました
+   （これにエラーを追加するには、イシュー#12010を参照してください）。
 
-2. The memory sharing behavior of a reshaped array is disregarded by precompilation (each view gets its own copy)
+.. 
+ 3. Replacing a module (or calling ``workspace()``) is a runtime error while doing an incremental precompile.
 
-3. Expecting the filesystem to be unchanged between compile-time and runtime
-   e.g. ``@__FILE__``/``source_path()`` to find resources at runtime,
-   or the BinDeps ``@checked_lib`` macro. Sometimes this is unavoidable.
-   However, when possible, it can be good practice to copy resources
-   into the module at compile-time so they won't need to be found at runtime.
+3. モジュールの置き換え（または ``workspace()`` の呼び出し）は、増分プリコンパイルをする際は実行時エラーとなります。
 
-4. WeakRef objects and finalizers are not currently handled properly by the serializer
-   (this will be fixed in an upcoming release).
+.. 
+ A few other points to be aware of:
 
-5. It is usually best to avoid capturing references to instances of internal metadata objects such as
-   Method, MethodInstance, MethodTable, TypeMapLevel, TypeMapEntry
-   and fields of those objects, as this can confuse the serializer
-   and may not lead to the outcome you desire.
-   It is not necessarily an error to do this,
-   but you simply need to be prepared that the system will
-   try to copy some of these and to create a single unique instance of others.
+その他の注意する必要がある点は、:
 
-It is sometimes helpful during module development to turn off incremental precompilation.
-The command line flag ``--compilecache={yes|no}`` enables you to toggle module precompilation on and off.
-When Julia is started with ``--compilecache=no`` the serialized modules in the compile cache are ignored when loading modules and module dependencies.
-``Base.compilecache()`` can still be called manually and it will respect ``__precompile__()`` directives for the module.
-The state of this command line flag is passed to ``Pkg.build()`` to disable automatic precompilation triggering when installing, updating, and explicitly building packages.
+.. 
+ 1. No code reload / cache invalidation is performed after changes are made to the source files themselves,
+    (including by ``Pkg.update``), and no cleanup is done after ``Pkg.rm``
+
+1. ソースファイル自体が変更された後（ ``Pkg.update`` を含む）は、コードのリロードやキャッシュの無効化は行われず、
+   また ``Pkg.rm`` 後はクリーンアップは行われません。
+
+.. 
+ 2. The memory sharing behavior of a reshaped array is disregarded by precompilation (each view gets its own copy)
+
+2. 再構成された配列のメモリ共有処理は、プリコンパイルによって無視されます（各ビューは独自のコピーを取得します）。
+
+.. 
+ 3. Expecting the filesystem to be unchanged between compile-time and runtime
+    e.g. ``@__FILE__``/``source_path()`` to find resources at runtime,
+    or the BinDeps ``@checked_lib`` macro. Sometimes this is unavoidable.
+    However, when possible, it can be good practice to copy resources
+    into the module at compile-time so they won't need to be found at runtime.
+
+3. 実行時にリソースを調べる ``@__FILE__``/``source_path()`` またはBinDeps ``@checked_lib`` マクロなど、
+   コンパイル時と実行時にファイルシステムが不変であることを期待します。しばしばこれは回避ができません。
+   しかし、可能であれば、コンパイル時にリソースをモジュールにコピーすることで、実行時にリソースを見つける必要がなくなります。
+
+.. 
+ 4. WeakRef objects and finalizers are not currently handled properly by the serializer
+    (this will be fixed in an upcoming release).
+
+4. WeakRefオブジェクトおよびファイナライザは、現在シリアライザによって正しく処理されていません
+  （これは、今後のリリースで修正される予定です）。
+
+.. 
+ 5. It is usually best to avoid capturing references to instances of internal metadata objects such as
+    Method, MethodInstance, MethodTable, TypeMapLevel, TypeMapEntry
+    and fields of those objects, as this can confuse the serializer
+    and may not lead to the outcome you desire.
+    It is not necessarily an error to do this,
+    but you simply need to be prepared that the system will
+    try to copy some of these and to create a single unique instance of others.
+
+5. シリアライザを混乱させる可能性があり、期待する結果が得られない可能性があるため、
+   通常、Method、MethodInstance、MethodTable、TypeMapLevel、TypeMapEntry、
+   およびこれらのオブジェクトのフィールドなどの内部メタデータオブジェクトの
+   インスタンスへの参照をキャプチャしないようにしてください。これを行うことは必ずしも間違いではありませんが、
+   システムがこれらのいくつかをコピーし、一意のインスタンスを作成しようとすることに注意してください。
+
+.. 
+ It is sometimes helpful during module development to turn off incremental precompilation.
+ The command line flag ``--compilecache={yes|no}`` enables you to toggle module precompilation on and off.
+ When Julia is started with ``--compilecache=no`` the serialized modules in the compile cache are ignored when loading modules and module dependencies.
+ ``Base.compilecache()`` can still be called manually and it will respect ``__precompile__()`` directives for the module.
+ The state of this command line flag is passed to ``Pkg.build()`` to disable automatic precompilation triggering when installing, updating, and explicitly building packages.
+ 
+増分プリコンパイルをオフにすることは、モジュール開発中に役立つことがあります。
+コマンドラインフラグ ``--compilecache={yes|no}`` により、モジュールのプリコンパイルをオンまたはオフに切り替えることができます。
+``--compilecache=no`` を指定してJuliaを起動すると、モジュールとモジュールの依存関係をロードするときに、
+コンパイルキャッシュ内のシリアライズされたモジュールは無視されます。 ``Base.compilecache()`` は手動で呼び出すことができ、
+モジュールの ``__precompile__()`` の命令を尊重します。このコマンドラインフラグの状態は ``Pkg.build()`` に渡され、
+パッケージをインストール、更新、および明示的に構築する際の自動プリコンパイルトリガを無効にします。
+ 
