@@ -124,23 +124,33 @@ Juliaでは、与えられた引数の数および対象の関数の引数の型
 多重ディスパッチおよびメソッドをほぼ継続的に使用してきました。前述の ``+`` 関数のようなJuliaの標準関数と演算子は全て、
 引数の型とカウントのさまざまな組み合わせに対して動作を定義する多くのメソッドを持っています。
 
-When defining a function, one can optionally constrain the types of
-parameters it is applicable to, using the ``::`` type-assertion
-operator, introduced in the section on :ref:`man-composite-types`:
+.. 
+ When defining a function, one can optionally constrain the types of
+ parameters it is applicable to, using the ``::`` type-assertion
+ operator, introduced in the section on :ref:`man-composite-types`:
+
+関数を定義する際に、 :ref:`man-コンポジット型` のセクションで紹介された ``::`` 演算子を使うことで、
+適用可能なパラメータの型を任意に制約することができます。:
 
 .. doctest::
 
     julia> f(x::Float64, y::Float64) = 2x + y;
 
-This function definition applies only to calls where ``x`` and ``y`` are
-both values of type :obj:`Float64`:
+.. 
+ This function definition applies only to calls where ``x`` and ``y`` are
+ both values of type :obj:`Float64`:
+
+この関数定義は、 ``x`` と ``y`` の両方が :obj:`Float64` 型の値である呼び出しにのみ適応されます。:
 
 .. doctest::
 
     julia> f(2.0, 3.0)
     7.0
 
-Applying it to any other types of arguments will result in a :exc:`MethodError`:
+.. 
+ Applying it to any other types of arguments will result in a :exc:`MethodError`:
+
+他の型の引数に適用した場合、 :exc:`MethodError` となります。:
 
 .. doctest::
 
@@ -166,14 +176,21 @@ Applying it to any other types of arguments will result in a :exc:`MethodError`:
     ERROR: MethodError: no method matching f(::String, ::String)
     ...
 
-As you can see, the arguments must be precisely of type :obj:`Float64`.
-Other numeric types, such as integers or 32-bit floating-point values,
-are not automatically converted to 64-bit floating-point, nor are
-strings parsed as numbers. Because :obj:`Float64` is a concrete type and
-concrete types cannot be subclassed in Julia, such a definition can only
-be applied to arguments that are exactly of type :obj:`Float64`. It may
-often be useful, however, to write more general methods where the
-declared parameter types are abstract:
+.. 
+ As you can see, the arguments must be precisely of type :obj:`Float64`.
+ Other numeric types, such as integers or 32-bit floating-point values,
+ are not automatically converted to 64-bit floating-point, nor are
+ strings parsed as numbers. Because :obj:`Float64` is a concrete type and
+ concrete types cannot be subclassed in Julia, such a definition can only
+ be applied to arguments that are exactly of type :obj:`Float64`. It may
+ often be useful, however, to write more general methods where the
+ declared parameter types are abstract:
+
+ご覧のように、引数は :obj:`Float64` 型でなければなりません。整数や32ビット浮動小数点値などの他の数値型は、
+自動的に64ビット浮動小数点には変換されず、また文字列は数字として解釈されません。
+:obj:`Float64` 型は具体型であり、Juliaでは具体型はサブクラス化できないため、
+このような定義は :obj:`Float64` 型である引数のみに対し適用が可能です。
+しかし、宣言されたパラメータ型が抽象型である、より一般的なメソッドを記述することはしばしば便利です。:
 
 .. doctest::
 
@@ -182,24 +199,36 @@ declared parameter types are abstract:
     julia> f(2.0, 3)
     1.0
 
-This method definition applies to any pair of arguments that are
-instances of :obj:`Number`. They need not be of the same type, so long as
-they are each numeric values. The problem of handling disparate numeric
-types is delegated to the arithmetic operations in the expression
-``2x - y``.
+.. 
+ This method definition applies to any pair of arguments that are
+ instances of :obj:`Number`. They need not be of the same type, so long as
+ they are each numeric values. The problem of handling disparate numeric
+ types is delegated to the arithmetic operations in the expression
+ ``2x - y``.
 
-To define a function with multiple methods, one simply defines the
-function multiple times, with different numbers and types of arguments.
-The first method definition for a function creates the function object,
-and subsequent method definitions add new methods to the existing
-function object. The most specific method definition matching the number
-and types of the arguments will be executed when the function is
-applied. Thus, the two method definitions above, taken together, define
-the behavior for ``f`` over all pairs of instances of the abstract type
-:obj:`Number` — but with a different behavior specific to pairs of
-:obj:`Float64` values. If one of the arguments is a 64-bit float but the
-other one is not, then the ``f(Float64,Float64)`` method cannot be
-called and the more general ``f(Number,Number)`` method must be used:
+このメソッド定義は、 :obj:`Number` のインスタンスである引数のペアに適用されます。それぞれのが数値である限り、
+そのペアは同じ型である必要はありません。異なる種類の数値型を処理する問題は、 ``2x - y`` の算術演算に代表されます。
+
+.. 
+ To define a function with multiple methods, one simply defines the
+ function multiple times, with different numbers and types of arguments.
+ The first method definition for a function creates the function object,
+ and subsequent method definitions add new methods to the existing
+ function object. The most specific method definition matching the number
+ and types of the arguments will be executed when the function is
+ applied. Thus, the two method definitions above, taken together, define
+ the behavior for ``f`` over all pairs of instances of the abstract type
+ :obj:`Number` — but with a different behavior specific to pairs of
+ :obj:`Float64` values. If one of the arguments is a 64-bit float but the
+ other one is not, then the ``f(Float64,Float64)`` method cannot be
+ called and the more general ``f(Number,Number)`` method must be used:
+
+複数のメソッドで関数を定義するには、異なる数値と型の引数を使用して関数を複数回定義するだけです。
+関数の最初のメソッド定義は関数オブジェクトを作成し、後続のメソッド定義は既存の関数オブジェクトに新しいメソッドを追加します。
+引数の数と型に最も一致するメソッド定義は、関数が適用されたときに実行されます。したがって、上記の2つのメソッド定義は、
+抽象型 :obj:`Number` のインスタンスの全てのペアに対する ``f`` の動作を定義しますが、 :obj:`Float64` の値のペアに対する動作は異なります。
+引数の1つが64ビット浮動小数点数型でもう1つの引数が64ビット浮動小数点数型ではない場合、
+``f(Float64,Float64)`` メソッドは使用することができず、より全般的な ``f(Number,Number)`` メソッドを使用する必要があります。:
 
 .. doctest::
 
@@ -215,12 +244,17 @@ called and the more general ``f(Number,Number)`` method must be used:
     julia> f(2, 3)
     1
 
-The ``2x + y`` definition is only used in the first case, while the
-``2x - y`` definition is used in the others. No automatic casting or
-conversion of function arguments is ever performed: all conversion in
-Julia is non-magical and completely explicit. :ref:`man-conversion-and-promotion`, however, shows how clever
-application of sufficiently advanced technology can be indistinguishable
-from magic. [Clarke61]_
+.. 
+ The ``2x + y`` definition is only used in the first case, while the
+ ``2x - y`` definition is used in the others. No automatic casting or
+ conversion of function arguments is ever performed: all conversion in
+ Julia is non-magical and completely explicit. :ref:`man-conversion-and-promotion`, however, shows how clever
+ application of sufficiently advanced technology can be indistinguishable
+ from magic. [Clarke61]_
+
+``2x + y`` 定義は最初のケースにのみ使用され、 ``2x - y`` 定義は他のケースに使用されます。
+関数の引数のキャストや変換は自動では実行されません。Juliaの変換は全て魔法のようではなく明示的に実行されます。
+しかし、 :ref:`man-変換とプロモーション` では進んだ技術の応用は魔法のようであることを示しています。 [Clarke61]_
 
 For non-numeric values, and for fewer or more than two arguments, the
 function ``f`` remains undefined, and applying it will still result in a
