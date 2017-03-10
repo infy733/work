@@ -1302,49 +1302,89 @@ Juliaのマクロを使うことで省略することが可能です。::
 それらは単に関数であり、全てJulia内に記述されています。ソースを読むことでそれらが何をしているかを知ることができますが、
 それらは、構築された式オブジェクトをあなたのプログラムの構文ツリーに挿入することが全てです。
 
-Generated functions
+.. 
+  Generated functions
+  -------------------
+
+生成関数
 -------------------
 
-A very special macro is ``@generated``, which allows you to define so-called
-*generated functions*. These have the capability to generate specialized
-code depending on the types of their arguments with more flexibility and/or
-less code than what can be achieved with multiple dispatch. While macros
-work with expressions at parsing-time and cannot access the types of their
-inputs, a generated function gets expanded at a time when the types of
-the arguments are known, but the function is not yet compiled.
+.. 
+  A very special macro is ``@generated``, which allows you to define so-called
+  *generated functions*. These have the capability to generate specialized
+  code depending on the types of their arguments with more flexibility and/or
+  less code than what can be achieved with multiple dispatch. While macros
+  work with expressions at parsing-time and cannot access the types of their
+  inputs, a generated function gets expanded at a time when the types of
+  the arguments are known, but the function is not yet compiled.
 
-Instead of performing some calculation or action, a generated function
-declaration returns a quoted expression which then forms the body for the
-method corresponding to the types of the arguments. When called, the body
-expression is first evaluated and compiled,
-then the returned expression is compiled and run.
-To make this efficient, the result is often cached.
-And to make this inferable, only a limited subset of the language is usable.
-Thus, generated functions provide a flexible framework to move work from
-run-time to compile-time, at the expense of greater restrictions on the allowable constructs.
+``@generated`` は特殊なマクロであり、生成関数と呼ばれるものを定義することができます。
+この関数は、それらの引数の型に応じて、よりフレキシブルで、および[または]多重ディスパッチでできるものよりも少ないコードで、
+特別なコードを生成することができます。マクロは解析時の拡張で動作し、インプットの型にアクセスすることはできませんが、
+一方で生成関数は引数の型が判明し、関数がまだコンパイルされていないタイミングで拡張されます。
 
-When defining generated functions, there are four main differences to
-ordinary functions:
+.. 
+  Instead of performing some calculation or action, a generated function
+  declaration returns a quoted expression which then forms the body for the
+  method corresponding to the types of the arguments. When called, the body
+  expression is first evaluated and compiled,
+  then the returned expression is compiled and run.
+  To make this efficient, the result is often cached.
+  And to make this inferable, only a limited subset of the language is usable.
+  Thus, generated functions provide a flexible framework to move work from
+  run-time to compile-time, at the expense of greater restrictions on the allowable constructs.
 
-1. You annotate the function declaration with the ``@generated`` macro.
-   This adds some information to the AST that lets the compiler know that
-   this is a generated function.
+計算や動作を行う代わりに、生成関数の宣言は、引数の型に対応するメソッドのボディ部を生成する引用式を返します。
+呼び出されると、ボディ式が初めに評価およびコンパイルされ、返された式がコンパイルされ実行されます。
+この処理を効率化するため、処理結果はキャッシュしばしばキャッシュされます。その後これを推測可能にし、
+言語の限られたサブセットのみがアクセスできるようにします。したがって、許容される構築に対する大きな制約を犠牲にして、
+生成関数は処理を実行時からコンパイル時に移動させるフレキシブルなフレームワークを提供します。
 
-2. In the body of the generated function you only have access to the
-   *types* of the arguments -- not their values -- and any function that
-   was defined *before* the definition of the generated function.
+.. 
+  When defining generated functions, there are four main differences to
+  ordinary functions:
+  
+生成関数を定義する際、大きく4つの通常の関数との違いがあります。:  
 
-3. Instead of calculating something or performing some action, you return
-   a *quoted expression* which, when evaluated, does what you want.
+.. 
+  1. You annotate the function declaration with the ``@generated`` macro.
+     This adds some information to the AST that lets the compiler know that
+     this is a generated function.
 
-4. Generated functions must not have any side-effects or examine any non-constant
-   global state (including, for example, IO, locks, or non-local dictionaries).
-   In other words, they must be completely pure.
-   Due to an implementation limitation,
-   this also means that they currently cannot define a closure or untyped generator.
+1. ``@generated`` マクロで関数宣言に注釈を付けてください。
+   これは、コンパイラにこの関数が生成関数であることを知らせるASTに情報を付け加えます。
 
-It's easiest to illustrate this with an example. We can declare a generated
-function ``foo`` as
+.. 
+  2. In the body of the generated function you only have access to the
+     *types* of the arguments -- not their values -- and any function that
+     was defined *before* the definition of the generated function.
+
+2. 生成関数のボディ部では、引数の値ではなく、引数の型へのアクセスと、
+   生成関数の定義よりも前に定義された関数へのアクセスのみを持ちます。
+
+.. 
+  3. Instead of calculating something or performing some action, you return
+     a *quoted expression* which, when evaluated, does what you want.
+
+3. 計算やその他の処理を行うのではなく、引用式が返されます。
+
+.. 
+  4. Generated functions must not have any side-effects or examine any non-constant
+     global state (including, for example, IO, locks, or non-local dictionaries).
+     In other words, they must be completely pure.
+     Due to an implementation limitation,
+     this also means that they currently cannot define a closure or untyped generator.
+
+4. 生成関数はいかなる副作用や一定ではないグローバル状態（例えばIO、ロック、非ローカルディクショナリを含む）を持つことはできません。
+   言い換えれば、保持できるのは純粋なものでなければなりません。実装の制約により、
+   これは現在クロージャや非型生成プログラムを定義できないことを意味します。
+
+.. 
+  It's easiest to illustrate this with an example. We can declare a generated
+  function ``foo`` as
+
+例を見ることで簡単に理解できると思います。生成関数 ``foo`` を以下のように宣言することができます。
+
 
 .. doctest::
 
@@ -1354,13 +1394,21 @@ function ``foo`` as
            end
     foo (generic function with 1 method)
 
-Note that the body returns a quoted expression, namely ``:(x * x)``, rather
-than just the value of ``x * x``.
+.. 
+  Note that the body returns a quoted expression, namely ``:(x * x)``, rather
+  than just the value of ``x * x``.
 
-From the caller's perspective, they are very similar to regular functions;
-in fact, you don't have to know if you're calling a regular or generated
-function - the syntax and result of the call is just the same.
-Let's see how ``foo`` behaves:
+ボディ部は、値である ``x * x`` ではなく、引用式 ``:(x * x)`` を返す点に注意してください。
+
+.. 
+  From the caller's perspective, they are very similar to regular functions;
+  in fact, you don't have to know if you're calling a regular or generated
+  function - the syntax and result of the call is just the same.
+  Let's see how ``foo`` behaves:
+
+呼び出し側から見れば、これらは非常に通常関数と似ています。実際、ユーザは自分が通常関数を呼び出しているのか、
+生成関数を呼び出しているのかを知る必要はありません。この2種類の呼び出しの構文と結果は同じです。
+``foo`` がどのように動くのか見てみましょう。:
 
 .. doctest::
 
@@ -1377,42 +1425,69 @@ Let's see how ``foo`` behaves:
     julia> y
     "barbar"
 
-So, we see that in the body of the generated function, ``x`` is the
-*type* of the passed argument, and the value returned by the generated
-function, is the result of evaluating the quoted expression we returned
-from the definition, now with the *value* of ``x``.
+.. 
+  So, we see that in the body of the generated function, ``x`` is the
+  *type* of the passed argument, and the value returned by the generated
+  function, is the result of evaluating the quoted expression we returned
+  from the definition, now with the *value* of ``x``.
 
-What happens if we evaluate ``foo`` again with a type that we have already
-used?
+生成関数のボディ部では、 ``x`` は渡された引数の型であり、
+生成関数により返された値は定義から返された引用式の評価結果であり、この場合は ``x`` の値です。
+
+.. 
+  What happens if we evaluate ``foo`` again with a type that we have already
+  used?
+
+もし ``foo`` を既に使用した型で処理するとどうなるのでしょうか。
 
 .. doctest::
 
     julia> foo(4)
     16
 
-Note that there is no printout of :obj:`Int64`. We can see that the body
-of the generated function was only executed once here,
-for the specific set of argument types, and the result was cached.
-After that, for this example, the expression returned from the generated
-function on the first invocation was re-used as the method body.
-However, the actual caching behavior is an implementation-defined performance optimization,
-so it is invalid to depend too closely on this behavior.
+.. 
+  Note that there is no printout of :obj:`Int64`. We can see that the body
+  of the generated function was only executed once here,
+  for the specific set of argument types, and the result was cached.
+  After that, for this example, the expression returned from the generated
+  function on the first invocation was re-used as the method body.
+  However, the actual caching behavior is an implementation-defined performance optimization,
+  so it is invalid to depend too closely on this behavior.
 
-The number of times a generated function is generated *might* be only once,
-but it *might* also be more often, or appear to not happen at all.
-As a consequence, you should *never* write a generated function with side effects - when,
-and how often, the side effects occur is undefined.
-(This is true for macros too - and just like for macros,
-the use of :func:`eval` in a generated function is a sign that
-you're doing something the wrong way.)
-However, unlike macros, the runtime system cannot correctly handle a call to
-:func:`eval`, so it is disallowed.
+:obj:`Int64` の出力が無い点に注意してください。生成関数のボディ部は特定の引数の型のセットに対して1度だけ処理され、
+処理結果はキャッシュされることがわかります。この例における後続の処理は、
+最初の呼び出しの生成関数より返された式はメソッドのボディ部として再度使用されています。
+しかし、実際のキャッシュ処理は実装定義されたパフォーマンスの最適化のためであり、
+この処理に依存しすぎることは誤りです。
 
-The example generated function ``foo`` above did not do anything a normal
-function ``foo(x) = x * x`` could not do (except printing the type on the
-first invocation, and incurring higher overhead).
-However, the power of a generated function lies in its ability to compute
-different quoted expressions depending on the types passed to it:
+.. 
+  The number of times a generated function is generated *might* be only once,
+  but it *might* also be more often, or appear to not happen at all.
+  As a consequence, you should *never* write a generated function with side effects - when,
+  and how often, the side effects occur is undefined.
+  (This is true for macros too - and just like for macros,
+  the use of :func:`eval` in a generated function is a sign that
+  you're doing something the wrong way.)
+  However, unlike macros, the runtime system cannot correctly handle a call to
+  :func:`eval`, so it is disallowed.
+
+生成関数が生成される回数は1度だけですが、これは複数になったり、1度も起きない場合もあります。
+結果として、生成関数は副作用とともに記述するべきではありません。
+いつ、どのくらいの頻度で副作用が発生するかはわかりません（マクロでもあったように、
+生成関数内で :func:`eval` を使用することは、何かが間違っているサインです）。
+しかし、マクロとは違い、実行システムは :func:`eval` の呼び出しを正しく処理できないため、
+これは許容されていません。
+
+.. 
+  The example generated function ``foo`` above did not do anything a normal
+  function ``foo(x) = x * x`` could not do (except printing the type on the
+  first invocation, and incurring higher overhead).
+  However, the power of a generated function lies in its ability to compute
+  different quoted expressions depending on the types passed to it:
+
+上記の生成関数 ``foo`` の例は、通常の関数 ``foo(x) = x * x`` ができないこと
+（最初の呼び出しの型を出力することと高いオーバーヘッドを被ることを除く）はしていません。
+しかし、生成関数の利点は、渡された型に依存して異なる引用式を処理できる能力にあります。:
 
 .. doctest::
 
@@ -1431,10 +1506,16 @@ different quoted expressions depending on the types passed to it:
    julia> bar("baz")
    "baz"
 
-(although of course this contrived example would be more easily implemented
-using multiple dispatch...)
+.. 
+  (although of course this contrived example would be more easily implemented
+  using multiple dispatch...)
 
-Abusing this will corrupt the runtime system and cause undefined behavior:
+（この不自然な例は多重ディスパッチを使用することでより簡単に実装できることは事実です。）
+
+.. 
+  Abusing this will corrupt the runtime system and cause undefined behavior:
+
+これを不正に使用することは、実行システムに影響を与えたり定義していない動作をすることになります。:
 
 .. doctest::
 
@@ -1447,53 +1528,95 @@ Abusing this will corrupt the runtime system and cause undefined behavior:
           end
    baz (generic function with 1 method)
 
+.. 
+  Since the body of the generated function is non-deterministic, its behavior,
+  *and the behavior of all subsequent code* is undefined.
 
-Since the body of the generated function is non-deterministic, its behavior,
-*and the behavior of all subsequent code* is undefined.
+生成関数のボディ部は確定的ではないため、その動作と後続のコードは定義されていません。
 
-*Don't copy these examples!*
+.. 
+  *Don't copy these examples!*
 
-These examples are hopefully helpful to illustrate how generated functions
-work, both in the definition end and at the call site; however, *don't
-copy them*, for the following reasons:
+*これらの例はコピーしないでください！*
 
-* the ``foo`` function has side-effects (the call to ``Core.println``), and it is undefined exactly when,
-  how often or how many times these side-effects will occur
-* the ``bar`` function solves a problem that is better solved with multiple
-  dispatch - defining ``bar(x) = x`` and ``bar(x::Integer) = x ^ 2`` will do
-  the same thing, but it is both simpler and faster.
-* the ``baz`` function is pathologically insane
+.. 
+  These examples are hopefully helpful to illustrate how generated functions
+  work, both in the definition end and at the call site; however, *don't
+  copy them*, for the following reasons:
 
-Note that the set of operations that should not be attempted in a generated function
-is unbounded, and the runtime system can currently only detect a subset of
-the invalid operations. There are many other operations that will simply
-corrupt the runtime system without notification, usually in subtle
-ways not obviously connected to the bad definition.
-Because the function generator is run during inference,
-it must respect all of the limitations of that code.
+これらの例は定義の最後と呼び出し側で生成関数がどのように動くか理解するのに役立つかと思います。
+しかし、以下の理由により、コピーはしないようにしてください。:
 
-Some operations that should not be attempted include:
+.. 
+  * the ``foo`` function has side-effects (the call to ``Core.println``), and it is undefined exactly when,
+    how often or how many times these side-effects will occur
+  * the ``bar`` function solves a problem that is better solved with multiple
+    dispatch - defining ``bar(x) = x`` and ``bar(x::Integer) = x ^ 2`` will do
+    the same thing, but it is both simpler and faster.
+  * the ``baz`` function is pathologically insane
 
-  1. Caching of native pointers.
+* ``foo`` 関数には副作用（ ``Core.println`` の呼び出し）があり、これはいつ、どれくらいの頻度で起こるのかは定義されていません。
+* ``bar`` 関数は多重ディスパッチよりも効率的に動作します。 ``bar(x) = x`` と ``bar(x::Integer) = x ^ 2`` は
+  同じ処理を行いますが、前者よりシンプルで早いです。
+* ``baz`` 関数は理不尽なほど複雑です。
 
-  2. Interacting with the contents or methods of Core.Inference in any way.
+.. 
+  Note that the set of operations that should not be attempted in a generated function
+  is unbounded, and the runtime system can currently only detect a subset of
+  the invalid operations. There are many other operations that will simply
+  corrupt the runtime system without notification, usually in subtle
+  ways not obviously connected to the bad definition.
+  Because the function generator is run during inference,
+  it must respect all of the limitations of that code.
 
-  3. Observing any mutable state.
+生成関数内で実行すべきではない処理は数多くあり、実行システムは現在誤った処理のサブセットのみを検知できる点に注意してください。
+その他にも、目立たず不正な定義に関連しない、通知なく実行システムに影響を与える処理は数多くあります。
+推測時に関数の生成が実行されるため、コードの制約を把握する必要があります。
 
-     - Inference on the generated function may be run at *any* time,
-       including while your code is attempting to observe or mutate this state.
+.. 
+  Some operations that should not be attempted include:
 
-  4. Taking any locks: C code you call out to may use locks internally,
-     (for example, it is not problematic to call ``malloc``,
-     even though most implementations require locks internally)
-     but don't attempt to hold or acquire any while executing Julia code.
+生成関数の中で実行すべきではない処理の例は、:
 
-  5. Calling any function that is defined after the body of the generated function.
-     This condition is relaxed for incrementally-loaded precompiled modules to
-     allow calling any function in the module.
+.. 
+    1. Caching of native pointers.
 
-Alright, now that we have a better understanding of how generated functions
-work, let's use them to build some more advanced (and valid) functionality...
+    2. Interacting with the contents or methods of Core.Inference in any way.
+
+    3. Observing any mutable state.
+
+       - Inference on the generated function may be run at *any* time,
+         including while your code is attempting to observe or mutate this state.
+
+    4. Taking any locks: C code you call out to may use locks internally,
+       (for example, it is not problematic to call ``malloc``,
+       even though most implementations require locks internally)
+       but don't attempt to hold or acquire any while executing Julia code.
+
+    5. Calling any function that is defined after the body of the generated function.
+       This condition is relaxed for incrementally-loaded precompiled modules to
+       allow calling any function in the module.
+     
+1. 固有のポインターをキャッシュする
+
+2. Core.Inferenceの内容やメソッドに関連づける
+
+3. 可変の状態を監視する
+
+   - 生成関数の推測は、コードが状態を監視したり変更する際も含めて、いつでも実行されます。
+
+4. ロックを取る:Cコードを呼び出すと内部的にロックを使いますが（例えば、
+   ほとんどの実装ではロックを内部的に必要としますが、 ``malloc`` を呼び出すことは問題ではありません）、
+   Juliaコードを実行中にはロックを保持したり取得しようとしないでください。
+
+5. 生成関数のボディ部以降に定義された関数を呼び出す:この条件は、
+   増分ロードのプリコンパイルがモジュール内の関数を呼び出すことができるように、緩められています。   
+
+.. 
+  Alright, now that we have a better understanding of how generated functions
+  work, let's use them to build some more advanced (and valid) functionality...
+
+生成関数がどのように動くのかについて知ることができたので、生成関数を使って高度な機能を構築してみましょう。
 
 An advanced example
 ~~~~~~~~~~~~~~~~~~~
