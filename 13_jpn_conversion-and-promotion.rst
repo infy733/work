@@ -326,27 +326,46 @@ Juliaの ``Rational`` 型のケーススタディを続行するため、 `ratio
 
 .. _man-promotion:
 
-Promotion
+.. 
+  Promotion
+  ---------
+
+プロモーション（昇格）
 ---------
 
-Promotion refers to converting values of mixed types to a single common
-type. Although it is not strictly necessary, it is generally implied
-that the common type to which the values are converted can faithfully
-represent all of the original values. In this sense, the term
-"promotion" is appropriate since the values are converted to a "greater"
-type — i.e. one which can represent all of the input values in a single
-common type. It is important, however, not to confuse this with
-object-oriented (structural) super-typing, or Julia's notion of abstract
-super-types: promotion has nothing to do with the type hierarchy, and
-everything to do with converting between alternate representations. For
-instance, although every ``Int32`` value can also be represented as a
-``Float64`` value, ``Int32`` is not a subtype of ``Float64``.
+.. 
+  Promotion refers to converting values of mixed types to a single common
+  type. Although it is not strictly necessary, it is generally implied
+  that the common type to which the values are converted can faithfully
+  represent all of the original values. In this sense, the term
+  "promotion" is appropriate since the values are converted to a "greater"
+  type — i.e. one which can represent all of the input values in a single
+  common type. It is important, however, not to confuse this with
+  object-oriented (structural) super-typing, or Julia's notion of abstract
+  super-types: promotion has nothing to do with the type hierarchy, and
+  everything to do with converting between alternate representations. For
+  instance, although every ``Int32`` value can also be represented as a
+  ``Float64`` value, ``Int32`` is not a subtype of ``Float64``.
 
-Promotion to a common "greater" type is performed in Julia by the ``promote``
-function, which takes any number of arguments, and returns a tuple of
-the same number of values, converted to a common type, or throws an
-exception if promotion is not possible. The most common use case for
-promotion is to convert numeric arguments to a common type:
+プロモーション（昇格）は、色々な型の値を1つの共通の型に変換することを指します。
+厳密には必要というわけではありませんが、値が変換される共通の型は、
+元の値のすべてを忠実に表すことができることを示しています。この意味では、
+値が「より大きい」型、つまり、入力値の全てを共通の型で表すことができるものに変換されるため、
+「プロモーション」という用語は適切です。しかし、これをオブジェクト指向の（構造的）上位タイプ、
+またはジュリアの概念の抽象上位タイプと混同しないことが重要です。昇格は型の階層とは関係がなく、
+代替表現間の変換が全てです。例えば、全ての ``Int32`` 値は ``Float64`` 値としても表現できますが、
+``Int32`` は ``Float64`` のサブタイプではありません。
+
+.. 
+  Promotion to a common "greater" type is performed in Julia by the ``promote``
+  function, which takes any number of arguments, and returns a tuple of
+  the same number of values, converted to a common type, or throws an
+  exception if promotion is not possible. The most common use case for
+  promotion is to convert numeric arguments to a common type:
+
+Juliaにおける「より大きい」型への昇格は、複数の引数をとり、共通の型に変換された同じ数の値のタプルを返す、
+``promote`` 関数によって実行されます。昇格が不可能な場合は例外をスローします。
+昇格の最も一般的な使用例は、数値引数を共通の型に変換することです。:
 
 .. doctest::
 
@@ -368,46 +387,74 @@ promotion is to convert numeric arguments to a common type:
     julia> promote(1 + 2im, 3//4)
     (1//1 + 2//1*im,3//4 + 0//1*im)
 
-Floating-point values are promoted to the largest of the floating-point
-argument types. Integer values are promoted to the larger of either the
-native machine word size or the largest integer argument type.
-Mixtures of integers and floating-point values are promoted to a
-floating-point type big enough to hold all the values. Integers mixed
-with rationals are promoted to rationals. Rationals mixed with floats
-are promoted to floats. Complex values mixed with real values are
-promoted to the appropriate kind of complex value.
+.. 
+  Floating-point values are promoted to the largest of the floating-point
+  argument types. Integer values are promoted to the larger of either the
+  native machine word size or the largest integer argument type.
+  Mixtures of integers and floating-point values are promoted to a
+  floating-point type big enough to hold all the values. Integers mixed
+  with rationals are promoted to rationals. Rationals mixed with floats
+  are promoted to floats. Complex values mixed with real values are
+  promoted to the appropriate kind of complex value.
 
-That is really all there is to using promotions. The rest is just a
-matter of clever application, the most typical "clever" application
-being the definition of catch-all methods for numeric operations like
-the arithmetic operators ``+``, ``-``, ``*`` and ``/``. Here are some of
-the catch-all method definitions given in
-`promotion.jl <https://github.com/JuliaLang/julia/blob/master/base/promotion.jl>`_::
+浮動小数点値は浮動小数点引数型のなかで最大のものに昇格されます。整数値は、使用しているコンピュータのワードサイズ、
+または最大の整数引数型の、いずれか大きい方に昇格されます。整数と浮動小数点値の混合の場合は、
+全ての値を保持するのに十分な大きさの浮動小数点型に昇格されます。整数と有理数の混合の場合は、
+有理数に昇格されます。有理数と浮動小数点数の混合の場合は、浮動小数点数に昇格されます。
+複素数値と実数の混合の場合は、適切な種類の複素数値に昇格されます。
+
+.. 
+  That is really all there is to using promotions. The rest is just a
+  matter of clever application, the most typical "clever" application
+  being the definition of catch-all methods for numeric operations like
+  the arithmetic operators ``+``, ``-``, ``*`` and ``/``. Here are some of
+  the catch-all method definitions given in
+  `promotion.jl <https://github.com/JuliaLang/julia/blob/master/base/promotion.jl>`_::
+
+以上が昇格の使用方法です。以下は賢い使用方法であり、最も典型的な賢い機能は、
+算術演算子 ``+`` 、 ``-`` 、 ``*`` および ``/`` のような数値演算の汎用メソッドの定義です。
+以下に、 `promotion.jl <https://github.com/JuliaLang/julia/blob/master/base/promotion.jl>`_ で
+指定された汎用メソッド定義の一部を示します。::
 
     +(x::Number, y::Number) = +(promote(x,y)...)
     -(x::Number, y::Number) = -(promote(x,y)...)
     *(x::Number, y::Number) = *(promote(x,y)...)
     /(x::Number, y::Number) = /(promote(x,y)...)
 
-These method definitions say that in the absence of more specific rules
-for adding, subtracting, multiplying and dividing pairs of numeric
-values, promote the values to a common type and then try again. That's
-all there is to it: nowhere else does one ever need to worry about
-promotion to a common numeric type for arithmetic operations — it just
-happens automatically. There are definitions of catch-all promotion
-methods for a number of other arithmetic and mathematical functions in
-`promotion.jl <https://github.com/JuliaLang/julia/blob/master/base/promotion.jl>`_,
-but beyond that, there are hardly any calls to ``promote`` required in
-the Julia standard library. The most common usages of ``promote`` occur
-in outer constructors methods, provided for convenience, to allow
-constructor calls with mixed types to delegate to an inner type with
-fields promoted to an appropriate common type. For example, recall that
-`rational.jl <https://github.com/JuliaLang/julia/blob/master/base/rational.jl>`_
-provides the following outer constructor method::
+.. 
+  These method definitions say that in the absence of more specific rules
+  for adding, subtracting, multiplying and dividing pairs of numeric
+  values, promote the values to a common type and then try again. That's
+  all there is to it: nowhere else does one ever need to worry about
+  promotion to a common numeric type for arithmetic operations — it just
+  happens automatically. There are definitions of catch-all promotion
+  methods for a number of other arithmetic and mathematical functions in
+  `promotion.jl <https://github.com/JuliaLang/julia/blob/master/base/promotion.jl>`_,
+  but beyond that, there are hardly any calls to ``promote`` required in
+  the Julia standard library. The most common usages of ``promote`` occur
+  in outer constructors methods, provided for convenience, to allow
+  constructor calls with mixed types to delegate to an inner type with
+  fields promoted to an appropriate common type. For example, recall that
+  `rational.jl <https://github.com/JuliaLang/julia/blob/master/base/rational.jl>`_
+  provides the following outer constructor method::
+
+これらのメソッド定義では、数値のペアを加算、減算、乗算、および除算するためのより具体的なルールがない場合、
+値を共通の型に昇格してから処理をし直します。必要なことはこれだけです。
+算術演算の一般的な数値型への昇格を心配する必要はありません。それは自動的に処理されます。
+`promotion.jl <https://github.com/JuliaLang/julia/blob/master/base/promotion.jl>`_ には数多くの
+算術関数の汎用プロモーションメソッドの定義がありますが、
+Julia標準ライブラリで必要な ``promote`` を呼び出すことはほとんどありません。
+``promote`` の最も一般的な使用はアウターコンストラクタメソッドにおいてであり、
+これにより異なる型を持つコンストラクタの呼び出しを、適切な共通の型に昇格されたフィールドの内部型に渡すことができます。
+例えば、 `rational.jl <https://github.com/JuliaLang/julia/blob/master/base/rational.jl>`_ は
+次のアウターコンストラクタメソッドを提供することを思い出してください。::
 
     Rational(n::Integer, d::Integer) = Rational(promote(n,d)...)
 
-This allows calls like the following to work:
+.. 
+  This allows calls like the following to work:
+
+これにより、次のような呼び出しが可能になります。:
 
 .. doctest::
 
@@ -417,10 +464,14 @@ This allows calls like the following to work:
     julia> typeof(ans)
     Rational{Int32}
 
-For most user-defined types, it is better practice to require
-programmers to supply the expected types to constructor functions
-explicitly, but sometimes, especially for numeric problems, it can be
-convenient to do promotion automatically.
+.. 
+  For most user-defined types, it is better practice to require
+  programmers to supply the expected types to constructor functions
+  explicitly, but sometimes, especially for numeric problems, it can be
+  convenient to do promotion automatically.
+
+ほとんどのユーザー定義型では、プログラマは予想される型をコンストラクタ関数に明示的に指定することをお勧めしますが、
+特に数値処理の場合は、自動的に昇格させるのが便利です。
 
 .. _man-promotion-rules:
 
