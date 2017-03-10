@@ -323,8 +323,7 @@ Intの範囲やベクトルでインデックスを作成するには、別の�
 
 
 
-===================================================================== ============================================ =======================================================================================
-実装するメソッド                                                                                                     概要
+実装するメソッド                                                                                                      概要
 ===================================================================== ============================================ =======================================================================================
 :func:`size(A) <size>`                                                                                             ``A`` の次元を含むタプルを返す
 :func:`getindex(A, i::Int) <getindex>`                                                                             （``LinearFast`` の場合は） 線形スカラーインデックス
@@ -332,21 +331,20 @@ Intの範囲やベクトルでインデックスを作成するには、別の�
 :func:`setindex!(A, v, i::Int) <setindex!>`                                                                        （ ``LinearFast`` の場合は）スカラーインデックスの割り当て
 :func:`setindex!(A, v, I::Vararg{Int, N}) <setindex!>`                                                             （ ``N = ndims(A)`` である ``LinearSlow`` の場合は） N次元のスカラーインデックスの割り当て
 **オプションのメソッド**                                                  **デフォルト定義**                             **概要**
-:func:`Base.linearindexing(::Type) <Base.linearindexing>`             ``Base.LinearSlow()``                        ``Base.LinearFast()`` もしくは ``Base.LinearSlow()`` を返す。下記説明を参照。
-:func:`getindex(A, I...) <getindex>`                                  スカラー :func:`getindex` に定義される     詳細は :ref:`多次元と非スカラーインデックス <man-配列のインデックス>`                                 
-:func:`setindex!(A, I...) <setindex!>`                                defined in terms of scalar :func:`setindex!` :ref:`Multidimensional and nonscalar indexed assignment <man-array-indexing>`
-:func:`start`/:func:`next`/:func:`done`                               defined in terms of scalar :func:`getindex`  Iteration
-:func:`length(A) <length>`                                            ``prod(size(A))``                            Number of elements
-:func:`similar(A) <similar>`                                          ``similar(A, eltype(A), size(A))``           Return a mutable array with the same shape and element type
-:func:`similar(A, ::Type{S}) <similar>`                               ``similar(A, S, size(A))``                   Return a mutable array with the same shape and the specified element type
-:func:`similar(A, dims::NTuple{Int}) <similar>`                       ``similar(A, eltype(A), dims)``              Return a mutable array with the same element type and size `dims`
-:func:`similar(A, ::Type{S}, dims::NTuple{Int}) <similar>`            ``Array{S}(dims)``                           Return a mutable array with the specified element type and size
-**Non-traditional indices**                                           **Default definition**                       **Brief description**
-:func:`indices(A) <indices>`                                          ``map(OneTo, size(A))``                      Return the ``AbstractUnitRange`` of valid indices
-:func:`Base.similar(A, ::Type{S}, inds::NTuple{Ind}) <similar>`       ``similar(A, S, Base.to_shape(inds))``       Return a mutable array with the specified indices ``inds`` (see below)
-:func:`Base.similar(T::Union{Type,Function}, inds) <similar>`         ``T(Base.to_shape(inds))``                   Return an array similar to ``T`` with the specified indices ``inds`` (see below)
+:func:`Base.linearindexing(::Type) <Base.linearindexing>`             ``Base.LinearSlow()``                         ``Base.LinearFast()`` もしくは ``Base.LinearSlow()`` を返す。下記説明を参照。
+:func:`getindex(A, I...) <getindex>`                                  スカラー :func:`getindex` の観点から定義される     詳細は :ref:`多次元と非スカラーインデックス <man-配列のインデックス>`                                 
+:func:`setindex!(A, I...) <setindex!>`                                スカラー :func:`setindex!` の観点から定義される    詳細は :ref:`多次元と非スカラーインデックス <man-配列のインデックス>`
+:func:`start`/:func:`next`/:func:`done`                               スカラー :func:`getindex`  の観点から定義される    反復
+:func:`length(A) <length>`                                            ``prod(size(A))``                            　要素数
+:func:`similar(A) <similar>`                                          ``similar(A, eltype(A), size(A))``            同じ形と要素の型を持つ可変配列を返す
+:func:`similar(A, ::Type{S}) <similar>`                               ``similar(A, S, size(A))``                    同じ形と指定された要素の型の可変配列を返す
+:func:`similar(A, dims::NTuple{Int}) <similar>`                       ``similar(A, eltype(A), dims)``               同じ要素の型とサイズの可変配列を返す
+:func:`similar(A, ::Type{S}, dims::NTuple{Int}) <similar>`            ``Array{S}(dims)``                            指定された要素の型とサイズの可変配列を返す
+**既存と異なるインデックス**                                              **デフォルト定義**                              **概要**
+:func:`indices(A) <indices>`                                          ``map(OneTo, size(A))``                       有効なインデックスの ``AbstractUnitRange`` を返す
+:func:`Base.similar(A, ::Type{S}, inds::NTuple{Ind}) <similar>`       ``similar(A, S, Base.to_shape(inds))``        指定されたインデックス ``inds`` の可変配列を返す（下記参照）
+:func:`Base.similar(T::Union{Type,Function}, inds) <similar>`         ``T(Base.to_shape(inds))``                    ``T`` に似た配列を指定されたインデックス ``inds`` で返す（下記参照）
 ===================================================================== ============================================ =======================================================================================
-
 
 If a type is defined as a subtype of ``AbstractArray``, it inherits a very large set of rich behaviors including iteration and multidimensional indexing built on top of single-element access.  See the :ref:`arrays manual page <man-arrays>` and :ref:`standard library section <stdlib-arrays>` for more supported methods.
 
