@@ -128,25 +128,43 @@ Juliaでは、型オブジェクトはコンストラクタ関数としても機
 アウターコンストラクタメソッドは、自動的に与えられるデフォルトのものなどの別のコンストラクタメソッドを呼び出すことで、
 新しいインスタンスを作成することができます。
 
-Inner Constructor Methods
+.. 
+  Inner Constructor Methods
+  -------------------------
+
+インナーコンストラクタメソッド
 -------------------------
 
-While outer constructor methods succeed in addressing the problem of
-providing additional convenience methods for constructing objects, they
-fail to address the other two use cases mentioned in the introduction of
-this chapter: enforcing invariants, and allowing construction of
-self-referential objects. For these problems, one needs *inner*
-constructor methods. An inner constructor method is much like an outer
-constructor method, with two differences:
+.. 
+  While outer constructor methods succeed in addressing the problem of
+  providing additional convenience methods for constructing objects, they
+  fail to address the other two use cases mentioned in the introduction of
+  this chapter: enforcing invariants, and allowing construction of
+  self-referential objects. For these problems, one needs *inner*
+  constructor methods. An inner constructor method is much like an outer
+  constructor method, with two differences:
 
-1. It is declared inside the block of a type declaration, rather than
-   outside of it like normal methods.
-2. It has access to a special locally existent function called ``new``
-   that creates objects of the block's type.
+アウターコンストラクタメソッドは、オブジェクトを構築するための便利なメソッドを追加するという問題に
+対処する点では利点がある一方で、この章の導入で述べた不変性の強制と自己参照可能な構造の許容という
+2つのケースには対処できません。これらの問題に対応するためには、インナーコンストラクタメソッドが必要です。
+インナーコンストラクタメソッドはアウターコンストラクタメソッドとよく似ていますが、以下2つの違いがあります。:
 
-For example, suppose one wants to declare a type that holds a pair of
-real numbers, subject to the constraint that the first number is
-not greater than the second one. One could declare it like this:
+.. 
+  1. It is declared inside the block of a type declaration, rather than
+     outside of it like normal methods.
+  2. It has access to a special locally existent function called ``new``
+     that creates objects of the block's type.
+
+1. 通常のメソッドのように外側ではなく、型宣言のブロック内で宣言される。
+2.　ブロック型のオブジェクトを作成する、 ``new`` というローカルに存在する特殊な関数へのアクセスができる。
+
+.. 
+  For example, suppose one wants to declare a type that holds a pair of
+  real numbers, subject to the constraint that the first number is
+  not greater than the second one. One could declare it like this:
+
+例えば、第1の数が第2の数よりも大きくないという制約に従う、実数のペアを持つする型を宣言したいとします。
+これを次のように宣言することができます。:
 
 .. testcode::
 
@@ -157,8 +175,11 @@ not greater than the second one. One could declare it like this:
       OrderedPair(x,y) = x > y ? error("out of order") : new(x,y)
     end
 
-Now ``OrderedPair`` objects can only be constructed such that
-``x <= y``:
+.. 
+  Now ``OrderedPair`` objects can only be constructed such that
+  ``x <= y``:
+
+``OrderedPair`` オブジェクトは ``x <= y`` となるようにのみ構築することができます。:
 
 .. doctest::
 
@@ -170,29 +191,51 @@ Now ``OrderedPair`` objects can only be constructed such that
      in OrderedPair(::Int64, ::Int64) at ./none:5
      ...
 
-You can still reach in and directly change the field values to violate
-this invariant, but messing around with an object's internals uninvited is
-considered poor form. You (or someone else) can also provide additional
-outer constructor methods at any later point, but once a type is
-declared, there is no way to add more inner constructor methods. Since
-outer constructor methods can only create objects by calling other
-constructor methods, ultimately, some inner constructor must be called
-to create an object. This guarantees that all objects of the declared
-type must come into existence by a call to one of the inner constructor
-methods provided with the type, thereby giving some degree of
-enforcement of a type's invariants.
+.. 
+  You can still reach in and directly change the field values to violate
+  this invariant, but messing around with an object's internals uninvited is
+  considered poor form. You (or someone else) can also provide additional
+  outer constructor methods at any later point, but once a type is
+  declared, there is no way to add more inner constructor methods. Since
+  outer constructor methods can only create objects by calling other
+  constructor methods, ultimately, some inner constructor must be called
+  to create an object. This guarantees that all objects of the declared
+  type must come into existence by a call to one of the inner constructor
+  methods provided with the type, thereby giving some degree of
+  enforcement of a type's invariants.
 
-Of course, if the type is declared as ``immutable``, then its
-constructor-provided invariants are fully enforced. This is an important
-consideration when deciding whether a type should be immutable.
+この不変性に違反するようにフィールド値を直接変更することはできますが、呼び出されていないオブジェクトの内部を
+操作することは不適切な方法であるとみなされています。また、後続に追加の
+アウターコンストラクタメソッドを与えることができますが、一度型が宣言されると、
+インナーコンストラクタメソッドを追加することはできません。アウターコンストラクタメソッドは
+他のコンストラクタメソッドを呼び出すことによってのみオブジェクトを作成できるため、最終的には、
+インナーコンストラクタを呼び出してオブジェクトを作成する必要があります。これにより、
+宣言された型のすべてのオブジェクトが、その型で提供されるインナーコンストラクタメソッドを呼び出すことによって
+存在しなければならないことが保証され、それによって型の不変性がある程度強制されます。
 
-If any inner constructor method is defined, no default constructor
-method is provided: it is presumed that you have supplied yourself with
-all the inner constructors you need. The default constructor is
-equivalent to writing your own inner constructor method that takes all
-of the object's fields as parameters (constrained to be of the correct
-type, if the corresponding field has a type), and passes them to
-``new``, returning the resulting object::
+.. 
+  Of course, if the type is declared as ``immutable``, then its
+  constructor-provided invariants are fully enforced. This is an important
+  consideration when deciding whether a type should be immutable.
+
+もちろん型が ``immutable`` （不変）として宣言されている場合、
+その与えられているコンストラクタの不変性は完全に強制されています。
+これは、型が不変でなければならないかどうかを決定する際の重要な考慮事項です。
+
+.. 
+  If any inner constructor method is defined, no default constructor
+  method is provided: it is presumed that you have supplied yourself with
+  all the inner constructors you need. The default constructor is
+  equivalent to writing your own inner constructor method that takes all
+  of the object's fields as parameters (constrained to be of the correct
+  type, if the corresponding field has a type), and passes them to
+  ``new``, returning the resulting object::
+
+インナーコンストラクタメソッドが定義されている場合、デフォルトコンストラクタメソッドは与えられません。
+これは、必要となる全てのインナーコンストラクタがすでに与えられているとみなされるためです。
+デフォルトコンストラクタは、オブジェクトのフィールドをパラメータ（対応するフィールドに型がある場合は
+正しい型に制約される）として取るインナーコンストラクタメソッドを記述することと同様であり、
+それらを ``new`` に渡して結果のオブジェクトを返します。::
 
     type Foo
       bar
@@ -201,10 +244,14 @@ type, if the corresponding field has a type), and passes them to
       Foo(bar,baz) = new(bar,baz)
     end
 
-This declaration has the same effect as the earlier definition of the
-``Foo`` type without an explicit inner constructor method. The following
-two types are equivalent — one with a default constructor, the other
-with an explicit constructor::
+.. 
+  This declaration has the same effect as the earlier definition of the
+  ``Foo`` type without an explicit inner constructor method. The following
+  two types are equivalent — one with a default constructor, the other
+  with an explicit constructor::
+
+この宣言は、前述の明示的なインナーコンストラクターメソッドを持たない ``Foo`` 型の定義と同じ効果を持ちます。
+次の2つの型は同様です。1つはデフォルトコンストラクタを使用し、もう1つは明示的なコンストラクタを使用します。::
 
     type T1
       x::Int64
@@ -227,47 +274,79 @@ with an explicit constructor::
     julia> T2(1.0)
     T2(1)
 
-It is considered good form to provide as few inner constructor methods
-as possible: only those taking all arguments explicitly and enforcing
-essential error checking and transformation. Additional convenience
-constructor methods, supplying default values or auxiliary
-transformations, should be provided as outer constructors that call the
-inner constructors to do the heavy lifting. This separation is typically
-quite natural.
+.. 
+  It is considered good form to provide as few inner constructor methods
+  as possible: only those taking all arguments explicitly and enforcing
+  essential error checking and transformation. Additional convenience
+  constructor methods, supplying default values or auxiliary
+  transformations, should be provided as outer constructors that call the
+  inner constructors to do the heavy lifting. This separation is typically
+  quite natural.
 
-Incomplete Initialization
+できるだけ少ないインナーコンストラクタメソッドを与えることは良いコードであるとみなされます。
+これらは全ての引数を取り、本質的なエラーチェックと変換を強制します。
+重い処理をするためにインナーコンストラクタを呼び出すアウターコンストラクタとして、
+デフォルト値または補助的な変換を行う、追加の便利なコンストラクタメソッドを用意する必要があります。
+この住み分けは非常に自然なものです。
+
+.. 
+  Incomplete Initialization
+  -------------------------
+
+不完全な初期化
 -------------------------
 
-The final problem which has still not been addressed is construction of
-self-referential objects, or more generally, recursive data structures.
-Since the fundamental difficulty may not be immediately obvious, let us
-briefly explain it. Consider the following recursive type declaration::
+.. 
+  The final problem which has still not been addressed is construction of
+  self-referential objects, or more generally, recursive data structures.
+  Since the fundamental difficulty may not be immediately obvious, let us
+  briefly explain it. Consider the following recursive type declaration::
+
+まだ説明されていない最後の問題は自己参照オブジェクト、またはより一般的には、再帰的データ構造です。
+この問題の根本的な難しさは明確ではないかもしれないため、簡単に説明します。次の再帰型宣言を考えてみましょう。::
 
     type SelfReferential
       obj::SelfReferential
     end
 
-This type may appear innocuous enough, until one considers how to
-construct an instance of it. If ``a`` is an instance of
-``SelfReferential``, then a second instance can be created by the call::
+.. 
+  This type may appear innocuous enough, until one considers how to
+  construct an instance of it. If ``a`` is an instance of
+  ``SelfReferential``, then a second instance can be created by the call::
+
+この型は、そのインスタンス構築方法を検討するまでは、無害に見えるかもしれません。
+``a`` が ``SelfReferential`` のインスタンスである場合、呼び出しにより2番目のインスタンスを作成できます。::
 
     b = SelfReferential(a)
 
-But how does one construct the first instance when no instance exists to
-provide as a valid value for its ``obj`` field? The only solution is to
-allow creating an incompletely initialized instance of
-``SelfReferential`` with an unassigned ``obj`` field, and using that
-incomplete instance as a valid value for the ``obj`` field of another
-instance, such as, for example, itself.
+.. 
+  But how does one construct the first instance when no instance exists to
+  provide as a valid value for its ``obj`` field? The only solution is to
+  allow creating an incompletely initialized instance of
+  ``SelfReferential`` with an unassigned ``obj`` field, and using that
+  incomplete instance as a valid value for the ``obj`` field of another
+  instance, such as, for example, itself.
 
-To allow for the creation of incompletely initialized objects, Julia
-allows the ``new`` function to be called with fewer than the number of
-fields that the type has, returning an object with the unspecified
-fields uninitialized. The inner constructor method can then use the
-incomplete object, finishing its initialization before returning it.
-Here, for example, we take another crack at defining the
-``SelfReferential`` type, with a zero-argument inner constructor
-returning instances having ``obj`` fields pointing to themselves:
+しかし、``obj`` フィールドの有効な値としてインスタンスが存在しない場合、
+どのように最初のインスタンスを作成するのでしょうか。唯一の解決策は、
+割り当てられていない ``SelfReferential`` の不完全に初期化されたインスタンスを作成し、
+その不完全なインスタンスを他のインスタンスの``obj`` フィールドの有効な値として使用することです。
+
+.. 
+  To allow for the creation of incompletely initialized objects, Julia
+  allows the ``new`` function to be called with fewer than the number of
+  fields that the type has, returning an object with the unspecified
+  fields uninitialized. The inner constructor method can then use the
+  incomplete object, finishing its initialization before returning it.
+  Here, for example, we take another crack at defining the
+  ``SelfReferential`` type, with a zero-argument inner constructor
+  returning instances having ``obj`` fields pointing to themselves:
+
+不完全に初期化されたオブジェクトの作成を可能にするために、Juliaは、型が持つよりも少ない
+フィールド数で関数を呼び出し、未指定のフィールドが初期化されていないオブジェクトを返します。
+インナーコンストラクタメソッドは、不完全なオブジェクトを使用し、値を返す前にその初期化を完了します。
+ここで例として、自身を指す ``obj`` フィールドを持ち、インスタンスを返す引数が無いインナーコンストラクタを
+使用する ``SelfReferential`` 型の定義をしてみます。:
 
 .. testcode::
 
@@ -277,8 +356,11 @@ returning instances having ``obj`` fields pointing to themselves:
       SelfReferential() = (x = new(); x.obj = x)
     end
 
-We can verify that this constructor works and constructs objects that
-are, in fact, self-referential:
+.. 
+  We can verify that this constructor works and constructs objects that
+  are, in fact, self-referential:
+
+このコンストラクタが動作し、実際には自己参照型のオブジェクトを構築することを検証することができます。:
 
 .. doctest::
 
@@ -293,9 +375,13 @@ are, in fact, self-referential:
     julia> is(x, x.obj.obj)
     true
 
-Although it is generally a good idea to return a fully initialized
-object from an inner constructor, incompletely initialized objects can
-be returned:
+.. 
+  Although it is generally a good idea to return a fully initialized
+  object from an inner constructor, incompletely initialized objects can
+  be returned:
+
+インナーコンストラクタから完全に初期化されたオブジェクトを返すことは一般的には理想ですが、
+不完全に初期化されたオブジェクトを返すことができます。:
 
 .. doctest::
 
@@ -306,8 +392,12 @@ be returned:
 
     julia> z = Incomplete();
 
-While you are allowed to create objects with uninitialized fields, any
-access to an uninitialized reference is an immediate error:
+.. 
+  While you are allowed to create objects with uninitialized fields, any
+  access to an uninitialized reference is an immediate error:
+
+初期化されていないフィールドを持つオブジェクトを作成することは許容されていますが、
+初期化されていない参照へのアクセスは即座にエラーになります。:
 
 .. doctest::
 
@@ -315,12 +405,20 @@ access to an uninitialized reference is an immediate error:
     ERROR: UndefRefError: access to undefined reference
      ...
 
-This avoids the need to continually check for ``null`` values.
-However, not all object fields are references. Julia considers some
-types to be "plain data", meaning all of their data is self-contained
-and does not reference other objects. The plain data types consist of bits
-types (e.g. ``Int``) and immutable structs of other plain data types.
-The initial contents of a plain data type is undefined::
+.. 
+  This avoids the need to continually check for ``null`` values.
+  However, not all object fields are references. Julia considers some
+  types to be "plain data", meaning all of their data is self-contained
+  and does not reference other objects. The plain data types consist of bits
+  types (e.g. ``Int``) and immutable structs of other plain data types.
+  The initial contents of a plain data type is undefined::
+
+これにより、 ``null`` 値を継続的にチェックする必要がなくなります。
+ただし、全てのオブジェクトフィールドが参照であるとは限りません。Juliaは、
+いくつかの型を「プレーンデータ」、つまり、全てのデータが自己完結型であり
+他のオブジェクトを参照しないものとみなします。プレーンデータ型は、
+ビット型（例えば ``Int`` ）と他のプレーンデータ型の不変構造体から構成されています。
+プレーンデータ型の初期の内容は未定義です。::
 
     julia> type HasPlain
              n::Int
@@ -330,10 +428,16 @@ The initial contents of a plain data type is undefined::
     julia> HasPlain()
     HasPlain(438103441441)
 
-Arrays of plain data types exhibit the same behavior.
+.. 
+  Arrays of plain data types exhibit the same behavior.
 
-You can pass incomplete objects to other functions from inner constructors to
-delegate their completion::
+プレーンデータ型の配列は同じ動作を示します。
+
+.. 
+  You can pass incomplete objects to other functions from inner constructors to
+  delegate their completion::
+
+不完全なオブジェクトをインナーコンストラクタから他の関数に渡して、その完了を任せることができます。::
 
     type Lazy
       xx
@@ -341,10 +445,15 @@ delegate their completion::
       Lazy(v) = complete_me(new(), v)
     end
 
-As with incomplete objects returned from constructors, if
-``complete_me`` or any of its callees try to access the ``xx`` field of
-the ``Lazy`` object before it has been initialized, an error will be
-thrown immediately.
+.. 
+  As with incomplete objects returned from constructors, if
+  ``complete_me`` or any of its callees try to access the ``xx`` field of
+  the ``Lazy`` object before it has been initialized, an error will be
+  thrown immediately.
+
+``complete_me`` または呼び出されるもののいずれかが初期化される前に ``Lazy`` オブジェクトの
+``xx`` フィールドにアクセスしようとした場合、コンストラクタから返された不完全なオブジェクトと同様に、
+すぐにエラーがスローされます。
 
 Parametric Constructors
 -----------------------
