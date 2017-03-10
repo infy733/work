@@ -26,8 +26,8 @@ Juliaは、パッケージ開発者やユーザーがJulia 0.4以降のビルト
 
 .. tip::
 
-  このドキュメントシステムは、Julia 0.3で `Docile.jl <https://github.com/MichaelHatherly/Docile.jl>`_ 
-  パッケージで使用できます。詳細については、パッケージの説明を参照してください。
+このドキュメントシステムは、Julia 0.3で `Docile.jl <https://github.com/MichaelHatherly/Docile.jl>`_ 
+パッケージで使用できます。詳細については、パッケージの説明を参照してください。
 
 .. 
  The basic syntax is very simple: any string appearing at the top-level right
@@ -106,4 +106,95 @@ Juliaは、パッケージ開発者やユーザーがJulia 0.4以降のビルト
    この方法は、関数の関連する複数のメソッドをドキュメント化する際にも使用できます。関数が多くのキーワード引数を許容する場合、
    シグネチャ内に ``<keyword arguments>`` プレースホルダ（ ``f(x; <keyword arguments>)`` など）を記述し、
    ``# Arguments`` セクション配下に完全なリストを与える必要があります（4点目を参照）。
+
+.. 
+ 2. Include a single one-line sentence describing what the function does or what the
+    object represents after the simplified signature block. If needed, provide more details
+    in a second paragraph, after a blank line.
+
+    The one-line sentence should use the imperative form ("Do this", "Return that") instead
+    of the third person (do not write "Returns the length...") when documenting functions.
+    It should end with a period. If the meaning of a function cannot be summarized easily,
+    splitting it into separate composable parts could be beneficial (this should not be
+    taken as an absolute requirement for every single case though).
+
+2. 簡略化されたシグネチャブロックの後に、関数が何を表すか、またはオブジェクトが表すものを記述する1行の文を含めてください。
+   必要に応じて、空白行の後の2段落目に詳細を入力してください。
+   
+   関数をドキュメント化する場合は、1行文は、三人称（Returns the length…のような文）ではなく、
+   命令形（Do thisやReturn thatなどの形）で記述する必要があります。そして文はピリオドで終わる必要があります。
+   関数の意味を簡単に要約することができない場合、別々の構成可能なパーツに分割することができます
+   （ただし、個別のケースごとに絶対的な要件とはみなされません）。
+
+.. 
+ 3. Do not repeat yourself.
+
+    Since the function name is given by the signature, there is no need to
+    start the documentation with "The function ``bar``...": go straight to the point.
+    Similarly, if the signature specifies the types of the arguments, mentioning them
+    in the description is redundant.
+
+3. 繰り返しをしないようにしてください。
+  
+   関数名はシグネチャによって与えられるため、 "The function ``bar``..." のようにドキュメントを開始する必要はありません。
+   必要なことだけを記述してください。同様に、シグネチャが引数の型を指定している場合、それらを概要に記述することは冗長的です。 
+
+.. 
+ 4. Only provide an argument list when really necessary.
+
+    For simple functions, it is often clearer to mention the role of the arguments directly
+    in the description of the function's purpose. An argument list would only repeat
+    information already provided elsewhere. However, providing an argument list can be a good
+    idea for complex functions with many arguments (in particular keyword arguments).
+    In that case, insert it after the general description of the function, under
+    an ``# Arguments`` header, with one ``*`` bullet for each argument. The list should
+    mention the types and default values (if any) of the arguments::
+
+4. 本当に必要なときにのみ引数リストを与えてください。
+    
+   単純な関数の場合、関数の目的の記述の中で、引数の役割について直接言及することはしばしば便利です。
+   引数リストは既に他の場所で提供されている情報を繰り返すだけです。しかし、引数リストを提供することは、
+   多くの引数（特にキーワード引数）を持つ複雑な関数に対しては有効です。その場合は、関数の一般的な説明の後に
+   ``# Arguments`` ヘッダの下に、各引数に1つの「*」付きで挿入します。リストには、引数の型とデフォルト値（存在する場合）が
+   記載されている必要があります。::
+   
+       """
+       ...
+       # Arguments
+       * `n::Integer`: the number of elements to compute.
+       * `dim::Integer=1`: the dimensions along which to perform the computation.
+       ...
+       """
+
+.. 
+ 5. Include any code examples in an ``# Examples`` section.
+
+    Examples should, whenever possible, be written as *doctests*. A *doctest* is a fenced
+    code block (see `Code blocks`_) starting with `````jldoctest`` and contains any number of
+    ``julia>`` prompts together with inputs and expected outputs that mimic the Julia REPL.
+
+    For example in the following docstring a variable ``a`` is defined and the expected
+    result, as printed in a Julia REPL, appears afterwards::
+
+5. ``# Examples`` セクションにコードの例を含めてください。
+
+   可能であれば、コードの例はdoctestとして記述してください。doctestは、 `````jldoctest`` で始まり、
+   インプットとJulia REPLを模した期待されたアウトプットを持つ任意の数の ``julia>`` プロンプトを含んだ、
+   分離コードブロック（ `コードブロック`_ を参照）です。
+   
+   例えば、次のdocstringでは、変数 ``a`` が定義され、Julia REPLに出力されているように、
+   期待される結果がその後に表示されます。::
+  
+       """
+       Some nice documentation here.
+
+       # Examples
+
+       ```jldoctest
+       julia> a = [1 2; 3 4]
+       2×2 Array{Int64,2}:
+        1  2
+        3  4
+       ```
+       """
 
