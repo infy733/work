@@ -475,53 +475,87 @@ Julia標準ライブラリで必要な ``promote`` を呼び出すことはほ�
 
 .. _man-promotion-rules:
 
-Defining Promotion Rules
+.. 
+  Defining Promotion Rules
+  ~~~~~~~~~~~~~~~~~~~~~~~~
+
+プロモーションルールの定義
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Although one could, in principle, define methods for the ``promote``
-function directly, this would require many redundant definitions for all
-possible permutations of argument types. Instead, the behavior of
-``promote`` is defined in terms of an auxiliary function called
-``promote_rule``, which one can provide methods for. The
-``promote_rule`` function takes a pair of type objects and returns
-another type object, such that instances of the argument types will be
-promoted to the returned type. Thus, by defining the rule::
+.. 
+  Although one could, in principle, define methods for the ``promote``
+  function directly, this would require many redundant definitions for all
+  possible permutations of argument types. Instead, the behavior of
+  ``promote`` is defined in terms of an auxiliary function called
+  ``promote_rule``, which one can provide methods for. The
+  ``promote_rule`` function takes a pair of type objects and returns
+  another type object, such that instances of the argument types will be
+  promoted to the returned type. Thus, by defining the rule::
+
+原則的には、 ``promote`` 関数のメソッドを直接定義することはできますが、
+これには全ての可能な引数型の順列に対して多くの冗長的な定義が必要となります。
+代わりに、 ``promote`` の動作は ``promote_rule`` と呼ばれる補助的な関数の観点から定義されています。
+``promote_rule`` 関数は型オブジェクトのペアを取り、別の型オブジェクトを返します。
+例えば、引数型のインスタンスは返される型に昇格されます。したがって、ルールを定義することによって、::
 
     promote_rule(::Type{Float64}, ::Type{Float32} ) = Float64
 
-one declares that when 64-bit and 32-bit floating-point values are
-promoted together, they should be promoted to 64-bit floating-point. The
-promotion type does not need to be one of the argument types, however;
-the following promotion rules both occur in Julia's standard library::
+.. 
+  one declares that when 64-bit and 32-bit floating-point values are
+  promoted together, they should be promoted to 64-bit floating-point. The
+  promotion type does not need to be one of the argument types, however;
+  the following promotion rules both occur in Julia's standard library::
+
+4ビットと32ビットの浮動小数点値を一緒に昇格させると、64ビットの浮動小数点に昇格する必要があると宣言しています。
+昇格する型は引数の型のどちらかである必要はありませんが、Juliaの標準ライブラリでは、
+次の両方のプロモーションルールが発生します。::
+
 
     promote_rule(::Type{UInt8}, ::Type{Int8}) = Int
     promote_rule(::Type{BigInt}, ::Type{Int8}) = BigInt
 
-In the latter case, the result type is ``BigInt`` since ``BigInt`` is
-the only type large enough to hold integers for arbitrary-precision
-integer arithmetic.  Also note that one does not need to define both
-``promote_rule(::Type{A}, ::Type{B})`` and
-``promote_rule(::Type{B}, ::Type{A})`` — the symmetry is implied by
-the way ``promote_rule`` is used in the promotion process.
+.. 
+  In the latter case, the result type is ``BigInt`` since ``BigInt`` is
+  the only type large enough to hold integers for arbitrary-precision
+  integer arithmetic.  Also note that one does not need to define both
+  ``promote_rule(::Type{A}, ::Type{B})`` and
+  ``promote_rule(::Type{B}, ::Type{A})`` — the symmetry is implied by
+  the way ``promote_rule`` is used in the promotion process.
 
-The ``promote_rule`` function is used as a building block to define a
-second function called ``promote_type``, which, given any number of type
-objects, returns the common type to which those values, as arguments to
-``promote`` should be promoted. Thus, if one wants to know, in absence
-of actual values, what type a collection of values of certain types
-would promote to, one can use ``promote_type``:
+後者の場合、 ``BigInt`` は任意精度の整数演算のための整数を保持するのに十分な大きさを持つの唯一の型であるため、
+結果の型は ``BigInt`` となります。また、 ``promote_rule(::Type{A}, ::Type{B})`` および
+``promote_rule(::Type{B}, ::Type{A})`` の両方を定義する必要はないことに注意してください。
+この対称性は、 ``promote_rule`` がプロモーションのプロセスで使用される方法によって暗示されます。
+
+.. 
+  The ``promote_rule`` function is used as a building block to define a
+  second function called ``promote_type``, which, given any number of type
+  objects, returns the common type to which those values, as arguments to
+  ``promote`` should be promoted. Thus, if one wants to know, in absence
+  of actual values, what type a collection of values of certain types
+  would promote to, one can use ``promote_type``:
+
+``promote_rule`` 関数はビルドブロックとして使用され、 ``promote_type`` という2番目の関数を定義します。
+これは、任意の数の型オブジェクトについて、 ``promote`` の昇格させる引数としてそれらの値に共通の型を返します。
+したがって、実際の値がない場合、特定の型の値のコレクションがどの型に昇格するかを知りたい場合、
+``promote_type`` を使用できます。:
 
 .. doctest::
 
     julia> promote_type(Int8, UInt16)
     Int64
 
-Internally, ``promote_type`` is used inside of ``promote`` to determine
-what type argument values should be converted to for promotion. It can,
-however, be useful in its own right. The curious reader can read the
-code in
-`promotion.jl <https://github.com/JuliaLang/julia/blob/master/base/promotion.jl>`_,
-which defines the complete promotion mechanism in about 35 lines.
+.. 
+  Internally, ``promote_type`` is used inside of ``promote`` to determine
+  what type argument values should be converted to for promotion. It can,
+  however, be useful in its own right. The curious reader can read the
+  code in
+  `promotion.jl <https://github.com/JuliaLang/julia/blob/master/base/promotion.jl>`_,
+  which defines the complete promotion mechanism in about 35 lines.
+
+内部的には、 ``promote_type`` はプロモート処理の内部で使用され、昇格のためにどの型の引数値を変換するべきかを決定します。
+しかし、それ自体で有用なことがあります。興味がある方は、約35行で完全なプロモーションの仕組みを定義している
+`promotion.jl <https://github.com/JuliaLang/julia/blob/master/base/promotion.jl>`_ のコードを読んでみてください。
 
 Case Study: Rational Promotions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
