@@ -649,38 +649,63 @@ Juliaにおけるこの種の関数定義のディスパッチによる動きは
 
 .. _man-note-on-optional-and-keyword-arguments:
 
-Note on Optional and keyword Arguments
+.. 
+ Note on Optional and keyword Arguments
+ --------------------------------------
+
+オプション引数とキーワード引数に関する注意
 --------------------------------------
 
-As mentioned briefly in :ref:`man-functions`, optional arguments are
-implemented as syntax for multiple method definitions. For example,
-this definition::
+.. 
+ As mentioned briefly in :ref:`man-functions`, optional arguments are
+ implemented as syntax for multiple method definitions. For example,
+ this definition::
+
+:ref:`man-f関数` で簡単に述べたように、オプション引数は複数のメソッド定義の構文として実装されています。例えば::
 
     f(a=1,b=2) = a+2b
 
-translates to the following three methods::
+.. 
+ translates to the following three methods::
 
-    f(a,b) = a+2b
+この定義は、次の3つの方法に変換されます。::
+
+    f(a,b) = a+2b
     f(a) = f(a,2)
     f() = f(1,2)
 
-This means that calling ``f()`` is equivalent to calling ``f(1,2)``. In
-this case the result is ``5``, because ``f(1,2)`` invokes the first
-method of ``f`` above. However, this need not always be the case. If you
-define a fourth method that is more specialized for integers::
+.. 
+ This means that calling ``f()`` is equivalent to calling ``f(1,2)``. In
+ this case the result is ``5``, because ``f(1,2)`` invokes the first
+ method of ``f`` above. However, this need not always be the case. If you
+ define a fourth method that is more specialized for integers::
+
+これは、 ``f()`` の呼び出しは ``f(1,2)`` の呼び出しと同じであることを意味します。
+この場合、 ``f(1,2)`` は ``f`` の最初のメソッドを呼び出すため、結果は ``5`` となります。
+しかし、必ずしもそうである必要はありません。整数に特化した4番目のメソッドを定義した場合は、次のようになります。::
 
     f(a::Int,b::Int) = a-2b
 
-then the result of both ``f()`` and ``f(1,2)`` is ``-3``. In other words,
-optional arguments are tied to a function, not to any specific method of
-that function. It depends on the types of the optional arguments which
-method is invoked. When optional arguments are defined in terms of a global
-variable, the type of the optional argument may even change at run-time.
+.. 
+ then the result of both ``f()`` and ``f(1,2)`` is ``-3``. In other words,
+ optional arguments are tied to a function, not to any specific method of
+ that function. It depends on the types of the optional arguments which
+ method is invoked. When optional arguments are defined in terms of a global
+ variable, the type of the optional argument may even change at run-time.
 
-Keyword arguments behave quite differently from ordinary positional arguments.
-In particular, they do not participate in method dispatch. Methods are
-dispatched based only on positional arguments, with keyword arguments processed
-after the matching method is identified.
+この場合、 ``f()`` と ``f(1,2)`` の結果は ``-3`` となります。言い換えれば、オプションの引数は、
+関数の特定のメソッドではなく、関数に結び付けられます。どのメソッドが呼び出されるかは、
+オプションの引数の型に依存します。オプションの引数がグローバル変数で定義されている場合、
+オプションの引数の型は実行時に変更されることがあります。
+
+.. 
+ Keyword arguments behave quite differently from ordinary positional arguments.
+ In particular, they do not participate in method dispatch. Methods are
+ dispatched based only on positional arguments, with keyword arguments processed
+ after the matching method is identified.
+
+キーワード引数は、通常の引数とは全く異なる動作をします。特に、メソッドディスパッチ時には動作しません。
+メソッドは通常の引数だけに基づいてディスパッチされ、一致するメソッドが識別された後にキーワード引数が処理されます。
 
 Function-like objects
 ---------------------
