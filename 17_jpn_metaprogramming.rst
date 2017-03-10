@@ -418,11 +418,18 @@ Juliaにおける「:」は2つの構文上の目的を持ちます。1つ目の
 :ref:`コマンドの加筆 <man-コマンドの加筆>` に関連付けられています。
 式の加筆は、複雑なJuliaの式の利便性と可読性の高いプログラム構築を可能にします。
 
-:func:`eval` and effects
+.. 
+  :func:`eval` and effects
+  ~~~~~~~~~~~~~~~~~~~~~~~~
+
+:func:`eval` と効果
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given an expression object, one can cause Julia to evaluate (execute) it
-at global scope using :func:`eval`:
+.. 
+  Given an expression object, one can cause Julia to evaluate (execute) it
+  at global scope using :func:`eval`:
+
+与えられた式について、 :func:`eval`: を使ってグローバルスコープでJuliaに評価（実行）させることができます。:
 
 .. doctest::
 
@@ -444,11 +451,15 @@ at global scope using :func:`eval`:
     julia> eval(ex)
     3
 
-Every :ref:`module <man-modules>` has its own :func:`eval` function that
-evaluates expressions in its global scope.
-Expressions passed to :func:`eval` are not limited to returning values
-— they can also have side-effects that alter the state of the enclosing
-module's environment:
+.. 
+  Every :ref:`module <man-modules>` has its own :func:`eval` function that
+  evaluates expressions in its global scope.
+  Expressions passed to :func:`eval` are not limited to returning values
+  — they can also have side-effects that alter the state of the enclosing
+  module's environment:
+
+全ての :ref:`モジュール <man-モジュール>` は、それぞれグローバルスコープ内の式を評価する :func:`eval` 関数を持ちます。
+:func:`eval` に渡された式は値を返すだけに限られず、囲われているモジュールの環境の状態を変えてしまう副作用がある場合があります。:
 
 .. doctest::
 
@@ -465,12 +476,19 @@ module's environment:
     julia> x
     1
 
-Here, the evaluation of an expression object causes a value to be
-assigned to the global variable ``x``.
+.. 
+  Here, the evaluation of an expression object causes a value to be
+  assigned to the global variable ``x``.
 
-Since expressions are just :obj:`Expr` objects which can be constructed
-programmatically and then evaluated, it is possible to dynamically generate
-arbitrary code which can then be run using :func:`eval`. Here is a simple example:
+これは、式オブジェクトの評価が値をグローバル変数 ``x`` に割り当てられるようにする例です。
+
+.. 
+  Since expressions are just :obj:`Expr` objects which can be constructed
+  programmatically and then evaluated, it is possible to dynamically generate
+  arbitrary code which can then be run using :func:`eval`. Here is a simple example:
+
+式は、プログラム的に構築されから評価される :obj:`Expr` オブジェクトであるため、 :func:`eval` を使用して
+実行することができる任意のコードを動的に生成することが可能です。以下は簡単な例です。:
 
 .. doctest::
 
@@ -484,31 +502,51 @@ arbitrary code which can then be run using :func:`eval`. Here is a simple exampl
     julia> eval(ex)
     3
 
-The value of ``a`` is used to construct the expression ``ex`` which
-applies the ``+`` function to the value 1 and the variable ``b``. Note
-the important distinction between the way ``a`` and ``b`` are used:
+.. 
+  The value of ``a`` is used to construct the expression ``ex`` which
+  applies the ``+`` function to the value 1 and the variable ``b``. Note
+  the important distinction between the way ``a`` and ``b`` are used:
 
--  The value of the *variable* ``a`` at expression construction time is
-   used as an immediate value in the expression. Thus, the value of
-   ``a`` when the expression is evaluated no longer matters: the value
-   in the expression is already ``1``, independent of whatever the value
-   of ``a`` might be.
--  On the other hand, the *symbol* ``:b`` is used in the expression
-   construction, so the value of the variable ``b`` at that time is
-   irrelevant — ``:b`` is just a symbol and the variable ``b`` need not
-   even be defined. At expression evaluation time, however, the value of
-   the symbol ``:b`` is resolved by looking up the value of the variable
-   ``b``.
+``a`` の値は、「+」関数を値「1」および変数 ``b`` に適用する式 ``ex`` を構築するために使用されています。
+``a`` と ``b`` の使われ方の重要な以下の違いに注意してください。:
 
-Functions on :obj:`Expr`\ essions
+.. 
+  -  The value of the *variable* ``a`` at expression construction time is
+     used as an immediate value in the expression. Thus, the value of
+     ``a`` when the expression is evaluated no longer matters: the value
+     in the expression is already ``1``, independent of whatever the value
+     of ``a`` might be.
+  -  On the other hand, the *symbol* ``:b`` is used in the expression
+     construction, so the value of the variable ``b`` at that time is
+     irrelevant — ``:b`` is just a symbol and the variable ``b`` need not
+     even be defined. At expression evaluation time, however, the value of
+     the symbol ``:b`` is resolved by looking up the value of the variable
+     ``b``.
+   
+-  式構築時における変数 ``a`` の値は、その式の即値として使用されています。したがって、
+   式が評価されている際の ``a`` の値は問題とはなりません。式の値は、 ``a`` の値が何であろうと、既に ``1`` です。
+-  一方で、記号 ``:b`` は式構築に使われているため、そのタイミングにおける変数 ``b`` の値は問題にはなりません。
+   ``:b`` はただの記号であり、変数 ``b`` は定義される必要がありません。しかし、式が評価される際には、
+   記号 ``:b`` の値は変数 ``b`` の値を検索することで解決されます。
+
+.. 
+  Functions on :obj:`Expr`\ essions
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:obj:`Expr`\ 上の関数
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-As hinted above, one extremely useful feature of Julia is the capability to
-generate and manipulate Julia code within Julia itself. We have already
-seen one example of a function returning :obj:`Expr` objects: the :func:`parse`
-function, which takes a string of Julia code and returns the corresponding
-:obj:`Expr`. A function can also take one or more :obj:`Expr` objects as
-arguments, and return another :obj:`Expr`. Here is a simple, motivating example::
+.. 
+  As hinted above, one extremely useful feature of Julia is the capability to
+  generate and manipulate Julia code within Julia itself. We have already
+  seen one example of a function returning :obj:`Expr` objects: the :func:`parse`
+  function, which takes a string of Julia code and returns the corresponding
+  :obj:`Expr`. A function can also take one or more :obj:`Expr` objects as
+  arguments, and return another :obj:`Expr`. Here is a simple, motivating example::
+
+上記にあるとおり、Juliaの最も便利な機能は、Julia内でJuliaコードを生成したり操作できる点です。
+既にこれまでに文字列のJuliaコードを取り、対応する :obj:`Expr` オブジェクトを返す :func:`parse` 関数を見てきました。
+関数は1つまたは複数の :obj:`Expr` オブジェクトを引数として取り、他の :obj:`Expr` オブジェクトを返すことができます。以下は簡単な例です。::
 
    julia> function math_expr(op, op1, op2)
             expr = Expr(:call, op, op1, op2)
