@@ -1,22 +1,38 @@
 .. _man-modules:
 
+.. 
 *********
  Modules
 *********
 
+*********
+ モジュール
+*********
+
 .. index:: module, baremodule, using, import, export, importall
 
-Modules in Julia are separate variable workspaces, i.e. they introduce
-a new global scope. They are delimited syntactically, inside ``module
-Name ... end``. Modules allow you to create top-level definitions (aka
-global variables) without worrying about name conflicts when your code
-is used together with somebody else's. Within a module, you can
-control which names from other modules are visible (via importing),
-and specify which of your names are intended to be public (via
-exporting).
+.. 
+ Modules in Julia are separate variable workspaces, i.e. they introduce
+ a new global scope. They are delimited syntactically, inside ``module
+ Name ... end``. Modules allow you to create top-level definitions (aka
+ global variables) without worrying about name conflicts when your code
+ is used together with somebody else's. Within a module, you can
+ control which names from other modules are visible (via importing),
+ and specify which of your names are intended to be public (via
+ exporting).
 
-The following example demonstrates the major features of modules. It is
-not meant to be run, but is shown for illustrative purposes::
+Juliaのモジュールは区別された変数ワークスペースです。例えば、新しいグローバルスコープを導入します。
+それらは、 ``module Name ... end`` の中で構文的に区切られます。モジュールは、
+コードが他の箇所で一緒に使用されている場合でも、名前の競合を心配することなく、
+トップレベルの定義（別名グローバル変数）を作成することを可能にします。モジュール内では、
+他のモジュールのどの名前が（インポートによって）表示されるかを制御したり、
+どの名前を（エクスポートによって）公開するかを指定することができます。
+
+.. 
+ The following example demonstrates the major features of modules. It is
+ not meant to be run, but is shown for illustrative purposes::
+
+次の例は、モジュールの主な機能を示しています。これは実行されるためではなく、説明の目的で示されています。::
 
     module MyModule
     using Lib
@@ -39,47 +55,91 @@ not meant to be run, but is shown for illustrative purposes::
     show(io::IO, a::MyType) = print(io, "MyType $(a.x)")
     end
 
-Note that the style is not to indent the body of the module, since
-that would typically lead to whole files being indented.
+.. 
+ Note that the style is not to indent the body of the module, since
+ that would typically lead to whole files being indented.
 
-This module defines a type ``MyType``, and two functions. Function
-``foo`` and type ``MyType`` are exported, and so will be available for
-importing into other modules.  Function ``bar`` is private to
-``MyModule``.
+通常ファイル全体がインデントされるため、コードではモジュールのボディ部を字下げしないことに注意してください。
 
-The statement ``using Lib`` means that a module called ``Lib`` will be
-available for resolving names as needed. When a global variable is
-encountered that has no definition in the current module, the system
-will search for it among variables exported by ``Lib`` and import it if
-it is found there.
-This means that all uses of that global within the current module will
-resolve to the definition of that variable in ``Lib``.
+.. 
+ This module defines a type ``MyType``, and two functions. Function
+ ``foo`` and type ``MyType`` are exported, and so will be available for
+ importing into other modules.  Function ``bar`` is private to
+ ``MyModule``.
 
-The statement ``using BigLib: thing1, thing2`` is a syntactic shortcut for
-``using BigLib.thing1, BigLib.thing2``.
+このモジュールは型 ``MyType`` および2つの関数を定義します。関数 ``foo`` と型 ``MyType`` がエクスポートされるため、
+他のモジュールにインポートすることもできます。ファンクション ``bar`` は ``MyModule`` 専用です。
 
-The ``import`` keyword supports all the same syntax as ``using``, but only
-operates on a single name at a time. It does not add modules to be searched
-the way ``using`` does. ``import`` also differs from ``using`` in that
-functions must be imported using ``import`` to be extended with new methods.
+.. 
+ The statement ``using Lib`` means that a module called ``Lib`` will be
+ available for resolving names as needed. When a global variable is
+ encountered that has no definition in the current module, the system
+ will search for it among variables exported by ``Lib`` and import it if
+ it is found there.
+ This means that all uses of that global within the current module will
+ resolve to the definition of that variable in ``Lib``.
 
-In ``MyModule`` above we wanted to add a method to the standard ``show``
-function, so we had to write ``import Base.show``.
-Functions whose names are only visible via ``using`` cannot be extended.
+``using Lib`` ステートメントは、 ``Lib`` モジュールは必要な場合に名前解決が可能であることを意味します。
+グローバル変数が現在のモジュールに定義されていない場合、システムは ``Lib`` によりエクスポートされた変数から検索し、
+もし一致するものがあればそれをインポートします。これは、現在のモジュール内のグローバルの全ての利用が、
+``Lib`` 内の変数の定義により解決されることを意味します。
 
-The keyword ``importall`` explicitly imports all names exported by the
-specified module, as if ``import`` were individually used on all of them.
+.. 
+ The statement ``using BigLib: thing1, thing2`` is a syntactic shortcut for
+ ``using BigLib.thing1, BigLib.thing2``.
 
-Once a variable is made visible via ``using`` or ``import``, a module may
-not create its own variable with the same name.
-Imported variables are read-only; assigning to a global variable always
-affects a variable owned by the current module, or else raises an error.
+ステートメント ``using BigLib: thing1, thing2`` は、 ``using BigLib.thing1, BigLib.thing2`` の構文上のショートカットです。
+
+.. 
+ The ``import`` keyword supports all the same syntax as ``using``, but only
+ operates on a single name at a time. It does not add modules to be searched
+ the way ``using`` does. ``import`` also differs from ``using`` in that
+ functions must be imported using ``import`` to be extended with new methods.
+
+``import`` キーワードは、 ``using`` と同じ構文をサポートしますが、一度に1つの名前でしか動作しません。
+``import`` は、 ``using`` が行うような方法では、検索されるモジュールを追加することはしません。
+``import`` は、新しいメソッドで拡張するために ``import`` を使用してインポートする必要がある点で、
+``using`` とは異なります。
+
+.. 
+ In ``MyModule`` above we wanted to add a method to the standard ``show``
+ function, so we had to write ``import Base.show``.
+ Functions whose names are only visible via ``using`` cannot be extended.
+
+上記の ``MyModule`` では、標準の ``show`` 関数にメソッドを追加したいため、
+``import Base.show`` を書く必要がありました。 ``using`` を使用することでのみ名前がわかる関数は、
+拡張することができません。
+
+.. 
+ The keyword ``importall`` explicitly imports all names exported by the
+ specified module, as if ``import`` were individually used on all of them.
+
+``importall`` キーワードは、個々に対して ``importall`` が使われたかのように、
+指定されたモジュールによってエクスポートされた全ての名前を明示的にインポートします。
+
+.. 
+ Once a variable is made visible via ``using`` or ``import``, a module may
+ not create its own variable with the same name.
+ Imported variables are read-only; assigning to a global variable always
+ affects a variable owned by the current module, or else raises an error.
+
+変数を ``using`` または ``import`` で表示すると、モジュールは同じ名前の変数を作成しないことがあります。
+インポートされた変数は読み取り専用です。グローバル変数の割り当ては、常に現在のモジュールが所有する変数に影響しますし、
+そうでない場合は、エラーが発生します。
 
 
+.. 
 Summary of module usage
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-To load a module, two main keywords can be used: ``using`` and ``import``. To understand their differences, consider the following example::
+モジュールの使用のサマリ
+^^^^^^^^^^^^^^^^^^^^^^^
+
+.. 
+ To load a module, two main keywords can be used: ``using`` and ``import``. To understand their differences, consider the following example::
+
+モジュールをロードするには、 ``using`` と ``import`` の2つの主要なキーワードを使用できます。それらの違いを理解するには、
+次の例を考えてみてください。::
 
     module MyModule
 
@@ -91,33 +151,65 @@ To load a module, two main keywords can be used: ``using`` and ``import``. To un
 
     end
 
-In this module we export the ``x`` and ``y`` functions (with the keyword ``export``), and also have the non-exported function ``p``. There are several different ways to load the Module and its inner functions into the current workspace:
+.. 
+ In this module we export the ``x`` and ``y`` functions (with the keyword ``export``), and also have the non-exported function ``p``. There are several different ways to load the Module and its inner functions into the current workspace:
 
-+------------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------------------------------------------+
-|Import Command                      | What is brought into scope                                                                    | Available for method extension                                         |
-+====================================+===============================================================================================+========================================================================+
-| ``using MyModule``                 | All ``export``\ ed names (``x`` and ``y``), ``MyModule.x``, ``MyModule.y`` and ``MyModule.p`` | ``MyModule.x``, ``MyModule.y`` and ``MyModule.p``                      |
-+------------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------------------------------------------+
-| ``using MyModule.x, MyModule.p``   | ``x`` and ``p``                                                                               |                                                                        |
-+------------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------------------------------------------+
-| ``using MyModule: x, p``           | ``x`` and ``p``                                                                               |                                                                        |
-+------------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------------------------------------------+
-| ``import MyModule``                | ``MyModule.x``, ``MyModule.y`` and ``MyModule.p``                                             | ``MyModule.x``, ``MyModule.y`` and ``MyModule.p``                      |
-+------------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------------------------------------------+
-| ``import MyModule.x, MyModule.p``  | ``x`` and ``p``                                                                               | ``x`` and ``p``                                                        |
-+------------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------------------------------------------+
-| ``import MyModule: x, p``          | ``x`` and ``p``                                                                               | ``x`` and ``p``                                                        |
-+------------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------------------------------------------+
-| ``importall MyModule``             |  All ``export``\ ed names (``x`` and ``y``)                                                   | ``x`` and ``y``                                                        |
-+------------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------------------------------------------+
+このモジュールは、 ``x`` および ``y`` 関数（ ``export`` キーワードを使用）をエクスポートし、
+エクスポートされていない関数 ``p`` も持ちます。モジュールとその内部関数を現在のワークスペースにロードするには、
+いくつかの方法があります。:
+
+..
+ +------------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------------------------------------------+
+ |Import Command                      | What is brought into scope                                                                    | Available for method extension                                         |
+ +====================================+===============================================================================================+========================================================================+
+ | ``using MyModule``                 | All ``export``\ ed names (``x`` and ``y``), ``MyModule.x``, ``MyModule.y`` and ``MyModule.p`` | ``MyModule.x``, ``MyModule.y`` and ``MyModule.p``                      |
+ +------------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------------------------------------------+
+ | ``using MyModule.x, MyModule.p``   | ``x`` and ``p``                                                                               |                                                                        |
+ +------------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------------------------------------------+
+ | ``using MyModule: x, p``           | ``x`` and ``p``                                                                               |                                                                        |
+ +------------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------------------------------------------+
+ | ``import MyModule``                | ``MyModule.x``, ``MyModule.y`` and ``MyModule.p``                                             | ``MyModule.x``, ``MyModule.y`` and ``MyModule.p``                      |
+ +------------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------------------------------------------+
+ | ``import MyModule.x, MyModule.p``  | ``x`` and ``p``                                                                               | ``x`` and ``p``                                                        |
+ +------------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------------------------------------------+
+ | ``import MyModule: x, p``          | ``x`` and ``p``                                                                               | ``x`` and ``p``                                                        |
+ +------------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------------------------------------------+
+ | ``importall MyModule``             |  All ``export``\ ed names (``x`` and ``y``)                                                   | ``x`` and ``y``                                                        |
+ +------------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------------------------------------------+
 
 
-Modules and files
++------------------------------------+---------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------+
+|インポートコマンド                     | スコープにインポートされるもの                                                                               | 可能なメソッド拡張                                                        |
++====================================+=========================================================================================================+========================================================================+
+| ``using MyModule``                 | 全ての ``export``\ された名前 （ ``x`` および ``y`` ）, ``MyModule.x``, ``MyModule.y`` および ``MyModule.p`` | ``MyModule.x``, ``MyModule.y`` および ``MyModule.p``                    |
++------------------------------------+---------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------+
+| ``using MyModule.x, MyModule.p``   | ``x`` および ``p``                                                                                       |                                                                        |
++------------------------------------+---------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------+
+| ``using MyModule: x, p``           | ``x`` および ``p``                                                                                       |                                                                        |
++------------------------------------+---------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------+
+| ``import MyModule``                | ``MyModule.x``, ``MyModule.y`` および ``MyModule.p``                                                     | ``MyModule.x``, ``MyModule.y`` および ``MyModule.p``                    |
++------------------------------------+---------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------+
+| ``import MyModule.x, MyModule.p``  | ``x`` および ``p``                                                                                       | ``x`` および ``p``                                                      |
++------------------------------------+---------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------+
+| ``import MyModule: x, p``          | ``x`` および ``p``                                                                                       | ``x`` および ``p``                                                      |
++------------------------------------+---------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------+
+| ``importall MyModule``             |  全ての ``export``\ された名前 （ ``x`` および ``y`` ）                                                     | ``x`` および ``y``                                                      |
++------------------------------------+---------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------+
+
+.. 
+ Modules and files
+ -----------------
+
+モジュールとファイル
 -----------------
 
-Files and file names are mostly unrelated to modules; modules are associated
-only with module expressions.
-One can have multiple files per module, and multiple modules per file::
+.. 
+ Files and file names are mostly unrelated to modules; modules are associated
+ only with module expressions.
+ One can have multiple files per module, and multiple modules per file::
+
+ファイルとファイル名はほとんどがモジュールとは無関係です。モジュールはモジュール式とのみ関連付けられます。
+1モジュールに対し複数のファイルを持つことができ、1ファイルに対し複数のモジュールを持つことができます。::
 
     module Foo
 
@@ -126,10 +218,15 @@ One can have multiple files per module, and multiple modules per file::
 
     end
 
-Including the same code in different modules provides mixin-like behavior.
-One could use this to run the same code with different base definitions,
-for example testing code by running it with "safe" versions of some
-operators::
+.. 
+ Including the same code in different modules provides mixin-like behavior.
+ One could use this to run the same code with different base definitions,
+ for example testing code by running it with "safe" versions of some
+ operators::
+
+異なるモジュールに同じコードを組み込むことで、mixinのような動作が実現します。これを使用することで、
+異なる基本定義を持つ同じコードを実行することができます。例えば、「安全な」演算子のバージョンでコードを
+実行してテストをすることができます。::
 
     module Normal
     include("mycode.jl")
@@ -141,22 +238,40 @@ operators::
     end
 
 
-Standard modules
+.. 
+ Standard modules
+ ----------------
+
+標準モジュール
 ----------------
 
-There are three important standard modules: Main, Core, and Base.
+.. 
+ There are three important standard modules: Main, Core, and Base.
 
-Main is the top-level module, and Julia starts with Main set as the
-current module.  Variables defined at the prompt go in Main, and
-``whos()`` lists variables in Main.
+モジュールには、Main、Core、Baseの3つの主要モジュールがあります。
 
-Core contains all identifiers considered "built in" to the language, i.e.
-part of the core language and not libraries. Every module implicitly
-specifies ``using Core``, since you can't do anything without those
-definitions.
+.. 
+ Main is the top-level module, and Julia starts with Main set as the
+ current module.  Variables defined at the prompt go in Main, and
+ ``whos()`` lists variables in Main.
 
-Base is the standard library (the contents of base/). All modules implicitly
-contain ``using Base``, since this is needed in the vast majority of cases.
+Mainは最上位のモジュールであり、JuliaはカレントのモジュールとしてMainを設定しています。
+プロンプトで定義された変数はMainに格納され、 ``whos()`` はMainの変数をリスト化します。
+
+.. 
+ Core contains all identifiers considered "built in" to the language, i.e.
+ part of the core language and not libraries. Every module implicitly
+ specifies ``using Core``, since you can't do anything without those
+ definitions.
+
+Coreには、使用している言語に「ビルトイン」とみなされる識別子、例えばライブラリではなくコア言語の一部が格納されます。
+これらの定義なしには処理できないため、全てのモジュールは暗黙的に ``using Core`` を定義します。
+
+.. 
+ Base is the standard library (the contents of base/). All modules implicitly
+ contain ``using Base``, since this is needed in the vast majority of cases.
+
+Baseは標準ライブラリ（base/の内容）です。多くの場合に必要となるため、全てのモジュールは、暗黙的に ``using Base`` を持ちます。
 
 
 Default top-level definitions and bare modules
