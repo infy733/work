@@ -177,3 +177,7 @@ Juliaは、パッケージ開発者やユーザーがJulia 0.4以降のビルト
     result, as printed in a Julia REPL, appears afterwards::
 
 5. ``# Examples`` セクションにコードの例を含めてください。
+
+   可能であれば、コードの例はdoctestとして記述してください。doctestは、 `````jldoctest`` で始まり、
+   インプットとJulia REPLを模した期待されたアウトプットを持つ任意の数の ``julia>`` プロンプトを含んだ、
+   分離コードブロック（ `コードブロック`_ を参照）です。
