@@ -184,8 +184,8 @@ Juliaは、パッケージ開発者やユーザーがJulia 0.4以降のビルト
    
    例えば、次のdocstringでは、変数 ``a`` が定義され、Julia REPLに出力されているように、
    期待される結果がその後に表示されます。::
-  
-       """
+
+       """
        Some nice documentation here.
 
        # Examples
