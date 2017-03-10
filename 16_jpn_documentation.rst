@@ -290,12 +290,20 @@ doctestの空白が重要であることに注意してください。例えば�
 
 8. 周囲のコードで使用されている行の長さの制限を守ってください。
 
-Accessing Documentation
+.. 
+  Accessing Documentation
+  -----------------------
+
+ドキュメントへのアクセス
 -----------------------
 
-Documentation can be accessed at the REPL or in IJulia by typing ``?``
-followed by the name of a function or macro, and pressing ``Enter``. For
-example,
+.. 
+  Documentation can be accessed at the REPL or in IJulia by typing ``?``
+  followed by the name of a function or macro, and pressing ``Enter``. For
+  example,
+
+ドキュメントは、REPLまたはIJuliaで、関数名やマクロ名の後に ``?`` を入力し、
+``Enter`` キーを押すことでアクセスできます。例えば、
 
 .. doctest::
 
@@ -303,21 +311,36 @@ example,
     ?@time
     ?r""
 
-will bring up docs for the relevant function, macro or string macro
-respectively. In `Juno <http://junolab.org>`_ using ``Ctrl-J, Ctrl-D`` will
-bring up documentation for the object under the cursor.
+.. 
+  will bring up docs for the relevant function, macro or string macro
+  respectively. In `Juno <http://junolab.org>`_ using ``Ctrl-J, Ctrl-D`` will
+  bring up documentation for the object under the cursor.
 
-Functions & Methods
+それぞれ関連する関数、マクロ、または文字列マクロのドキュメントを表示します。 `Juno <http://junolab.org>`_ では
+``Ctrl-J, Ctrl-D`` を使用することで、カーソルの下にオブジェクトのドキュメントが表示します。
+
+.. 
+  Functions & Methods
+  -------------------
+
+関数＆メソッド
 -------------------
 
-Functions in Julia may have multiple implementations, known as methods.
-While it's good practice for generic functions to have a single purpose,
-Julia allows methods to be documented individually if necessary.
-In general, only the most generic method should be documented, or even the
-function itself (i.e. the object created without any methods by
-``function bar end``). Specific methods should only be documented if their
-behaviour differs from the more generic ones. In any case, they should not
-repeat the information provided elsewhere. For example:
+.. 
+  Functions in Julia may have multiple implementations, known as methods.
+  While it's good practice for generic functions to have a single purpose,
+  Julia allows methods to be documented individually if necessary.
+  In general, only the most generic method should be documented, or even the
+  function itself (i.e. the object created without any methods by
+  ``function bar end``). Specific methods should only be documented if their
+  behaviour differs from the more generic ones. In any case, they should not
+  repeat the information provided elsewhere. For example:
+
+Juliaの関数には、メソッドと呼ばれる複数の実装があります。一般的な関数が一つのみの目的を持つことはよい習慣ですが、
+Juliaでは必要に応じてメソッドを個別のドキュメントにすることができます。通常、最も一般的なメソッドまたは関数
+（例えば ``function bar end`` メソッド以外で生成されたオブジェクト）がドキュメント化されるべきです。
+固有のメソッドは、処理がより一般的なものと異なる場合にのみドキュメント化されるべきです。
+いずれにしても、他の場所で提供されている情報は、繰り返すべきではありません。例えば、:
 
 .. doctest::
 
@@ -340,34 +363,58 @@ repeat the information provided elsewhere. For example:
 
     When applied to strings, concatenates them.
 
-When retrieving documentation for a generic function, the metadata for
-each method is concatenated with the ``catdoc`` function, which can of
-course be overridden for custom types.
+.. 
+  When retrieving documentation for a generic function, the metadata for
+  each method is concatenated with the ``catdoc`` function, which can of
+  course be overridden for custom types.
 
-Advanced Usage
+一般的な関数のドキュメントを取得する際には、個々のメソッドのメタデータは、
+カスタムの型に対して上書きされることができる ``catdoc`` 関数と連結されます。
+
+.. 
+  Advanced Usage
+  --------------
+
+高度な使用法
 --------------
 
-The ``@doc`` macro associates its first argument with its second in a
-per-module dictionary called ``META``. By default, documentation is
-expected to be written in Markdown, and the ``doc""`` string macro simply
-creates an object representing the Markdown content. In the future it is
-likely to do more advanced things such as allowing for relative image or
-link paths.
+.. 
+  The ``@doc`` macro associates its first argument with its second in a
+  per-module dictionary called ``META``. By default, documentation is
+  expected to be written in Markdown, and the ``doc""`` string macro simply
+  creates an object representing the Markdown content. In the future it is
+  likely to do more advanced things such as allowing for relative image or
+  link paths.
 
-When used for retrieving documentation, the ``@doc`` macro (or equally,
-the ``doc`` function) will search all ``META`` dictionaries for metadata
-relevant to the given object and return it. The returned object (some
-Markdown content, for example) will by default display itself
-intelligently. This design also makes it easy to use the doc system in a
-programmatic way; for example, to re-use documentation between different
-versions of a function:
+``@doc`` マクロは、 ``META`` というモジュールごとの辞書の中で、最初の引数を2番目の引数に関連付けます。
+デフォルトでは、ドキュメントは Markdownで書かれていることが期待され、 ``doc""`` 文字列マクロは
+マークダウンの内容を表すオブジェクトを作成します。将来的には、相対的な画像やリンクのパスを許容するなど、
+より高度な処理を行う可能性があります。
+
+.. 
+  When used for retrieving documentation, the ``@doc`` macro (or equally,
+  the ``doc`` function) will search all ``META`` dictionaries for metadata
+  relevant to the given object and return it. The returned object (some
+  Markdown content, for example) will by default display itself
+  intelligently. This design also makes it easy to use the doc system in a
+  programmatic way; for example, to re-use documentation between different
+  versions of a function:
+
+``@doc`` マクロ（あるいは同様の ``doc`` 関数）は、ドキュメントの検索に使用すると、
+指定されたオブジェクトに関連するメタデータを全ての ``META`` ディクショナリから検索し、
+結果を返します。返されたオブジェクト（例えば、マークダウンの内容など）は、
+デフォルトでそれを表示します。また、この設計により、プログラミングの観点でドキュメントシステムが
+使いやすくなります。例えば、関数の異なるバージョン間でドキュメントを再利用する場合、:
 
 .. doctest::
 
     @doc "..." foo!
     @doc (@doc foo!) foo
 
-Or for use with Julia's metaprogramming functionality:
+.. 
+  Or for use with Julia's metaprogramming functionality:
+
+またはJuliaのメタプログラミング機能と併用する場合、:
 
 .. doctest::
 
@@ -379,9 +426,13 @@ Or for use with Julia's metaprogramming functionality:
     @doc "`add(a,b)` adds `a` and `b` together" add
     @doc "`subtract(a,b)` subtracts `b` from `a`" subtract
 
-Documentation written in non-toplevel blocks, such as ``if``, ``for``, and ``let``, are not
-automatically added to the documentation system. ``@doc`` must be used in these cases. For
-example:
+.. 
+  Documentation written in non-toplevel blocks, such as ``if``, ``for``, and ``let``, are not
+  automatically added to the documentation system. ``@doc`` must be used in these cases. For
+  example:
+
+``if`` 、 ``for`` 、 ``let`` などの最上位ではないブロックで書かれたドキュメントは、
+自動的にはドキュメントシステムには追加されません。これらのケースでは ``@doc`` を使用しなければなりません。例えば、:
 
 .. code-block:: julia
 
@@ -390,8 +441,11 @@ example:
         f(x) = x
     end
 
-will not add any documentation to ``f`` even when the condition is ``true`` and must instead
-be written as:
+.. 
+  will not add any documentation to ``f`` even when the condition is ``true`` and must instead
+  be written as:
+
+これは条件が ``true`` であっても ``f`` にドキュメントを追加することはなく、代わりに次のように記述する必要があります。:
 
 .. code-block:: julia
 
