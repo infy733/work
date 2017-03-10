@@ -707,15 +707,27 @@ Juliaにおけるこの種の関数定義のディスパッチによる動きは
 キーワード引数は、通常の引数とは全く異なる動作をします。特に、メソッドディスパッチ時には動作しません。
 メソッドは通常の引数だけに基づいてディスパッチされ、一致するメソッドが識別された後にキーワード引数が処理されます。
 
-Function-like objects
+.. 
+ Function-like objects
+ ---------------------
+
+関数のようなオブジェクト
 ---------------------
 
-Methods are associated with types, so it is possible to make any arbitrary
-Julia object "callable" by adding methods to its type.
-(Such "callable" objects are sometimes called "functors.")
+.. 
+ Methods are associated with types, so it is possible to make any arbitrary
+ Julia object "callable" by adding methods to its type.
+ (Such "callable" objects are sometimes called "functors.")
 
-For example, you can define a type that stores the coefficients of a
-polynomial, but behaves like a function evaluating the polynomial::
+メソッドは型に関連付けられているため、型にメソッドを追加することで、
+任意のJuliaオブジェクトを「呼び出し可能」にすることができます
+（このような「呼び出し可能な」オブジェクトは、「functor」と呼ばれることもあります。）。
+
+.. 
+ For example, you can define a type that stores the coefficients of a
+ polynomial, but behaves like a function evaluating the polynomial::
+
+例えば、多項式の係数を格納する型を定義できますが、その型は多項式を評価する関数のように動作します。::
 
     immutable Polynomial{R}
         coeffs::Vector{R}
@@ -729,9 +741,13 @@ polynomial, but behaves like a function evaluating the polynomial::
         return v
     end
 
-Notice that the function is specified by type instead of by name.
-In the function body, ``p`` will refer to the object that was called.
-A ``Polynomial`` can be used as follows::
+.. 
+ Notice that the function is specified by type instead of by name.
+ In the function body, ``p`` will refer to the object that was called.
+ A ``Polynomial`` can be used as follows::
+
+関数が名前ではなく型によって指定されていることに注意してください。関数本体では、
+``p`` は呼び出されたオブジェクトを参照します。多項式 ``Polynomial`` は次のように使用できます。::
 
     julia> p = Polynomial([1,10,100])
     Polynomial{Int64}([1,10,100])
@@ -739,19 +755,33 @@ A ``Polynomial`` can be used as follows::
     julia> p(3)
     931
 
-This mechanism is also the key to how type constructors and closures
-(inner functions that refer to their surrounding environment) work
-in Julia, discussed :ref:`later in the manual <constructors-and-conversion>`.
+.. 
+ This mechanism is also the key to how type constructors and closures
+ (inner functions that refer to their surrounding environment) work
+ in Julia, discussed :ref:`later in the manual <constructors-and-conversion>`.
 
-Empty generic functions
+このメカニズムは、型コンストラクタとクロージャ（周囲の環境を参照する内部関数）がJuliaで
+どのように機能するかの鍵でもあります。 :ref:`これは後にマニュアル <constructors-and-conversion>` の中で説明されます。
+
+.. 
+ Empty generic functions
+ -----------------------
+
+空の汎用関数
 -----------------------
 
-Occasionally it is useful to introduce a generic function without yet adding
-methods.
-This can be used to separate interface definitions from implementations.
-It might also be done for the purpose of documentation or code readability.
-The syntax for this is an empty ``function`` block without a tuple of
-arguments::
+.. 
+ Occasionally it is useful to introduce a generic function without yet adding
+ methods.
+ This can be used to separate interface definitions from implementations.
+ It might also be done for the purpose of documentation or code readability.
+ The syntax for this is an empty ``function`` block without a tuple of
+ arguments::
+
+まだメソッドを追加していない空の汎用関数を使用すると便利な場合があります。
+これは、インタフェース定義を実装から分離するために使用できます。
+これはドキュメンテーションやコードの読みやすさのために使うこともできます。
+このための構文は、引数のタプルがない空の関数ブロックです。:
 
     function emptyfunc
     end
