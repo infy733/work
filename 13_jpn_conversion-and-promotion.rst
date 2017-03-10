@@ -183,27 +183,45 @@ Juliaには、 :ref:`man-整数と浮動小数点数` 、 :ref:`man-算術処理
 ほとんどの文字列は数値として表現することはできません。したがって、Juliaでは、
 この処理を実行するために専用の :func:`parse` 関数を明示的に使用しなければなりません。
 
-Defining New Conversions
+.. 
+  Defining New Conversions
+  ~~~~~~~~~~~~~~~~~~~~~~~~
+
+新しい変換の定義
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-To define a new conversion, simply provide a new method for :func:`convert`.
-That's really all there is to it. For example, the method to convert a
-real number to a boolean is this::
+.. 
+  To define a new conversion, simply provide a new method for :func:`convert`.
+  That's really all there is to it. For example, the method to convert a
+  real number to a boolean is this::
+
+新しい変換を定義するには、単に :func:`convert` の新しいメソッドを提供するだけです。他に必要なものはありません。
+例えば、実数をブール値に変換する方法は次の通りです。::
 
     convert(::Type{Bool}, x::Real) = x==0 ? false : x==1 ? true : throw(InexactError())
 
-The type of the first argument of this method is a :ref:`singleton
-type <man-singleton-types>`, ``Type{Bool}``, the only instance of
-which is ``Bool``. Thus, this method is only invoked when the first
-argument is the type value ``Bool``. Notice the syntax used for the first
-argument: the argument name is omitted prior to the ``::`` symbol, and only
-the type is given.  This is the syntax in Julia for a function argument whose type is
-specified but whose value is never used in the function body.  In this example,
-since the type is a singleton, there would never be any reason to use its value
-within the body.
-When invoked, the method determines
-whether a numeric value is true or false as a boolean, by comparing it
-to one and zero:
+.. 
+  The type of the first argument of this method is a :ref:`singleton
+  type <man-singleton-types>`, ``Type{Bool}``, the only instance of
+  which is ``Bool``. Thus, this method is only invoked when the first
+  argument is the type value ``Bool``. Notice the syntax used for the first
+  argument: the argument name is omitted prior to the ``::`` symbol, and only
+  the type is given.  This is the syntax in Julia for a function argument whose type is
+  specified but whose value is never used in the function body.  In this example,
+  since the type is a singleton, there would never be any reason to use its value
+  within the body.
+  When invoked, the method determines
+  whether a numeric value is true or false as a boolean, by comparing it
+  to one and zero:
+
+このメソッドの最初の引数の型は、 :ref:`シングルトン型 <man-シングルトン型>` の ``Type{Bool}`` であり、
+``Bool`` の唯一のインスタンスです。
+したがって、このメソッドは、最初の引数が型値 ``Bool`` の場合にのみ呼び出されます。
+最初の引数に使用される構文に注目してください。引数名は ``::`` シンボルの前に省略され、
+型だけが与えられています。これは、型が指定されているものの、
+その値が関数本体で使用されていない関数引数のJulia構文です。この例では、型がシングルトン型であるため、
+その値を本体内で使用する必要はありません。呼び出されると、このメソッドは数値を1と0と比較することによって、
+真偽値をブール値として判断します。:
 
 .. doctest::
 
@@ -221,10 +239,14 @@ to one and zero:
     julia> convert(Bool, 0im)
     false
 
-The method signatures for conversion methods are often quite a bit more
-involved than this example, especially for parametric types. The example
-above is meant to be pedagogical, and is not the actual Julia behaviour.
-This is the actual implementation in Julia::
+.. 
+  The method signatures for conversion methods are often quite a bit more
+  involved than this example, especially for parametric types. The example
+  above is meant to be pedagogical, and is not the actual Julia behaviour.
+  This is the actual implementation in Julia::
+
+変換メソッドのメソッドシグネチャ、特にパラメータ型のシグネチャは、この例よりもかなり複雑です。
+上の例は説明用のものであり、実際のJuliaの動作ではありません。以下がJuliaの実際の実装です。::
 
     convert{T<:Real}(::Type{T}, z::Complex) = (imag(z)==0 ? convert(T,real(z)) :
                                                throw(InexactError()))
@@ -234,14 +256,21 @@ This is the actual implementation in Julia::
      in convert(::Type{Bool}, ::Complex{Int64}) at ./complex.jl:18
      ...
 
+.. 
+  Case Study: Rational Conversions
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Case Study: Rational Conversions
+ケーススタディ：Rationalの変換
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To continue our case study of Julia's ``Rational`` type, here are the
-conversions declared in
-`rational.jl <https://github.com/JuliaLang/julia/blob/master/base/rational.jl>`_,
-right after the declaration of the type and its constructors::
+.. 
+  To continue our case study of Julia's ``Rational`` type, here are the
+  conversions declared in
+  `rational.jl <https://github.com/JuliaLang/julia/blob/master/base/rational.jl>`_,
+  right after the declaration of the type and its constructors::
+
+Juliaの ``Rational`` 型のケーススタディを続行するため、 `rational.jl <https://github.com/JuliaLang/julia/blob/master/base/rational.jl>`_ 
+で宣言された変換が、型とそのコンストラクタの宣言の直後にある例を見てみましょう。::
 
     convert{T<:Integer}(::Type{Rational{T}}, x::Rational) = Rational(convert(T,x.num),convert(T,x.den))
     convert{T<:Integer}(::Type{Rational{T}}, x::Integer) = Rational(convert(T,x), convert(T,1))
@@ -266,21 +295,34 @@ right after the declaration of the type and its constructors::
     convert{T<:AbstractFloat}(::Type{T}, x::Rational) = convert(T,x.num)/convert(T,x.den)
     convert{T<:Integer}(::Type{T}, x::Rational) = div(convert(T,x.num),convert(T,x.den))
 
-The initial four convert methods provide conversions to rational types.
-The first method converts one type of rational to another type of
-rational by converting the numerator and denominator to the appropriate
-integer type. The second method does the same conversion for integers by
-taking the denominator to be 1. The third method implements a standard
-algorithm for approximating a floating-point number by a ratio of
-integers to within a given tolerance, and the fourth method applies it,
-using machine epsilon at the given value as the threshold. In general,
-one should have ``a//b == convert(Rational{Int64}, a/b)``.
+.. 
+  The initial four convert methods provide conversions to rational types.
+  The first method converts one type of rational to another type of
+  rational by converting the numerator and denominator to the appropriate
+  integer type. The second method does the same conversion for integers by
+  taking the denominator to be 1. The third method implements a standard
+  algorithm for approximating a floating-point number by a ratio of
+  integers to within a given tolerance, and the fourth method applies it,
+  using machine epsilon at the given value as the threshold. In general,
+  one should have ``a//b == convert(Rational{Int64}, a/b)``.
 
-The last two convert methods provide conversions from rational types to
-floating-point and integer types. To convert to floating point, one
-simply converts both numerator and denominator to that floating point
-type and then divides. To convert to integer, one can use the ``div``
-operator for truncated integer division (rounded towards zero).
+初めの4つの変換メソッドは、合理的な型への変換を行います。最初のメソッドは、
+分子と分母を適切な整数型に変換することによって、rational型の1つを別のrational型に変換します。
+2つ目のメソッドは、分母を1とすることで同じように整数の変換をします。3つ目のメソッドは、
+与えられた許容値内の整数比で浮動小数点数を近似するための標準アルゴリズムを実装し、
+4つ目のメソッドは、与えられた値のマシンイプシロンを閾値として使用して、3つ目のメソッドを適用します。
+一般に、 ``a//b == convert(Rational{Int64}, a/b)`` の形で使うことができます。
+
+.. 
+  The last two convert methods provide conversions from rational types to
+  floating-point and integer types. To convert to floating point, one
+  simply converts both numerator and denominator to that floating point
+  type and then divides. To convert to integer, one can use the ``div``
+  operator for truncated integer division (rounded towards zero).
+
+最後の2つの変換メソッドは、rational型から浮動小数点型および整数型への変換を提供します。
+浮動小数点に変換するには、分子と分母の両方をその浮動小数点型に変換してから除算するだけです。
+整数に変換するには、切り捨てられた整数の除算（0に端数処理される）に ``div`` 演算子を使用できます。
 
 .. _man-promotion:
 
