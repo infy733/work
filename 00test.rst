@@ -126,3 +126,43 @@ Juliaは、パッケージ開発者やユーザーがJulia 0.4以降のビルト
    関数の意味を簡単に要約することができない場合、別々の構成可能なパーツに分割することができます
    （ただし、個別のケースごとに絶対的な要件とはみなされません）。
 
+.. 
+ 3. Do not repeat yourself.
+
+    Since the function name is given by the signature, there is no need to
+    start the documentation with "The function ``bar``...": go straight to the point.
+    Similarly, if the signature specifies the types of the arguments, mentioning them
+    in the description is redundant.
+
+3. 繰り返しをしないようにしてください。
+  
+   関数名はシグネチャによって与えられるため、 "The function ``bar``..." のようにドキュメントを開始する必要はありません。
+   必要なことだけを記述してください。同様に、シグネチャが引数の型を指定している場合、それらを概要に記述することは冗長的です。 
+
+.. 
+ 4. Only provide an argument list when really necessary.
+
+    For simple functions, it is often clearer to mention the role of the arguments directly
+    in the description of the function's purpose. An argument list would only repeat
+    information already provided elsewhere. However, providing an argument list can be a good
+    idea for complex functions with many arguments (in particular keyword arguments).
+    In that case, insert it after the general description of the function, under
+    an ``# Arguments`` header, with one ``*`` bullet for each argument. The list should
+    mention the types and default values (if any) of the arguments::
+
+4. 本当に必要なときにのみ引数リストを与えてください。
+    
+   単純な関数の場合、関数の目的の記述の中で、引数の役割について直接言及することはしばしば便利です。
+   引数リストは既に他の場所で提供されている情報を繰り返すだけです。しかし、引数リストを提供することは、
+   多くの引数（特にキーワード引数）を持つ複雑な関数に対しては有効です。その場合は、関数の一般的な説明の後に
+   ``# Arguments`` ヘッダの下に、各引数に1つの「*」付きで挿入します。リストには、引数の型とデフォルト値（存在する場合）が
+   記載されている必要があります。::
+   
+       """
+       ...
+       # Arguments
+       * `n::Integer`: the number of elements to compute.
+       * `dim::Integer=1`: the dimensions along which to perform the computation.
+       ...
+       """
+
