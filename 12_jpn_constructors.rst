@@ -682,14 +682,23 @@ Juliaでは、型オブジェクトはコンストラクタ関数としても機
 それらをより緩めて分かりやすい方法で簡単に動作させることも可能です。さらに、コンストラクタは型システム、
 メソッド、および多重ディスパッチの全ての機能を活用できるため、洗練された動作を定義することは非常に簡単です。
 
-Case Study: Rational
+.. 
+  Case Study: Rational
+  --------------------
+
+ケーススタディ：Rational
 --------------------
 
-Perhaps the best way to tie all these pieces together is to present a
-real world example of a parametric composite type and its constructor
-methods. To that end, here is beginning of
-`rational.jl <https://github.com/JuliaLang/julia/blob/master/base/rational.jl>`_,
-which implements Julia's :ref:`man-rational-numbers`::
+.. 
+  Perhaps the best way to tie all these pieces together is to present a
+  real world example of a parametric composite type and its constructor
+  methods. To that end, here is beginning of
+  `rational.jl <https://github.com/JuliaLang/julia/blob/master/base/rational.jl>`_,
+  which implements Julia's :ref:`man-rational-numbers`::
+
+おそらく、これらの全ての要素を結びつける最も良い方法は、パラメトリックコンポジット型とそのコンストラクタメソッドの
+例を提示することです。以下はJuliaの :ref:`man-有理数` を実装する
+`rational.jl <https://github.com/JuliaLang/julia/blob/master/base/rational.jl>`_ の例です。::
 
     immutable Rational{T<:Integer} <: Real
         num::T
@@ -721,49 +730,83 @@ which implements Julia's :ref:`man-rational-numbers`::
         complex(real(xy)//yy, imag(xy)//yy)
     end
 
-The first line — ``immutable Rational{T<:Int} <: Real`` — declares that
-:class:`Rational` takes one type parameter of an integer type, and is itself
-a real type. The field declarations ``num::T`` and ``den::T`` indicate
-that the data held in a ``Rational{T}`` object are a pair of integers of
-type ``T``, one representing the rational value's numerator and the
-other representing its denominator.
+.. 
+  The first line — ``immutable Rational{T<:Int} <: Real`` — declares that
+  :class:`Rational` takes one type parameter of an integer type, and is itself
+  a real type. The field declarations ``num::T`` and ``den::T`` indicate
+  that the data held in a ``Rational{T}`` object are a pair of integers of
+  type ``T``, one representing the rational value's numerator and the
+  other representing its denominator.
 
-Now things get interesting. :class:`Rational` has a single inner constructor
-method which checks that both of ``num`` and ``den`` aren't zero and
-ensures that every rational is constructed in "lowest terms" with a
-non-negative denominator. This is accomplished by dividing the given
-numerator and denominator values by their greatest common divisor,
-computed using the ``gcd`` function. Since ``gcd`` returns the greatest
-common divisor of its arguments with sign matching the first argument
-(``den`` here), after this division the new value of ``den`` is
-guaranteed to be non-negative. Because this is the only inner
-constructor for :class:`Rational`, we can be certain that :class:`Rational`
-objects are always constructed in this normalized form.
+最初の行の ``immutable Rational{T<:Int} <: Real`` は :class:`Rational` が1つの整数型の型パラメータを取ること、
+およびそれが実型であることを宣言しています。フィールド宣言の ``num::T`` および ``den::T`` は、
+``Rational{T}`` オブジェクトに格納されているデータは型 ``T`` の整数のペアであることを示し、
+前者は有理値の分子を表し、後者はその分母を表します。
 
-:class:`Rational` also provides several outer constructor methods for
-convenience. The first is the "standard" general constructor that infers
-the type parameter ``T`` from the type of the numerator and denominator
-when they have the same type. The second applies when the given
-numerator and denominator values have different types: it promotes them
-to a common type and then delegates construction to the outer
-constructor for arguments of matching type. The third outer constructor
-turns integer values into rationals by supplying a value of ``1`` as the
-denominator.
+.. 
+  Now things get interesting. :class:`Rational` has a single inner constructor
+  method which checks that both of ``num`` and ``den`` aren't zero and
+  ensures that every rational is constructed in "lowest terms" with a
+  non-negative denominator. This is accomplished by dividing the given
+  numerator and denominator values by their greatest common divisor,
+  computed using the ``gcd`` function. Since ``gcd`` returns the greatest
+  common divisor of its arguments with sign matching the first argument
+  (``den`` here), after this division the new value of ``den`` is
+  guaranteed to be non-negative. Because this is the only inner
+  constructor for :class:`Rational`, we can be certain that :class:`Rational`
+  objects are always constructed in this normalized form.
 
-Following the outer constructor definitions, we have a number of methods
-for the :obj:`//` operator, which provides a syntax for writing rationals.
-Before these definitions, :obj:`//` is a completely undefined operator with
-only syntax and no meaning. Afterwards, it behaves just as described in
-:ref:`man-rational-numbers`
-— its entire behavior is defined in these few lines. The first and most
-basic definition just makes ``a//b`` construct a :class:`Rational` by
-applying the :class:`Rational` constructor to ``a`` and ``b`` when they are
-integers. When one of the operands of :obj:`//` is already a rational
-number, we construct a new rational for the resulting ratio slightly
-differently; this behavior is actually identical to division of a
-rational with an integer. Finally, applying :obj:`//` to complex integral
-values creates an instance of ``Complex{Rational}`` — a complex number
-whose real and imaginary parts are rationals:
+これは興味深いものです。 :class:`Rational` は、 ``num`` および ``den`` が0以外であることをチェックし、
+また全ての有理数が非マイナスの分母を持つ「最小の項」で構成されていることを保証する、
+単一のインナーコンストラクタメソッドを持ちます。これは、これは、与えられた分子と分母の値を、
+``gcd`` 関数を使用して算出された最大公約数で除算することで実現されます。
+``gcd`` は最初の引数（ここでは ``den`` ）の記号に一致する、引数の最大公約数を返すため、
+この除算の後の ``den`` の新しい値は、マイナスではないことが担保されます。
+これは :class:`Rational` のインナーコンストラクタに対してのみであるため、
+:class:`Rational` オブジェクトは常に標準化された状態であると言えます。
+
+.. 
+  :class:`Rational` also provides several outer constructor methods for
+  convenience. The first is the "standard" general constructor that infers
+  the type parameter ``T`` from the type of the numerator and denominator
+  when they have the same type. The second applies when the given
+  numerator and denominator values have different types: it promotes them
+  to a common type and then delegates construction to the outer
+  constructor for arguments of matching type. The third outer constructor
+  turns integer values into rationals by supplying a value of ``1`` as the
+  denominator.
+
+:class:`Rational` は利便性のためにいくつかのアウターコンストラクタメソッドも提供します。
+最初のアウターコンストラクタメソッドは、分母と分子の型が同じ場合に、
+それらの型から型パラメータ ``T`` を推測する、スタンダードなコンストラクタです。
+2つ目は与えられた分母と分子の値が異なる型を持つ場合に使用し、
+これは分母と分子の値の型を共通する型に昇格させ、構文を一致する型の引数のアウターコンストラクタに渡します。
+3つ目は、 ``1`` を分母として与えることで、整数値を有理数に変換します。
+
+.. 
+  Following the outer constructor definitions, we have a number of methods
+  for the :obj:`//` operator, which provides a syntax for writing rationals.
+  Before these definitions, :obj:`//` is a completely undefined operator with
+  only syntax and no meaning. Afterwards, it behaves just as described in
+  :ref:`man-rational-numbers`
+  — its entire behavior is defined in these few lines. The first and most
+  basic definition just makes ``a//b`` construct a :class:`Rational` by
+  applying the :class:`Rational` constructor to ``a`` and ``b`` when they are
+  integers. When one of the operands of :obj:`//` is already a rational
+  number, we construct a new rational for the resulting ratio slightly
+  differently; this behavior is actually identical to division of a
+  rational with an integer. Finally, applying :obj:`//` to complex integral
+  values creates an instance of ``Complex{Rational}`` — a complex number
+  whose real and imaginary parts are rationals:
+
+以下のアウターコンストラクタ定義では、有理数を記述する構文を提供する :obj:`//` 演算子のいくつかのメソッドがあります。
+これらの定義より前では、 :obj:`//` は構文のみで意味を持たない未定義の演算子です。定義以降では、
+:obj:`//` 演算子は「有理数」に説明がある通りの動作をし、その動作の全てはこれら数行の中に定義されています。
+最も基本的な定義は、 ``a`` と ``b`` が整数の場合にそれらに :class:`Rational` コンストラクタを適用することで、
+ ``a//b`` が :class:`Rational` を構成するようにすることです。これらの :obj:`//` の被演算子の一方がすでに有理数の場合は、
+少し異なる処理結果の比率の新しい有理数を構成します。この処理は、整数で有理数を除算することと同一です。
+最後に、 :obj:`//` を複雑な積分の値(complex integral values)に適用すると、
+``Complex{Rational}`` を作成します。これは、実体と仮想のパーツが有理数である複素数です。:
 
 .. doctest::
 
@@ -776,12 +819,18 @@ whose real and imaginary parts are rationals:
     julia> ans <: Complex{Rational}
     false
 
-Thus, although the :obj:`//` operator usually returns an instance of
-:class:`Rational`, if either of its arguments are complex integers, it will
-return an instance of ``Complex{Rational}`` instead. The interested
-reader should consider perusing the rest of
-`rational.jl <https://github.com/JuliaLang/julia/blob/master/base/rational.jl>`_:
-it is short, self-contained, and implements an entire basic Julia type.
+.. 
+  Thus, although the :obj:`//` operator usually returns an instance of
+  :class:`Rational`, if either of its arguments are complex integers, it will
+  return an instance of ``Complex{Rational}`` instead. The interested
+  reader should consider perusing the rest of
+  `rational.jl <https://github.com/JuliaLang/julia/blob/master/base/rational.jl>`_:
+  it is short, self-contained, and implements an entire basic Julia type.
+
+したがって、通常 :obj:`//` 演算子は :class:`Rational` のインスタンスを返しますが、
+もし一方の引数がcomplex integerの場合、代わりに ``Complex{Rational}`` のインスタンスを返します。
+興味がある方は `rational.jl <https://github.com/JuliaLang/julia/blob/master/base/rational.jl>`_ の
+残りを読むことをお勧めします。これは短く、包括的で、Juliaの型の基礎的な実装です。
 
 .. _constructors-and-conversion:
 
