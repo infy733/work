@@ -383,12 +383,19 @@ Juliaの全ての値は抽象型の「Any」のインスタンスであるため
 ハイレベルのアルゴリズムを抽象的に表現することができ、それでいて実行時に各ケースを
 処理する効率的で特別なコードを生成することができます。
 
-Method Ambiguities
+.. 
+ Method Ambiguities
+ ------------------
+
+メソッドのあいまいさ
 ------------------
 
-It is possible to define a set of function methods such that there is no
-unique most specific method applicable to some combinations of
-arguments:
+.. 
+ It is possible to define a set of function methods such that there is no
+ unique most specific method applicable to some combinations of
+ arguments:
+
+引数の組み合わせに適用可能な一意のメソッドが存在しない関数メソッドのセットを定義することができてしまいます。:
 
 .. doctest::
 
@@ -408,11 +415,17 @@ arguments:
       g(x::Float64, y) at none:1
      ...
 
-Here the call ``g(2.0, 3.0)`` could be handled by either the
-``g(Float64, Any)`` or the ``g(Any, Float64)`` method, and neither is
-more specific than the other. In such cases, Julia raises a ``MethodError``
-rather than arbitrarily picking a method. You can avoid method ambiguities
-by specifying an appropriate method for the intersection case:
+.. 
+ Here the call ``g(2.0, 3.0)`` could be handled by either the
+ ``g(Float64, Any)`` or the ``g(Any, Float64)`` method, and neither is
+ more specific than the other. In such cases, Julia raises a ``MethodError``
+ rather than arbitrarily picking a method. You can avoid method ambiguities
+ by specifying an appropriate method for the intersection case:
+
+この場合、 ``g(2.0, 3.0)`` の呼び出しは ``g(Float64, Any)`` または ``g(Any, Float64)`` メソッドの
+いずれかで処理することができ、どちらがよりふさわしいということはありません。
+このような場合、Juliaはメソッドを任意に選択するのではなく、 ``MethodError`` を返します。
+インターセクションケースに適切なメソッドを指定することによって、メソッドのあいまいさを回避することができます。:
 
 .. doctest:: unambiguous
 
@@ -431,9 +444,13 @@ by specifying an appropriate method for the intersection case:
     julia> g(2.0, 3.0)
     10.0
 
-It is recommended that the disambiguating method be defined first,
-since otherwise the ambiguity exists, if transiently, until the more
-specific method is defined.
+.. 
+ It is recommended that the disambiguating method be defined first,
+ since otherwise the ambiguity exists, if transiently, until the more
+ specific method is defined.
+
+特定のメソッドが定義されるまであいまいさが存在するため、
+最初にあいまいさを回避するメソッドを定義することを推奨します。
 
 .. _man-parametric-methods:
 
