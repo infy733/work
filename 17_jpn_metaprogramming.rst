@@ -1618,14 +1618,23 @@ Juliaのマクロを使うことで省略することが可能です。::
 
 生成関数がどのように動くのかについて知ることができたので、生成関数を使って高度な機能を構築してみましょう。
 
-An advanced example
+.. 
+  An advanced example
+  ~~~~~~~~~~~~~~~~~~~
+
+高度な例
 ~~~~~~~~~~~~~~~~~~~
 
-Julia's base library has a :func:`sub2ind` function to calculate a
-linear index into an n-dimensional array, based on a set of n multilinear
-indices - in other words, to calculate the index ``i`` that can be used to
-index into an array ``A`` using ``A[i]``, instead of ``A[x,y,z,...]``. One
-possible implementation is the following::
+.. 
+  Julia's base library has a :func:`sub2ind` function to calculate a
+  linear index into an n-dimensional array, based on a set of n multilinear
+  indices - in other words, to calculate the index ``i`` that can be used to
+  index into an array ``A`` using ``A[i]``, instead of ``A[x,y,z,...]``. One
+  possible implementation is the following::
+
+Juliaの基本ライブラリは、n重線形インデックスのセットを基に、線形インデックスをn次元の配列に入れて計算する :func:`sub2ind` 関数を持ちます。
+言い換えれば、この関数は ``A[x,y,z,...]`` の代わりに、 ``A[i]`` を使って配列 ``A`` に入れて
+使用することができるインデックス ``i`` を計算します。実装の一例は以下の通りです。::
 
     function sub2ind_loop{N}(dims::NTuple{N}, I::Integer...)
         ind = I[N] - 1
@@ -1635,7 +1644,10 @@ possible implementation is the following::
         return ind + 1
     end
 
-The same thing can be done using recursion::
+.. 
+  The same thing can be done using recursion::
+
+再帰を使用して同じ処理をすることができます。::
 
     sub2ind_rec(dims::Tuple{}) = 1
     sub2ind_rec(dims::Tuple{}, i1::Integer, I::Integer...) =
@@ -1644,16 +1656,25 @@ The same thing can be done using recursion::
     sub2ind_rec(dims::Tuple{Integer, Vararg{Integer}}, i1::Integer, I::Integer...) =
         i1 + dims[1] * (sub2ind_rec(tail(dims), I...) - 1)
 
-Both these implementations, although different, do essentially the same
-thing: a runtime loop over the dimensions of the array, collecting the
-offset in each dimension into the final index.
+.. 
+  Both these implementations, although different, do essentially the same
+  thing: a runtime loop over the dimensions of the array, collecting the
+  offset in each dimension into the final index.
 
-However, all the information we need for the loop is embedded in the type
-information of the arguments. Thus, we can utilize generated functions to
-move the iteration to compile-time; in compiler parlance, we use generated
-functions to manually unroll the loop. The body becomes almost identical,
-but instead of calculating the linear index, we build up an *expression*
-that calculates the index:
+この2つの異なる実装は、配列の次元に対する実行時ループと、各次元のオフセットを最終のインデックスに集めるという同じ処理を行います。
+
+.. 
+  However, all the information we need for the loop is embedded in the type
+  information of the arguments. Thus, we can utilize generated functions to
+  move the iteration to compile-time; in compiler parlance, we use generated
+  functions to manually unroll the loop. The body becomes almost identical,
+  but instead of calculating the linear index, we build up an *expression*
+  that calculates the index:
+
+しかし、ループに必要な情報は、全て引数の型情報に埋め込まれています。したがって、
+繰り返し処理をコンパイル時に移動させるために生成関数を使うことができ、
+コンパイルの言葉で言うと、ループをマニュアルで展開するために生成関数を使うことができます。
+ボディ部はほぼ同じものになりますが、線形インデックスを計算する代わりに、インデックスを計算する式を構築します。:
 
 .. code-block:: julia
 
@@ -1665,10 +1686,16 @@ that calculates the index:
         return :($ex + 1)
     end
 
-**What code will this generate?**
+.. 
+  **What code will this generate?**
 
-An easy way to find out, is to extract the body into another (regular)
-function:
+**どのようなコードを生成するのか？**
+
+.. 
+  An easy way to find out, is to extract the body into another (regular)
+  function:
+
+確認する簡単な方法として、ボディ部を他の（通常）関数へ抽出することができます。:
 
 .. doctest::
 
@@ -1687,17 +1714,27 @@ function:
           end
    sub2ind_gen_impl (generic function with 1 method)
 
-We can now execute ``sub2ind_gen_impl`` and examine the expression it
-returns:
+.. 
+  We can now execute ``sub2ind_gen_impl`` and examine the expression it
+  returns:
+
+``sub2ind_gen_impl`` を実行して、これが返す式を確認することができます。:
 
 .. doctest::
 
    julia> sub2ind_gen_impl(Tuple{Int,Int}, Int, Int)
    :(((I[1] - 1) + dims[1] * (I[2] - 1)) + 1)
 
-So, the method body that will be used here doesn't include a loop at all
-- just indexing into the two tuples, multiplication and addition/subtraction.
-All the looping is performed compile-time, and we avoid looping during
-execution entirely. Thus, we only loop *once per type*, in this case once
-per ``N`` (except in edge cases where the function is generated more than
-once - see disclaimer above).
+.. 
+  So, the method body that will be used here doesn't include a loop at all
+  - just indexing into the two tuples, multiplication and addition/subtraction.
+  All the looping is performed compile-time, and we avoid looping during
+  execution entirely. Thus, we only loop *once per type*, in this case once
+  per ``N`` (except in edge cases where the function is generated more than
+  once - see disclaimer above).
+  
+つまり、ここで使用されるメソッドのボディ部はループを全く導入せず、単に2つのタプル
+（乗算および加算/減算）にインデックス化するだけです。全てのループはコンパイル時に実行され、
+実行時のループを回避します。したがって、型に対して1度だけループされ、
+このケースでは ``N`` （1つ以上の関数が生成される特殊なケースは除きます。上記の否認声明を参照してください。）に対して1度ループされます。
+ 
