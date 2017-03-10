@@ -109,14 +109,20 @@ Juliaでは、与えられた引数の数および対象の関数の引数の型
 メソッドの定義
 ----------------
 
-Until now, we have, in our examples, defined only functions with a
-single method having unconstrained argument types. Such functions behave
-just like they would in traditional dynamically typed languages.
-Nevertheless, we have used multiple dispatch and methods almost
-continually without being aware of it: all of Julia's standard functions
-and operators, like the aforementioned ``+`` function, have many methods
-defining their behavior over various possible combinations of argument
-type and count.
+.. 
+ Until now, we have, in our examples, defined only functions with a
+ single method having unconstrained argument types. Such functions behave
+ just like they would in traditional dynamically typed languages.
+ Nevertheless, we have used multiple dispatch and methods almost
+ continually without being aware of it: all of Julia's standard functions
+ and operators, like the aforementioned ``+`` function, have many methods
+ defining their behavior over various possible combinations of argument
+ type and count.
+
+これまでの例では、制約のない型を持つ単一のメソッドの関数のみ定義してきました。このような関数は、
+従来の動的に型指定された言語と同じように動作します。それにもかかわらず、我々はそれを意識することなく、
+多重ディスパッチおよびメソッドをほぼ継続的に使用してきました。前述の ``+`` 関数のようなJuliaの標準関数と演算子は全て、
+引数の型とカウントのさまざまな組み合わせに対して動作を定義する多くのメソッドを持っています。
 
 When defining a function, one can optionally constrain the types of
 parameters it is applicable to, using the ``::`` type-assertion
