@@ -761,7 +761,7 @@ Juliaにおけるこの種の関数定義のディスパッチによる動きは
  in Julia, discussed :ref:`later in the manual <constructors-and-conversion>`.
 
 このメカニズムは、型コンストラクタとクロージャ（周囲の環境を参照する内部関数）がJuliaで
-どのように機能するかの鍵でもあります。 :ref:` これは後にマニュアル <constructors-and-conversion>` の中で説明されます。
+どのように機能するかの鍵でもあります。 :ref:`これは後にマニュアル<constructors-and-conversion>` の中で説明されます。
 
 .. 
  Empty generic functions
