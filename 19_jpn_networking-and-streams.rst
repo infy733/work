@@ -35,7 +35,7 @@ Juliaは、端末、パイプ、TCPソケットなどのストリーミングI/O
  All Julia streams expose at least a :func:`read` and a :func:`write` method,
  taking the stream as their first argument, e.g.::
 
-全てのJuliaのストリームは少なくとも、ストリームを第一引数とする :func:`read` と :func:`write` メソッドにさらされています。
+全てのJuliaのストリームは少なくとも、ストリームを第一引数とする :func:`read` と :func:`write` メソッドにさらされています。::
 
     julia> write(STDOUT,"Hello World");  # suppress return value 11 with ;
     Hello World
@@ -347,7 +347,15 @@ UnixソケットAPIに精通している方には、メソッド名には見覚�
 作成したサーバに接続します。一方、accept関数は新しく作成されたソケットにサーバー側接続を返し、接続が成功したことを示すために 
 「Hello World」を出力します。
 
-A great strength of Julia is that since the API is exposed synchronously even though the I/O is actually happening asynchronously, we didn't have to worry callbacks or even making sure that the server gets to run. When we called :func:`connect` the current task waited for the connection to be established and only continued executing after that was done. In this pause, the server task resumed execution (because a connection request was now available), accepted the connection, printed the message and waited for the next client. Reading and writing works in the same way. To see this, consider the following simple echo server::
+.. 
+  A great strength of Julia is that since the API is exposed synchronously even though the I/O is actually happening asynchronously, we didn't have to worry callbacks or even making sure that the server gets to run. When we called :func:`connect` the current task waited for the connection to be established and only continued executing after that was done. In this pause, the server task resumed execution (because a connection request was now available), accepted the connection, printed the message and waited for the next client. Reading and writing works in the same way. To see this, consider the following simple echo server::
+  
+Juliaの大きな強みは、I/O は実際に非同期的に起こっていても、APIは同期的に公開されるため、
+コールバックを心配する必要がなく、サーバーが動作することを確認する必要もないという点です。
+:func:`connect` を呼び出すと、現在のタスクは接続が確立されるのを待ち、接続の確立後にのみ実行を継続します。
+この一時停止では、サーバタスクは（接続要求が利用可能になったため）実行を再開し、接続を受け入れ、
+メッセージを出力し、次のクライアントを待機します。読み書きも同じように動作します。
+これを確認するため、次の単純なエコーサーバを見てみましょう。::
 
     julia> @async begin
              server = listen(2001)
@@ -372,21 +380,36 @@ A great strength of Julia is that since the API is exposed synchronously even th
     Hello World from the Echo Server
 
 
-As with other streams, use :func:`close` to disconnect the socket::
+.. 
+  As with other streams, use :func:`close` to disconnect the socket::
+  
+他のストリームと同様に、 :func:`close` を使用してソケットを切断してください。::
 
-    julia> close(clientside)
+    julia> close(clientside)
 
-Resolving IP Addresses
+..
+  Resolving IP Addresses
+  ----------------------
+
+IPアドレスの解決
 ----------------------
 
-One of the :func:`connect` methods that does not follow the :func:`listen` methods is ``connect(host::String,port)``, which will attempt to connect to the host
-given by the ``host`` parameter on the port given by the port parameter. It
-allows you to do things like::
+.. 
+  One of the :func:`connect` methods that does not follow the :func:`listen` methods is ``connect(host::String,port)``, which will attempt to connect to the host
+  given by the ``host`` parameter on the port given by the port parameter. It
+  allows you to do things like::
+
+:func:`listen` メソッドとはことなる動きをする :func:`connect` メソッドの1つは ``connect(host::String,port)`` であり、
+これはポートパラメータに与えられたポート上の、ホストパラメータに与えられたホストに対して接続を行います。
+これにより、以下のようなことが可能になります。::
 
     julia> connect("google.com",80)
     TCPSocket(open, 0 bytes waiting)
 
-At the base of this functionality is :func:`getaddrinfo`, which will do the appropriate address resolution::
+.. 
+  At the base of this functionality is :func:`getaddrinfo`, which will do the appropriate address resolution::
+
+この機能の基盤は :func:`getaddrinfo` であり、これは適切なアドレス解決を行います。::
 
     julia> getaddrinfo("google.com")
     ip"74.125.226.225"
