@@ -1,66 +1,151 @@
 .. currentmodule:: Base
 
+.. 
+ ****************
+  Linear algebra
+ ****************
+
 ****************
- Linear algebra
+ 線形代数
 ****************
 
-Matrix factorizations
+.. 
+ Matrix factorizations
+ =====================
+
+行列の分解
 =====================
 
-`Matrix factorizations (a.k.a. matrix decompositions) <https://en.wikipedia.org/wiki/Matrix_decomposition>`_
-compute the factorization of a matrix into a product of matrices, and
-are one of the central concepts in linear algebra.
+.. 
+ `Matrix factorizations (a.k.a. matrix decompositions) <https://en.wikipedia.org/wiki/Matrix_decomposition>`_
+ compute the factorization of a matrix into a product of matrices, and
+ are one of the central concepts in linear algebra.
 
-The following table summarizes the types of matrix factorizations that have been
-implemented in Julia. Details of their associated methods can be found
-in the :ref:`stdlib-linalg` section of the standard library documentation.
+`行列の分解 <https://en.wikipedia.org/wiki/Matrix_decomposition>`_ は、
+行列を行列の積に分解する計算であり、線形代数の中心概念の1つです。
+
+.. 
+ The following table summarizes the types of matrix factorizations that have been
+ implemented in Julia. Details of their associated methods can be found
+ in the :ref:`stdlib-linalg` section of the standard library documentation.
+
+次の表は、Juliaに実装されている行列分解のタイプがまとめられています。関連するメソッドの詳細は、
+標準ライブラリドキュメントの :ref:`stdlib-linalg` セクションを参照してください。
+
+.. 
+ ======================== ======
+ :class:`Cholesky`        `Cholesky factorization <https://en.wikipedia.org/wiki/Cholesky_decomposition>`_
+ :class:`CholeskyPivoted` `Pivoted <https://en.wikipedia.org/wiki/Pivot_element>`_ Cholesky factorization
+ :class:`LU`              `LU factorization <https://en.wikipedia.org/wiki/LU_decomposition>`_
+ :class:`LUTridiagonal`   LU factorization for Tridiagonal matrices
+ :class:`UmfpackLU`       LU factorization for sparse matrices (computed by UMFPack)
+ :class:`QR`              `QR factorization <https://en.wikipedia.org/wiki/QR_decomposition>`_
+ :class:`QRCompactWY`     Compact WY form of the QR factorization
+ :class:`QRPivoted`       Pivoted `QR factorization <https://en.wikipedia.org/wiki/QR_decomposition>`_
+ :class:`Hessenberg`      `Hessenberg decomposition <http://mathworld.wolfram.com/HessenbergDecomposition.html>`_
+ :class:`Eigen`           `Spectral decomposition <https://en.wikipedia.org/wiki/Eigendecomposition_(matrix)>`_
+ :class:`SVD`             `Singular value decomposition <https://en.wikipedia.org/wiki/Singular_value_decomposition>`_
+ :class:`GeneralizedSVD`  `Generalized SVD <https://en.wikipedia.org/wiki/Generalized_singular_value_decomposition#Higher_order_version>`_
+ ======================== ======
 
 ======================== ======
-:class:`Cholesky`        `Cholesky factorization <https://en.wikipedia.org/wiki/Cholesky_decomposition>`_
-:class:`CholeskyPivoted` `Pivoted <https://en.wikipedia.org/wiki/Pivot_element>`_ Cholesky factorization
-:class:`LU`              `LU factorization <https://en.wikipedia.org/wiki/LU_decomposition>`_
-:class:`LUTridiagonal`   LU factorization for Tridiagonal matrices
-:class:`UmfpackLU`       LU factorization for sparse matrices (computed by UMFPack)
-:class:`QR`              `QR factorization <https://en.wikipedia.org/wiki/QR_decomposition>`_
-:class:`QRCompactWY`     Compact WY form of the QR factorization
-:class:`QRPivoted`       Pivoted `QR factorization <https://en.wikipedia.org/wiki/QR_decomposition>`_
-:class:`Hessenberg`      `Hessenberg decomposition <http://mathworld.wolfram.com/HessenbergDecomposition.html>`_
-:class:`Eigen`           `Spectral decomposition <https://en.wikipedia.org/wiki/Eigendecomposition_(matrix)>`_
-:class:`SVD`             `Singular value decomposition <https://en.wikipedia.org/wiki/Singular_value_decomposition>`_
-:class:`GeneralizedSVD`  `Generalized SVD <https://en.wikipedia.org/wiki/Generalized_singular_value_decomposition#Higher_order_version>`_
+:class:`Cholesky`        `コレスキー分解 <https://en.wikipedia.org/wiki/Cholesky_decomposition>`_
+:class:`CholeskyPivoted` コレスキー分解の `ピボット <https://en.wikipedia.org/wiki/Pivot_element>`_ 
+:class:`LU`              `LU分解 <https://en.wikipedia.org/wiki/LU_decomposition>`_
+:class:`LUTridiagonal`   三重対角行列のLU分解
+:class:`UmfpackLU`       スパース行列のLU分解（UMFPackで計算）
+:class:`QR`              `QR分解 <https://en.wikipedia.org/wiki/QR_decomposition>`_
+:class:`QRCompactWY`     CompacコンパクトなWY形式のQR分解t WY form of the QR factorization
+:class:`QRPivoted`       `QR分解 <https://en.wikipedia.org/wiki/QR_decomposition>`_ のピボット
+:class:`Hessenberg`      `ヘッセンベルク分解 <http://mathworld.wolfram.com/HessenbergDecomposition.html>`_
+:class:`Eigen`           `スペクトル分解 <https://en.wikipedia.org/wiki/Eigendecomposition_(matrix)>`_
+:class:`SVD`             `特異値分解 <https://en.wikipedia.org/wiki/Singular_value_decomposition>`_
+:class:`GeneralizedSVD`  `一般化された特異値分解 <https://en.wikipedia.org/wiki/Generalized_singular_value_decomposition#Higher_order_version>`_
 ======================== ======
 
-Special matrices
+.. 
+ Special matrices
+ ================
+
+特殊な行列
 ================
 
-`Matrices with special symmetries and structures <http://www2.imm.dtu.dk/pubdb/views/publication_details.php?id=3274>`_
-arise often in linear algebra and are frequently associated with
-various matrix factorizations.
-Julia features a rich collection of special matrix types, which allow for fast
-computation with specialized routines that are specially developed for
-particular matrix types.
+.. 
+ `Matrices with special symmetries and structures <http://www2.imm.dtu.dk/pubdb/views/publication_details.php?id=3274>`_
+ arise often in linear algebra and are frequently associated with
+ various matrix factorizations.
+ Julia features a rich collection of special matrix types, which allow for fast
+ computation with specialized routines that are specially developed for
+ particular matrix types.
 
-The following tables summarize the types of special matrices that have been
-implemented in Julia, as well as whether hooks to various optimized methods
-for them in LAPACK are available.
+`特別な対称性と構造を持つ行列 <http://www2.imm.dtu.dk/pubdb/views/publication_details.php?id=3274>`_ は
+線形代数で頻繁に発生し、しばしば様々な行列分解を伴う。Juliaには特別な行列の豊富なコレクションがあり、
+特定の行列用に特別に開発された特殊なルーチンで高速計算が可能です。
+
+.. 
+ The following tables summarize the types of special matrices that have been
+ implemented in Julia, as well as whether hooks to various optimized methods
+ for them in LAPACK are available.
+
+次の表は、Juliaで実装されている特殊な行列のタイプと、LAPACKのさまざまな最適化されたメソッドへの接続が利用可能かどうかをまとめたものです。
+
+.. 
+ ======================== ==================================================================================
+ :class:`Hermitian`       `Hermitian matrix <https://en.wikipedia.org/wiki/Hermitian_matrix>`_
+ :class:`UpperTriangular` Upper `triangular matrix <https://en.wikipedia.org/wiki/Triangular_matrix>`_
+ :class:`LowerTriangular` Lower `triangular matrix <https://en.wikipedia.org/wiki/Triangular_matrix>`_
+ :class:`Tridiagonal`     `Tridiagonal matrix <https://en.wikipedia.org/wiki/Tridiagonal_matrix>`_
+ :class:`SymTridiagonal`  Symmetric tridiagonal matrix
+ :class:`Bidiagonal`      Upper/lower `bidiagonal matrix <https://en.wikipedia.org/wiki/Bidiagonal_matrix>`_
+ :class:`Diagonal`        `Diagonal matrix <https://en.wikipedia.org/wiki/Diagonal_matrix>`_
+ :class:`UniformScaling`  `Uniform scaling operator <https://en.wikipedia.org/wiki/Uniform_scaling>`_
+ ======================== ==================================================================================
 
 ======================== ==================================================================================
-:class:`Hermitian`       `Hermitian matrix <https://en.wikipedia.org/wiki/Hermitian_matrix>`_
-:class:`UpperTriangular` Upper `triangular matrix <https://en.wikipedia.org/wiki/Triangular_matrix>`_
-:class:`LowerTriangular` Lower `triangular matrix <https://en.wikipedia.org/wiki/Triangular_matrix>`_
-:class:`Tridiagonal`     `Tridiagonal matrix <https://en.wikipedia.org/wiki/Tridiagonal_matrix>`_
-:class:`SymTridiagonal`  Symmetric tridiagonal matrix
-:class:`Bidiagonal`      Upper/lower `bidiagonal matrix <https://en.wikipedia.org/wiki/Bidiagonal_matrix>`_
-:class:`Diagonal`        `Diagonal matrix <https://en.wikipedia.org/wiki/Diagonal_matrix>`_
-:class:`UniformScaling`  `Uniform scaling operator <https://en.wikipedia.org/wiki/Uniform_scaling>`_
+:class:`Hermitian`       `エルミート行列 <https://en.wikipedia.org/wiki/Hermitian_matrix>`_
+:class:`UpperTriangular` `上三角行列 <https://en.wikipedia.org/wiki/Triangular_matrix>`_
+:class:`LowerTriangular` `下三角行列 <https://en.wikipedia.org/wiki/Triangular_matrix>`_
+:class:`Tridiagonal`     `三重対角行列 <https://en.wikipedia.org/wiki/Tridiagonal_matrix>`_
+:class:`SymTridiagonal`  対称三重対角行列
+:class:`Bidiagonal`      `上/下二重対角行列 <https://en.wikipedia.org/wiki/Bidiagonal_matrix>`_
+:class:`Diagonal`        `対角行列 <https://en.wikipedia.org/wiki/Diagonal_matrix>`_
+:class:`UniformScaling`  `均等スケーリング演算子 <https://en.wikipedia.org/wiki/Uniform_scaling>`_
 ======================== ==================================================================================
 
+.. 
 Elementary operations
 ---------------------
 
+初等オペレーション
+---------------------
+
+.. 
+ +-------------------------+-------+-------+-------+-------+--------------------------------+
+ | Matrix type             | ``+`` | ``-`` | ``*`` | ``\`` | Other functions with           |
+ |                         |       |       |       |       | optimized methods              |
+ +=========================+=======+=======+=======+=======+================================+
+ | :class:`Hermitian`      |       |       |       |   MV  | :func:`inv`,                   |
+ |                         |       |       |       |       | :func:`sqrtm`, :func:`expm`    |
+ +-------------------------+-------+-------+-------+-------+--------------------------------+
+ | :class:`UpperTriangular`|       |       |  MV   |   MV  | :func:`inv`, :func:`det`       |
+ +-------------------------+-------+-------+-------+-------+--------------------------------+
+ | :class:`LowerTriangular`|       |       |  MV   |   MV  | :func:`inv`, :func:`det`       |
+ +-------------------------+-------+-------+-------+-------+--------------------------------+
+ | :class:`SymTridiagonal` |   M   |   M   |  MS   |   MV  | :func:`eigmax`, :func:`eigmin` |
+ +-------------------------+-------+-------+-------+-------+--------------------------------+
+ | :class:`Tridiagonal`    |   M   |   M   |  MS   |   MV  |                                |
+ +-------------------------+-------+-------+-------+-------+--------------------------------+
+ | :class:`Bidiagonal`     |   M   |   M   |  MS   |   MV  |                                |
+ +-------------------------+-------+-------+-------+-------+--------------------------------+
+ | :class:`Diagonal`       |   M   |   M   |  MV   |   MV  | :func:`inv`, :func:`det`,      |
+ |                         |       |       |       |       | :func:`logdet`, :func:`/`      |
+ +-------------------------+-------+-------+-------+-------+--------------------------------+
+ | :class:`UniformScaling` |   M   |   M   |  MVS  |  MVS  | :func:`/`                      |
+ +-------------------------+-------+-------+-------+-------+--------------------------------+
+
 +-------------------------+-------+-------+-------+-------+--------------------------------+
-| Matrix type             | ``+`` | ``-`` | ``*`` | ``\`` | Other functions with           |
-|                         |       |       |       |       | optimized methods              |
+| 行列の種類                | ``+`` | ``-`` | ``*`` | ``\`` | 最適化されたメソッドを持つ         |
+|                         |       |       |       |       | 他の関数                        |
 +=========================+=======+=======+=======+=======+================================+
 | :class:`Hermitian`      |       |       |       |   MV  | :func:`inv`,                   |
 |                         |       |       |       |       | :func:`sqrtm`, :func:`expm`    |
