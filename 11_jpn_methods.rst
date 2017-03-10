@@ -569,9 +569,13 @@ Juliaにおけるこの種の関数定義のディスパッチによる動きは
     julia> mytypeof(1.0)
     Float64
 
-Just as you can put subtype constraints on type parameters in type
-declarations (see :ref:`man-parametric-types`), you
-can also constrain type parameters of methods::
+.. 
+ Just as you can put subtype constraints on type parameters in type
+ declarations (see :ref:`man-parametric-types`), you
+ can also constrain type parameters of methods::
+
+型宣言の型パラメータにサブタイプの制約を入れることができるように（ :ref:`man-パラメータ型` 参照）、
+メソッドの型パラメータを制約することができます。::
 
     same_type_numeric{T<:Number}(x::T, y::T) = true
     same_type_numeric(x::Number, y::Number) = false
@@ -594,8 +598,12 @@ can also constrain type parameters of methods::
     julia> same_type_numeric(Int32(1), Int64(2))
     false
 
-The ``same_type_numeric`` function behaves much like the ``same_type``
-function defined above, but is only defined for pairs of numbers.
+.. 
+ The ``same_type_numeric`` function behaves much like the ``same_type``
+ function defined above, but is only defined for pairs of numbers.
+
+``same_type_numeric`` 関数は上記の ``same_type`` 関数のように動作しますが、
+``same_type_numeric`` 関数は数値のペアに対してのみ定義されています。
 
 .. _man-vararg-fixedlen:
 
