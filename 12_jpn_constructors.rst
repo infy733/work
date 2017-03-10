@@ -2,16 +2,26 @@
 
 .. currentmodule:: Base
 
+.. 
+ **************
+  Constructors
+ **************
+
 **************
- Constructors
+ コンストラクタ
 **************
 
-Constructors [#]_ are functions that create new objects — specifically,
-instances of :ref:`man-composite-types`. In Julia,
-type objects also serve as constructor functions: they create new
-instances of themselves when applied to an argument tuple as a function.
-This much was already mentioned briefly when composite types were
-introduced. For example::
+.. 
+ Constructors [#]_ are functions that create new objects — specifically,
+ instances of :ref:`man-composite-types`. In Julia,
+ type objects also serve as constructor functions: they create new
+ instances of themselves when applied to an argument tuple as a function.
+ This much was already mentioned briefly when composite types were
+ introduced. For example::
+
+コンストラクタは [#]_ は、新しいオブジェクト、具体的には :ref:`man-コンポジット型` のインスタンスを作成する関数です。
+Juliaでは、型オブジェクトはコンストラクタ関数としても機能します。引数タプルを関数として適用した場合、
+型オブジェクトは新しいインスタンスを作成します。これは、コンポジット型の説明の際にすでに簡単に触れられています。例えば::
 
     type Foo
       bar
@@ -27,28 +37,44 @@ introduced. For example::
     julia> foo.baz
     2
 
-For many types, forming new objects by binding their field values
-together is all that is ever needed to create instances. There are,
-however, cases where more functionality is required when creating
-composite objects. Sometimes invariants must be enforced, either by
-checking arguments or by transforming them. `Recursive data
-structures <https://en.wikipedia.org/wiki/Recursion_%28computer_science%29#Recursive_data_structures_.28structural_recursion.29>`_,
-especially those that may be self-referential, often cannot be
-constructed cleanly without first being created in an incomplete state
-and then altered programmatically to be made whole, as a separate step
-from object creation. Sometimes, it's just convenient to be able to
-construct objects with fewer or different types of parameters than they
-have fields. Julia's system for object construction addresses all of
-these cases and more.
+.. 
+ For many types, forming new objects by binding their field values
+ together is all that is ever needed to create instances. There are,
+ however, cases where more functionality is required when creating
+ composite objects. Sometimes invariants must be enforced, either by
+ checking arguments or by transforming them. `Recursive data
+ structures <https://en.wikipedia.org/wiki/Recursion_%28computer_science%29#Recursive_data_structures_.28structural_recursion.29>`_,
+ especially those that may be self-referential, often cannot be
+ constructed cleanly without first being created in an incomplete state
+ and then altered programmatically to be made whole, as a separate step
+ from object creation. Sometimes, it's just convenient to be able to
+ construct objects with fewer or different types of parameters than they
+ have fields. Julia's system for object construction addresses all of
+ these cases and more.
 
-.. [#] Nomenclature: while the term “constructor” generally refers to
-  the entire function which constructs objects of a type, it is common to
-  abuse terminology slightly and refer to specific constructor methods as
-  “constructors”. In such situations, it is generally clear from context
-  that the term is used to mean “constructor method” rather than
-  “constructor function”, especially as it is often used in the sense of
-  singling out a particular method of the constructor from all of the
-  others.
+多くの型では、インスタンスを作成するには、フィールド値をバインドして新しいオブジェクトを作成する必要があります。
+しかし、コンポジットオブジェクトを作成する際により多くの機能が必要になる場合があります。
+場合によっては、引数をチェックしたり変換したりすることによって、不変性を強制する必要があります。
+`再帰的データ構造 <https://en.wikipedia.org/wiki/Recursion_%28computer_science%29#Recursive_data_structures_.28structural_recursion.29>`_ 、
+特に自己参照可能な構造は、不完全な状態として作成されてその後オブジェクト作成とは
+別のステップとしてプログラムで変更されずに、きれいに構築することはできないことがあります。
+場合によっては、フィールドに持つものよりも少ないまたは異なる種類のパラメータでオブジェクトを
+構築できることが便利なこともあります。Juliaのオブジェクト構築システムは、これらすべての事例に対応しています。
+
+.. 
+ .. [#] Nomenclature: while the term “constructor” generally refers to
+   the entire function which constructs objects of a type, it is common to
+   abuse terminology slightly and refer to specific constructor methods as
+   “constructors”. In such situations, it is generally clear from context
+   that the term is used to mean “constructor method” rather than
+   “constructor function”, especially as it is often used in the sense of
+   singling out a particular method of the constructor from all of the
+   others.
+
+.. [#] 「コンストラクタ」という用語は、一般的にはある型のオブジェクトを構成する関数全体を指しますが、
+特定のコンストラクタメソッドを「コンストラクタ」と呼ぶことがあります。このような場合には、一般的に、
+その用語が「コンストラクタ関数」ではなく「コンストラクタメソッド」を意味するのに使用されることは文脈から判断することができます。
+「コンストラクタ」という用語は、特にコンストラクタの全体から特定のコンストラクタメソッドを選ぶという意味でよく使われています。
 
 Outer Constructor Methods
 -------------------------
