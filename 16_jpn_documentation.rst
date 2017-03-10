@@ -454,13 +454,23 @@ Juliaでは必要に応じてメソッドを個別のドキュメントにする
         f(x) = x
     end
 
-Syntax Guide
+.. 
+  Syntax Guide
+  ------------
+
+構文ガイド
 ------------
 
-A comprehensive overview of all documentable Julia syntax.
+.. 
+  A comprehensive overview of all documentable Julia syntax.
 
-In the following examples ``"..."`` is used to illustrate an arbitrary docstring which may
-be one of the follow four variants and contain arbitrary text:
+全てのドキュメント化可能なJulia構文の包括的な概要です。
+
+.. 
+  In the following examples ``"..."`` is used to illustrate an arbitrary docstring which may
+  be one of the follow four variants and contain arbitrary text:
+
+以下の例では、 ``"..."`` は、4つのつづり違いのうちの1つであり任意のテキストを含む、任意のdocstringを示すために使用されています。:
 
 .. code-block:: julia
 
@@ -476,11 +486,19 @@ be one of the follow four variants and contain arbitrary text:
     ...
     """
 
-``@doc_str`` should only be used when the docstring contains ``$`` or ``\`` characters that
-should not be parsed by Julia such as LaTeX syntax or Julia source code examples containing
-interpolation.
+.. 
+  ``@doc_str`` should only be used when the docstring contains ``$`` or ``\`` characters that
+  should not be parsed by Julia such as LaTeX syntax or Julia source code examples containing
+  interpolation.
 
-Functions and Methods
+``@doc_str`` は、LaTeX構文や補間を含むJuliaソースコードの例など、Juliaによって解析されるべきではない ``$`` または
+``\`` 文字がdocstringに含まれている場合にのみ使用してください。
+
+.. 
+  Functions and Methods
+  ~~~~~~~~~~~~~~~~~~~~~
+
+関数とメソッド
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: julia
@@ -491,8 +509,11 @@ Functions and Methods
     "..."
     f
 
-Adds docstring ``"..."`` to ``Function`` ``f``. The first version is the preferred syntax,
-however both are equivalent.
+.. 
+  Adds docstring ``"..."`` to ``Function`` ``f``. The first version is the preferred syntax,
+  however both are equivalent.
+
+これはdocstring ``"..."`` を ``Function`` ``f`` に追加します。最初のバージョンが好ましい構文ですが、どちらも同等です。
 
 .. code-block:: julia
 
@@ -507,16 +528,26 @@ however both are equivalent.
     "..."
     f(x)
 
-Adds docstring ``"..."`` to ``Method`` ``f(::Any)``.
+.. 
+  Adds docstring ``"..."`` to ``Method`` ``f(::Any)``.
+
+これはdocsting ``"..."`` を ``Method`` ``f(::Any)`` に追加します。
 
 .. code-block:: julia
 
     "..."
     f(x, y = 1) = x + y
 
-Adds docstring ``"..."`` to two ``Method``\ s, namely ``f(::Any)`` and ``f(::Any, ::Any)``.
+.. 
+  Adds docstring ``"..."`` to two ``Method``\ s, namely ``f(::Any)`` and ``f(::Any, ::Any)``.
 
-Macros
+これはdocsting ``"..."`` を2つの``Method``\  ``f(::Any)`` と ``f(::Any, ::Any)`` に追加します。
+
+.. 
+  Macros
+  ~~~~~~
+
+マクロ
 ~~~~~~
 
 .. code-block:: julia
@@ -524,16 +555,26 @@ Macros
     "..."
     macro m(x) end
 
-Adds docstring ``"..."`` to the ``@m(::Any)`` macro definition.
+.. 
+  Adds docstring ``"..."`` to the ``@m(::Any)`` macro definition.
+
+これはdocsting ``"..."`` を ``@m(::Any)`` マクロ定義に追加します。
 
 .. code-block:: julia
 
     "..."
     :(@m)
 
-Adds docstring ``"..."`` to the macro named ``@m``.
+.. 
+  Adds docstring ``"..."`` to the macro named ``@m``.
 
-Types
+これはdocsting ``"..."`` を ``@m`` マクロに追加します。
+
+.. 
+  Types
+  ~~~~~
+
+型
 ~~~~~
 
 .. code-block:: julia
@@ -551,7 +592,10 @@ Types
         ...
     end
 
-Adds the docstring ``"..."`` to types ``T1``, ``T2``, and ``T3``.
+.. 
+  Adds the docstring ``"..."`` to types ``T1``, ``T2``, and ``T3``.
+
+これはdocsting ``"..."`` を型 ``T1`` 、 ``T2`` 、 ``T3`` に追加します。
 
 .. code-block:: julia
 
@@ -563,20 +607,34 @@ Adds the docstring ``"..."`` to types ``T1``, ``T2``, and ``T3``.
         y
     end
 
-Adds docstring ``"..."`` to type ``T``, ``"x"`` to field ``T.x`` and ``"y"`` to field
-``T.y``. Also applicable to ``immutable`` types.
+.. 
+  Adds docstring ``"..."`` to type ``T``, ``"x"`` to field ``T.x`` and ``"y"`` to field
+  ``T.y``. Also applicable to ``immutable`` types.
+
+これはdocsting ``"..."`` を型 ``T`` に、 ``"x"`` をフィールド ``T.x`` に、 ``"y"`` をフィールド ``T.y`` に追加します。
+これは ``immutable`` 型にも適用できます。
 
 .. code-block:: julia
 
     "..."
     typealias A T
 
-Adds docstring ``"..."`` to the ``Binding`` ``A``.
+.. 
+  Adds docstring ``"..."`` to the ``Binding`` ``A``.
 
-``Binding``\ s are used to store a reference to a particular ``Symbol`` in a ``Module``
-without storing the referenced value itself.
+これはdocsting ``"..."`` を ``Binding`` ``A`` に追加します。
 
-Modules
+.. 
+  ``Binding``\ s are used to store a reference to a particular ``Symbol`` in a ``Module``
+  without storing the referenced value itself.
+
+``Binding``\ は、参照された値自体を格納することなく、 ``Module`` 内の特定の ``Symbol`` への参照を格納するために使用されます。
+
+.. 
+  Modules
+  ~~~~~~~
+
+モジュール
 ~~~~~~~
 
 .. code-block:: julia
@@ -591,8 +649,12 @@ Modules
 
     end
 
-Adds docstring ``"..."`` to the ``Module`` ``M``. Adding the docstring above the ``Module``
-is the preferred syntax, however both are equivalent.
+.. 
+  Adds docstring ``"..."`` to the ``Module`` ``M``. Adding the docstring above the ``Module``
+  is the preferred syntax, however both are equivalent.
+
+これはdocsting ``"..."`` を ``Module`` ``M`` に追加します。 ``Module`` 上にdocstringを追加するのが好ましい構文ですが、
+どちらも同等です。
 
 .. code-block:: julia
 
@@ -610,11 +672,21 @@ is the preferred syntax, however both are equivalent.
 
     end
 
-Documenting a ``baremodule`` by placing a docstring above the expression automatically
-imports ``@doc`` into the module. These imports must be done manually when the
-module expression is not documented. Empty ``baremodule``\ s cannot be documented.
+.. 
+  Documenting a ``baremodule`` by placing a docstring above the expression automatically
+  imports ``@doc`` into the module. These imports must be done manually when the
+  module expression is not documented. Empty ``baremodule``\ s cannot be documented.
 
-Global Variables
+式の上にdocstringを記述して ``baremodule`` をドキュメント化すると、
+自動的に ``@doc`` がモジュールにインポートされます。これらのインポートは、
+モジュール式がドキュメント化されていない場合は、手動で行う必要があります。
+空の ``baremodule``\ はドキュメント化することができません。
+
+.. 
+  Global Variables
+  ~~~~~~~~~~~~~~~~
+
+グローバル変数
 ~~~~~~~~~~~~~~~~
 
 .. code-block:: julia
@@ -628,11 +700,14 @@ Global Variables
     "..."
     global c = 3
 
-Adds docstring ``"..."`` to the ``Binding``\ s ``a``, ``b``, and ``c``.
+.. 
+  Adds docstring ``"..."`` to the ``Binding``\ s ``a``, ``b``, and ``c``.
+
+これはdocsting ``"..."`` を ``Binding``\  ``a`` 、 ``b`` および ``c`` に追加します。
 
 .. note::
-
-    When a ``const`` definition is only used to define an alias of another definition, such
+.. 
+    When a ``const`` definition is only used to define an alias of another definition, such
     as is the case with the function ``div`` and its alias ``÷`` in ``Base``, do not
     document the alias and instead document the actual function.
 
@@ -642,13 +717,25 @@ Adds docstring ``"..."`` to the ``Binding``\ s ``a``, ``b``, and ``c``.
 
     For example you should write
 
+``const`` が別の定義のエイリアスを定義するために使用された場合
+（例えば関数 ``div`` とそのエイリアスである ``Base`` における ``÷`` ）、
+エイリアスはドキュメント化せずに、その実際の関数をドキュメント化してください。
+
+もし実際の定義ではなくエイリアスがドキュメント化された場合、docsystem（ ``?`` モード）は、
+実際の定義が検索された際にエイリアスに付随するdocstringを返しません。
+
+例えば、以下のように記述するべきであり、
+
     .. code-block:: julia
 
         "..."
         f(x) = x + 1
         const alias = f
 
-    rather than
+.. 
+    rather than
+
+以下は望ましくありません。
 
     .. code-block:: julia
 
@@ -661,10 +748,18 @@ Adds docstring ``"..."`` to the ``Binding``\ s ``a``, ``b``, and ``c``.
     "..."
     sym
 
-Adds docstring ``"..."`` to the value associated with ``sym``. Users should prefer
-documenting ``sym`` at it's definition.
+.. 
+  Adds docstring ``"..."`` to the value associated with ``sym``. Users should prefer
+  documenting ``sym`` at it's definition.
 
-Multiple Objects
+これはdocsting ``"..."`` を ``sym`` に関連する値に追加します。ユーザは、定義において、
+``sym`` をドキュメント化することが望ましいです。
+
+.. 
+  Multiple Objects
+  ~~~~~~~~~~~~~~~~
+
+複数のオブジェクト
 ~~~~~~~~~~~~~~~~
 
 .. code-block:: julia
@@ -672,8 +767,12 @@ Multiple Objects
     "..."
     a, b
 
-Adds docstring ``"..."`` to ``a`` and ``b`` each of which should be a documentable
-expression. This syntax is equivalent to
+.. 
+  Adds docstring ``"..."`` to ``a`` and ``b`` each of which should be a documentable
+  expression. This syntax is equivalent to
+
+これはdocsting ``"..."`` をそれぞれがドキュメント化可能な表現である必要がある ``a`` および ``b`` に追加します。
+この構文は以下と等しいです。
 
 .. code-block:: julia
 
@@ -683,8 +782,13 @@ expression. This syntax is equivalent to
     "..."
     b
 
-Any number of expressions many be documented together in this way. This syntax can be useful
-when two functions are related, such as non-mutating and mutating versions ``f`` and ``f!``.
+.. 
+  Any number of expressions many be documented together in this way. This syntax can be useful
+  when two functions are related, such as non-mutating and mutating versions ``f`` and ``f!``.
+
+任意の数の式はこの方法で一緒にドキュメント化することができます。
+この構文は、変形していないバージョンと変形したバージョンの ``f`` と ``f!`` のように、
+2つの関数が関連する際に便利です。
 
 Macro-generated code
 ~~~~~~~~~~~~~~~~~~~~
