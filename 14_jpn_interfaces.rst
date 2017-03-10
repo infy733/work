@@ -320,10 +320,7 @@ Intの範囲やベクトルでインデックスを作成するには、別の�
   :func:`Base.similar(T::Union{Type,Function}, inds) <similar>`         ``T(Base.to_shape(inds))``                   Return an array similar to ``T`` with the specified indices ``inds`` (see below)
   ===================================================================== ============================================ =======================================================================================
 
-
-
-
-実装するメソッド                                                                                                      概要
+                                                                                                      概要
 ===================================================================== ============================================ =======================================================================================
 実装するメソッド                                                                                                      概要
 ===================================================================== ============================================ =======================================================================================
@@ -348,13 +345,39 @@ Intの範囲やベクトルでインデックスを作成するには、別の�
 :func:`Base.similar(T::Union{Type,Function}, inds) <similar>`         ``T(Base.to_shape(inds))``                   ``T`` に似た配列を指定されたインデックス ``inds`` で返す（下記参照）
 ===================================================================== ============================================ =======================================================================================
 
-If a type is defined as a subtype of ``AbstractArray``, it inherits a very large set of rich behaviors including iteration and multidimensional indexing built on top of single-element access.  See the :ref:`arrays manual page <man-arrays>` and :ref:`standard library section <stdlib-arrays>` for more supported methods.
+.. 
+  If a type is defined as a subtype of ``AbstractArray``, it inherits a very large set of rich behaviors including iteration and multidimensional indexing built on top of single-element access.  See the :ref:`arrays manual page <man-arrays>` and :ref:`standard library section <stdlib-arrays>` for more supported methods.
 
-A key part in defining an ``AbstractArray`` subtype is :func:`Base.linearindexing`. Since indexing is such an important part of an array and often occurs in hot loops, it's important to make both indexing and indexed assignment as efficient as possible.  Array data structures are typically defined in one of two ways: either it most efficiently accesses its elements using just one index (linear indexing) or it intrinsically accesses the elements with indices specified for every dimension.  These two modalities are identified by Julia as ``Base.LinearFast()`` and ``Base.LinearSlow()``.  Converting a linear index to multiple indexing subscripts is typically very expensive, so this provides a traits-based mechanism to enable efficient generic code for all array types.
+型が ``AbstractArray`` のサブタイプとして定義されている場合は、シングル要素アクセスの上に構築された
+反復処理や多次元インデックスを含む非常に大きな一連の動作を継承します。その他の多くのサポートされている
+メソッドについては、 :ref:`マニュアルの配列 <man-配列>` と :ref:`標準ライブラリ <stdlib配列>` を参照してください。
 
-This distinction determines which scalar indexing methods the type must define. ``LinearFast()`` arrays are simple: just define :func:`getindex(A::ArrayType, i::Int) <getindex>`.  When the array is subsequently indexed with a multidimensional set of indices, the fallback :func:`getindex(A::AbstractArray, I...)` efficiently converts the indices into one linear index and then calls the above method. ``LinearSlow()`` arrays, on the other hand, require methods to be defined for each supported dimensionality with ``ndims(A)`` ``Int`` indices.  For example, the builtin ``SparseMatrixCSC`` type only supports two dimensions, so it just defines :func:`getindex(A::SparseMatrixCSC, i::Int, j::Int)`.  The same holds for :func:`setindex!`.
+.. 
+  A key part in defining an ``AbstractArray`` subtype is :func:`Base.linearindexing`. Since indexing is such an important part of an array and often occurs in hot loops, it's important to make both indexing and indexed assignment as efficient as possible.  Array data structures are typically defined in one of two ways: either it most efficiently accesses its elements using just one index (linear indexing) or it intrinsically accesses the elements with indices specified for every dimension.  These two modalities are identified by Julia as ``Base.LinearFast()`` and ``Base.LinearSlow()``.  Converting a linear index to multiple indexing subscripts is typically very expensive, so this provides a traits-based mechanism to enable efficient generic code for all array types.
 
-Returning to the sequence of squares from above, we could instead define it as a subtype of an ``AbstractArray{Int, 1}``:
+``AbstractArray`` サブタイプを定義する上で重要な部分は、 :func:`Base.linearindexing` です。
+インデックスは配列の重要な部分であり、また頻繁にホット・ループ内で行われるため、
+インデックスとインデックスの割り当ての両方を効率的に行うことが重要です。配列データ構造は、
+通常、1つのインデックス（線形インデックス）を使用して要素に最も効率的にアクセスするか、
+全ての次元に指定されたインデックスを持つ要素に本質的にアクセスするかの2つの方法のいずれかで定義されます。
+これら2つの方法は、Juliaにより ``Base.LinearFast()`` および ``Base.LinearSlow()`` として識別されます。
+線形インデックスを複数のインデックス付きサブスクリプトに変換するのは通常非常にコストがかかるため、
+全ての配列型に対して効率的な汎用コードを可能にする特性に基づくのメカニズムを提供します。
+
+.. 
+  This distinction determines which scalar indexing methods the type must define. ``LinearFast()`` arrays are simple: just define :func:`getindex(A::ArrayType, i::Int) <getindex>`.  When the array is subsequently indexed with a multidimensional set of indices, the fallback :func:`getindex(A::AbstractArray, I...)` efficiently converts the indices into one linear index and then calls the above method. ``LinearSlow()`` arrays, on the other hand, require methods to be defined for each supported dimensionality with ``ndims(A)`` ``Int`` indices.  For example, the builtin ``SparseMatrixCSC`` type only supports two dimensions, so it just defines :func:`getindex(A::SparseMatrixCSC, i::Int, j::Int)`.  The same holds for :func:`setindex!`.
+
+この区別は、型が定義しなければならないスカラーインデックスメソッドを決定します。 ``LinearFast()`` 配列はシンプルであり、
+:func:`getindex(A::ArrayType, i::Int) <getindex>` を定義します。その後、配列が多次元インデックスでインデックス付けされると、
+フォールバック :func:`getindex(A::AbstractArray, I...)` はインデックスを1つの線形インデックスに効率的に変換し、
+上記のメソッドを呼び出します。一方、 ``LinearSlow()`` 配列では、 ``ndims(A)`` ``Int`` インデックスを使用して、
+サポートされている次元ごとにメソッドを定義する必要があります。例えば、ビルトインの ``SparseMatrixCSC`` 型は2つの次元しかサポートしないため、
+:func:`getindex(A::SparseMatrixCSC, i::Int, j::Int)` を定義します。 :func:`setindex!` についても同様です。
+
+.. 
+  Returning to the sequence of squares from above, we could instead define it as a subtype of an ``AbstractArray{Int, 1}``:
+
+上記の平方数のシーケンスに戻り、それを ``AbstractArray{Int, 1}`` のサブタイプとして定義することもできます。:
 
 .. doctest::
 
@@ -365,7 +388,12 @@ Returning to the sequence of squares from above, we could instead define it as a
            Base.linearindexing{T<:SquaresVector}(::Type{T}) = Base.LinearFast()
            Base.getindex(S::SquaresVector, i::Int) = i*i;
 
-Note that it's very important to specify the two parameters of the ``AbstractArray``; the first defines the :func:`eltype`, and the second defines the :func:`ndims`.  That supertype and those three methods are all it takes for ``SquaresVector`` to be an iterable, indexable, and completely functional array:
+.. 
+  Note that it's very important to specify the two parameters of the ``AbstractArray``; the first defines the :func:`eltype`, and the second defines the :func:`ndims`.  That supertype and those three methods are all it takes for ``SquaresVector`` to be an iterable, indexable, and completely functional array:
+
+``AbstractArray`` の2つのパラメータを指定することは非常に重要となります。最初のパラメータは :func:`eltype` を定義し、
+2番目は :func:`ndims` を定義します。その上位タイプと3つのメソッドは、 ``SquaresVector`` が反復可能、インデックス可能、
+および機能的な配列となるために必要な要素の全てです。:
 
 .. testsetup::
 
