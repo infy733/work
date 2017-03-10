@@ -761,7 +761,7 @@ Juliaにおけるこの種の関数定義のディスパッチによる動きは
  in Julia, discussed :ref:`later in the manual <constructors-and-conversion>`.
 
 このメカニズムは、型コンストラクタとクロージャ（周囲の環境を参照する内部関数）がJuliaで
-どのように機能するかの鍵でもあります。 :ref:`これは後にマニュアル <constructors-and-conversion>` の中で説明されます。
+どのように機能するかの鍵でもあります。 :ref:`これは後にマニュアル <コンストラクタと変換>` の中で説明されます。
 
 .. 
  Empty generic functions
@@ -781,9 +781,9 @@ Juliaにおけるこの種の関数定義のディスパッチによる動きは
 まだメソッドを追加していない空の汎用関数を使用すると便利な場合があります。
 これは、インタフェース定義を実装から分離するために使用できます。
 これはドキュメンテーションやコードの読みやすさのために使うこともできます。
-このための構文は、引数のタプルがない空の関数ブロックです。:
+このための構文は、引数のタプルがない空の関数ブロックです。::
 
-    function emptyfunc
+    function emptyfunc
     end
 
 .. [Clarke61] Arthur C. Clarke, *Profiles of the Future* (1961): Clarke's Third Law.
