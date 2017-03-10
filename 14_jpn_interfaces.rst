@@ -42,12 +42,12 @@ Juliaの利便性と拡張性の多くは、インフォーマルなインタフ
  ================================================== ======================== =====================================================================================
 
 ================================================== ======================== =====================================================================================
-Required methods                                                            Brief description
+必要なメソッド                                                            概要
 ================================================== ======================== =====================================================================================
-:func:`start(iter) <start>`                                                 Returns the initial iteration state
-:func:`next(iter, state) <next>`                                            Returns the current item and the next state
-:func:`done(iter, state) <done>`                                            Tests if there are any items remaining
-**Important optional methods**                     **Default definition**   **Brief description**
+:func:`start(iter) <start>`                                                 初期の反復状態を返す
+:func:`next(iter, state) <next>`                                            現在のアイテムと次の状態を返す
+:func:`done(iter, state) <done>`                                            アイテムが残っているかテストする
+**重要なオプションメソッド**                     **デフォルト定義**   **概要**
 :func:`iteratorsize(IterType) <iteratorsize>`      ``HasLength()``          One of `HasLength()`, `HasShape()`, `IsInfinite()`, or `SizeUnknown()` as appropriate
 :func:`iteratoreltype(IterType) <iteratoreltype>`  ``HasEltype()``          Either `EltypeUnknown()` or `HasEltype()` as appropriate
 :func:`eltype(IterType) <eltype>`                  ``Any``                  The type the items returned by :func:`next`
