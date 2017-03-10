@@ -1,15 +1,45 @@
 .. _man-interfaces:
 
+.. 
+ ************
+  Interfaces
+ ************
+
 ************
- Interfaces
+ インタフェース
 ************
 
-A lot of the power and extensibility in Julia comes from a collection of informal interfaces.  By extending a few specific methods to work for a custom type, objects of that type not only receive those functionalities, but they are also able to be used in other methods that are written to generically build upon those behaviors.
+.. 
+ A lot of the power and extensibility in Julia comes from a collection of informal interfaces.  By extending a few specific methods to work for a custom type, objects of that type not only receive those functionalities, but they are also able to be used in other methods that are written to generically build upon those behaviors.
+
+Juliaの利便性と拡張性の多くは、インフォーマルなインタフェースの集まりから来ています。
+カスタムの型のためにいくつかの特定のメソッドを拡張することによって、
+その型のオブジェクトはそれらの機能を受け取るだけでなく、
+処理を一般的に構築するように記述された他のメソッドでも使用できます。
 
 .. _man-interfaces-iteration:
 
-Iteration
+.. 
+ Iteration
+ ---------
+
+反復
 ---------
+
+..
+ ================================================== ======================== =====================================================================================
+ Required methods                                                            Brief description
+ ================================================== ======================== =====================================================================================
+ :func:`start(iter) <start>`                                                 Returns the initial iteration state
+ :func:`next(iter, state) <next>`                                            Returns the current item and the next state
+ :func:`done(iter, state) <done>`                                            Tests if there are any items remaining
+ **Important optional methods**                     **Default definition**   **Brief description**
+ :func:`iteratorsize(IterType) <iteratorsize>`      ``HasLength()``          One of `HasLength()`, `HasShape()`, `IsInfinite()`, or `SizeUnknown()` as appropriate
+ :func:`iteratoreltype(IterType) <iteratoreltype>`  ``HasEltype()``          Either `EltypeUnknown()` or `HasEltype()` as appropriate
+ :func:`eltype(IterType) <eltype>`                  ``Any``                  The type the items returned by :func:`next`
+ :func:`length(iter) <length>`                      (*undefined*)            The number of items, if known
+ :func:`size(iter, [dim...]) <size>`                (*undefined*)            The number of items in each dimension, if known
+ ================================================== ======================== =====================================================================================
 
 ================================================== ======================== =====================================================================================
 Required methods                                                            Brief description
