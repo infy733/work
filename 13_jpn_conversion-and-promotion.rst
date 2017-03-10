@@ -1,74 +1,126 @@
 .. _man-conversion-and-promotion:
 
+.. 
+ **************************
+  Conversion and Promotion
+ **************************
+
 **************************
- Conversion and Promotion
+ 変換とプロモーション
 **************************
 
-Julia has a system for promoting arguments of mathematical operators to
-a common type, which has been mentioned in various other sections,
-including :ref:`man-integers-and-floating-point-numbers`, :ref:`man-mathematical-operations`, :ref:`man-types`, and
-:ref:`man-methods`. In this section, we explain how this promotion
-system works, as well as how to extend it to new types and apply it to
-functions besides built-in mathematical operators. Traditionally,
-programming languages fall into two camps with respect to promotion of
-arithmetic arguments:
+.. 
+ Julia has a system for promoting arguments of mathematical operators to
+ a common type, which has been mentioned in various other sections,
+ including :ref:`man-integers-and-floating-point-numbers`, :ref:`man-mathematical-operations`, :ref:`man-types`, and
+ :ref:`man-methods`. In this section, we explain how this promotion
+ system works, as well as how to extend it to new types and apply it to
+ functions besides built-in mathematical operators. Traditionally,
+ programming languages fall into two camps with respect to promotion of
+ arithmetic arguments:
 
--  **Automatic promotion for built-in arithmetic types and operators.**
-   In most languages, built-in numeric types, when used as operands to
-   arithmetic operators with infix syntax, such as ``+``, ``-``, ``*``,
-   and ``/``, are automatically promoted to a common type to produce the
-   expected results. C, Java, Perl, and Python, to name a few, all
-   correctly compute the sum ``1 + 1.5`` as the floating-point value
-   ``2.5``, even though one of the operands to ``+`` is an integer.
-   These systems are convenient and designed carefully enough that they
-   are generally all-but-invisible to the programmer: hardly anyone
-   consciously thinks of this promotion taking place when writing such
-   an expression, but compilers and interpreters must perform conversion
-   before addition since integers and floating-point values cannot be
-   added as-is. Complex rules for such automatic conversions are thus
-   inevitably part of specifications and implementations for such
-   languages.
--  **No automatic promotion.** This camp includes Ada and ML — very
-   "strict" statically typed languages. In these languages, every
-   conversion must be explicitly specified by the programmer. Thus, the
-   example expression ``1 + 1.5`` would be a compilation error in both
-   Ada and ML. Instead one must write ``real(1) + 1.5``, explicitly
-   converting the integer ``1`` to a floating-point value before
-   performing addition. Explicit conversion everywhere is so
-   inconvenient, however, that even Ada has some degree of automatic
-   conversion: integer literals are promoted to the expected integer
-   type automatically, and floating-point literals are similarly
-   promoted to appropriate floating-point types.
+Juliaには、 :ref:`man-整数と浮動小数点数` 、 :ref:`man-算術処理と基本的な関数` 、 :ref:`man-型` および :ref:`man-メソッド` などのさまざまな
+セクションで述べられているように、算術演算子の引数を共通の型に昇格（プロモーション）させるためのシステムがあります。
+このセクションでは、このプロモーションシステムがどのように機能するのか、
+またどのように新しい型にまで広げるのかおよびビルトイン以外の算術演算子の関数に適用するのかを説明します。
+伝統的に、プログラミング言語は算術引数のプロモーションシステムについて、2つに分類することができます。:
 
-In a sense, Julia falls into the "no automatic promotion" category:
-mathematical operators are just functions with special syntax, and the
-arguments of functions are never automatically converted. However, one
-may observe that applying mathematical operations to a wide variety of
-mixed argument types is just an extreme case of polymorphic multiple
-dispatch — something which Julia's dispatch and type systems are
-particularly well-suited to handle. "Automatic" promotion of
-mathematical operands simply emerges as a special application: Julia
-comes with pre-defined catch-all dispatch rules for mathematical
-operators, invoked when no specific implementation exists for some
-combination of operand types. These catch-all rules first promote all
-operands to a common type using user-definable promotion rules, and then
-invoke a specialized implementation of the operator in question for the
-resulting values, now of the same type. User-defined types can easily
-participate in this promotion system by defining methods for conversion
-to and from other types, and providing a handful of promotion rules
-defining what types they should promote to when mixed with other types.
+.. 
+ -  **Automatic promotion for built-in arithmetic types and operators.**
+    In most languages, built-in numeric types, when used as operands to
+    arithmetic operators with infix syntax, such as ``+``, ``-``, ``*``,
+    and ``/``, are automatically promoted to a common type to produce the
+    expected results. C, Java, Perl, and Python, to name a few, all
+    correctly compute the sum ``1 + 1.5`` as the floating-point value
+    ``2.5``, even though one of the operands to ``+`` is an integer.
+    These systems are convenient and designed carefully enough that they
+    are generally all-but-invisible to the programmer: hardly anyone
+    consciously thinks of this promotion taking place when writing such
+    an expression, but compilers and interpreters must perform conversion
+    before addition since integers and floating-point values cannot be
+    added as-is. Complex rules for such automatic conversions are thus
+    inevitably part of specifications and implementations for such
+    languages.
+ -  **No automatic promotion.** This camp includes Ada and ML — very
+    "strict" statically typed languages. In these languages, every
+    conversion must be explicitly specified by the programmer. Thus, the
+    example expression ``1 + 1.5`` would be a compilation error in both
+    Ada and ML. Instead one must write ``real(1) + 1.5``, explicitly
+    converting the integer ``1`` to a floating-point value before
+    performing addition. Explicit conversion everywhere is so
+    inconvenient, however, that even Ada has some degree of automatic
+    conversion: integer literals are promoted to the expected integer
+    type automatically, and floating-point literals are similarly
+    promoted to appropriate floating-point types.
+   
+-  **ビルトインの算術型および演算子の自動昇格**
+   ほとんどの言語では、 ``+`` 、 ``-`` 、 ``*`` 、 ``/`` などの中置構文を持つ算術演算子の被演算子として使用されると、
+   ビルトインの数値型は自動的に共通の型に昇格され、期待される結果が得られます。C、Java、Perl、およびPythonでは、
+   たとえ ``+`` の被演算子の1つが整数であっても、 ``1 + 1.5`` は浮動小数点値 ``2.5`` として、正しく計算されます。
+   これらのシステムは、プログラマにとっては完全に見えないほど便利で、慎重に設計されています。
+   これらのコードを書いている際に、この昇格が起きていることに気にする人はほとんどいないかと思いますが、
+   整数や浮動小数点の値をそのままでは追加できないため、コンパイラやインタプリタは追加する前に変換を実行する必要があります。
+   したがって、このような自動変換の複雑なルールは、そのような言語の仕様および実装の一部と言えます。
+-  **自動昇格なし**
+   この分類には、AdaやMLなどの「厳格な」静的型言語が含まれます。これらの言語では、
+   全ての変換はプログラマによって明示的に指定される必要があります。したがって、
+   例の式 ``1 + 1.5`` は、AdaとMLの両方でコンパイルエラーになります。
+   その代わりに、加算を実行する前に、整数「1」を浮動小数点値に明示的に変換するように、
+   ``real(1) + 1.5`` と書く必要があります。しかし、常に明示的に変換するのは非常に面倒ですが、
+   Adaでもある程度の自動変換が行われます。整数リテラルは予想される整数型に自動的に昇格され、
+   浮動小数点リテラルも同様に適切な浮動小数点型に昇格されます。
+
+.. 
+ In a sense, Julia falls into the "no automatic promotion" category:
+ mathematical operators are just functions with special syntax, and the
+ arguments of functions are never automatically converted. However, one
+ may observe that applying mathematical operations to a wide variety of
+ mixed argument types is just an extreme case of polymorphic multiple
+ dispatch — something which Julia's dispatch and type systems are
+ particularly well-suited to handle. "Automatic" promotion of
+ mathematical operands simply emerges as a special application: Julia
+ comes with pre-defined catch-all dispatch rules for mathematical
+ operators, invoked when no specific implementation exists for some
+ combination of operand types. These catch-all rules first promote all
+ operands to a common type using user-definable promotion rules, and then
+ invoke a specialized implementation of the operator in question for the
+ resulting values, now of the same type. User-defined types can easily
+ participate in this promotion system by defining methods for conversion
+ to and from other types, and providing a handful of promotion rules
+ defining what types they should promote to when mixed with other types.
+
+ある意味では、Juliaは「自動昇格なし」カテゴリに分類されます。算術演算子は特別な構文を持つ関数に過ぎず、
+関数の引数は決して自動的に変換されません。しかし、多種多様な引数型に算術演算を適用することは、
+多様な多重ディスパッチの極端なケースに過ぎません。Juliaのディスパッチおよび型システムは特に処理に適しています。
+算術被演算子の「自動」昇格は、単に特別なアプリケーションとして出現します。Juliaには、
+算術演算子のための初めから定義された汎用のディスパッチルールがあります。
+これは、被演算子の組み合わせに対して特定の実装が存在しない場合に呼び出されます。
+これらの汎用ルールは、まず初めにユーザー定義可能なプロモーションルールを使用してすべての被演算子を共通型に昇格させ、
+結果の同じ型となった値について問題となる演算子に対して特殊な実装を呼び出します。
+ユーザー定義型は、他の型への変換のためのメソッドを定義し、他の型と混合したときに
+どの型に昇格するべきかを定義するプロモーションルールをいくつか提供することで、このプロモーションシステムに関与しています。
 
 .. _man-conversion:
 
-Conversion
+.. 
+ Conversion
+ ----------
+
+変換
 ----------
 
-Conversion of values to various types is performed by the ``convert``
-function. The ``convert`` function generally takes two arguments: the
-first is a type object while the second is a value to convert to that
-type; the returned value is the value converted to an instance of given
-type. The simplest way to understand this function is to see it in
-action:
+.. 
+ Conversion of values to various types is performed by the ``convert``
+ function. The ``convert`` function generally takes two arguments: the
+ first is a type object while the second is a value to convert to that
+ type; the returned value is the value converted to an instance of given
+ type. The simplest way to understand this function is to see it in
+ action:
+
+値のさまざまな型への変換は、 ``convert`` 関数によって実行されます。 ``convert`` 関数は通常2つの引数をとります。
+1つ目は型オブジェクトであり、2つ目は指定した型に変換する値です。
+戻り値は、指定された型のインスタンスに変換された値です。
+この関数を理解する最も簡単な方法は、実際に動作を確認することです。:
 
 .. doctest::
 
@@ -100,9 +152,13 @@ action:
      1.0  2.0  3.0
      4.0  5.0  6.0
 
-Conversion isn't always possible, in which case a no method error is
-thrown indicating that ``convert`` doesn't know how to perform the
-requested conversion:
+.. 
+ Conversion isn't always possible, in which case a no method error is
+ thrown indicating that ``convert`` doesn't know how to perform the
+ requested conversion:
+
+変換が常に可能であるとは限りません。この場合、「no method error」がスローされ、
+これは ``convert`` が要求された変換を実行できないことを示します。:
 
 .. doctest::
 
@@ -112,13 +168,20 @@ requested conversion:
     since type constructors fall back to convert methods.
      ...
 
-Some languages consider parsing strings as numbers or formatting
-numbers as strings to be conversions (many dynamic languages will even
-perform conversion for you automatically), however Julia does not: even
-though some strings can be parsed as numbers, most strings are not valid
-representations of numbers, and only a very limited subset of them are.
-Therefore in Julia the dedicated :func:`parse` function must be used
-to perform this operation, making it more explicit.
+.. 
+ Some languages consider parsing strings as numbers or formatting
+ numbers as strings to be conversions (many dynamic languages will even
+ perform conversion for you automatically), however Julia does not: even
+ though some strings can be parsed as numbers, most strings are not valid
+ representations of numbers, and only a very limited subset of them are.
+ Therefore in Julia the dedicated :func:`parse` function must be used
+ to perform this operation, making it more explicit.
+
+いくつかの言語では、文字列を数値として、または数値を変換される文字列としてを解析しようとします
+（多くの動的言語は自動的に変換を実行します）。しかし、Juliaは異なっています。
+いくつかの文字列は数値として解析されますが、その数は非常に限られており、
+ほとんどの文字列は数値として表現することはできません。したがって、Juliaでは、
+この処理を実行するために専用の :func:`parse` 関数を明示的に使用しなければなりません。
 
 Defining New Conversions
 ~~~~~~~~~~~~~~~~~~~~~~~~
