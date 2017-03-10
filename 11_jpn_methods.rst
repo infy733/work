@@ -607,10 +607,18 @@ Juliaにおけるこの種の関数定義のディスパッチによる動きは
 
 .. _man-vararg-fixedlen:
 
-Parametrically-constrained Varargs methods
+.. 
+ Parametrically-constrained Varargs methods
+ ------------------------------------------
+
+パラメトリック制約付き可変引数メソッド
 ------------------------------------------
 
-Function parameters can also be used to constrain the number of arguments that may be supplied to a "varargs" function (:ref:`man-varargs-functions`).  The notation ``Vararg{T,N}`` is used to indicate such a constraint.  For example:
+.. 
+ Function parameters can also be used to constrain the number of arguments that may be supplied to a "varargs" function (:ref:`man-varargs-functions`).  The notation ``Vararg{T,N}`` is used to indicate such a constraint.  For example:
+
+関数パラメータは、可変引数関数（ :ref:`man-可変引数関数` 参照）に渡される引数の数を制限するためにも使用できます。
+``Vararg{T,N}`` という表記は、そのような制約を示すために使用されます。例えば:
 
 .. doctest::
 
@@ -627,11 +635,17 @@ Function parameters can also be used to constrain the number of arguments that m
     ERROR: MethodError: no method matching bar(::Int64, ::Int64, ::Int64, ::Int64, ::Int64)
     ...
 
-More usefully, it is possible to constrain varargs methods by a parameter.  For example::
+.. 
+ More usefully, it is possible to constrain varargs methods by a parameter.  For example::
+
+もっと便利なことに、パラメータで可変引数メソッドを制約することが可能です。例えば::
 
     function getindex{T,N}(A::AbstractArray{T,N}, indexes::Vararg{Number,N})
 
-would be called only when the number of ``indexes`` matches the dimensionality of the array.
+.. 
+ would be called only when the number of ``indexes`` matches the dimensionality of the array.
+
+これは、インデックスの数が配列の次元数と一致する場合にのみ呼び出されます。
 
 .. _man-note-on-optional-and-keyword-arguments:
 
