@@ -5,9 +5,9 @@
   Documentation
  ***************
 
-***************
+******************
  ドキュメンテーション
-***************
+******************
 
 .. 
  Julia enables package developers and users to document functions, types and
