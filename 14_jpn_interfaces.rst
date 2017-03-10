@@ -421,7 +421,10 @@ Intの範囲やベクトルでインデックスを作成するには、別の�
     1×2 Array{Float64,2}:
      0.0151876  0.0179393
 
-As a more complicated example, let's define our own toy N-dimensional sparse-like array type built on top of ``Dict``:
+.. 
+  As a more complicated example, let's define our own toy N-dimensional sparse-like array type built on top of ``Dict``:
+
+より複雑な例として、 ``Dict`` 上に構築されたN次元のまばらな配列型を定義してみましょう。:
 
 .. doctest::
 
@@ -439,7 +442,12 @@ As a more complicated example, let's define our own toy N-dimensional sparse-lik
            Base.getindex{T,N}(A::SparseArray{T,N}, I::Vararg{Int,N})     = get(A.data, I, zero(T))
            Base.setindex!{T,N}(A::SparseArray{T,N}, v, I::Vararg{Int,N}) = (A.data[I] = v)
 
-Notice that this is a ``LinearSlow`` array, so we must manually define :func:`getindex` and :func:`setindex!` at the dimensionality of the array.  Unlike the ``SquaresVector``, we are able to define :func:`setindex!`, and so we can mutate the array:
+.. 
+  Notice that this is a ``LinearSlow`` array, so we must manually define :func:`getindex` and :func:`setindex!` at the dimensionality of the array.  Unlike the ``SquaresVector``, we are able to define :func:`setindex!`, and so we can mutate the array:
+
+これは ``LinearSlow`` 配列であるため、配列の次元数で :func:`getindex` と :func:`setindex!` をマニュアルで定義する必要があります。
+``SquaresVector`` とは異なり、 :func:`setindex!` を定義することができるため、配列を変更することができます。:
+
 
 .. doctest::
 
@@ -461,7 +469,13 @@ Notice that this is a ``LinearSlow`` array, so we must manually define :func:`ge
      2.0  5.0  8.0
      3.0  6.0  9.0
 
-The result of indexing an ``AbstractArray`` can itself be an array (for instance when indexing by a ``Range``). The ``AbstractArray`` fallback methods use :func:`similar` to allocate an ``Array`` of the appropriate size and element type, which is filled in using the basic indexing method described above. However, when implementing an array wrapper you often want the result to be wrapped as well:
+.. 
+  The result of indexing an ``AbstractArray`` can itself be an array (for instance when indexing by a ``Range``). The ``AbstractArray`` fallback methods use :func:`similar` to allocate an ``Array`` of the appropriate size and element type, which is filled in using the basic indexing method described above. However, when implementing an array wrapper you often want the result to be wrapped as well:
+
+``AbstractArray`` のインデックス結果は、それ自体が配列である可能性があります（たとえば、 ``Range`` によるインデックスの場合）。
+``AbstractArray`` フォールバックメソッドは :func:`similar` を使用して、適切なサイズと、
+前述の基本的なインデックスメソッドを使用して埋められた要素型の ``Array`` を割り当てます。
+しかし、配列ラッパーを実装するときには、結果をラッピングした方がよい場合もしばしばあります。:
 
 .. doctest::
 
@@ -470,7 +484,15 @@ The result of indexing an ``AbstractArray`` can itself be an array (for instance
      1.0  4.0  7.0
      2.0  5.0  8.0
 
-In this example it is accomplished by defining ``Base.similar{T}(A::SparseArray, ::Type{T}, dims::Dims)`` to create the appropriate wrapped array. (Note that while ``similar`` supports 1- and 2-argument forms, in most case you only need to specialize the 3-argument form.) For this to work it's important that ``SparseArray`` is mutable (supports ``setindex!``). :func:`similar` is also used to allocate result arrays for arithmetic on ``AbstractArrays``, for instance:
+.. 
+  In this example it is accomplished by defining ``Base.similar{T}(A::SparseArray, ::Type{T}, dims::Dims)`` to create the appropriate wrapped array. (Note that while ``similar`` supports 1- and 2-argument forms, in most case you only need to specialize the 3-argument form.) For this to work it's important that ``SparseArray`` is mutable (supports ``setindex!``). :func:`similar` is also used to allocate result arrays for arithmetic on ``AbstractArrays``, for instance:
+
+この例では、 ``Base.similar{T}(A::SparseArray, ::Type{T}, dims::Dims)`` を定義することで、
+適切にラッピングされた配列を作成します（ ``similar`` は1または2引数の形をとりますが、
+ほとんどのケースでは3引数で専門性を高める必要があります）。これが機能するようにするためには、
+``SparseArray`` が変更可能であることが重要です（ ``setindex!`` をサポートしています）。
+:func:`similar` は、 ``AbstractArrays`` での演算に結果の配列を割り当てるためにも使用されます。例えば、:
+
 
 .. doctest::
 
@@ -480,7 +502,11 @@ In this example it is accomplished by defining ``Base.similar{T}(A::SparseArray,
      6.0   9.0  12.0
      7.0  10.0  13.0
 
-In addition to all the iterable and indexable methods from above, these types can also interact with each other and use all of the methods defined in the standard library for ``AbstractArrays``:
+.. 
+  In addition to all the iterable and indexable methods from above, these types can also interact with each other and use all of the methods defined in the standard library for ``AbstractArrays``:
+
+上記の反復可能なメソッドとインデックス可能なメソッドに加えて、これらの型は相互にやりとりして、
+``AbstractArrays`` の標準ライブラリで定義されている全てのメソッドを使用することもできます。:
 
 .. doctest::
 
@@ -493,9 +519,15 @@ In addition to all the iterable and indexable methods from above, these types ca
     julia> dot(A[:,1],A[:,2])
     32.0
 
-If you are defining an array type that allows non-traditional indexing
-(indices that start at something other than 1), you should specialize
-``indices``.  You should also specialize ``similar`` so that the
-``dims`` argument (ordinarily a ``Dims`` size-tuple) can accept
-``AbstractUnitRange`` objects, perhaps range-types ``Ind`` of your own
-design.  For more information, see :ref:`devdocs-offsetarrays`.
+.. 
+  If you are defining an array type that allows non-traditional indexing
+  (indices that start at something other than 1), you should specialize
+  ``indices``.  You should also specialize ``similar`` so that the
+  ``dims`` argument (ordinarily a ``Dims`` size-tuple) can accept
+  ``AbstractUnitRange`` objects, perhaps range-types ``Ind`` of your own
+  design.  For more information, see :ref:`devdocs-offsetarrays`.
+  
+従来とは異なるインデックス（1以外から始まるインデックス）を許容する配列型を定義する場合、
+インデックスを特殊化する必要があります。また、 ``dims`` 引数（通常は ``Dims`` サイズタプル）が
+``AbstractUnitRange`` オブジェクトを許容できるように、おそらく独自の設計のrange型 ``Ind`` を、
+同様に特殊化する必要があります。詳細は :ref:`devdocs-offsetarrays` を参照ください。
