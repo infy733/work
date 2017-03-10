@@ -21,7 +21,7 @@
  concept of "addition". Accordingly, in Julia, these behaviors all belong
  to a single object: the ``+`` function.
 
-:ref:`man-関数`セクションの内容を思い出してください。関数は、引数のタプルを戻り値にマップするオブジェクトであり、
+:ref:`man-関数` セクションの内容を思い出してください。関数は、引数のタプルを戻り値にマップするオブジェクトであり、
 もし適切な値が返されない場合は、例外がスローされます。概念上同様な関数または処理が、
 異なる引数の型に対して全く異なる実装がされることは一般的です。例えば、2つの整数を加算することは、
 2つの浮動小数点数を加算することとは異なり、またどちらも浮動小数点数に整数を足すこととは異なります。
@@ -332,13 +332,21 @@ Juliaの全ての値は抽象型の「Any」のインスタンスであるため
     julia> f("foo", 1)
     Whoa there, Nelly.
 
-This catch-all is less specific than any other possible method
-definition for a pair of parameter values, so it is only be called on
-pairs of arguments to which no other method definition applies.
+.. 
+ This catch-all is less specific than any other possible method
+ definition for a pair of parameter values, so it is only be called on
+ pairs of arguments to which no other method definition applies.
 
-Although it seems a simple concept, multiple dispatch on the types of
-values is perhaps the single most powerful and central feature of the
-Julia language. Core operations typically have dozens of methods:
+この包括的なメソッドは、他のメソッドと比較するとパラメータ値のペアの定義は明確ではないため、
+他のメソッド定義が適用されない引数のペアに対してのみ呼び出されます。
+
+.. 
+ Although it seems a simple concept, multiple dispatch on the types of
+ values is perhaps the single most powerful and central feature of the
+ Julia language. Core operations typically have dozens of methods:
+
+これはシンプルなコンセプトに見えますが、値の型に対する多重ディスパッチは、
+おそらくJuliaの中で最も強力で中心的な機能です。コアオペレーションには、通常数十種類のメソッドがあります。:
 
 .. doctest::
    :options: +SKIP
@@ -365,10 +373,15 @@ Julia language. Core operations typically have dozens of methods:
     ...
     +(a, b, c, xs...) at operators.jl:119
 
-Multiple dispatch together with the flexible parametric type system give
-Julia its ability to abstractly express high-level algorithms decoupled
-from implementation details, yet generate efficient, specialized code to
-handle each case at run time.
+.. 
+ Multiple dispatch together with the flexible parametric type system give
+ Julia its ability to abstractly express high-level algorithms decoupled
+ from implementation details, yet generate efficient, specialized code to
+ handle each case at run time.
+
+多重ディスパッチと柔軟なパラメータ型システムを行うことで、Juliaは実装の詳細から切り離された
+ハイレベルのアルゴリズムを抽象的に表現することができ、それでいて実行時に各ケースを
+処理する効率的で特別なコードを生成することができます。
 
 Method Ambiguities
 ------------------
