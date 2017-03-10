@@ -48,11 +48,11 @@ Juliaの利便性と拡張性の多くは、インフォーマルなインタフ
 :func:`next(iter, state) <next>`                                            現在のアイテムと次の状態を返す
 :func:`done(iter, state) <done>`                                            アイテムが残っているかテストする
 **重要なオプションメソッド**                           **デフォルト定義**        **概要**
-:func:`iteratorsize(IterType) <iteratorsize>`      ``HasLength()``          One of `HasLength()`, `HasShape()`, `IsInfinite()`, or `SizeUnknown()` as appropriate
-:func:`iteratoreltype(IterType) <iteratoreltype>`  ``HasEltype()``          Either `EltypeUnknown()` or `HasEltype()` as appropriate
-:func:`eltype(IterType) <eltype>`                  ``Any``                  The type the items returned by :func:`next`
-:func:`length(iter) <length>`                      (*undefined*)            The number of items, if known
-:func:`size(iter, [dim...]) <size>`                (*undefined*)            The number of items in each dimension, if known
+:func:`iteratorsize(IterType) <iteratorsize>`      ``HasLength()``          `HasLength()`, `HasShape()`, `IsInfinite()`, または `SizeUnknown()` のうち、適切な1つ
+:func:`iteratoreltype(IterType) <iteratoreltype>`  ``HasEltype()``          `EltypeUnknown()` または `HasEltype()` のうち、適切な1つ
+:func:`eltype(IterType) <eltype>`                  ``Any``                  :func:`next` により返されるアイテムの型
+:func:`length(iter) <length>`                      (*定義なし*)               判明している場合は、アイテム数
+:func:`size(iter, [dim...]) <size>`                (*定義なし*)               判明している場合は、各次元のアイテム数
 ================================================== ======================== =====================================================================================
 
 ================================================================ ======================================================================
