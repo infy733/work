@@ -557,31 +557,51 @@ Julia標準ライブラリで必要な ``promote`` を呼び出すことはほ�
 しかし、それ自体で有用なことがあります。興味がある方は、約35行で完全なプロモーションの仕組みを定義している
 `promotion.jl <https://github.com/JuliaLang/julia/blob/master/base/promotion.jl>`_ のコードを読んでみてください。
 
-Case Study: Rational Promotions
+.. 
+  Case Study: Rational Promotions
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ケーススタディ：有理数の昇格
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Finally, we finish off our ongoing case study of Julia's rational number
-type, which makes relatively sophisticated use of the promotion
-mechanism with the following promotion rules::
+.. 
+  Finally, we finish off our ongoing case study of Julia's rational number
+  type, which makes relatively sophisticated use of the promotion
+  mechanism with the following promotion rules::
+
+
+ついに、ここまで継続してきたJuliaの有理数型に関するケーススタディを終了します。
+これは、次のプロモーションルールで昇格のメカニズムを比較的洗練された形で使用することができます。::
 
     promote_rule{T<:Integer,S<:Integer}(::Type{Rational{T}}, ::Type{S}) = Rational{promote_type(T,S)}
     promote_rule{T<:Integer,S<:Integer}(::Type{Rational{T}}, ::Type{Rational{S}}) = Rational{promote_type(T,S)}
     promote_rule{T<:Integer,S<:AbstractFloat}(::Type{Rational{T}}, ::Type{S}) = promote_type(T,S)
 
-The first rule says that promoting a rational number with any other integer
-type promotes to a rational type whose numerator/denominator type is the
-result of promotion of its numerator/denominator type with the other integer
-type. The second rule applies the same logic to two different types of rational
-numbers, resulting in a rational of the promotion of their respective
-numerator/denominator types. The third and final rule dictates that promoting
-a rational with a float results in the same type as promoting the
-numerator/denominator type with the float.
+.. 
+  The first rule says that promoting a rational number with any other integer
+  type promotes to a rational type whose numerator/denominator type is the
+  result of promotion of its numerator/denominator type with the other integer
+  type. The second rule applies the same logic to two different types of rational
+  numbers, resulting in a rational of the promotion of their respective
+  numerator/denominator types. The third and final rule dictates that promoting
+  a rational with a float results in the same type as promoting the
+  numerator/denominator type with the float.
 
-This small handful of promotion rules, together with the `conversion
-methods discussed above <#case-study-rational-conversions>`_, are
-sufficient to make rational numbers interoperate completely naturally
-with all of Julia's other numeric types — integers, floating-point
-numbers, and complex numbers. By providing appropriate conversion
-methods and promotion rules in the same manner, any user-defined numeric
-type can interoperate just as naturally with Julia's predefined
-numerics.
+最初のルールは、他の整数型の有理数を昇格することは、他の整数型の分子/分母の型の昇格の結果である、
+有理数型に昇格することをを示しています。2つ目のルールは、同じロジックを2つの異なる型の有理数に適用し、
+その結果、それぞれの分子/分母型の昇格を合理的にします。3つ目と最後のルールは、浮動小数点を使用して有理数を昇格させると、
+浮動小数点で分子/分母を昇格させた場合と同じ型になることを示しています。
+
+.. 
+  This small handful of promotion rules, together with the `conversion
+  methods discussed above <#case-study-rational-conversions>`_, are
+  sufficient to make rational numbers interoperate completely naturally
+  with all of Julia's other numeric types — integers, floating-point
+  numbers, and complex numbers. By providing appropriate conversion
+  methods and promotion rules in the same manner, any user-defined numeric
+  type can interoperate just as naturally with Julia's predefined
+  numerics.
+  
+このプロモーションルールは、前述の「変換メソッド」とともに、Juliaの他の全ての数値型（整数、浮動小数点数、および複素数）と
+有理数を完全かつ自然に相互運用させることができます。適切な変換メソッドとプロモーションルールを同じ方法で提供することで、
+ユーザー定義の数値型は全て、Juliaの事前定義された数値と自然に相互運用できます。
