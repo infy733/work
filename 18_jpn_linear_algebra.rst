@@ -144,8 +144,8 @@
  +-------------------------+-------+-------+-------+-------+--------------------------------+
 
 +-------------------------+-------+-------+-------+-------+--------------------------------+
-| 行列種類                 | ``+`` | ``-`` | ``*`` | ``\`` | 最適化されたメソッドを持つ他        |
-|                         |       |       |       |       | の関数                          |
+|行列の種類　　　            | ``+`` | ``-`` | ``*`` | ``\`` | 最適化されたメソッドを持つ他       |
+|                         |       |       |       |       | の関数                          |
 +=========================+=======+=======+=======+=======+================================+
 | :class:`Hermitian`      |       |       |       |   MV  | :func:`inv`,                   |
 |                         |       |       |       |       | :func:`sqrtm`, :func:`expm`    |
@@ -166,21 +166,56 @@
 | :class:`UniformScaling` |   M   |   M   |  MVS  |  MVS  | :func:`/`                      |
 +-------------------------+-------+-------+-------+-------+--------------------------------+
 
-Legend:
+.. 
+  Legend:
+
+凡例
+
+.. 
+  +------------+---------------------------------------------------------------+
+  | M (matrix) | An optimized method for matrix-matrix operations is available |
+  +------------+---------------------------------------------------------------+
+  | V (vector) | An optimized method for matrix-vector operations is available |
+  +------------+---------------------------------------------------------------+
+  | S (scalar) | An optimized method for matrix-scalar operations is available |
+  +------------+---------------------------------------------------------------+
 
 +------------+---------------------------------------------------------------+
-| M (matrix) | An optimized method for matrix-matrix operations is available |
+| M (matrix) | 行列 - 行列操作のための最適化されたメソッドが利用可能                 |
 +------------+---------------------------------------------------------------+
-| V (vector) | An optimized method for matrix-vector operations is available |
+| V (vector) | 行列 - ベクトル演算のための最適化されたメソッドが利用可能              |
 +------------+---------------------------------------------------------------+
-| S (scalar) | An optimized method for matrix-scalar operations is available |
+| S (scalar) | 行列 - スカラー演算のための最適化されたメソッドが利用可                |
 +------------+---------------------------------------------------------------+
 
-Matrix factorizations
+.. 
+  Matrix factorizations
+  ---------------------
+
+行列分解
 ---------------------
 
+.. 
+  +-------------------------+--------+-------------+-----------------+-----------------+-------------+-----------------+
+  | Matrix type             | LAPACK | :func:`eig` | :func:`eigvals` | :func:`eigvecs` | :func:`svd` | :func:`svdvals` |
+  +=========================+========+=============+=================+=================+=============+=================+
+  | :class:`Hermitian`      |   HE   |             |       ARI       |                 |             |                 |
+  +-------------------------+--------+-------------+-----------------+-----------------+-------------+-----------------+
+  | :class:`UpperTriangular`|   TR   |      A      |        A        |       A         |             |                 |
+  +-------------------------+--------+-------------+-----------------+-----------------+-------------+-----------------+
+  | :class:`LowerTriangular`|   TR   |      A      |        A        |       A         |             |                 |
+  +-------------------------+--------+-------------+-----------------+-----------------+-------------+-----------------+
+  | :class:`SymTridiagonal` |   ST   |      A      |       ARI       |       AV        |             |                 |
+  +-------------------------+--------+-------------+-----------------+-----------------+-------------+-----------------+
+  | :class:`Tridiagonal`    |   GT   |             |                 |                 |             |                 |
+  +-------------------------+--------+-------------+-----------------+-----------------+-------------+-----------------+
+  | :class:`Bidiagonal`     |   BD   |             |                 |                 |      A      |         A       |
+  +-------------------------+--------+-------------+-----------------+-----------------+-------------+-----------------+
+  | :class:`Diagonal`       |   DI   |             |        A        |                 |             |                 |
+  +-------------------------+--------+-------------+-----------------+-----------------+-------------+-----------------+
+
 +-------------------------+--------+-------------+-----------------+-----------------+-------------+-----------------+
-| Matrix type             | LAPACK | :func:`eig` | :func:`eigvals` | :func:`eigvecs` | :func:`svd` | :func:`svdvals` |
+| 行列の種類                | LAPACK | :func:`eig` | :func:`eigvals` | :func:`eigvecs` | :func:`svd` | :func:`svdvals` |
 +=========================+========+=============+=================+=================+=============+=================+
 | :class:`Hermitian`      |   HE   |             |       ARI       |                 |             |                 |
 +-------------------------+--------+-------------+-----------------+-----------------+-------------+-----------------+
@@ -197,19 +232,45 @@ Matrix factorizations
 | :class:`Diagonal`       |   DI   |             |        A        |                 |             |                 |
 +-------------------------+--------+-------------+-----------------+-----------------+-------------+-----------------+
 
-Legend:
+.. 
+  Legend:
+
+凡例
+
+.. 
+  +--------------+-----------------------------------------------------------------------------------------------------------------------------------+------------------------+
+  | A (all)      | An optimized method to find all the characteristic values and/or vectors is available                                             | e.g. ``eigvals(M)``    |
+  +--------------+-----------------------------------------------------------------------------------------------------------------------------------+------------------------+
+  | R (range)    | An optimized method to find the ``il``:sup:`th` through the ``ih``:sup:`th` characteristic values are available                   | ``eigvals(M, il, ih)`` |
+  +--------------+-----------------------------------------------------------------------------------------------------------------------------------+------------------------+
+  | I (interval) | An optimized method to find the characteristic values in the interval [``vl``, ``vh``] is available                               | ``eigvals(M, vl, vh)`` |
+  +--------------+-----------------------------------------------------------------------------------------------------------------------------------+------------------------+
+  | V (vectors)  | An optimized method to find the characteristic vectors corresponding to the characteristic values ``x=[x1, x2,...]`` is available | ``eigvecs(M, x)``      |
+  +--------------+-----------------------------------------------------------------------------------------------------------------------------------+------------------------+
 
 +--------------+-----------------------------------------------------------------------------------------------------------------------------------+------------------------+
-| A (all)      | An optimized method to find all the characteristic values and/or vectors is available                                             | e.g. ``eigvals(M)``    |
+| A (all)      | 全ての特性値および/またはベクトルを見つける最適化されたメソッドが利用可能                                                                     | 例 ``eigvals(M)``      |
 +--------------+-----------------------------------------------------------------------------------------------------------------------------------+------------------------+
-| R (range)    | An optimized method to find the ``il``:sup:`th` through the ``ih``:sup:`th` characteristic values are available                   | ``eigvals(M, il, ih)`` |
+| R (range)    | ``ih``:sup:`th` 特性値を通じて ``il``:sup:`th` を見つける最適化されたメソッドが利用可能                                                    | ``eigvals(M, il, ih)`` |
 +--------------+-----------------------------------------------------------------------------------------------------------------------------------+------------------------+
-| I (interval) | An optimized method to find the characteristic values in the interval [``vl``, ``vh``] is available                               | ``eigvals(M, vl, vh)`` |
+| I (interval) | インターバル [``vl``, ``vh``] で特性値を見つける最適化されたメソッドが利用可能                                                              | ``eigvals(M, vl, vh)`` |
 +--------------+-----------------------------------------------------------------------------------------------------------------------------------+------------------------+
-| V (vectors)  | An optimized method to find the characteristic vectors corresponding to the characteristic values ``x=[x1, x2,...]`` is available | ``eigvecs(M, x)``      |
+| V (vectors)  | 特性値 ``x=[x1, x2,...]`` に対応する特性ベクトルを見つける最適化されたメソッドが利用可能                                                     | ``eigvecs(M, x)``      |
 +--------------+-----------------------------------------------------------------------------------------------------------------------------------+------------------------+
 
-The uniform scaling operator
+.. 
+  The uniform scaling operator
+  ----------------------------
+
+均等スケーリング演算子
 ----------------------------
-A :class:`UniformScaling` operator represents a scalar times the identity operator, ``λ*I``. The identity operator  :class:`I` is defined as a constant and is an instance of :class:`UniformScaling`. The size of these operators are generic and match the other matrix in the binary operations :obj:`+`, :obj:`-`, :obj:`*` and :obj:`\\`. For ``A+I`` and ``A-I`` this means that ``A`` must be square. Multiplication with the identity operator :class:`I` is a noop (except for checking that the scaling factor is one) and therefore almost without overhead.
 
+.. 
+  A :class:`UniformScaling` operator represents a scalar times the identity operator, ``λ*I``. The identity operator  :class:`I` is defined as a constant and is an instance of :class:`UniformScaling`. The size of these operators are generic and match the other matrix in the binary operations :obj:`+`, :obj:`-`, :obj:`*` and :obj:`\\`. For ``A+I`` and ``A-I`` this means that ``A`` must be square. Multiplication with the identity operator :class:`I` is a noop (except for checking that the scaling factor is one) and therefore almost without overhead.
+
+:class:`UniformScaling` 演算子は、スカラーをアイデンティティ演算子の倍数 ``λ*I`` で表します。
+アイデンティティ演算子 :class:`I` は定数として定義され、 :class:`UniformScaling` のインスタンスとなります。
+これらの演算子のサイズは一般的であり、他の行列のバイナリ演算 :obj:`+` 、 :obj:`-` 、 :obj:`*` および :obj:`\\` と一致します。
+``A+I`` と ``A-I`` の場合、 ``A`` は平行でなければならないことを意味します。
+アイデンティティ演算子 :class:`I` の乗算はnoop（スケーリング係数が1であることを確認することを除く）であり、
+オーバーヘッドはほとんどありません。
