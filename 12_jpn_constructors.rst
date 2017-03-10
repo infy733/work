@@ -76,37 +76,57 @@ Juliaでは、型オブジェクトはコンストラクタ関数としても機
        その用語が「コンストラクタ関数」ではなく「コンストラクタメソッド」を意味するのに使用されることは文脈から判断することができます。
        「コンストラクタ」という用語は、特にコンストラクタの全体から特定のコンストラクタメソッドを選ぶという意味でよく使われています。
 
-Outer Constructor Methods
+.. 
+  Outer Constructor Methods
+  -------------------------
+
+その他のコンストラクタメソッド
 -------------------------
 
-A constructor is just like any other function in Julia in that its
-overall behavior is defined by the combined behavior of its methods.
-Accordingly, you can add functionality to a constructor by simply
-defining new methods. For example, let's say you want to add a
-constructor method for ``Foo`` objects that takes only one argument and
-uses the given value for both the ``bar`` and ``baz`` fields. This is
-simple::
+.. 
+  A constructor is just like any other function in Julia in that its
+  overall behavior is defined by the combined behavior of its methods.
+  Accordingly, you can add functionality to a constructor by simply
+  defining new methods. For example, let's say you want to add a
+  constructor method for ``Foo`` objects that takes only one argument and
+  uses the given value for both the ``bar`` and ``baz`` fields. This is
+  simple::
+
+コンストラクタは、Juliaの他の関数と同様に、その処理はメソッドの動作を組み合わせることで定義されています。
+したがって、新しいメソッドを定義することで、コンストラクタに機能を追加することができます。
+例えば、引数を1つしか取らない ``Foo`` オブジェクトにコンストラクタメソッドを追加し、
+``bar`` および ``baz`` フィールドに与えられた値を使用したいとします。これは単純に以下とすることでできます。::
 
     Foo(x) = Foo(x,x)
 
     julia> Foo(1)
     Foo(1,1)
 
-You could also add a zero-argument ``Foo`` constructor method that
-supplies default values for both of the ``bar`` and ``baz`` fields::
+.. 
+  You could also add a zero-argument ``Foo`` constructor method that
+  supplies default values for both of the ``bar`` and ``baz`` fields::
+
+``bar`` フィールドと ``baz`` フィールドの両方にデフォルト値を与える、引数のない ``Foo`` コンストラクタメソッドを追加することもできます。::
 
     Foo() = Foo(0)
 
     julia> Foo()
     Foo(0,0)
 
-Here the zero-argument constructor method calls the single-argument
-constructor method, which in turn calls the automatically provided
-two-argument constructor method. For reasons that will become clear very
-shortly, additional constructor methods declared as normal methods like
-this are called *outer* constructor methods. Outer constructor methods
-can only ever create a new instance by calling another constructor
-method, such as the automatically provided default ones.
+.. 
+  Here the zero-argument constructor method calls the single-argument
+  constructor method, which in turn calls the automatically provided
+  two-argument constructor method. For reasons that will become clear very
+  shortly, additional constructor methods declared as normal methods like
+  this are called *outer* constructor methods. Outer constructor methods
+  can only ever create a new instance by calling another constructor
+  method, such as the automatically provided default ones.
+
+ここでは、引数のないコンストラクタメソッドは、単一引数のコンストラクタメソッドを呼び出し、
+次に自動的に提供される2つの引数のコンストラクターメソッドを呼び出します。理由は後述しますが、
+このケースのように通常のメソッドとして宣言される追加のコンストラクタメソッドはアウターコンストラクタメソッドと呼ばれます。
+アウターコンストラクタメソッドは、自動的に与えられるデフォルトのものなどの別のコンストラクタメソッドを呼び出すことで、
+新しいインスタンスを作成することができます。
 
 Inner Constructor Methods
 -------------------------
