@@ -198,7 +198,7 @@ Juliaは、パッケージ開発者やユーザーがJulia 0.4以降のビルト
        ```
        """
 
-   .. warning::
+.. warning::
 .. 
       Calling ``rand`` and other RNG-related functions should be avoided in doctests since
       they will not produce consistent outputs during different Julia sessions.
@@ -216,28 +216,49 @@ doctestの再現性に影響する可能性があります。
 
 doctestの空白が重要であることに注意してください。例えば、pretty-printing配列の出力の位置をずらすと、doctestが失敗します。
 
-
-   You can then run ``make -C doc doctest`` to run all the doctests in the Julia Manual,
+.. 
+   You can then run ``make -C doc doctest`` to run all the doctests in the Julia Manual,
    which will ensure that your example works.
 
    Examples that are untestable should be written within fenced code blocks starting with
    `````julia`` so that they are highlighted correctly in the generated documentation.
+   
+``make -C doc doctest`` を実行することでJulia Manual内のdoctestを全て実行することができ、
+これによりあなたの例が正常に動作するかを確認することができます。
 
-   .. tip::
+テストできない例は、 `````julia`` から始まる分離コードブロック内に記述することで、生成されたドキュメント内で適切にハイライトされます。  
 
-      Wherever possible examples should be **self-contained** and **runnable** so that
+.. tip::
+
+.. 
+      Wherever possible examples should be **self-contained** and **runnable** so that
       readers are able to try them out without having to include any dependencies.
 
-6. Use backticks to identify code and equations.
+可能な限り、例は自己完結的で実行可能でなければなりません。これにより使用者は依存関係を一切含まずにそれらをテストすることができます。
 
-   Julia identifiers and code excerpts should always appear between backticks `````
-   to enable highlighting. Equations in the LaTeX syntax can be inserted between
-   double backticks ``````. Use Unicode characters rather than their LaTeX escape sequence,
-   i.e. ````α = 1```` rather than :samp:`\`\`\\\\alpha = 1\`\``.
+.. 
+  6. Use backticks to identify code and equations.
 
-7. Place the starting and ending ``"""`` characters on lines by themselves.
+     Julia identifiers and code excerpts should always appear between backticks `````
+     to enable highlighting. Equations in the LaTeX syntax can be inserted between
+     double backticks ``````. Use Unicode characters rather than their LaTeX escape sequence,
+     i.e. ````α = 1```` rather than :samp:`\`\`\\\\alpha = 1\`\``.
 
-   That is, write::
+6. コードと式を識別するためにバッククォートを使用します。
+   
+   Juliaの識別子とコードの引用は、ハイライトを可能にするために常にバッククォート ````` の間に記述する必要があります。
+   LaTeX構文の方程式は、ダブルバッククォート `````` の間に挿入することができます。LaTeXエスケープシーケンスではなく、
+   Unicode文字を使用してください。例えば、 :samp:`\`\`\\\\alpha = 1\`\`` ではなく ````α = 1```` と記述してください。
+
+.. 
+  7. Place the starting and ending ``"""`` characters on lines by themselves.
+
+7. 開始と終了の「”""」文字を1行に記述してください。
+
+.. 
+   That is, write::
+
+これは、以下のように記述するべきであり、::
 
        """
        ...
@@ -246,19 +267,28 @@ doctestの空白が重要であることに注意してください。例えば�
        """
        f(x, y) = ...
 
-   rather than::
+.. 
+   rather than::
+
+以下のようにはしないでください。::
 
        """...
 
        ..."""
        f(x, y) = ...
 
-   This makes it more clear where docstrings start and end.
+.. 
+   This makes it more clear where docstrings start and end.
 
-8. Respect the line length limit used in the surrounding code.
+これにより、どこからdocstringが開始し、どこで終了するのかが明確になります。
 
-   Docstrings are edited using the same tools as code. Therefore, the same conventions
-   should apply. It it advised to add line breaks after 92 characters.
+.. 
+  8. Respect the line length limit used in the surrounding code.
+
+     Docstrings are edited using the same tools as code. Therefore, the same conventions
+     should apply. It it advised to add line breaks after 92 characters.
+
+8. 周囲のコードで使用されている行の長さの制限を守ってください。
 
 Accessing Documentation
 -----------------------
