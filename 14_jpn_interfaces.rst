@@ -70,7 +70,7 @@ Juliaの利便性と拡張性の多くは、インフォーマルなインタフ
 ================================================================ ======================================================================
 `HasLength()`                                                    :func:`length(iter) <length>`
 `HasShape()`                                                     :func:`length(iter) <length>` および :func:`size(iter, [dim...]) <size>`
-`IsInfinite()`                                                   (*なし)
+`IsInfinite()`                                                   (*なし*)
 `SizeUnknown()`                                                  (*なし*)
 ================================================================ ======================================================================
 
@@ -89,15 +89,31 @@ Juliaの利便性と拡張性の多くは、インフォーマルなインタフ
 `EltypeUnknown()`                                                    (*なし*)
 ==================================================================== ==================================
 
-Sequential iteration is implemented by the methods :func:`start`, :func:`done`, and :func:`next`. Instead of mutating objects as they are iterated over, Julia provides these three methods to keep track of the iteration state externally from the object. The :func:`start(iter) <start>` method returns the initial state for the iterable object ``iter``. That state gets passed along to :func:`done(iter, state) <done>`, which tests if there are any elements remaining, and :func:`next(iter, state) <next>`, which returns a tuple containing the current element and an updated ``state``. The ``state`` object can be anything, and is generally considered to be an implementation detail private to the iterable object.
+.. 
+  Sequential iteration is implemented by the methods :func:`start`, :func:`done`, and :func:`next`. Instead of mutating objects as they are iterated over, Julia provides these three methods to keep track of the iteration state externally from the object. The :func:`start(iter) <start>` method returns the initial state for the iterable object ``iter``. That state gets passed along to :func:`done(iter, state) <done>`, which tests if there are any elements remaining, and :func:`next(iter, state) <next>`, which returns a tuple containing the current element and an updated ``state``. The ``state`` object can be anything, and is generally considered to be an implementation detail private to the iterable object.
 
-Any object defines these three methods is iterable and can be used in the :ref:`many functions that rely upon iteration <stdlib-collections-iteration>`. It can also be used directly in a ``for`` loop since the syntax::
+逐次反復は :func:`start` 、 :func:`done` 、および :func:`next` のメソッドによって実装されています。
+Juliaは、反復処理する際にオブジェクトを変更する代わりに、オブジェクトから外部的に反復状態を追跡するために
+これらの3つのメソッドを提供します。 :func:`start(iter) <start>` メソッドは、反復可能なオブジェクト ``iter`` 初期状態を返します。
+状態は、要素が残っているかをテストする :func:`done(iter, state) <done>` および現在の要素と
+更新された ``state`` を含むタプルを返す :func:`next(iter, state) <next>` に渡されます。
+``state`` オブジェクトは何にでも当てはまり、一般的に、反復可能オブジェクト専用の実装の詳細と見なされます。
+
+.. 
+  Any object defines these three methods is iterable and can be used in the :ref:`many functions that rely upon iteration <stdlib-collections-iteration>`. It can also be used directly in a ``for`` loop since the syntax::
+
+これらの3つのメソッドを定義するオブジェクトは反復可能であり、 :ref:`反復に依存する多くの関数 <stdlibコレクションの反復>` 内で
+使用することができます。
+また、「for」ループで直接使用することもできます。なぜなら構文は、::
 
     for i in iter   # or  "for i = iter"
         # body
     end
 
-is translated into::
+.. 
+  is translated into::
+
+以下のように解釈できるからです。::
 
     state = start(iter)
     while !done(iter, state)
@@ -105,7 +121,10 @@ is translated into::
         # body
     end
 
-A simple example is an iterable sequence of square numbers with a defined length:
+.. 
+  A simple example is an iterable sequence of square numbers with a defined length:
+  
+簡単な例は、長さが定義された平方数の反復可能なシーケンスです。:  
 
 .. doctest::
 
@@ -118,7 +137,10 @@ A simple example is an iterable sequence of square numbers with a defined length
            Base.eltype(::Type{Squares}) = Int # Note that this is defined for the type
            Base.length(S::Squares) = S.count;
 
-With only ``start``, ``next``, and ``done`` definitions, the ``Squares`` type is already pretty powerful. We can iterate over all the elements:
+.. 
+  With only ``start``, ``next``, and ``done`` definitions, the ``Squares`` type is already pretty powerful. We can iterate over all the elements:
+
+``start`` 、 ``next`` および ``done`` だけでも、 ``Squares`` 型は強力です。全ての要素を繰り返し処理できます。:
 
 .. doctest::
 
@@ -133,7 +155,10 @@ With only ``start``, ``next``, and ``done`` definitions, the ``Squares`` type is
     36
     49
 
-We can use many of the builtin methods that work with iterables, like :func:`in`, :func:`mean` and :func:`std`:
+.. 
+  We can use many of the builtin methods that work with iterables, like :func:`in`, :func:`mean` and :func:`std`:
+
+:func:`in` 、 :func:`mean` および :func:`std` のように、反復可能で動作する多くのビルトインメソッドを使用できます。:
 
 .. doctest::
 
@@ -143,9 +168,19 @@ We can use many of the builtin methods that work with iterables, like :func:`in`
     julia> mean(Squares(100)), std(Squares(100))
     (3383.5,3024.355854282583)
 
-There are a few more methods we can extend to give Julia more information about this iterable collection.  We know that the elements in a ``Squares`` sequence will always be ``Int``. By extending the :func:`eltype` method, we can give that information to Julia and help it make more specialized code in the more complicated methods. We also know the number of elements in our sequence, so we can extend :func:`length`, too.
+.. 
+  There are a few more methods we can extend to give Julia more information about this iterable collection.  We know that the elements in a ``Squares`` sequence will always be ``Int``. By extending the :func:`eltype` method, we can give that information to Julia and help it make more specialized code in the more complicated methods. We also know the number of elements in our sequence, so we can extend :func:`length`, too.
 
-Now, when we ask Julia to :func:`collect` all the elements into an array it can preallocate a ``Vector{Int}`` of the right size instead of blindly ``push!``\ ing each element into a ``Vector{Any}``:
+Juliaにこの繰り返し可能なコレクションについての詳しい情報を与えるために拡張できるメソッドがいくつかあります。
+``Squares`` シーケンスの要素は常に ``Int`` となります。 :func:`eltype` メソッドを拡張することにより、情報をJuliaに与え、
+より複雑なメソッドでより特殊なコードを作成するのをサポートすることができます。シーケンス内の要素の数も知っているため、
+:func:`length` も拡張できます。
+
+.. 
+  Now, when we ask Julia to :func:`collect` all the elements into an array it can preallocate a ``Vector{Int}`` of the right size instead of blindly ``push!``\ ing each element into a ``Vector{Any}``:
+
+Juliaに全ての要素を配列に :func:`collect` するように命令した場合、各要素を盲目的に ``Vector{Any}`` に ``push!``\ するのではなく、
+適切なサイズの ``Vector{Int}`` を事前に割り当てることができます。:
 
 .. doctest::
 
@@ -153,7 +188,12 @@ Now, when we ask Julia to :func:`collect` all the elements into an array it can 
     1×100 Array{Int64,2}:
      1  4  9  16  25  36  49  64  81  100  …  9025  9216  9409  9604  9801  10000
 
-While we can rely upon generic implementations, we can also extend specific methods where we know there is a simpler algorithm.  For example, there's a formula to compute the sum of squares, so we can override the generic iterative version with a more performant solution:
+.. 
+  While we can rely upon generic implementations, we can also extend specific methods where we know there is a simpler algorithm.  For example, there's a formula to compute the sum of squares, so we can override the generic iterative version with a more performant solution:
+
+一般的な実装に頼ることもできますが、よりシンプルなアルゴリズムがあることがわかっている場合は、
+特定のメソッドを拡張することもできます。例えば、平方数の和を計算する式があるため、
+より一般的な反復バージョンを、より効果的なソリューションで上書きすることができます。:
 
 .. doctest::
 
@@ -161,7 +201,12 @@ While we can rely upon generic implementations, we can also extend specific meth
            sum(Squares(1803))
     1955361914
 
-This is a very common pattern throughout the Julia standard library: a small set of required methods define an informal interface that enable many fancier behaviors.  In some cases, types will want to additionally specialize those extra behaviors when they know a more efficient algorithm can be used in their specific case.
+.. 
+  This is a very common pattern throughout the Julia standard library: a small set of required methods define an informal interface that enable many fancier behaviors.  In some cases, types will want to additionally specialize those extra behaviors when they know a more efficient algorithm can be used in their specific case.
+
+これは、Juliaの標準ライブラリ全体を通して非常に一般的なパターンです。少数の必須メソッドは、
+多くの魅力的な動作を可能にするインフォーマルなインターフェイスを定義します。
+より効率的なアルゴリズムを特定のケースで使用できることが分かっている場合、型はそれらの追加の動作をさらに特殊化しようとします。
 
 .. _man-interfaces-indexing:
 
