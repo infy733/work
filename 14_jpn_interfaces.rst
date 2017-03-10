@@ -288,17 +288,48 @@ Intの範囲やベクトルでインデックスを作成するには、別の�
 
 .. _man-interfaces-abstractarray:
 
-Abstract Arrays
+.. 
+  Abstract Arrays
+  ---------------
+
+抽象配列
 ---------------
 
+  ===================================================================== ============================================ =======================================================================================
+  Methods to implement                                                                                               Brief description
+  ===================================================================== ============================================ =======================================================================================
+  :func:`size(A) <size>`                                                                                             Returns a tuple containing the dimensions of ``A``
+  :func:`getindex(A, i::Int) <getindex>`                                                                             (if ``LinearFast``) Linear scalar indexing
+  :func:`getindex(A, I::Vararg{Int, N}) <getindex>`                                                                  (if ``LinearSlow``, where ``N = ndims(A)``) N-dimensional scalar indexing
+  :func:`setindex!(A, v, i::Int) <setindex!>`                                                                        (if ``LinearFast``) Scalar indexed assignment
+  :func:`setindex!(A, v, I::Vararg{Int, N}) <setindex!>`                                                             (if ``LinearSlow``, where ``N = ndims(A)``) N-dimensional scalar indexed assignment
+  **Optional methods**                                                  **Default definition**                       **Brief description**
+  :func:`Base.linearindexing(::Type) <Base.linearindexing>`             ``Base.LinearSlow()``                        Returns either ``Base.LinearFast()`` or ``Base.LinearSlow()``. See the description below.
+  :func:`getindex(A, I...) <getindex>`                                  defined in terms of scalar :func:`getindex`  :ref:`Multidimensional and nonscalar indexing <man-array-indexing>`
+  :func:`setindex!(A, I...) <setindex!>`                                defined in terms of scalar :func:`setindex!` :ref:`Multidimensional and nonscalar indexed assignment <man-array-indexing>`
+  :func:`start`/:func:`next`/:func:`done`                               defined in terms of scalar :func:`getindex`  Iteration
+  :func:`length(A) <length>`                                            ``prod(size(A))``                            Number of elements
+  :func:`similar(A) <similar>`                                          ``similar(A, eltype(A), size(A))``           Return a mutable array with the same shape and element type
+  :func:`similar(A, ::Type{S}) <similar>`                               ``similar(A, S, size(A))``                   Return a mutable array with the same shape and the specified element type
+  :func:`similar(A, dims::NTuple{Int}) <similar>`                       ``similar(A, eltype(A), dims)``              Return a mutable array with the same element type and size `dims`
+  :func:`similar(A, ::Type{S}, dims::NTuple{Int}) <similar>`            ``Array{S}(dims)``                           Return a mutable array with the specified element type and size
+  **Non-traditional indices**                                           **Default definition**                       **Brief description**
+  :func:`indices(A) <indices>`                                          ``map(OneTo, size(A))``                      Return the ``AbstractUnitRange`` of valid indices
+  :func:`Base.similar(A, ::Type{S}, inds::NTuple{Ind}) <similar>`       ``similar(A, S, Base.to_shape(inds))``       Return a mutable array with the specified indices ``inds`` (see below)
+  :func:`Base.similar(T::Union{Type,Function}, inds) <similar>`         ``T(Base.to_shape(inds))``                   Return an array similar to ``T`` with the specified indices ``inds`` (see below)
+  ===================================================================== ============================================ =======================================================================================
+
+
+
+
 ===================================================================== ============================================ =======================================================================================
-Methods to implement                                                                                               Brief description
+実装するメソッド                                                                                                     概要
 ===================================================================== ============================================ =======================================================================================
-:func:`size(A) <size>`                                                                                             Returns a tuple containing the dimensions of ``A``
-:func:`getindex(A, i::Int) <getindex>`                                                                             (if ``LinearFast``) Linear scalar indexing
-:func:`getindex(A, I::Vararg{Int, N}) <getindex>`                                                                  (if ``LinearSlow``, where ``N = ndims(A)``) N-dimensional scalar indexing
-:func:`setindex!(A, v, i::Int) <setindex!>`                                                                        (if ``LinearFast``) Scalar indexed assignment
-:func:`setindex!(A, v, I::Vararg{Int, N}) <setindex!>`                                                             (if ``LinearSlow``, where ``N = ndims(A)``) N-dimensional scalar indexed assignment
+:func:`size(A) <size>`                                                                                             ``A`` の次元を含むタプルを返す
+:func:`getindex(A, i::Int) <getindex>`                                                                             （``LinearFast`` の場合は） 線形スカラーインデックス
+:func:`getindex(A, I::Vararg{Int, N}) <getindex>`                                                                  （ ``N = ndims(A)`` である ``LinearSlow`` の場合は )N次元スカラーインデックス
+:func:`setindex!(A, v, i::Int) <setindex!>`                                                                        （ ``LinearFast`` の場合は）スカラーインデックスの割り当て
+:func:`setindex!(A, v, I::Vararg{Int, N}) <setindex!>`                                                             （ ``N = ndims(A)`` である ``LinearSlow`` の場合は） N次元のスカラーインデックスの割り当て
 **Optional methods**                                                  **Default definition**                       **Brief description**
 :func:`Base.linearindexing(::Type) <Base.linearindexing>`             ``Base.LinearSlow()``                        Returns either ``Base.LinearFast()`` or ``Base.LinearSlow()``. See the description below.
 :func:`getindex(A, I...) <getindex>`                                  defined in terms of scalar :func:`getindex`  :ref:`Multidimensional and nonscalar indexing <man-array-indexing>`
@@ -314,6 +345,7 @@ Methods to implement                                                            
 :func:`Base.similar(A, ::Type{S}, inds::NTuple{Ind}) <similar>`       ``similar(A, S, Base.to_shape(inds))``       Return a mutable array with the specified indices ``inds`` (see below)
 :func:`Base.similar(T::Union{Type,Function}, inds) <similar>`         ``T(Base.to_shape(inds))``                   Return an array similar to ``T`` with the specified indices ``inds`` (see below)
 ===================================================================== ============================================ =======================================================================================
+
 
 If a type is defined as a subtype of ``AbstractArray``, it inherits a very large set of rich behaviors including iteration and multidimensional indexing built on top of single-element access.  See the :ref:`arrays manual page <man-arrays>` and :ref:`standard library section <stdlib-arrays>` for more supported methods.
 
