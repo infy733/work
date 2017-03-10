@@ -1100,13 +1100,19 @@ Juliaのマクロの拡張は、これらの問題を以下のように解決し
 コード生成
 ---------------
 
-When a significant amount of repetitive boilerplate code is required, it
-is common to generate it programmatically to avoid redundancy. In most
-languages, this requires an extra build step, and a separate program to
-generate the repetitive code. In Julia, expression interpolation and
-:func:`eval` allow such code generation to take place in the normal course of
-program execution. For example, the following code defines a series of
-operators on three arguments in terms of their 2-argument forms::
+.. 
+  When a significant amount of repetitive boilerplate code is required, it
+  is common to generate it programmatically to avoid redundancy. In most
+  languages, this requires an extra build step, and a separate program to
+  generate the repetitive code. In Julia, expression interpolation and
+  :func:`eval` allow such code generation to take place in the normal course of
+  program execution. For example, the following code defines a series of
+  operators on three arguments in terms of their 2-argument forms::
+
+多数の繰り返しの定型的なコードが必要な場合は、冗長性を避けるためにプログラムで生成することができます。
+多くの言語では、これには追加のビルド工程が必要となり、また独立したプログラムで繰り返しのコードを生成する必要があります。
+Juliaでは、式の加筆および :func:`eval` により、そのようなコードの生成を通常のプログラム実行時に行うことができます。
+例として、以下のコードは2引数形式の点から、3つの引数の処理を定義したものです。::
 
     for op = (:+, :*, :&, :|, :$)
       eval(quote
@@ -1114,26 +1120,39 @@ operators on three arguments in terms of their 2-argument forms::
       end)
     end
 
-In this manner, Julia acts as its own `preprocessor
-<https://en.wikipedia.org/wiki/Preprocessor>`_, and allows code
-generation from inside the language. The above code could be written
-slightly more tersely using the ``:`` prefix quoting form::
+.. 
+  In this manner, Julia acts as its own `preprocessor
+  <https://en.wikipedia.org/wiki/Preprocessor>`_, and allows code
+  generation from inside the language. The above code could be written
+  slightly more tersely using the ``:`` prefix quoting form::
+
+このやり方では、Juliaは自身の `プレプロセッサ <https://en.wikipedia.org/wiki/Preprocessor>`_ として動作し、
+言語内でのコード生成を可能にします。上記のコードは ``:`` プレフィックス引用形式を使用することで、
+もう少し簡潔に記述することができます。::
 
     for op = (:+, :*, :&, :|, :$)
       eval(:(($op)(a,b,c) = ($op)(($op)(a,b),c)))
     end
 
-This sort of in-language code generation, however, using the
-``eval(quote(...))`` pattern, is common enough that Julia comes with a
-macro to abbreviate this pattern::
+.. 
+  This sort of in-language code generation, however, using the
+  ``eval(quote(...))`` pattern, is common enough that Julia comes with a
+  macro to abbreviate this pattern::
+
+しかし、この種の ``eval(quote(...))`` を使用した言語内コード生成は、
+Juliaのマクロを使うことで省略することが可能です。::
 
     for op = (:+, :*, :&, :|, :$)
       @eval ($op)(a,b,c) = ($op)(($op)(a,b),c)
     end
 
-The :obj:`@eval` macro rewrites this call to be precisely equivalent to the
-above longer versions. For longer blocks of generated code, the
-expression argument given to :obj:`@eval` can be a block::
+.. 
+  The :obj:`@eval` macro rewrites this call to be precisely equivalent to the
+  above longer versions. For longer blocks of generated code, the
+  expression argument given to :obj:`@eval` can be a block::
+
+:obj:`@eval` は、上記の長いコードを正確に短く書き直しています。より長いコード生成のブロックでは、
+:obj:`@eval` への式引数をブロックとすることができます。::
 
     @eval begin
       # multiple lines
@@ -1141,43 +1160,71 @@ expression argument given to :obj:`@eval` can be a block::
 
 .. _man-non-standard-string-literals2:
 
-Non-Standard String Literals
+.. 
+  Non-Standard String Literals
+  ----------------------------
+
+非標準文字列リテラル
 ----------------------------
 
-Recall from :ref:`Strings <man-non-standard-string-literals>` that
-string literals prefixed by an identifier are called non-standard string
-literals, and can have different semantics than un-prefixed string
-literals. For example:
+.. 
+  Recall from :ref:`Strings <man-non-standard-string-literals>` that
+  string literals prefixed by an identifier are called non-standard string
+  literals, and can have different semantics than un-prefixed string
+  literals. For example:
 
--  ``r"^\s*(?:#|$)"`` produces a regular expression object rather than a
-   string
--  ``b"DATA\xff\u2200"`` is a byte array literal for
-   ``[68,65,84,65,255,226,136,128]``.
+識別子の接頭辞が付いた文字列リテラルは非標準文字列リテラルと呼ばれ、
+これは接頭辞が無い文字列リテラルとは異なる意味を持つという :ref:`文字列 <man-非標準文字列リテラル>` の内容を思い出してください。
+例えば、:
 
-Perhaps surprisingly, these behaviors are not hard-coded into the Julia
-parser or compiler. Instead, they are custom behaviors provided by a
-general mechanism that anyone can use: prefixed string literals are
-parsed as calls to specially-named macros. For example, the regular
-expression macro is just the following::
+.. 
+  -  ``r"^\s*(?:#|$)"`` produces a regular expression object rather than a
+     string
+  -  ``b"DATA\xff\u2200"`` is a byte array literal for
+     ``[68,65,84,65,255,226,136,128]``.
+
+-  ``r"^\s*(?:#|$)"`` は文字列ではなく、通常の式オブジェクトを生成します。
+-  ``[68,65,84,65,255,226,136,128]`` は ``b"DATA\xff\u2200"`` のバイト配列リテラルです。
+
+.. 
+  Perhaps surprisingly, these behaviors are not hard-coded into the Julia
+  parser or compiler. Instead, they are custom behaviors provided by a
+  general mechanism that anyone can use: prefixed string literals are
+  parsed as calls to specially-named macros. For example, the regular
+  expression macro is just the following::
+
+驚くかもしれませんが、これらの処理はJuliaの構文解析やコンパイラにハードコーディングされているわけではありません。
+代わりに、識別子の接頭辞が付いた文字列リテラルは、特別なマクロの呼び出しとして解析されるという、
+誰もが使うことができる一般的な仕組みにより実現される、カスタムされた処理です。例えば、通常の式マクロは以下の通りです。::
 
     macro r_str(p)
       Regex(p)
     end
 
-That's all. This macro says that the literal contents of the string
-literal ``r"^\s*(?:#|$)"`` should be passed to the ``@r_str`` macro and
-the result of that expansion should be placed in the syntax tree where
-the string literal occurs. In other words, the expression
-``r"^\s*(?:#|$)"`` is equivalent to placing the following object
-directly into the syntax tree::
+.. 
+  That's all. This macro says that the literal contents of the string
+  literal ``r"^\s*(?:#|$)"`` should be passed to the ``@r_str`` macro and
+  the result of that expansion should be placed in the syntax tree where
+  the string literal occurs. In other words, the expression
+  ``r"^\s*(?:#|$)"`` is equivalent to placing the following object
+  directly into the syntax tree::
+
+これだけです。このマクロは、文字列リテラル ``r"^\s*(?:#|$)"`` のリテラル内容は ``@r_str`` マクロに渡され、
+その拡張の結果は文字列リテラルが発生した構文ツリーに格納されると記述されています。言い換えれば、式 ``r"^\s*(?:#|$)"`` は
+構文ツリーに以下のオブジェクトを直接格納することと同様です。::
 
     Regex("^\\s*(?:#|\$)")
 
-Not only is the string literal form shorter and far more convenient, but
-it is also more efficient: since the regular expression is compiled and
-the :obj:`Regex` object is actually created *when the code is compiled*,
-the compilation occurs only once, rather than every time the code is
-executed. Consider if the regular expression occurs in a loop::
+.. 
+  Not only is the string literal form shorter and far more convenient, but
+  it is also more efficient: since the regular expression is compiled and
+  the :obj:`Regex` object is actually created *when the code is compiled*,
+  the compilation occurs only once, rather than every time the code is
+  executed. Consider if the regular expression occurs in a loop::
+
+この文字列リテラル形式は短くより利便性が高いだけでなく、より効率的です。通常式はコンパイルされ、
+:obj:`Regex` オブジェクトはコードがコンパイルされた際に生成されるため、コンパイルは、
+コードが実行されるごとに行われるのではなく、一度のみ行われます。通常式がループ内で起こるケースを考えてみてください。::
 
     for line = lines
       m = match(r"^\s*(?:#|$)", line)
@@ -1188,11 +1235,16 @@ executed. Consider if the regular expression occurs in a loop::
       end
     end
 
-Since the regular expression ``r"^\s*(?:#|$)"`` is compiled and inserted
-into the syntax tree when this code is parsed, the expression is only
-compiled once instead of each time the loop is executed. In order to
-accomplish this without macros, one would have to write this loop like
-this::
+.. 
+  Since the regular expression ``r"^\s*(?:#|$)"`` is compiled and inserted
+  into the syntax tree when this code is parsed, the expression is only
+  compiled once instead of each time the loop is executed. In order to
+  accomplish this without macros, one would have to write this loop like
+  this::
+
+通常式 ``r"^\s*(?:#|$)"`` は、コードが解析された際にコンパイルされ構文ツリーに挿入されるため、
+ループが実行される度にコンパイルされるのではなく、一度だけコンパイルされます。これをマクロ無しで実現するには、
+ループを以下のように記述しなければなりません。::
 
     re = Regex("^\\s*(?:#|\$)")
     for line = lines
@@ -1204,33 +1256,51 @@ this::
       end
     end
 
-Moreover, if the compiler could not determine that the regex object was
-constant over all loops, certain optimizations might not be possible,
-making this version still less efficient than the more convenient
-literal form above. Of course, there are still situations where the
-non-literal form is more convenient: if one needs to interpolate a
-variable into the regular expression, one must take this more verbose
-approach; in cases where the regular expression pattern itself is
-dynamic, potentially changing upon each loop iteration, a new regular
-expression object must be constructed on each iteration. In the vast
-majority of use cases, however, regular expressions are not constructed
-based on run-time data. In this majority of cases, the ability to write
-regular expressions as compile-time values is invaluable.
+.. 
+  Moreover, if the compiler could not determine that the regex object was
+  constant over all loops, certain optimizations might not be possible,
+  making this version still less efficient than the more convenient
+  literal form above. Of course, there are still situations where the
+  non-literal form is more convenient: if one needs to interpolate a
+  variable into the regular expression, one must take this more verbose
+  approach; in cases where the regular expression pattern itself is
+  dynamic, potentially changing upon each loop iteration, a new regular
+  expression object must be constructed on each iteration. In the vast
+  majority of use cases, however, regular expressions are not constructed
+  based on run-time data. In this majority of cases, the ability to write
+  regular expressions as compile-time values is invaluable.
 
-The mechanism for user-defined string literals is deeply, profoundly
-powerful. Not only are Julia's non-standard literals implemented using
-it, but also the command literal syntax (```echo "Hello, $person"```)
-is implemented with the following innocuous-looking macro::
+さらに、もしコンパイラがregexオブジェクトは全てのループにおいて不変であるか判断がつかない場合、
+特定の最適化処理は不可能であり、この記述方法は上記の便利なリテラル形式よりも非効率的となります。
+もちろん、非リテラル形式がより便利である場合もあります。例えばもし変数を通常式に加筆したい場合、
+この冗長的な記述をする必要があります。また通常式自体が動的の場合は、
+新しい通常式がループの中の各繰り返しごとに構築される必要があります。
+しかし、ほとんどのケースでは、通常式は実行時データを基に構築されることはありません。
+多くの場合では、コンパイル時の値として通常式を書くことができる点は極めて価値があります。
+
+.. 
+  The mechanism for user-defined string literals is deeply, profoundly
+  powerful. Not only are Julia's non-standard literals implemented using
+  it, but also the command literal syntax (```echo "Hello, $person"```)
+  is implemented with the following innocuous-looking macro::
+
+このユーザ定義の文字列リテラルの仕組みは、非常に強力です。Juliaの非標準リテラルがこれを使用して実装されているだけでなく、
+コマンドリテラル構文（ ```echo "Hello, $person"``` ）も以下の何の変哲も無いマクロにより実装されています。::
 
     macro cmd(str)
       :(cmd_gen($shell_parse(str)))
     end
 
-Of course, a large amount of complexity is hidden in the functions used
-in this macro definition, but they are just functions, written
-entirely in Julia. You can read their source and see precisely what they
-do — and all they do is construct expression objects to be inserted into
-your program's syntax tree.
+.. 
+  Of course, a large amount of complexity is hidden in the functions used
+  in this macro definition, but they are just functions, written
+  entirely in Julia. You can read their source and see precisely what they
+  do — and all they do is construct expression objects to be inserted into
+  your program's syntax tree.
+
+もちろん多くの複雑なことがこのマクロ定義の中で使われている関数に隠されていますが、
+それらは単に関数であり、全てJulia内に記述されています。ソースを読むことでそれらが何をしているかを知ることができますが、
+それらは、構築された式オブジェクトをあなたのプログラムの構文ツリーに挿入することが全てです。
 
 Generated functions
 -------------------
