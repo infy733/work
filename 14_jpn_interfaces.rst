@@ -331,9 +331,9 @@ Intの範囲やベクトルでインデックスを作成するには、別の�
 :func:`getindex(A, I::Vararg{Int, N}) <getindex>`                                                                  （ ``N = ndims(A)`` である ``LinearSlow`` の場合は )N次元スカラーインデックス
 :func:`setindex!(A, v, i::Int) <setindex!>`                                                                        （ ``LinearFast`` の場合は）スカラーインデックスの割り当て
 :func:`setindex!(A, v, I::Vararg{Int, N}) <setindex!>`                                                             （ ``N = ndims(A)`` である ``LinearSlow`` の場合は） N次元のスカラーインデックスの割り当て
-**Optional methods**                                                  **Default definition**                       **Brief description**
-:func:`Base.linearindexing(::Type) <Base.linearindexing>`             ``Base.LinearSlow()``                        Returns either ``Base.LinearFast()`` or ``Base.LinearSlow()``. See the description below.
-:func:`getindex(A, I...) <getindex>`                                  defined in terms of scalar :func:`getindex`  :ref:`Multidimensional and nonscalar indexing <man-array-indexing>`
+**オプションのメソッド**                                                  **デフォルト定義**                             **概要**
+:func:`Base.linearindexing(::Type) <Base.linearindexing>`             ``Base.LinearSlow()``                        ``Base.LinearFast()`` もしくは ``Base.LinearSlow()`` を返す。下記説明を参照。
+:func:`getindex(A, I...) <getindex>`                                  スカラー :func:`getindex` の観点から定義される :ref:`多次元と非スカラーインデックス <man-配列のインデックス>`
 :func:`setindex!(A, I...) <setindex!>`                                defined in terms of scalar :func:`setindex!` :ref:`Multidimensional and nonscalar indexed assignment <man-array-indexing>`
 :func:`start`/:func:`next`/:func:`done`                               defined in terms of scalar :func:`getindex`  Iteration
 :func:`length(A) <length>`                                            ``prod(size(A))``                            Number of elements
