@@ -16,12 +16,16 @@
 Juliaは、パッケージ開発者やユーザーがJulia 0.4以降のビルトインドキュメントシステムを使用して、
 関数、型およびその他のオブジェクトを簡単にドキュメント化することができます。
 
-.. tip::
 .. 
+  .. tip::
+
     This documentation system can also be used in Julia 0.3 via the
     `Docile.jl <https://github.com/MichaelHatherly/Docile.jl>`_ package; see
     the documentation for that package for more details.
-    
+
+
+.. tip::
+
 このドキュメントシステムは、Julia 0.3で `Docile.jl <https://github.com/MichaelHatherly/Docile.jl>`_ 
 パッケージで使用できます。詳細については、パッケージの説明を参照してください。
 
