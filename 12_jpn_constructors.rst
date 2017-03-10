@@ -803,7 +803,7 @@ Juliaでは、型オブジェクトはコンストラクタ関数としても機
 これらの定義より前では、 :obj:`//` は構文のみで意味を持たない未定義の演算子です。定義以降では、
 :obj:`//` 演算子は「有理数」に説明がある通りの動作をし、その動作の全てはこれら数行の中に定義されています。
 最も基本的な定義は、 ``a`` と ``b`` が整数の場合にそれらに :class:`Rational` コンストラクタを適用することで、
- ``a//b`` が :class:`Rational` を構成するようにすることです。これらの :obj:`//` の被演算子の一方がすでに有理数の場合は、
+``a//b`` が :class:`Rational` を構成するようにすることです。これらの :obj:`//` の被演算子の一方がすでに有理数の場合は、
 少し異なる処理結果の比率の新しい有理数を構成します。この処理は、整数で有理数を除算することと同一です。
 最後に、 :obj:`//` を複雑な積分の値(complex integral values)に適用すると、
 ``Complex{Rational}`` を作成します。これは、実体と仮想のパーツが有理数である複素数です。:
@@ -834,67 +834,118 @@ Juliaでは、型オブジェクトはコンストラクタ関数としても機
 
 .. _constructors-and-conversion:
 
-Constructors and Conversion
+.. 
+  Constructors and Conversion
+  ---------------------------
+
+コンストラクタと変換
 ---------------------------
 
-Constructors ``T(args...)`` in Julia are implemented like other
-callable objects: methods are added to their types.
-The type of a type is ``Type``, so all constructor methods are
-stored in the method table for the ``Type`` type.
-This means that you can declare more flexible constructors, e.g.
-constructors for abstract types, by explicitly defining methods
-for the appropriate types.
+.. 
+  Constructors ``T(args...)`` in Julia are implemented like other
+  callable objects: methods are added to their types.
+  The type of a type is ``Type``, so all constructor methods are
+  stored in the method table for the ``Type`` type.
+  This means that you can declare more flexible constructors, e.g.
+  constructors for abstract types, by explicitly defining methods
+  for the appropriate types.
 
-However, in some cases you could consider adding methods to
-``Base.convert`` *instead* of defining a constructor, because Julia
-falls back to calling :func:`convert` if no matching constructor
-is found. For example, if no constructor ``T(args...) = ...`` exists
-``Base.convert(::Type{T}, args...) = ...`` is called.
+Juliaのコンストラクタ ``T(args...)`` は、他の呼び出し可能オブジェクトのように実装されています。
+メソッドは、その型に追加されます。ある型の型は ``Type`` であり、全てのコンストラクタメソッドは、
+``Type`` 型のメソッドテーブルに格納されます。これは、適切な型に対して明示的にメソッドを定義することで、
+抽象型のコンストラクタのようなフレキシブルなコンストラクタを宣言できることを意味します。
 
-``convert`` is used extensively throughout Julia whenever one type
-needs to be converted to another (e.g. in assignment, ``ccall``,
-etcetera), and should generally only be defined (or successful) if the
-conversion is lossless.  For example, ``convert(Int, 3.0)`` produces
-``3``, but ``convert(Int, 3.2)`` throws an ``InexactError``.  If you
-want to define a constructor for a lossless conversion from one type
-to another, you should probably define a ``convert`` method instead.
+.. 
+  However, in some cases you could consider adding methods to
+  ``Base.convert`` *instead* of defining a constructor, because Julia
+  falls back to calling :func:`convert` if no matching constructor
+  is found. For example, if no constructor ``T(args...) = ...`` exists
+  ``Base.convert(::Type{T}, args...) = ...`` is called.
 
-On the other hand, if your constructor does not represent a lossless
-conversion, or doesn't represent "conversion" at all, it is better
-to leave it as a constructor rather than a ``convert`` method.  For
-example, the ``Array{Int}()`` constructor creates a zero-dimensional
-``Array`` of the type ``Int``, but is not really a "conversion" from
-``Int`` to an ``Array``.
+しかし、Juliaは一致するコンストラクタが見つからなければ :func:`convert` を呼び出すため、
+コンストラクタを定義する代わりに、 ``Base.convert`` にメソッドを追加することもできます。
+例えば、コンストラクタ ``T(args...) = ...`` が存在しない場合、
+``Base.convert(::Type{T}, args...) = ...`` が呼び出されます。
 
-Outer-only constructors
+.. 
+  ``convert`` is used extensively throughout Julia whenever one type
+  needs to be converted to another (e.g. in assignment, ``ccall``,
+  etcetera), and should generally only be defined (or successful) if the
+  conversion is lossless.  For example, ``convert(Int, 3.0)`` produces
+  ``3``, but ``convert(Int, 3.2)`` throws an ``InexactError``.  If you
+  want to define a constructor for a lossless conversion from one type
+  to another, you should probably define a ``convert`` method instead.
+
+``convert`` は、ある型を別の型に変換する必要があるとき（例えば割り当てや ``ccall`` など）にJuliaでは広く使用され、
+変換が可逆の場合は定義する必要があります。例えば、 ``convert(Int, 3.0)`` は ``3`` となりますが、
+``convert(Int, 3.2)`` では ``InexactError`` となります。ある型から別の型への可逆変換のコンストラクタを定義したい場合は、
+代わりに ``convert`` メソッドを定義する必要があります。
+
+.. 
+  On the other hand, if your constructor does not represent a lossless
+  conversion, or doesn't represent "conversion" at all, it is better
+  to leave it as a constructor rather than a ``convert`` method.  For
+  example, the ``Array{Int}()`` constructor creates a zero-dimensional
+  ``Array`` of the type ``Int``, but is not really a "conversion" from
+  ``Int`` to an ``Array``.
+
+一方、コンストラクタが可逆変換を表していない、または変換を全く表現していない場合は、
+``convert`` メソッドではなくコンストラクタのままとした方がよいでしょう。
+例えば、 ``Array{Int}()`` コンストラクタは、 ``Int`` 型のゼロ次元配列を作成しますが、
+これは ``Int`` から ``Array`` への「変換」ではありません。
+
+.. 
+  Outer-only constructors
+  -----------------------
+
+アウターオンリーコンストラクタ
 -----------------------
 
-As we have seen, a typical parametric type has inner constructors
-that are called when type parameters are known; e.g. they apply
-to ``Point{Int}`` but not to ``Point``.
-Optionally, outer constructors that determine type parameters
-automatically can be added, for example constructing a
-``Point{Int}`` from the call ``Point(1,2)``.
-Outer constructors call inner constructors to do the core
-work of making an instance.
-However, in some cases one would rather not provide inner constructors,
-so that specific type parameters cannot be requested manually.
+.. 
+  As we have seen, a typical parametric type has inner constructors
+  that are called when type parameters are known; e.g. they apply
+  to ``Point{Int}`` but not to ``Point``.
+  Optionally, outer constructors that determine type parameters
+  automatically can be added, for example constructing a
+  ``Point{Int}`` from the call ``Point(1,2)``.
+  Outer constructors call inner constructors to do the core
+  work of making an instance.
+  However, in some cases one would rather not provide inner constructors,
+  so that specific type parameters cannot be requested manually.
 
-For example, say we define a type that stores a vector along with
-an accurate representation of its sum::
+これまで見てきたように、典型的なパラメトリック型には、型パラメータが判明しているときに
+呼び出されるインナーコンストラクタがあります。例えばインナーコンストラクタは「Point{Int}」には
+適用されますが、 ``Point`` には適用されません。オプションで、型パラメータを自動的に決定する
+アウターコンストラクタを追加することができます。例えば、 ``Point(1,2)`` の呼び出しから
+``Point{Int}`` を構築することができます。アウターコンストラクタはインナーコンストラクタを呼び出して、
+インスタンスを作成する中核的な処理を行います。しかし、場合によっては、特定の型パラメータがマニュアルで
+呼び出されないようにするために、インナーコンストラクタを与えない方がいいケースがあります。
+
+.. 
+  For example, say we define a type that stores a vector along with
+  an accurate representation of its sum::
+
+例えば、ベクトルの和を正確に表現したベクトルを格納する型を定義したいとします。::
 
     type SummedArray{T<:Number,S<:Number}
         data::Vector{T}
         sum::S
     end
 
-The problem is that we want ``S`` to be a larger type than ``T``, so
-that we can sum many elements with less information loss.
-For example, when ``T`` is ``Int32``, we would like ``S`` to be ``Int64``.
-Therefore we want to avoid an interface that allows the user to construct
-instances of the type ``SummedArray{Int32,Int32}``.
-One way to do this is to provide only an outer constructor for ``SummedArray``.
-This can be done using method definition by type::
+.. 
+  The problem is that we want ``S`` to be a larger type than ``T``, so
+  that we can sum many elements with less information loss.
+  For example, when ``T`` is ``Int32``, we would like ``S`` to be ``Int64``.
+  Therefore we want to avoid an interface that allows the user to construct
+  instances of the type ``SummedArray{Int32,Int32}``.
+  One way to do this is to provide only an outer constructor for ``SummedArray``.
+  This can be done using method definition by type::
+
+問題は、より多くの要素をより少ない情報の欠落で合計するようにするため、 ``S`` を ``T`` よりも大きな型にしたい点です。
+例えば、 ``T`` が ``Int32`` の場合、 ``S`` を ``Int64`` にする必要があります。
+つまり、ユーザが型 ``SummedArray{Int32,Int32}`` のインスタンスを構築できるインタフェースを防ぎたいと考えています。
+これを実現する1つの方法は、 ``SummedArray`` のアウターコンストラクタのみを与えることです。
+これは、型によるメソッド定義を使用することでできます。::
 
     type SummedArray{T<:Number,S<:Number}
         data::Vector{T}
@@ -906,6 +957,10 @@ This can be done using method definition by type::
         end
     end
 
-This constructor will be invoked by the syntax ``SummedArray(a)``.
-The syntax ``new{T,S}`` allows specifying parameters for the type to be
-constructed, i.e. this call will return a ``SummedArray{T,S}``.
+.. 
+  This constructor will be invoked by the syntax ``SummedArray(a)``.
+  The syntax ``new{T,S}`` allows specifying parameters for the type to be
+  constructed, i.e. this call will return a ``SummedArray{T,S}``.
+  
+このコンストラクタは、構文 ``SummedArray(a)`` によって呼び出されます。構文 ``new{T,S}`` は、
+構築される型のパラメータを指定することを可能にします。この場合、この呼び出しは ``SummedArray{T,S}`` を返します。
