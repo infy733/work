@@ -455,14 +455,23 @@ Juliaでは、型オブジェクトはコンストラクタ関数としても機
 ``xx`` フィールドにアクセスしようとした場合、コンストラクタから返された不完全なオブジェクトと同様に、
 すぐにエラーがスローされます。
 
-Parametric Constructors
+.. 
+  Parametric Constructors
+  -----------------------
+
+パラメトリックコンストラクタ
 -----------------------
 
-Parametric types add a few wrinkles to the constructor story. Recall
-from :ref:`man-parametric-types` that, by default,
-instances of parametric composite types can be constructed either with
-explicitly given type parameters or with type parameters implied by the
-types of the arguments given to the constructor. Here are some examples:
+.. 
+  Parametric types add a few wrinkles to the constructor story. Recall
+  from :ref:`man-parametric-types` that, by default,
+  instances of parametric composite types can be constructed either with
+  explicitly given type parameters or with type parameters implied by the
+  types of the arguments given to the constructor. Here are some examples:
+
+パラメータ型は、コンストラクタにいくつかの便利さを足します。 :ref:`man-パラメータ型` の内容を思い出してください。
+デフォルトでは、パラメータコンポジット型のインスタンスは、明示的に与えられた型パラメータか、
+またはコンストラクタに与えられた引数の型によって暗示的に与えられた型パラメータにより構築できます。以下はその例です。:
 
 .. doctest::
 
@@ -502,27 +511,43 @@ types of the arguments given to the constructor. Here are some examples:
     julia> Point{Float64}(1,2)
     Point{Float64}(1.0,2.0)
 
-As you can see, for constructor calls with explicit type parameters, the
-arguments are converted to the implied field types: ``Point{Int64}(1,2)``
-works, but ``Point{Int64}(1.0,2.5)`` raises an
-``InexactError`` when converting ``2.5`` to ``Int64``.
-When the type is implied by the
-arguments to the constructor call, as in ``Point(1,2)``, then the types
-of the arguments must agree — otherwise the ``T`` cannot be determined —
-but any pair of real arguments with matching type may be given to the
-generic ``Point`` constructor.
+.. 
+  As you can see, for constructor calls with explicit type parameters, the
+  arguments are converted to the implied field types: ``Point{Int64}(1,2)``
+  works, but ``Point{Int64}(1.0,2.5)`` raises an
+  ``InexactError`` when converting ``2.5`` to ``Int64``.
+  When the type is implied by the
+  arguments to the constructor call, as in ``Point(1,2)``, then the types
+  of the arguments must agree — otherwise the ``T`` cannot be determined —
+  but any pair of real arguments with matching type may be given to the
+  generic ``Point`` constructor.
 
-What's really going on here is that ``Point``, ``Point{Float64}`` and
-``Point{Int64}`` are all different constructor functions. In fact,
-``Point{T}`` is a distinct constructor function for each type ``T``.
-Without any explicitly provided inner constructors, the declaration of
-the composite type ``Point{T<:Real}`` automatically provides an inner
-constructor, ``Point{T}``, for each possible type ``T<:Real``, that
-behaves just like non-parametric default inner constructors do. It also
-provides a single general outer ``Point`` constructor that takes pairs
-of real arguments, which must be of the same type. This automatic
-provision of constructors is equivalent to the following explicit
-declaration::
+見てわかる通り、明示的な型パラメータを持つコンストラクタ呼び出しでは、
+引数は暗示的なフィールド型に変換されます。 ``Point{Int64}(1,2)`` は動作しますが、
+``Point{Int64}(1.0,2.5)`` は ``2.5`` を ``Int64`` に変換する際に ``InexactError`` を出力します。
+型が ``Point(1,2)`` のようにコンストラクタ呼び出しの引数によって暗示的に指定されている場合、
+引数の型は一致する必要があり、一致していない場合は ``T`` を決定することができません。
+しかし、型と一致する実引数のペアは汎用 ``Point`` コンストラクタに渡されます。
+
+.. 
+  What's really going on here is that ``Point``, ``Point{Float64}`` and
+  ``Point{Int64}`` are all different constructor functions. In fact,
+  ``Point{T}`` is a distinct constructor function for each type ``T``.
+  Without any explicitly provided inner constructors, the declaration of
+  the composite type ``Point{T<:Real}`` automatically provides an inner
+  constructor, ``Point{T}``, for each possible type ``T<:Real``, that
+  behaves just like non-parametric default inner constructors do. It also
+  provides a single general outer ``Point`` constructor that takes pairs
+  of real arguments, which must be of the same type. This automatic
+  provision of constructors is equivalent to the following explicit
+  declaration::
+
+ここでは、 ``Point`` 、 ``Point{Float64}`` 、 ``Point{Int64}`` がすべて異なるコンストラクタ関数となります。
+``Point{T}`` は、それぞれの型 ``T`` の異なるのコンストラクタ関数です。明示的に与えられたインナーコンストラクタがなければ、
+コンポジット型 ``Point{T<:Real}`` の宣言は、自動的にインナーコンストラクタ ``Point{T}`` を可能な型 ``T<:Real`` の
+それぞれに与え、 ``T<:Real`` 非パラメータのデフォルトインナーコンストラクタのような動作をします。
+また、同じ型でなければならない実際の引数のペアを取る、単一の一般的なアウター ``Point`` コンストラクタも提供します。
+このコンストラクタの自動提供は、次の明示的宣言と同じです。::
 
     type Point{T<:Real}
       x::T
@@ -533,38 +558,60 @@ declaration::
 
     Point{T<:Real}(x::T, y::T) = Point{T}(x,y)
 
-Some features of parametric constructor definitions at work here deserve
-comment. First, inner constructor declarations always define methods of
-``Point{T}`` rather than methods of the general ``Point`` constructor
-function. Since ``Point`` is not a concrete type, it makes no sense for
-it to even have inner constructor methods at all. Thus, the inner method
-declaration ``Point(x,y) = new(x,y)`` provides an inner
-constructor method for each value of ``T``. It is this method
-declaration that defines the behavior of constructor calls with explicit
-type parameters like ``Point{Int64}(1,2)`` and
-``Point{Float64}(1.0,2.0)``. The outer constructor declaration, on the
-other hand, defines a method for the general ``Point`` constructor which
-only applies to pairs of values of the same real type. This declaration
-makes constructor calls without explicit type parameters, like
-``Point(1,2)`` and ``Point(1.0,2.5)``, work. Since the method
-declaration restricts the arguments to being of the same type, calls
-like ``Point(1,2.5)``, with arguments of different types, result in "no
-method" errors.
+.. 
+  Some features of parametric constructor definitions at work here deserve
+  comment. First, inner constructor declarations always define methods of
+  ``Point{T}`` rather than methods of the general ``Point`` constructor
+  function. Since ``Point`` is not a concrete type, it makes no sense for
+  it to even have inner constructor methods at all. Thus, the inner method
+  declaration ``Point(x,y) = new(x,y)`` provides an inner
+  constructor method for each value of ``T``. It is this method
+  declaration that defines the behavior of constructor calls with explicit
+  type parameters like ``Point{Int64}(1,2)`` and
+  ``Point{Float64}(1.0,2.0)``. The outer constructor declaration, on the
+  other hand, defines a method for the general ``Point`` constructor which
+  only applies to pairs of values of the same real type. This declaration
+  makes constructor calls without explicit type parameters, like
+  ``Point(1,2)`` and ``Point(1.0,2.5)``, work. Since the method
+  declaration restricts the arguments to being of the same type, calls
+  like ``Point(1,2.5)``, with arguments of different types, result in "no
+  method" errors.
 
-Suppose we wanted to make the constructor call ``Point(1,2.5)`` work by
-"promoting" the integer value ``1`` to the floating-point value ``1.0``.
-The simplest way to achieve this is to define the following additional
-outer constructor method:
+ここで示しているパラメトリックコンストラクタ定義のいくつかの機能について説明を追加します。
+まず、インナーコンストラクタ宣言は、一般的な ``Point`` コンストラクタ関数のメソッドではなく、
+``Point{T}`` のメソッドを常に定義します。 ``Point`` は具体型ではないため、
+インナーコンストラクタメソッドを持つことは意味がありません。したがって、
+インナーメソッド宣言 ``Point(x,y) = new(x,y)`` は、 ``T`` の各値に対して
+インナーコンストラクタメソッドを与えます。このメソッド宣言は、 ``Point{Int64}(1,2)`` や
+``Point{Float64}(1.0,2.0)`` のような明示的な型パラメータをコンストラクタ呼び出しの動作を定義します。
+一方、アウターコンストラクタ宣言は、同じ実数型の値のペアにのみ適用される一般的な ``Point`` コンストラクタのメソッドを定義します。
+この宣言は、 ``Point(1,2)`` や ``Point(1.0,2.5)`` のような明示的な型パラメータを持たないコンストラクタ呼び出しを
+動作するようにします。メソッドの宣言では、引数が同じ型に制限されるため、 ``Point(1,2.5)`` のように
+異なる型の引数を持つ呼び出しを行うと、「no method」エラーが発生します。
+
+.. 
+  Suppose we wanted to make the constructor call ``Point(1,2.5)`` work by
+  "promoting" the integer value ``1`` to the floating-point value ``1.0``.
+  The simplest way to achieve this is to define the following additional
+  outer constructor method:
+
+整数値 ``1`` を浮動小数点値 ``1.0`` に「昇格」させることによって、コンストラクタ呼び出し ``Point(1,2.5)`` を
+動作させたいとします。これを実現する最も簡単な方法は、以下の追加のアウターコンストラクターメソッドを定義することです。:
 
 .. doctest::
 
     julia> Point(x::Int64, y::Float64) = Point(convert(Float64,x),y);
 
-This method uses the :func:`convert` function to explicitly convert ``x`` to
-:class:`Float64` and then delegates construction to the general constructor
-for the case where both arguments are :class:`Float64`. With this method
-definition what was previously a :exc:`MethodError` now successfully
-creates a point of type ``Point{Float64}``:
+.. 
+  This method uses the :func:`convert` function to explicitly convert ``x`` to
+  :class:`Float64` and then delegates construction to the general constructor
+  for the case where both arguments are :class:`Float64`. With this method
+  definition what was previously a :exc:`MethodError` now successfully
+  creates a point of type ``Point{Float64}``:
+
+このメソッドは、 :func:`convert` 関数を使用して明示的に ``x`` を :class:`Float64` に変換し、
+その後両方の引数が :class:`Float64` の場合の一般的なコンストラクタに渡します。
+このメソッド定義により、以前は :exc:`MethodError` となっていたものが、正常に型 ``Point{Float64}`` のポイントを作成します。:
 
 .. doctest::
 
@@ -574,7 +621,10 @@ creates a point of type ``Point{Float64}``:
     julia> typeof(ans)
     Point{Float64}
 
-However, other similar calls still don't work:
+.. 
+  However, other similar calls still don't work:
+
+しかし、他の同様の呼び出しはまだ動作しません。:
 
 .. doctest::
 
@@ -585,20 +635,30 @@ However, other similar calls still don't work:
       Point{T<:Real}{T}(::Any) at sysimg.jl:53
      ...
 
-For a much more general way of making all such calls work sensibly, see
-:ref:`man-conversion-and-promotion`. At the risk
-of spoiling the suspense, we can reveal here that all it takes is
-the following outer method definition to make all calls to the general
-``Point`` constructor work as one would expect:
+.. 
+  For a much more general way of making all such calls work sensibly, see
+  :ref:`man-conversion-and-promotion`. At the risk
+  of spoiling the suspense, we can reveal here that all it takes is
+  the following outer method definition to make all calls to the general
+  ``Point`` constructor work as one would expect:
+
+そのような呼び出しを分かりやすくするためのより一般的な方法については、 :ref:`man-変換とプロモーション` を
+参照してください。一般的な ``Point`` コンストラクタへの全ての呼び出しを期待どおりに動作させるためには、
+以下のアウターメソッド定義が必要です。:
 
 .. doctest::
 
     julia> Point(x::Real, y::Real) = Point(promote(x,y)...);
 
-The ``promote`` function converts all its arguments to a common type
-— in this case :class:`Float64`. With this method definition, the ``Point``
-constructor promotes its arguments the same way that numeric operators
-like :obj:`+` do, and works for all kinds of real numbers:
+.. 
+  The ``promote`` function converts all its arguments to a common type
+  — in this case :class:`Float64`. With this method definition, the ``Point``
+  constructor promotes its arguments the same way that numeric operators
+  like :obj:`+` do, and works for all kinds of real numbers:
+
+``promote`` 関数は全ての引数を共通の型（この場合は :class:`Float64` ）に変換します。
+このメソッド定義では、「Point」コンストラクタは数値演算子 :obj:`+` のように引数を昇格させ、
+あらゆる種類の実数に対して機能します。:
 
 .. doctest::
 
@@ -611,11 +671,16 @@ like :obj:`+` do, and works for all kinds of real numbers:
     julia> Point(1.0,1//2)
     Point{Float64}(1.0,0.5)
 
-Thus, while the implicit type parameter constructors provided by default
-in Julia are fairly strict, it is possible to make them behave in a more
-relaxed but sensible manner quite easily. Moreover, since constructors
-can leverage all of the power of the type system, methods, and multiple
-dispatch, defining sophisticated behavior is typically quite simple.
+.. 
+  Thus, while the implicit type parameter constructors provided by default
+  in Julia are fairly strict, it is possible to make them behave in a more
+  relaxed but sensible manner quite easily. Moreover, since constructors
+  can leverage all of the power of the type system, methods, and multiple
+  dispatch, defining sophisticated behavior is typically quite simple.
+
+したがって、Juliaでデフォルトで提供されている暗示的な型パラメータコンストラクタはかなり厳密ですが、
+それらをより緩めて分かりやすい方法で簡単に動作させることも可能です。さらに、コンストラクタは型システム、
+メソッド、および多重ディスパッチの全ての機能を活用できるため、洗練された動作を定義することは非常に簡単です。
 
 Case Study: Rational
 --------------------
