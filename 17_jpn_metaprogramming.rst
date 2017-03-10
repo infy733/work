@@ -685,14 +685,23 @@ REPLに ``@sayhello`` が与えられると、式は即座に実行され、こ�
 なぜマクロ？
 ~~~~~~~~~~~~~~~~~~~~
 
-We have already seen a function ``f(::Expr...) -> Expr`` in a previous section.
-In fact, :func:`macroexpand` is also such a function. So, why do macros
-exist?
+.. 
+  We have already seen a function ``f(::Expr...) -> Expr`` in a previous section.
+  In fact, :func:`macroexpand` is also such a function. So, why do macros
+  exist?
 
-Macros are necessary because they execute when code is parsed, therefore,
-macros allow the programmer to generate and include fragments of customized
-code *before* the full program is run. To illustrate the difference,
-consider the following example::
+既に関数 ``f(::Expr...) -> Expr`` は前のセクションで説明しました。
+加えて、 :func:`macroexpand` も似た様な関数です。ではなぜマクロが存在するのでしょうか。
+
+.. 
+  Macros are necessary because they execute when code is parsed, therefore,
+  macros allow the programmer to generate and include fragments of customized
+  code *before* the full program is run. To illustrate the difference,
+  consider the following example::
+
+コードが解析された際に実行されるため、マクロは不可欠です。つまり、マクロにより、
+プログラマは全体のプログラムが実行されるよりも前に、カスタマイズされたコードの一部を生成したり含めたりすることができます。
+この違いを明確にするために、以下の例を参照してください。::
 
     julia> macro twostep(arg)
                println("I execute at parse time. The argument is: ", arg)
@@ -703,8 +712,11 @@ consider the following example::
     julia> ex = macroexpand( :(@twostep :(1, 2, 3)) );
     I execute at parse time. The argument is: :((1,2,3))
 
-The first call to :func:`println` is executed when :func:`macroexpand`
-is called. The resulting expression contains *only* the second ``println``::
+.. 
+  The first call to :func:`println` is executed when :func:`macroexpand`
+  is called. The resulting expression contains *only* the second ``println``::
+
+最初の :func:`println` の呼び出しは、 :func:`macroexpand` が呼び出された際に実行されます。結果の式は2つ目の ``println`` のみを含みます。::
 
     julia> typeof(ex)
     Expr
@@ -715,26 +727,42 @@ is called. The resulting expression contains *only* the second ``println``::
     julia> eval(ex)
     I execute at runtime. The argument is: (1,2,3)
 
-Macro invocation
+.. 
+  Macro invocation
+  ~~~~~~~~~~~~~~~~
+
+マクロの導入
 ~~~~~~~~~~~~~~~~
 
-Macros are invoked with the following general syntax::
+.. 
+  Macros are invoked with the following general syntax::
+
+マクロは以下の基本的な構文で呼び出されます。::
 
     @name expr1 expr2 ...
     @name(expr1, expr2, ...)
 
-Note the distinguishing ``@`` before the macro name and the lack of
-commas between the argument expressions in the first form, and the
-lack of whitespace after ``@name`` in the second form. The two styles
-should not be mixed. For example, the following syntax is different
-from the examples above; it passes the tuple ``(expr1, expr2, ...)`` as
-one argument to the macro::
+.. 
+  Note the distinguishing ``@`` before the macro name and the lack of
+  commas between the argument expressions in the first form, and the
+  lack of whitespace after ``@name`` in the second form. The two styles
+  should not be mixed. For example, the following syntax is different
+  from the examples above; it passes the tuple ``(expr1, expr2, ...)`` as
+  one argument to the macro::
+
+最初の形式のマクロ名の ``@`` と引数式の間にカンマが無い点と、2番目の形式の ``@name`` の後にスペースが無い違いについて注意してください。
+この2つの形式を混同しないようにしてください。例えば、以下の構文は上記の例とは異なります。
+これはタプル ``(expr1, expr2, ...)`` を1つの引数としてマクロに渡します。::
 
     @name (expr1, expr2, ...)
 
-It is important to emphasize that macros receive their arguments as
-expressions, literals, or symbols. One way to explore macro arguments
-is to call the :func:`show` function within the macro body::
+.. 
+  It is important to emphasize that macros receive their arguments as
+  expressions, literals, or symbols. One way to explore macro arguments
+  is to call the :func:`show` function within the macro body::
+
+マクロが引数を式、リテラルまたは記号として受け取ることを強調することは重要です。
+マクロの引数を確認するには、マクロのボディ内に :func:`show` 関数を呼び出す方法があります。::
 
     julia> macro showarg(x)
        show(x)
@@ -752,16 +780,26 @@ is to call the :func:`show` function within the macro body::
     :(println("Yo!"))
 
 
-Building an advanced macro
+.. 
+  Building an advanced macro
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+高度なマクロの構築
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Here is a simplified definition of Julia's :obj:`@assert` macro::
+.. 
+  Here is a simplified definition of Julia's :obj:`@assert` macro::
+
+以下はJuliaの :obj:`@assert` マクロの簡略化された定義です。:
 
     macro assert(ex)
         return :( $ex ? nothing : throw(AssertionError($(string(ex)))) )
     end
 
-This macro can be used like this:
+.. 
+  This macro can be used like this:
+
+このマクロは以下のように使用することができます。:
 
 .. doctest::
 
@@ -771,28 +809,46 @@ This macro can be used like this:
     ERROR: AssertionError: 1 == 0
      ...
 
-In place of the written syntax, the macro call is expanded at parse time to
-its returned result. This is equivalent to writing::
+.. 
+  In place of the written syntax, the macro call is expanded at parse time to
+  its returned result. This is equivalent to writing::
+
+記述された構文の代わりに、マクロの呼び出しは解析時に返される結果まで拡張されます。
+これは以下のように記述することと同様です。::
 
     1==1.0 ? nothing : throw(AssertionError("1==1.0"))
     1==0 ? nothing : throw(AssertionError("1==0"))
 
-That is, in the first call, the expression ``:(1==1.0)`` is spliced into
-the test condition slot, while the value of ``string(:(1==1.0))`` is
-spliced into the assertion message slot. The entire expression, thus
-constructed, is placed into the syntax tree where the :obj:`@assert` macro
-call occurs. Then at execution time, if the test expression evaluates to
-true, then ``nothing`` is returned, whereas if the test is false, an error
-is raised indicating the asserted expression that was false. Notice that
-it would not be possible to write this as a function, since only the
-*value* of the condition is available and it would be impossible to
-display the expression that computed it in the error message.
+.. 
+  That is, in the first call, the expression ``:(1==1.0)`` is spliced into
+  the test condition slot, while the value of ``string(:(1==1.0))`` is
+  spliced into the assertion message slot. The entire expression, thus
+  constructed, is placed into the syntax tree where the :obj:`@assert` macro
+  call occurs. Then at execution time, if the test expression evaluates to
+  true, then ``nothing`` is returned, whereas if the test is false, an error
+  is raised indicating the asserted expression that was false. Notice that
+  it would not be possible to write this as a function, since only the
+  *value* of the condition is available and it would be impossible to
+  display the expression that computed it in the error message.
 
-The actual definition of :obj:`@assert` in the standard library is more
-complicated. It allows the user to optionally specify their own error
-message, instead of just printing the failed expression. Just like in
-functions with a variable number of arguments, this is specified with an
-ellipses following the last argument::
+最初の呼び出しでは、式 ``:(1==1.0)`` は条件判断スロットに継ぎ合わされ、一方で ``string(:(1==1.0))`` の値は
+アサーションメッセージスロットに継ぎ合わされます。したがって、構築された式全体は、
+:obj:`@assert` マクロ呼び出しが発生する構文ツリーに挿入されます。その後、実行時において、
+条件判断の結果がtrueの場合は ``nothing`` が返され、一方で条件判断の結果がfalseの場合は
+アサーション式が誤りであることを示すエラーが出力されます。条件式の値のみが使用可能であり、
+エラーメッセージ内で処理された式を表示することは不可能であるため、
+これを関数として記述することはできない点に注意してください。
+
+.. 
+  The actual definition of :obj:`@assert` in the standard library is more
+  complicated. It allows the user to optionally specify their own error
+  message, instead of just printing the failed expression. Just like in
+  functions with a variable number of arguments, this is specified with an
+  ellipses following the last argument::
+
+標準ライブラリの :obj:`@assert` の実際の定義はより複雑です。ユーザは、失敗した式を単に出力するのではなく、
+オプションでエラーメッセージを指定することができます。多くの引数を持つ変数を使う関数の様に、
+これは最後の引数の後に省略記号をつけて指定することができます。::
 
     macro assert(ex, msgs...)
         msg_body = isempty(msgs) ? ex : msgs[1]
@@ -800,13 +856,19 @@ ellipses following the last argument::
         return :($ex ? nothing : throw(AssertionError($msg)))
     end
 
-Now :obj:`@assert` has two modes of operation, depending upon the number of
-arguments it receives! If there's only one argument, the tuple of expressions
-captured by ``msgs`` will be empty and it will behave the same as the simpler
-definition above. But now if the user specifies a second argument, it is
-printed in the message body instead of the failing expression. You can inspect
-the result of a macro expansion with the aptly named :func:`macroexpand`
-function:
+.. 
+  Now :obj:`@assert` has two modes of operation, depending upon the number of
+  arguments it receives! If there's only one argument, the tuple of expressions
+  captured by ``msgs`` will be empty and it will behave the same as the simpler
+  definition above. But now if the user specifies a second argument, it is
+  printed in the message body instead of the failing expression. You can inspect
+  the result of a macro expansion with the aptly named :func:`macroexpand`
+  function:
+
+:obj:`@assert` は、受け取る引数の数に依存した2つの操作モードがあります。引数が1つの場合は、
+``msgs`` により取得された式のタプルは空となり、上記のような簡易の定義のものと同様の動作をします。
+しかし、ユーザが2つ目の引数を定義した場合は、処理に失敗した式の代わりに、メッセージの本文に出力されます。
+:func:`macroexpand` を使用することで、マクロの拡張結果を調べることができます。:
 
 .. doctest::
 
@@ -824,14 +886,22 @@ function:
             (Base.throw)(Base.Main.Base.AssertionError("a should equal b!"))
         end)
 
-There is yet another case that the actual :obj:`@assert` macro handles: what
-if, in addition to printing "a should equal b," we wanted to print their
-values? One might naively try to use string interpolation in the custom
-message, e.g., ``@assert a==b "a ($a) should equal b ($b)!"``, but this
-won't work as expected with the above macro. Can you see why? Recall
-from :ref:`string interpolation <man-string-interpolation>` that an
-interpolated string is rewritten to a call to :func:`string`.
-Compare:
+.. 
+  There is yet another case that the actual :obj:`@assert` macro handles: what
+  if, in addition to printing "a should equal b," we wanted to print their
+  values? One might naively try to use string interpolation in the custom
+  message, e.g., ``@assert a==b "a ($a) should equal b ($b)!"``, but this
+  won't work as expected with the above macro. Can you see why? Recall
+  from :ref:`string interpolation <man-string-interpolation>` that an
+  interpolated string is rewritten to a call to :func:`string`.
+  Compare:
+
+しかし :obj:`@assert` が処理する別のケースが存在します。「a should equal b」と出力することに加えて、
+この値を出力したいとなった場合、どうすればよいでしょうか。単純に ``@assert a==b "a ($a) should equal b ($b)!"`` のように
+カスタムされたメッセージに文字列を継ぎ合せすることでできると考えるかもしれませんが、上記のマクロでは期待通りにはいきません。
+なぜだかわかるでしょうか。加筆された文字列は :func:`string` を呼び出すために
+再度記述されるという :ref:`文字列の加筆 <man-文字列の加筆>` の内容を思い出してください。
+以下を比べてみてください。:
 
 .. doctest::
 
@@ -852,41 +922,69 @@ Compare:
         5: String ")!"
       typ: Any
 
-So now instead of getting a plain string in ``msg_body``, the macro is
-receiving a full expression that will need to be evaluated in order to
-display as expected. This can be spliced directly into the returned expression
-as an argument to the :func:`string` call; see `error.jl
-<https://github.com/JuliaLang/julia/blob/master/base/error.jl>`_ for
-the complete implementation.
+.. 
+  So now instead of getting a plain string in ``msg_body``, the macro is
+  receiving a full expression that will need to be evaluated in order to
+  display as expected. This can be spliced directly into the returned expression
+  as an argument to the :func:`string` call; see `error.jl
+  <https://github.com/JuliaLang/julia/blob/master/base/error.jl>`_ for
+  the complete implementation.
 
-The :obj:`@assert` macro makes great use of splicing into quoted expressions
-to simplify the manipulation of expressions inside the macro body.
+``msg_body`` 内にプレーンなテキストを得る代わりに、マクロは、期待通りに出力するために
+評価される必要がある式全体を受け取っています。 :func:`string` の呼び出しの引数のように、
+これは返された式に直接継ぎ合せることができます。
+詳細な実装は `error.jl <https://github.com/JuliaLang/julia/blob/master/base/error.jl>`_ を
+参照してください。
 
+.. 
+  The :obj:`@assert` macro makes great use of splicing into quoted expressions
+  to simplify the manipulation of expressions inside the macro body.
 
-Hygiene
+:obj:`@assert` マクロは、マクロ本体の式の操作を単純化するために、引用式への継ぎ合せを非常にうまく利用します。
+
+.. 
+  Hygiene
+  ~~~~~~~
+
+衛生規約
 ~~~~~~~
 
-An issue that arises in more complex macros is that of
-`hygiene <https://en.wikipedia.org/wiki/Hygienic_macro>`_. In short, macros must
-ensure that the variables they introduce in their returned expressions do not
-accidentally clash with existing variables in the surrounding code they expand
-into. Conversely, the expressions that are passed into a macro as arguments are
-often *expected* to evaluate in the context of the surrounding code,
-interacting with and modifying the existing variables. Another concern arises
-from the fact that a macro may be called in a different module from where it
-was defined. In this case we need to ensure that all global variables are
-resolved to the correct module. Julia already has a major advantage over
-languages with textual macro expansion (like C) in that it only needs to
-consider the returned expression. All the other variables (such as ``msg`` in
-:obj:`@assert` above) follow the :ref:`normal scoping block behavior
-<man-variables-and-scoping>`.
+.. 
+  An issue that arises in more complex macros is that of
+  `hygiene <https://en.wikipedia.org/wiki/Hygienic_macro>`_. In short, macros must
+  ensure that the variables they introduce in their returned expressions do not
+  accidentally clash with existing variables in the surrounding code they expand
+  into. Conversely, the expressions that are passed into a macro as arguments are
+  often *expected* to evaluate in the context of the surrounding code,
+  interacting with and modifying the existing variables. Another concern arises
+  from the fact that a macro may be called in a different module from where it
+  was defined. In this case we need to ensure that all global variables are
+  resolved to the correct module. Julia already has a major advantage over
+  languages with textual macro expansion (like C) in that it only needs to
+  consider the returned expression. All the other variables (such as ``msg`` in
+  :obj:`@assert` above) follow the :ref:`normal scoping block behavior
+  <man-variables-and-scoping>`.
 
-To demonstrate these issues,
-let us consider writing a ``@time`` macro that takes an expression as
-its argument, records the time, evaluates the expression, records the
-time again, prints the difference between the before and after times,
-and then has the value of the expression as its final value.
-The macro might look like this::
+より複雑なマクロにおいて発生する問題は、衛生規約（ `hygiene <https://en.wikipedia.org/wiki/Hygienic_macro>`_ ）です。
+要約すると、マクロは、返された式の使用する変数が拡張しようとしている周りのコードの変数を誤って競合しないように、
+保証しなければなりません。反対に、引数としてマクロに渡される式は、
+既存の変数と相互作用および既存の変数を変更しながら、周囲のコードの文脈の中で評価されることが期待されています。
+その他の懸念として、マクロは定義されたモジュールとはことなるモジュールで呼び出される点があります。
+この場合、全てのグローバル変数は正しいモジュールに対して解決されていることを保証する必要があります。
+Juliaは、返された式のみを考慮すればよいという点において、他のテキストマクロ拡張の言語（Cなど）に対して
+大きな優位性を持ちます。他の全ての変数（上記 :obj:`@assert` の ``msg`` など）は :ref:`通常スコープの動作<man-変数とスコープ` に
+従います。
+
+.. 
+  To demonstrate these issues,
+  let us consider writing a ``@time`` macro that takes an expression as
+  its argument, records the time, evaluates the expression, records the
+  time again, prints the difference between the before and after times,
+  and then has the value of the expression as its final value.
+  The macro might look like this::
+
+これらの問題を説明するため、式を引数として取り、時間を記録し、式を評価し、時間を再度記録し、
+前後の時間の差分を出力し、その式の値を最終値として持つ ``@time`` マクロについて考えてみましょう。このマクロはこのようになります。::
 
     macro time(ex)
       return quote
@@ -898,26 +996,45 @@ The macro might look like this::
       end
     end
 
-Here, we want ``t0``, ``t1``, and ``val`` to be private temporary variables,
-and we want ``time`` to refer to the :func:`time` function in the standard library,
-not to any ``time`` variable the user might have (the same applies to
-``println``). Imagine the problems that could occur if the user expression
-``ex`` also contained assignments to a variable called ``t0``, or defined
-its own ``time`` variable. We might get errors, or mysteriously incorrect
-behavior.
+.. 
+  Here, we want ``t0``, ``t1``, and ``val`` to be private temporary variables,
+  and we want ``time`` to refer to the :func:`time` function in the standard library,
+  not to any ``time`` variable the user might have (the same applies to
+  ``println``). Imagine the problems that could occur if the user expression
+  ``ex`` also contained assignments to a variable called ``t0``, or defined
+  its own ``time`` variable. We might get errors, or mysteriously incorrect
+  behavior.
 
-Julia's macro expander solves these problems in the following way. First,
-variables within a macro result are classified as either local or global.
-A variable is considered local if it is assigned to (and not declared
-global), declared local, or used as a function argument name. Otherwise,
-it is considered global. Local variables are then renamed to be unique
-(using the :func:`gensym` function, which generates new symbols), and global
-variables are resolved within the macro definition environment. Therefore
-both of the above concerns are handled; the macro's locals will not conflict
-with any user variables, and ``time`` and ``println`` will refer to the
-standard library definitions.
+ここでは、 ``t0`` 、 ``t1`` および ``val`` は一時的なプライベート変数とする必要があり、
+また ``time`` は、ユーザが定義した ``time`` 変数ではなく、標準ライブラリの　``time``　関数を指したいとします
+（これは　 ``println`` も同様です）。ユーザ定義の式 ``ex`` は ``t0`` という変数の割り当ても含んでいる、
+または ``time`` という変数を定義している場合の問題を想像してください。処理の結果エラーが出力されるかもしれませんし、
+よくわからない間違った処理をするかもしれません。
 
-One problem remains however. Consider the following use of this macro::
+.. 
+  Julia's macro expander solves these problems in the following way. First,
+  variables within a macro result are classified as either local or global.
+  A variable is considered local if it is assigned to (and not declared
+  global), declared local, or used as a function argument name. Otherwise,
+  it is considered global. Local variables are then renamed to be unique
+  (using the :func:`gensym` function, which generates new symbols), and global
+  variables are resolved within the macro definition environment. Therefore
+  both of the above concerns are handled; the macro's locals will not conflict
+  with any user variables, and ``time`` and ``println`` will refer to the
+  standard library definitions.
+
+Juliaのマクロの拡張は、これらの問題を以下のように解決します。まず最初に、マクロの結果内の変数は
+コーカルまたはグローバルのどちらかとして機密扱いになります。変数は、もしそれがローカルに割り当てられている
+（およびグローバルとして宣言されていない）、ローカルとして宣言されている、または関数の引数名として使用されている場合は、
+ローカルとしてみなされます。そうでなければ、変数はグローバルとみなされます。
+ローカル変数はユニークになるように（新しい記号を生成する :func:`gensym` 関数を使用して）再度名前が付けられ、
+グローバル変数はマクロ定義の環境内で解決されます。したがって、上記の2つの懸念は解消されます。
+マクロのローカルはユーザ定義と競合することはなく、 ``time`` と ``println`` は標準ライブラリの定義を参照します。
+
+.. 
+  One problem remains however. Consider the following use of this macro::
+
+しかし、1つの問題が残ります。以下のマクロの使い方を考えてみてください。::
 
     module MyModule
     import Base.@time
@@ -927,11 +1044,16 @@ One problem remains however. Consider the following use of this macro::
     @time time()
     end
 
-Here the user expression ``ex`` is a call to ``time``, but not the same
-``time`` function that the macro uses. It clearly refers to ``MyModule.time``.
-Therefore we must arrange for the code in ``ex`` to be resolved in the
-macro call environment. This is done by "escaping" the expression with
-:func:`esc`::
+.. 
+  Here the user expression ``ex`` is a call to ``time``, but not the same
+  ``time`` function that the macro uses. It clearly refers to ``MyModule.time``.
+  Therefore we must arrange for the code in ``ex`` to be resolved in the
+  macro call environment. This is done by "escaping" the expression with
+  :func:`esc`::
+
+ここではユーザ定義式 ``ex`` は ``time`` の呼び出しですが、マクロが使用している ``time`` 関数とは異なるものです。
+これは明らかに ``MyModule.time`` を参照しています。したがって、 ``ex`` がマクロの呼び出し環境で解決されるように、
+手を加えなければなりません。これは、 :func:`esc` を使用して式をエスケープすることでできます。::
 
     macro time(ex)
         ...
@@ -939,13 +1061,21 @@ macro call environment. This is done by "escaping" the expression with
         ...
     end
 
-An expression wrapped in this manner is left alone by the macro expander
-and simply pasted into the output verbatim. Therefore it will be
-resolved in the macro call environment.
+.. 
+  An expression wrapped in this manner is left alone by the macro expander
+  and simply pasted into the output verbatim. Therefore it will be
+  resolved in the macro call environment.
 
-This escaping mechanism can be used to "violate" hygiene when necessary,
-in order to introduce or manipulate user variables. For example, the
-following macro sets ``x`` to zero in the call environment::
+この方法でラッピングされた式はマクロ拡張からは干渉されず、単に言葉通りに出力されます。
+したがって、これはマクロの呼び出し環境で解決されます。
+
+.. 
+  This escaping mechanism can be used to "violate" hygiene when necessary,
+  in order to introduce or manipulate user variables. For example, the
+  following macro sets ``x`` to zero in the call environment::
+
+このエスケープの仕組みは、ユーザ定義変数を渡したり操作するために、必要な場合は衛生規約に
+違反するために使うことができます。例えば、以下のマクロは呼び出し環境では ``x`` をゼロと設定しています。::
 
     macro zerox()
       return esc(:(x = 0))
@@ -957,10 +1087,17 @@ following macro sets ``x`` to zero in the call environment::
       x  # is zero
     end
 
-This kind of manipulation of variables should be used judiciously, but
-is occasionally quite handy.
+.. 
+  This kind of manipulation of variables should be used judiciously, but
+  is occasionally quite handy.
 
-Code Generation
+この種の変数の操作は賢明に使用する必要がありますが、場合によっては非常に便利です。
+
+.. 
+  Code Generation
+  ---------------
+
+コード生成
 ---------------
 
 When a significant amount of repetitive boilerplate code is required, it
