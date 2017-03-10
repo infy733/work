@@ -559,8 +559,11 @@ Juliaにおける「:」は2つの構文上の目的を持ちます。1つ目の
     julia> eval(ex)
     21
 
-As another example, here is a function that doubles any numeric argument,
-but leaves expressions alone::
+.. 
+  As another example, here is a function that doubles any numeric argument,
+  but leaves expressions alone::
+
+他の例と同様に、ここでは関数は2つの数値引数を取り、式を1つにする例です。::
 
     julia> function make_expr2(op, opr1, opr2)
              opr1f, opr2f = map(x -> isa(x, Number) ? 2*x : x, (opr1, opr2))
@@ -581,19 +584,35 @@ but leaves expressions alone::
 
 .. _man-macros:
 
-Macros
+.. 
+  Macros
+  ------
+
+マクロ
 ------
 
-Macros provide a method to include generated code in the final body
-of a program. A macro maps a tuple of arguments to a returned
-*expression*, and the resulting expression is compiled directly rather
-than requiring a runtime :func:`eval` call. Macro arguments may include
-expressions, literal values, and symbols.
+.. 
+  Macros provide a method to include generated code in the final body
+  of a program. A macro maps a tuple of arguments to a returned
+  *expression*, and the resulting expression is compiled directly rather
+  than requiring a runtime :func:`eval` call. Macro arguments may include
+  expressions, literal values, and symbols.
 
-Basics
+マクロはプログラムのボディ部の最後に生成されたコードを含めるメソッドを提供します。
+返された式の引数のマクロマップタプルと結果の式は、実行時に :func:`eval` を呼び出すことなく、
+直接コンパイルされます。マクロの引数は、式、リテラル、値、そして記号を含めることができます。
+
+.. 
+  Basics
+  ~~~~~~
+
+基本
 ~~~~~~
 
-Here is an extraordinarily simple macro:
+.. 
+  Here is an extraordinarily simple macro:
+
+以下は非常にシンプルなマクロの例です。:
 
 .. testcode::
 
@@ -606,34 +625,50 @@ Here is an extraordinarily simple macro:
 
     @sayhello (macro with 1 method)
 
-Macros have a dedicated character in Julia's syntax: the ``@`` (at-sign),
-followed by the unique name declared in a ``macro NAME ... end`` block.
-In this example, the compiler will replace all instances of ``@sayhello``
-with::
+.. 
+  Macros have a dedicated character in Julia's syntax: the ``@`` (at-sign),
+  followed by the unique name declared in a ``macro NAME ... end`` block.
+  In this example, the compiler will replace all instances of ``@sayhello``
+  with::
+
+マクロは専用の文字列、 ``macro NAME ... end`` ブロック内に宣言されたユニークな名前が後に続く ``@`` をJuliaの構文に持ちます。
+この例では、コンパイラは ``@sayhello`` の全てのインスタンスを以下と置き換えます。::
 
     :( println("Hello, world!") )
 
-When ``@sayhello`` is given at the REPL, the expression executes
-immediately, thus we only see the evaluation result::
+.. 
+  When ``@sayhello`` is given at the REPL, the expression executes
+  immediately, thus we only see the evaluation result::
+
+REPLに ``@sayhello`` が与えられると、式は即座に実行され、これにより評価結果のみ出力されます。::
 
     julia> @sayhello()
     "Hello, world!"
 
-Now, consider a slightly more complex macro::
+.. 
+  Now, consider a slightly more complex macro::
+
+それでは少し複雑なマクロを見てみましょう。:
 
     julia> macro sayhello(name)
                return :( println("Hello, ", $name) )
            end
 
-This macro takes one argument: ``name``. When ``@sayhello`` is
-encountered, the quoted expression is *expanded* to interpolate
-the value of the argument into the final expression::
+.. 
+  This macro takes one argument: ``name``. When ``@sayhello`` is
+  encountered, the quoted expression is *expanded* to interpolate
+  the value of the argument into the final expression::
+
+このマクロは1つの引数 ``name`` を取ります。 ``@sayhello`` に当たると、引用式は引数の値を最終的な式に加筆するために拡張されます。::
 
     julia> @sayhello("human")
     Hello, human
 
-We can view the quoted return expression using the function :func:`macroexpand`
-(**important note:** this is an extremely useful tool for debugging macros)::
+.. 
+  We can view the quoted return expression using the function :func:`macroexpand`
+  (**important note:** this is an extremely useful tool for debugging macros)::
+
+:func:`macroexpand` を使用することで、引用された返される式を確認することができます（**重要:**これはマクロのデバッグの際に非常に有効です）。::
 
     julia> ex = macroexpand( :(@sayhello("human")) )
     :(println("Hello, ","human"))
@@ -643,7 +678,11 @@ We can view the quoted return expression using the function :func:`macroexpand`
     julia> typeof(ex)
     Expr
 
-Hold up: why macros?
+.. 
+  Hold up: why macros?
+  ~~~~~~~~~~~~~~~~~~~~
+
+なぜマクロ？
 ~~~~~~~~~~~~~~~~~~~~
 
 We have already seen a function ``f(::Expr...) -> Expr`` in a previous section.
