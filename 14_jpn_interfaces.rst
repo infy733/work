@@ -234,7 +234,12 @@ Juliaに全ての要素を配列に :func:`collect` するように命令した�
 :func:`endof(X) <endof>`               ``X[end]`` に使用された最後のインデックス
 ====================================== ==================================
 
-For the ``Squares`` iterable above, we can easily compute the ``i``\ th element of the sequence by squaring it.  We can expose this as an indexing expression ``S[i]``.  To opt into this behavior, ``Squares`` simply needs to define :func:`getindex`:
+.. 
+  For the ``Squares`` iterable above, we can easily compute the ``i``\ th element of the sequence by squaring it.  We can expose this as an indexing expression ``S[i]``.  To opt into this behavior, ``Squares`` simply needs to define :func:`getindex`:
+
+上記の反復可能な「Squares」については、シーケンスの ``i``\ 番目の要素はそれを2乗することで簡単に計算できます。
+これをインデックスの式 ``S[i]`` として記述することができます。この動作に加わるためには、
+``Squares`` は単に :func:`getindex` を定義する必要があります。:
 
 .. doctest::
 
@@ -245,7 +250,10 @@ For the ``Squares`` iterable above, we can easily compute the ``i``\ th element 
            Squares(100)[23]
     529
 
-Additionally, to support the syntax ``S[end]``, we must define :func:`endof` to specify the last valid index:
+.. 
+  Additionally, to support the syntax ``S[end]``, we must define :func:`endof` to specify the last valid index:
+
+さらに、構文 ``S[end]`` をサポートするには、最後の有効なインデックスを指定するために :func:`endof` を定義する必要があります。:
 
 .. doctest::
 
@@ -253,7 +261,12 @@ Additionally, to support the syntax ``S[end]``, we must define :func:`endof` to 
            Squares(23)[end]
     529
 
-Note, though, that the above *only* defines :func:`getindex` with one integer index. Indexing with anything other than an ``Int`` will throw a ``MethodError`` saying that there was no matching method.  In order to support indexing with ranges or vectors of Ints, separate methods must be written:
+.. 
+  Note, though, that the above *only* defines :func:`getindex` with one integer index. Indexing with anything other than an ``Int`` will throw a ``MethodError`` saying that there was no matching method.  In order to support indexing with ranges or vectors of Ints, separate methods must be written:
+
+ただし、上の例では :func:`getindex` と整数インデックスを1つだけ定義していることに注意してください。
+``Int`` 以外のものでインデックスを作成すると、一致するメソッドがないことを示す ``MethodError`` がスローされます。
+Intの範囲やベクトルでインデックスを作成するには、別のメソッドを記述する必要があります。:
 
 .. doctest::
 
@@ -265,7 +278,13 @@ Note, though, that the above *only* defines :func:`getindex` with one integer in
      16
      25
 
-While this is starting to support more of the :ref:`indexing operations supported by some of the builtin types <man-array-indexing>`, there's still quite a number of behaviors missing. This ``Squares`` sequence is starting to look more and more like a vector as we've added behaviors to it. Instead of defining all these behaviors ourselves, we can officially define it as a subtype of an ``AbstractArray``.
+.. 
+  While this is starting to support more of the :ref:`indexing operations supported by some of the builtin types <man-array-indexing>`, there's still quite a number of behaviors missing. This ``Squares`` sequence is starting to look more and more like a vector as we've added behaviors to it. Instead of defining all these behaviors ourselves, we can officially define it as a subtype of an ``AbstractArray``.
+
+これは「いくつかのビルトインの型でサポートされているインデックス処理」の多くをサポートし始めていますが、
+依然として全ての動作ではありません。この ``Squares`` シーケンスは、私たちが動作を追加するごとに、
+ベクトルのような動作をします。これらの動作を全て自分で定義するのではなく、
+``AbstractArray`` のサブタイプとして正式に定義することができます。
 
 .. _man-interfaces-abstractarray:
 
