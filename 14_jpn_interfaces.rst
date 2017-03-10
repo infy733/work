@@ -210,15 +210,28 @@ Juliaに全ての要素を配列に :func:`collect` するように命令した�
 
 .. _man-interfaces-indexing:
 
-Indexing
+.. 
+  Indexing
+  --------
+
+インデックス
 --------
 
+.. 
+  ====================================== ==================================
+  Methods to implement                   Brief description
+  ====================================== ==================================
+  :func:`getindex(X, i) <getindex>`      ``X[i]``, indexed element access
+  :func:`setindex!(X, v, i) <setindex!>` ``X[i] = v``, indexed assignment
+  :func:`endof(X) <endof>`               The last index, used in ``X[end]``
+  ====================================== ==================================
+
 ====================================== ==================================
-Methods to implement                   Brief description
+実装するメソッド                          概要
 ====================================== ==================================
-:func:`getindex(X, i) <getindex>`      ``X[i]``, indexed element access
-:func:`setindex!(X, v, i) <setindex!>` ``X[i] = v``, indexed assignment
-:func:`endof(X) <endof>`               The last index, used in ``X[end]``
+:func:`getindex(X, i) <getindex>`      ``X[i]`` 、インデックスされた要素のアクセス
+:func:`setindex!(X, v, i) <setindex!>` ``X[i] = v`` 、インデックスされた割り当て
+:func:`endof(X) <endof>`               ``X[end]`` に使用された最後のインデックス
 ====================================== ==================================
 
 For the ``Squares`` iterable above, we can easily compute the ``i``\ th element of the sequence by squaring it.  We can expose this as an indexing expression ``S[i]``.  To opt into this behavior, ``Squares`` simply needs to define :func:`getindex`:
