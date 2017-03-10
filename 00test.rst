@@ -166,3 +166,36 @@ Juliaは、パッケージ開発者やユーザーがJulia 0.4以降のビルト
        ...
        """
 
+.. 
+ 5. Include any code examples in an ``# Examples`` section.
+
+    Examples should, whenever possible, be written as *doctests*. A *doctest* is a fenced
+    code block (see `Code blocks`_) starting with `````jldoctest`` and contains any number of
+    ``julia>`` prompts together with inputs and expected outputs that mimic the Julia REPL.
+
+    For example in the following docstring a variable ``a`` is defined and the expected
+    result, as printed in a Julia REPL, appears afterwards::
+
+5. ``# Examples`` セクションにコードの例を含めてください。
+
+   可能であれば、コードの例はdoctestとして記述してください。doctestは、 `````jldoctest`` で始まり、
+   インプットとJulia REPLを模した期待されたアウトプットを持つ任意の数の ``julia>`` プロンプトを含んだ、
+   分離コードブロック（ `コードブロック`_ を参照）です。
+   
+   例えば、次のdocstringでは、変数 ``a`` が定義され、Julia REPLに出力されているように、
+   期待される結果がその後に表示されます。::
+  
+       """
+       Some nice documentation here.
+
+       # Examples
+
+       ```jldoctest
+       julia> a = [1 2; 3 4]
+       2×2 Array{Int64,2}:
+        1  2
+        3  4
+       ```
+       """
+
+
