@@ -256,9 +256,12 @@ Juliaでは、与えられた引数の数および対象の関数の引数の型
 関数の引数のキャストや変換は自動では実行されません。Juliaの変換は全て魔法のようではなく明示的に実行されます。
 しかし、 :ref:`man-変換とプロモーション` では進んだ技術の応用は魔法のようであることを示しています。 [Clarke61]_
 
-For non-numeric values, and for fewer or more than two arguments, the
-function ``f`` remains undefined, and applying it will still result in a
-:obj:`MethodError`:
+.. 
+ For non-numeric values, and for fewer or more than two arguments, the
+ function ``f`` remains undefined, and applying it will still result in a
+ :obj:`MethodError`:
+
+数値以外の値や2つ以上の引数に対しては、関数 ``f`` は未定義のままであり、それを適用すると :obj:`MethodError` となります。:
 
 .. doctest::
 
@@ -275,18 +278,24 @@ function ``f`` remains undefined, and applying it will still result in a
       f(!Matched::Number, !Matched::Number) at none:1
     ...
 
+.. 
+ You can easily see which methods exist for a function by entering the
+ function object itself in an interactive session:
 
-You can easily see which methods exist for a function by entering the
-function object itself in an interactive session:
+対話式セッションに関数オブジェクトを入力すると、関数のどのメソッドが存在するかを簡単に確認できます。:
 
 .. doctest::
 
     julia> f
     f (generic function with 2 methods)
 
-This output tells us that ``f`` is a function object with two
-methods. To find out what the signatures of those methods are, use the
-:func:`methods` function:
+.. 
+ This output tells us that ``f`` is a function object with two
+ methods. To find out what the signatures of those methods are, use the
+ :func:`methods` function:
+
+これは、 ``f`` が2つのメソッドを持つ関数オブジェクトであることを示しています。
+メソッドの特徴を調べるには、 :func:`methods` 関数を使います。:
 
 .. doctest::
 
@@ -295,16 +304,26 @@ methods. To find out what the signatures of those methods are, use the
     f(x::Float64, y::Float64) at none:1
     f(x::Number, y::Number) at none:1
 
-which shows that ``f`` has two methods, one taking two :obj:`Float64`
-arguments and one taking arguments of type :obj:`Number`. It also
-indicates the file and line number where the methods were defined:
-because these methods were defined at the REPL, we get the apparent
-line number ``none:1``.
+.. 
+ which shows that ``f`` has two methods, one taking two :obj:`Float64`
+ arguments and one taking arguments of type :obj:`Number`. It also
+ indicates the file and line number where the methods were defined:
+ because these methods were defined at the REPL, we get the apparent
+ line number ``none:1``.
 
-In the absence of a type declaration with ``::``, the type of a method
-parameter is :obj:`Any` by default, meaning that it is unconstrained since
-all values in Julia are instances of the abstract type :obj:`Any`. Thus, we
-can define a catch-all method for ``f`` like so:
+これは、 ``f`` は2つのメソッドを持つことを示しており、1つは2つの :obj:`Float64` 型の引き数を取り、
+もう1つは :obj:`Number` 型の引き数を取ります。また、これは、メソッドが定義されているファイル名と行数を表示します。
+例のメソッドはREPLで定義されているため、行数 ``none:1`` が表示されます。
+
+.. 
+ In the absence of a type declaration with ``::``, the type of a method
+ parameter is :obj:`Any` by default, meaning that it is unconstrained since
+ all values in Julia are instances of the abstract type :obj:`Any`. Thus, we
+ can define a catch-all method for ``f`` like so:
+
+``::`` を使用した型宣言がない文の場合、メソッドパラメータの型はデフォルトで :obj:`Any` となります。
+Juliaの全ての値は抽象型の「Any」のインスタンスであるため制約されません。
+したがって、 ``f`` の包括的なメソッドを次のように定義することができます。:
 
 .. doctest::
 
