@@ -454,11 +454,18 @@ Juliaの全ての値は抽象型の「Any」のインスタンスであるため
 
 .. _man-parametric-methods:
 
-Parametric Methods
+.. 
+ Parametric Methods
+ ------------------
+
+パラメータメソッド
 ------------------
 
-Method definitions can optionally have type parameters immediately after
-the method name and before the parameter tuple:
+.. 
+ Method definitions can optionally have type parameters immediately after
+ the method name and before the parameter tuple:
+
+メソッド定義はオプションで、メソッド名の直後またはパラメータタプルの前に型パラメータを持つことができます。:
 
 .. doctest::
 
@@ -466,11 +473,16 @@ the method name and before the parameter tuple:
 
     julia> same_type(x,y) = false;
 
-The first method applies whenever both arguments are of the same
-concrete type, regardless of what type that is, while the second method
-acts as a catch-all, covering all other cases. Thus, overall, this
-defines a boolean function that checks whether its two arguments are of
-the same type:
+.. 
+ The first method applies whenever both arguments are of the same
+ concrete type, regardless of what type that is, while the second method
+ acts as a catch-all, covering all other cases. Thus, overall, this
+ defines a boolean function that checks whether its two arguments are of
+ the same type:
+
+最初のメソッドは、どの型であっても2つの引数が同じ具体型であれば適用されます。
+2つ目のメソッドは包括的なメソッドとして機能し、他の全てのケースをカバーします。
+したがって、これは2つの引数が同じ型であるかを確認するブール関数を定義します。:
 
 .. doctest::
 
@@ -492,13 +504,19 @@ the same type:
     julia> same_type(Int32(1), Int64(2))
     false
 
-This kind of definition of function behavior by dispatch is quite common
-— idiomatic, even — in Julia. Method type parameters are not restricted
-to being used as the types of parameters: they can be used anywhere a
-value would be in the signature of the function or body of the function.
-Here's an example where the method type parameter ``T`` is used as the
-type parameter to the parametric type ``Vector{T}`` in the method
-signature:
+.. 
+ This kind of definition of function behavior by dispatch is quite common
+ — idiomatic, even — in Julia. Method type parameters are not restricted
+ to being used as the types of parameters: they can be used anywhere a
+ value would be in the signature of the function or body of the function.
+ Here's an example where the method type parameter ``T`` is used as the
+ type parameter to the parametric type ``Vector{T}`` in the method
+ signature:
+
+Juliaにおけるこの種の関数定義のディスパッチによる動きは一般的です。メソッドの型パラメータは、
+パラメータの型としての使用に限定されず、関数または関数の本体のシグネチャ内に値がある場所なら
+どこでも使用できます。以下はメソッドの型パラメータ ``T`` がメソッドシグネチャのパラメータ型 ``Vector{T}`` に対して
+使用されている例です。:
 
 .. doctest::
 
@@ -531,10 +549,14 @@ signature:
       myappend{T}(::Array{T,1}, !Matched::T) at none:1
     ...
 
-As you can see, the type of the appended element must match the element
-type of the vector it is appended to, or else a :exc:`MethodError` is raised.
-In the following example, the method type parameter ``T`` is used as the
-return value:
+.. 
+ As you can see, the type of the appended element must match the element
+ type of the vector it is appended to, or else a :exc:`MethodError` is raised.
+ In the following example, the method type parameter ``T`` is used as the
+ return value:
+
+ご覧の通り、追加された要素の型は、追加されたベクトルの要素型と一致する必要があります。
+一致しない場合は :exc:`MethodError` が出力されます。次の例では、メソッド型パラメータ ``T`` は戻り値として使用されています。:
 
 .. doctest::
 
