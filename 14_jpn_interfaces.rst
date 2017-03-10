@@ -69,16 +69,24 @@ Juliaの利便性と拡張性の多くは、インフォーマルなインタフ
 :func:`iteratorsize(IterType) <iteratorsize>` により返される値     必要なメソッド
 ================================================================ ======================================================================
 `HasLength()`                                                    :func:`length(iter) <length>`
-`HasShape()`                                                     :func:`length(iter) <length>`  and :func:`size(iter, [dim...]) <size>`
-`IsInfinite()`                                                   (*none*)
-`SizeUnknown()`                                                  (*none*)
+`HasShape()`                                                     :func:`length(iter) <length>` および :func:`size(iter, [dim...]) <size>`
+`IsInfinite()`                                                   (*なし)
+`SizeUnknown()`                                                  (*なし*)
 ================================================================ ======================================================================
 
+.. 
+  ==================================================================== ==================================
+  Value returned by :func:`iteratoreltype(IterType) <iteratoreltype>`  Required Methods
+  ==================================================================== ==================================
+  `HasEltype()`                                                        :func:`eltype(IterType) <eltype>`
+  `EltypeUnknown()`                                                    (*none*)
+  ==================================================================== ==================================
+
 ==================================================================== ==================================
-Value returned by :func:`iteratoreltype(IterType) <iteratoreltype>`  Required Methods
+:func:`iteratoreltype(IterType) <iteratoreltype>` により返される値      必要なメソッド
 ==================================================================== ==================================
 `HasEltype()`                                                        :func:`eltype(IterType) <eltype>`
-`EltypeUnknown()`                                                    (*none*)
+`EltypeUnknown()`                                                    (*なし*)
 ==================================================================== ==================================
 
 Sequential iteration is implemented by the methods :func:`start`, :func:`done`, and :func:`next`. Instead of mutating objects as they are iterated over, Julia provides these three methods to keep track of the iteration state externally from the object. The :func:`start(iter) <start>` method returns the initial state for the iterable object ``iter``. That state gets passed along to :func:`done(iter, state) <done>`, which tests if there are any elements remaining, and :func:`next(iter, state) <next>`, which returns a tuple containing the current element and an updated ``state``. The ``state`` object can be anything, and is generally considered to be an implementation detail private to the iterable object.
