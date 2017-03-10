@@ -2,41 +2,71 @@
 
 .. currentmodule:: Base
 
+.. 
+ *****************
+  Metaprogramming
+ *****************
+
 *****************
- Metaprogramming
+ メタプログラミング
 *****************
 
-The strongest legacy of Lisp in the Julia language is its metaprogramming
-support. Like Lisp, Julia represents its own code as a data structure of
-the language itself.
-Since code is represented by objects that can be created and manipulated
-from within the language, it is possible for a program to transform and
-generate its own code. This allows sophisticated code generation
-without extra build steps, and also allows true Lisp-style macros operating at
-the level of `abstract syntax trees <https://en.wikipedia.org/wiki/Abstract_syntax_tree>`_.
-In contrast, preprocessor "macro" systems, like that of C and C++, perform
-textual manipulation and substitution before any actual parsing or
-interpretation occurs. Because all data types and code in Julia
-are represented by Julia data structures, powerful
-`reflection <https://en.wikipedia.org/wiki/Reflection_%28computer_programming%29>`_
-capabilities are available to explore the internals of a program and its types
-just like any other data.
+.. 
+ The strongest legacy of Lisp in the Julia language is its metaprogramming
+ support. Like Lisp, Julia represents its own code as a data structure of
+ the language itself.
+ Since code is represented by objects that can be created and manipulated
+ from within the language, it is possible for a program to transform and
+ generate its own code. This allows sophisticated code generation
+ without extra build steps, and also allows true Lisp-style macros operating at
+ the level of `abstract syntax trees <https://en.wikipedia.org/wiki/Abstract_syntax_tree>`_.
+ In contrast, preprocessor "macro" systems, like that of C and C++, perform
+ textual manipulation and substitution before any actual parsing or
+ interpretation occurs. Because all data types and code in Julia
+ are represented by Julia data structures, powerful
+ `reflection <https://en.wikipedia.org/wiki/Reflection_%28computer_programming%29>`_
+ capabilities are available to explore the internals of a program and its types
+ just like any other data.
 
-Program representation
+Juliaの言語における最も強力なLispの遺産は、メタプログラミングのサポートです。Lisp同様、Juliaは自身のコードを
+言語のデータストラクチャとして表します。コードは言語内で生成されたり変更されたりするオブジェクトにより表されるため、
+プログラムはコードを変えたり生成したりすることが可能になります。これにより、洗練されたコードを追加の
+ビルド工程無しに生成することが可能になり、また `抽象構文ツリー <https://en.wikipedia.org/wiki/Abstract_syntax_tree>`_ の
+レベルにおけるLispスタイルのマクロ操作が可能になります。
+一方で、CやC++のようなプレプロセッサマクロシステムは、実際の解析や解釈が始まる前に、テキストの処理や交換を行います。
+Juliaの全てのデータ型とコードはJuliaデータストラクチャにより表されているため、
+強力な `反映機能 <https://en.wikipedia.org/wiki/Reflection_%28computer_programming%29>`_ は他のデータ同様に
+プログラムや型の内側を検索することができます。
+
+.. 
+ Program representation
+ ----------------------
+
+プログラムの表現
 ----------------------
 
-Every Julia program starts life as a string:
+.. 
+ Every Julia program starts life as a string:
+
+全てのJuliaのプログラムは文字列として生まれます。
 
 .. doctest::
 
     julia> prog = "1 + 1"
     "1 + 1"
 
-**What happens next?**
+.. 
+ **What happens next?**
 
-The next step is to `parse <https://en.wikipedia.org/wiki/Parsing#Computer_languages>`_
-each string into an object called an expression, represented by the Julia type
-:obj:`Expr`:
+**次にどうなるのか？**
+
+.. 
+ The next step is to `parse <https://en.wikipedia.org/wiki/Parsing#Computer_languages>`_
+ each string into an object called an expression, represented by the Julia type
+ :obj:`Expr`:
+
+次に各文字列を式と呼ばれるオブジェクトに `解析 <https://en.wikipedia.org/wiki/Parsing#Computer_languages>`_ していきます。
+式はJuliaの型では :obj:`Expr` と表現されます。:
 
 .. doctest::
 
@@ -46,18 +76,26 @@ each string into an object called an expression, represented by the Julia type
     julia> typeof(ex1)
     Expr
 
-:obj:`Expr` objects contain three parts:
+.. 
+ :obj:`Expr` objects contain three parts:
 
-- a ``Symbol`` identifying the kind of expression. A symbol is an
-  `interned string <https://en.wikipedia.org/wiki/String_interning>`_
-  identifier (more discussion below).
+:obj:`Expr` オブジェクトは3つのパーツを持ちます。:
+
+.. 
+ - a ``Symbol`` identifying the kind of expression. A symbol is an
+   `interned string <https://en.wikipedia.org/wiki/String_interning>`_
+   identifier (more discussion below).
+
+- 式の種類を特定する ``Symbol`` シンボルは `intern文字列 <https://en.wikipedia.org/wiki/String_interning>`_ 識別子です（詳細は下記）。
 
 .. doctest::
 
     julia> ex1.head
     :call
+.. 
+ - the expression arguments, which may be symbols, other expressions, or literal values:
 
-- the expression arguments, which may be symbols, other expressions, or literal values:
+- 式の引数。引数は記号、他の式またはリテラル値:
 
 .. doctest::
 
@@ -67,35 +105,52 @@ each string into an object called an expression, represented by the Julia type
      1
      1
 
+.. 
 - finally, the expression result type, which may be annotated by the user or inferred
   by the compiler (and may be ignored completely for the purposes of this chapter):
+
+- 式の結果の型。型はユーザにより注釈をつけるか、コンパイラにより推測されます（これはこのチャプタでは扱いません）:
 
 .. doctest::
 
     julia> ex1.typ
     Any
 
-Expressions may also be constructed directly in
-`prefix notation <https://en.wikipedia.org/wiki/Polish_notation>`_:
+.. 
+ Expressions may also be constructed directly in
+ `prefix notation <https://en.wikipedia.org/wiki/Polish_notation>`_:
+
+式は `プレフィックス表記法 <https://en.wikipedia.org/wiki/Polish_notation>`_ により、
+直接構築することもできます。:
 
 .. doctest::
 
     julia> ex2 = Expr(:call, :+, 1, 1)
     :(1 + 1)
 
-The two expressions constructed above -- by parsing and by direct
-construction -- are equivalent:
+.. 
+ The two expressions constructed above -- by parsing and by direct
+ construction -- are equivalent:
+
+上記の2つの式（解析によるものと直接的に構築されたもの）は同等です。:
 
 .. doctest::
 
     julia> ex1 == ex2
     true
 
+.. 
 **The key point here is that Julia code is internally represented
 as a data structure that is accessible from the language itself.**
 
-The :func:`dump` function provides indented and annotated display of :obj:`Expr`
-objects:
+**ここでの重要なポイントは、Juliaコードは言語そのものからアクセスすることができるデータストラクチャとして、
+内部的に表現される点です。**
+
+.. 
+ The :func:`dump` function provides indented and annotated display of :obj:`Expr`
+ objects:
+
+:func:`dump` 関数は、インデントされ注釈付けされた :obj:`Expr` オブジェクトの表示を行います。:
 
 .. doctest::
 
@@ -108,27 +163,43 @@ objects:
         3: Int64 1
       typ: Any
 
-:obj:`Expr` objects may also be nested:
+.. 
+ :obj:`Expr` objects may also be nested:
+
+:obj:`Expr` オブジェクトはネスト化することもできます。:
 
 .. doctest::
 
     julia> ex3 = parse("(4 + 4) / 2")
     :((4 + 4) / 2)
 
-Another way to view expressions is with Meta.show_sexpr, which displays the
-`S-expression <https://en.wikipedia.org/wiki/S-expression>`_ form of a given
-:obj:`Expr`, which may look very familiar to users of Lisp. Here's an example
-illustrating the display on a nested :obj:`Expr`::
+.. 
+ Another way to view expressions is with Meta.show_sexpr, which displays the
+ `S-expression <https://en.wikipedia.org/wiki/S-expression>`_ form of a given
+ :obj:`Expr`, which may look very familiar to users of Lisp. Here's an example
+ illustrating the display on a nested :obj:`Expr`::
+
+式を見る他の方法には、与えられた :obj:`Expr` の `S-expression <https://en.wikipedia.org/wiki/S-expression>`_ フォームを表示す
+Meta.show_sexprがあり、これはLispユーザには見覚えがあるかもしれません。以下はネスト化された :obj:`Expr` の表示の例です。::
 
     julia> Meta.show_sexpr(ex3)
     (:call, :/, (:call, :+, 4, 4), 2)
 
-Symbols
+.. 
+ Symbols
+ ~~~~~~~
+
+記号
 ~~~~~~~
 
-The ``:`` character has two syntactic purposes in Julia. The first form creates a
-:obj:`Symbol`, an `interned string <https://en.wikipedia.org/wiki/String_interning>`_
-used as one building-block of expressions:
+.. 
+ The ``:`` character has two syntactic purposes in Julia. The first form creates a
+ :obj:`Symbol`, an `interned string <https://en.wikipedia.org/wiki/String_interning>`_
+ used as one building-block of expressions:
+
+Juliaにおける「:」は2つの構文上の目的を持ちます。1つ目の目的は、
+式の1つの構築ブロックとして使われる `intern文字列 <https://en.wikipedia.org/wiki/String_interning>`_ である
+:obj:`Symbol` を生成することです。:
 
 .. doctest::
 
@@ -138,8 +209,11 @@ used as one building-block of expressions:
     julia> typeof(ans)
     Symbol
 
-The :obj:`Symbol` constructor takes any number of arguments and creates a
-new symbol by concatenating their string representations together:
+.. 
+ The :obj:`Symbol` constructor takes any number of arguments and creates a
+ new symbol by concatenating their string representations together:
+
+:obj:`Symbol` コンストラクタは任意の数の引数を取り、文字列表現を連結することで新しい記号を生成します。:
 
 .. doctest::
 
@@ -152,13 +226,20 @@ new symbol by concatenating their string representations together:
     julia> Symbol(:var,'_',"sym")
     :var_sym
 
-In the context of an expression, symbols are used to indicate access to
-variables; when an expression is evaluated, a symbol is replaced with
-the value bound to that symbol in the appropriate :ref:`scope
-<man-variables-and-scoping>`.
+.. 
+ In the context of an expression, symbols are used to indicate access to
+ variables; when an expression is evaluated, a symbol is replaced with
+ the value bound to that symbol in the appropriate :ref:`scope
+ <man-variables-and-scoping>`.
 
-Sometimes extra parentheses around the argument to ``:`` are needed to avoid
-ambiguity in parsing.:
+式の文脈の中で、記号は変数へのアクセスを示すために使われます。式が評価される際に、
+記号は適切な :ref:`スコープ <man-変数とスコープ>` 内の記号に紐づく値に置き換えられます。
+
+.. 
+ Sometimes extra parentheses around the argument to ``:`` are needed to avoid
+ ambiguity in parsing.:
+
+解析時のあいまいさを回避するため、 ``:`` の引数の周りに追加の括弧が必要な場合があります。:
 
 .. doctest::
 
@@ -168,18 +249,31 @@ ambiguity in parsing.:
     julia> :(::)
     :(::)
 
-Expressions and evaluation
+.. 
+ Expressions and evaluation
+ --------------------------
+
+式と評価
 --------------------------
 
-Quoting
+.. 
+ Quoting
+ ~~~~~~~
+
+引用
 ~~~~~~~
 
-The second syntactic purpose of the ``:`` character is to create expression
-objects without using the explicit :obj:`Expr` constructor. This is referred
-to as *quoting*. The ``:`` character, followed by paired parentheses around
-a single statement of Julia code, produces an :obj:`Expr` object based on the
-enclosed code. Here is example of the short form used to quote an arithmetic
-expression:
+.. 
+ The second syntactic purpose of the ``:`` character is to create expression
+ objects without using the explicit :obj:`Expr` constructor. This is referred
+ to as *quoting*. The ``:`` character, followed by paired parentheses around
+ a single statement of Julia code, produces an :obj:`Expr` object based on the
+ enclosed code. Here is example of the short form used to quote an arithmetic
+ expression:
+
+``:`` の2つ目の目的は、明示的に :obj:`Expr` コンストラクタを使用せずに式オブジェクトを生成することです。
+これは引用と呼ばれます。Juliaコードのステートメントの周りに1対の括弧が続く ``:`` は、
+囲われたコードに基づく :obj:`Expr` オブジェクトを生成します。以下は引用を使用した短い算術式の例です。:
 
 .. doctest::
 
@@ -189,11 +283,17 @@ expression:
     julia> typeof(ex)
     Expr
 
-(to view the structure of this expression, try ``ex.head`` and ``ex.args``,
-or use :func:`dump` as above)
+.. 
+ (to view the structure of this expression, try ``ex.head`` and ``ex.args``,
+ or use :func:`dump` as above)
 
-Note that equivalent expressions may be constructed using :func:`parse` or
-the direct :obj:`Expr` form:
+（この式の構造を見るには、 ``ex.head`` 、``ex.args`` または :func:`dump` ）を使用してください。）
+
+.. 
+ Note that equivalent expressions may be constructed using :func:`parse` or
+ the direct :obj:`Expr` form:
+
+上記と同等の式は、 :func:`parse` または直接 :obj:`Expr` フォームを使うことで構築できる点に注意してください。:
 
 .. doctest::
 
@@ -202,19 +302,31 @@ the direct :obj:`Expr` form:
           Expr(:call, :+, :a, Expr(:call, :*, :b, :c), 1)
    true
 
-Expressions provided by the parser generally only have symbols, other
-expressions, and literal values as their args, whereas expressions
-constructed by Julia code can have arbitrary run-time values
-without literal forms as args. In this specific example, ``+`` and ``a``
-are symbols, ``*(b,c)`` is a subexpression, and ``1`` is a literal
-64-bit signed integer.
+.. 
+ Expressions provided by the parser generally only have symbols, other
+ expressions, and literal values as their args, whereas expressions
+ constructed by Julia code can have arbitrary run-time values
+ without literal forms as args. In this specific example, ``+`` and ``a``
+ are symbols, ``*(b,c)`` is a subexpression, and ``1`` is a literal
+ 64-bit signed integer.
 
-There is a second syntactic form of quoting for multiple expressions:
-blocks of code enclosed in ``quote ... end``. Note that this form
-introduces :obj:`QuoteNode` elements to the expression tree, which
-must be considered when directly manipulating an expression tree
-generated from ``quote`` blocks. For other purposes, ``:( ... )``
-and ``quote .. end`` blocks are treated identically.
+構文解析によって発生した式は、通常記号、他の式およびリテラル値を引数として持ちますが、
+一方でJuliaコードにより構築された式は、リテラル形式を引数として持つことなく、
+任意の実行値を持つことができます。上記の例では、 ``+`` および ``a`` は記号、 ``*(b,c)`` は部分式、
+そして ``1`` は64ビットリテラル整数として記述されています。
+
+.. 
+ There is a second syntactic form of quoting for multiple expressions:
+ blocks of code enclosed in ``quote ... end``. Note that this form
+ introduces :obj:`QuoteNode` elements to the expression tree, which
+ must be considered when directly manipulating an expression tree
+ generated from ``quote`` blocks. For other purposes, ``:( ... )``
+ and ``quote .. end`` blocks are treated identically.
+
+複数の式を引用する2つ目の構文形式として、 ``quote ... end`` に囲われたコードブロックがあります。
+この形式は式ツリーに :obj:`QuoteNode` 要素を渡しますが、 ``quote`` ブロックにより生成された式ツリーを
+直接的に操作する場合は考慮しなければならない点に注意してください。他の理由により、 ``:( ... )`` および
+``quote .. end`` ブロックは同様に処理されます。
 
 .. doctest::
 
@@ -232,16 +344,29 @@ and ``quote .. end`` blocks are treated identically.
     julia> typeof(ex)
     Expr
 
-Interpolation
+.. 
+ Interpolation
+ ~~~~~~~~~~~~~
+
+加筆
 ~~~~~~~~~~~~~
 
-Direct construction of :obj:`Expr` objects with value arguments is
-powerful, but :obj:`Expr` constructors can be tedious compared to "normal"
-Julia syntax. As an alternative, Julia allows "splicing" or interpolation
-of literals or expressions into quoted expressions. Interpolation is
-indicated by the ``$`` prefix.
+.. 
+ Direct construction of :obj:`Expr` objects with value arguments is
+ powerful, but :obj:`Expr` constructors can be tedious compared to "normal"
+ Julia syntax. As an alternative, Julia allows "splicing" or interpolation
+ of literals or expressions into quoted expressions. Interpolation is
+ indicated by the ``$`` prefix.
 
-In this example, the literal value of ``a`` is interpolated:
+値引数とともに :obj:`Expr` オブジェクトを直接構築することは強力ですが、
+通常のJulia構文と比較すると :obj:`Expr` コンストラクタは少し退屈です。
+代替として、リテラルや式を引用式に継ぎ合せたり加筆することができます。
+加筆は ``$`` プレフィックスで示されます。
+
+.. 
+ In this example, the literal value of ``a`` is interpolated:
+
+この例では、リテラル値 ``a`` は加筆されています。:
 
 .. doctest::
 
@@ -250,8 +375,11 @@ In this example, the literal value of ``a`` is interpolated:
     julia> ex = :($a + b)
     :(1 + b)
 
-Interpolating into an unquoted expression is not supported and will
-cause a compile-time error:
+.. 
+ Interpolating into an unquoted expression is not supported and will
+ cause a compile-time error:
+
+引用されていない式への加筆はサポートされておらず、コンパイル時にエラーとなります。:
 
 .. doctest::
 
@@ -259,25 +387,36 @@ cause a compile-time error:
     ERROR: unsupported or misplaced expression $
      ...
 
-In this example, the tuple ``(1,2,3)`` is interpolated as an
-expression into a conditional test:
+.. 
+ In this example, the tuple ``(1,2,3)`` is interpolated as an
+ expression into a conditional test:
+
+この例では、タプル ``(1,2,3)`` は条件に式として加筆されています。:
 
 .. doctest::
 
     julia> ex = :(a in $:((1,2,3)) )
     :(a in (1,2,3))
 
-Interpolating symbols into a nested expression requires enclosing each
-symbol in an enclosing quote block::
+.. 
+ Interpolating symbols into a nested expression requires enclosing each
+ symbol in an enclosing quote block::
+
+記号のネスト化された式への加筆は、囲われた引用ブロック内に各記号を囲む必要があります。::
 
     julia> :( :a in $( :(:a + :b) ) )
                        ^^^^^^^^^^
                        quoted inner expression
 
-The use of ``$`` for expression interpolation is intentionally reminiscent
-of :ref:`string interpolation <man-string-interpolation>` and :ref:`command
-interpolation <man-command-interpolation>`. Expression interpolation allows
-convenient, readable programmatic construction of complex Julia expressions.
+.. 
+ The use of ``$`` for expression interpolation is intentionally reminiscent
+ of :ref:`string interpolation <man-string-interpolation>` and :ref:`command
+ interpolation <man-command-interpolation>`. Expression interpolation allows
+ convenient, readable programmatic construction of complex Julia expressions.
+
+式の加筆時の ``$`` の使用は、意図的に :ref:`文字列の加筆 <man-文字列の加筆>` および
+:ref:`コマンドの加筆 <man-コマンドの加筆>` に関連付けられています。
+式の加筆は、複雑なJuliaの式の利便性と可読性の高いプログラム構築を可能にします。
 
 :func:`eval` and effects
 ~~~~~~~~~~~~~~~~~~~~~~~~
